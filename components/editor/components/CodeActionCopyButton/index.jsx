@@ -4,23 +4,21 @@ import {
   $getSelection,
   $setSelection,
 } from 'lexical'
+
 import * as React from 'react'
 import { useState } from 'react'
-
-import { Copy } from 'lucide-react'
-import { ClipboardCheck } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useDebounce } from '@/hooks/useDebounce'
+import { Button } from '@/components/ui/button'
+import { Check, Clipboard } from 'lucide-react'
 
-// codeNode copy code button
 export function CopyButton({ editor, getCodeDOMNode }) {
   const [isCopyCompleted, setCopyCompleted] = useState(false)
 
-  const removeSuccessIcon = useDebounce(() => {
+  const changeBackToClipboardIcon = useDebounce(() => {
     setCopyCompleted(false)
   }, 1000)
 
-  async function handleClick() {
+  async function handleCopy() {
     const codeDOMNode = getCodeDOMNode()
 
     if (!codeDOMNode) {
@@ -36,6 +34,7 @@ export function CopyButton({ editor, getCodeDOMNode }) {
         content = codeNode.getTextContent()
       }
 
+      // set cusor focus back after pressing copy
       const selection = $getSelection()
       $setSelection(selection)
     })
@@ -43,18 +42,18 @@ export function CopyButton({ editor, getCodeDOMNode }) {
     try {
       await navigator.clipboard.writeText(content)
       setCopyCompleted(true)
-      removeSuccessIcon()
-    } catch (err) {
-      console.error('Failed to copy: ', err)
+      changeBackToClipboardIcon()
+    } catch (error) {
+      console.error('Failed to copy code: ', error)
     }
   }
 
   return (
-    <Button variant="outline" size="icon" onClick={handleClick}>
+    <Button onClick={handleCopy}>
       {isCopyCompleted ? (
-        <ClipboardCheck className="h-4 w-4" />
+        <Check className="h-4 w-4" />
       ) : (
-        <Copy className="h-4 w-4" />
+        <Clipboard className="h-4 w-4" />
       )}
     </Button>
   )

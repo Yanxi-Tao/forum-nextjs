@@ -1,17 +1,20 @@
-// Language display and copy code function
-
-import { $isCodeNode, CodeNode, getLanguageFriendlyName } from '@lexical/code'
+import {
+  $isCodeNode,
+  CodeNode,
+  getLanguageFriendlyName,
+  normalizeCodeLang,
+} from '@lexical/code'
 
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $getNearestNodeFromDOMNode } from 'lexical'
 import { useEffect, useRef, useState } from 'react'
 import * as React from 'react'
-import { createPortal } from 'react-dom'
+import * as Portal from '@radix-ui/react-portal'
 
+import { CopyButton } from '../../components/CodeActionCopyButton'
 import { useDebounce } from '@/hooks/useDebounce'
-import { CopyButton } from '../../components/CodeActionComponent'
 
-const CODE_PADDING = 8
+const ACTION_PADDING = 8
 
 function CodeActionMenuContainer({ anchorElem }) {
   const [editor] = useLexicalComposerContext()
@@ -24,15 +27,14 @@ function CodeActionMenuContainer({ anchorElem }) {
   const codeSetRef = useRef(new Set())
   const codeDOMNodeRef = useRef(null)
 
-  // return code dom ref
   function getCodeDOMNode() {
     return codeDOMNodeRef.current
   }
 
-  // debounced onMouseMove event callback
-  const debounceOnMouseMove = useDebounce(
+  // update code action position and visibility
+  const deBounceMouseEnterCodeBlock = useDebounce(
     (event) => {
-      const { codeDOMNode, isOutside } = getMouseInfo(event) // null, false if not
+      const { codeDOMNode, isOutside } = getMouseInfo(event)
 
       if (isOutside) {
         setShown(false)
@@ -43,7 +45,6 @@ function CodeActionMenuContainer({ anchorElem }) {
         return
       }
 
-      // initialize ref
       codeDOMNodeRef.current = codeDOMNode
 
       let codeNode = null
@@ -52,24 +53,21 @@ function CodeActionMenuContainer({ anchorElem }) {
       editor.update(() => {
         const maybeCodeNode = $getNearestNodeFromDOMNode(codeDOMNode)
 
-        // if the maybeCodeNode is indeed a codeNode instance
         if ($isCodeNode(maybeCodeNode)) {
           codeNode = maybeCodeNode
-          _lang = codeNode.getLanguage() || '' // get coding language
+          _lang = codeNode.getLanguage() || ''
         }
       })
 
-      // if a mouse is in a codeNode instance
       if (codeNode) {
-        const { y: editorElemY, right: editorElemRight } =
-          anchorElem.getBoundingClientRect() // get the rootNode parent div position
-        const { y, right } = codeDOMNode.getBoundingClientRect()
-        // update states: language type, visibility and position
+        const { top: editorElemY, right: editorElemRight } =
+          anchorElem.getBoundingClientRect()
+        const { top, right } = codeDOMNode.getBoundingClientRect()
         setLang(_lang)
         setShown(true)
         setPosition({
-          right: `${editorElemRight - right + CODE_PADDING}px`,
-          top: `${y - editorElemY}px`,
+          right: `${editorElemRight - right + ACTION_PADDING}px`,
+          top: `${top - editorElemY}px`,
         })
       }
     },
@@ -77,22 +75,23 @@ function CodeActionMenuContainer({ anchorElem }) {
     1000
   )
 
-  // whether mouse enter codeblock event listener
+  // continuously call code action update callback
   useEffect(() => {
     if (!shouldListenMouseMove) {
       return
     }
 
-    document.addEventListener('mousemove', debounceOnMouseMove)
+    document.addEventListener('mousemove', deBounceMouseEnterCodeBlock)
 
     return () => {
       setShown(false)
-      debounceOnMouseMove.cancel()
-      document.removeEventListener('mousemove', debounceOnMouseMove)
+      deBounceMouseEnterCodeBlock.cancel()
+      document.removeEventListener('mousemove', deBounceMouseEnterCodeBlock)
     }
-  }, [shouldListenMouseMove, debounceOnMouseMove])
+  }, [shouldListenMouseMove, deBounceMouseEnterCodeBlock])
 
-  // life cycle hooks check for codeNode mounted/unmounted
+  // listen to if cursor enters codeblock as long as
+  // at least one code block node exist in editor
   editor.registerMutationListener(CodeNode, (mutations) => {
     editor.getEditorState().read(() => {
       for (const [key, type] of mutations) {
@@ -112,16 +111,17 @@ function CodeActionMenuContainer({ anchorElem }) {
     })
   })
 
+  const normalizedLang = normalizeCodeLang(lang)
   const codeFriendlyName = getLanguageFriendlyName(lang)
 
   return (
     <>
       {isShown ? (
         <div
-          className="code-action-menu-container absolute flex items-center flex-row select-none h-9 text-xs"
+          className="code-action-menu-container flex flex-row"
           style={{ ...position }}
         >
-          <div className="mr-1">{codeFriendlyName}</div>
+          <div className="code-highlight-languag mr-2">{codeFriendlyName}</div>
           <CopyButton editor={editor} getCodeDOMNode={getCodeDOMNode} />
         </div>
       ) : null}
@@ -129,12 +129,13 @@ function CodeActionMenuContainer({ anchorElem }) {
   )
 }
 
-// if mouse enters codeNode return codeNode DOM element and whether mouse enters that element
+// determine of cursor is in a code block / a code block's menu action container
+// return code block node element & whether cursor in
 function getMouseInfo(event) {
   const target = event.target
 
   if (target && target instanceof HTMLElement) {
-    const codeDOMNode = target.closest('code.editor-textCode') // if current element or its parents do not match with selectors then return null otherwise the element
+    const codeDOMNode = target.closest('code.editor-code')
 
     const isOutside = !(
       codeDOMNode || target.closest('div.code-action-menu-container')
@@ -144,11 +145,4 @@ function getMouseInfo(event) {
   } else {
     return { codeDOMNode: null, isOutside: true }
   }
-}
-
-export default function CodeActionMenuPlugin({ anchorElem = document.body }) {
-  return createPortal(
-    <CodeActionMenuContainer anchorElem={anchorElem} />, // anchor element is the rootNode parrent wrapper
-    anchorElem
-  )
 }
