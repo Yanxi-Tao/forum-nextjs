@@ -16,6 +16,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 
 const ACTION_PADDING = 8
 
+// code action component
 function CodeActionMenuContainer({ anchorElem }) {
   const [editor] = useLexicalComposerContext()
 
@@ -111,7 +112,9 @@ function CodeActionMenuContainer({ anchorElem }) {
     })
   })
 
+  // for potentially prettier formatting
   const normalizedLang = normalizeCodeLang(lang)
+  // map to friendly name
   const codeFriendlyName = getLanguageFriendlyName(lang)
 
   return (
@@ -145,4 +148,12 @@ function getMouseInfo(event) {
   } else {
     return { codeDOMNode: null, isOutside: true }
   }
+}
+
+export default function CodeActionMenuPlugin({ anchorElem = document.body }) {
+  return (
+    <Portal.Root asChild container={anchorElem}>
+      <CodeActionMenuContainer anchorElem={anchorElem} />
+    </Portal.Root>
+  )
 }
