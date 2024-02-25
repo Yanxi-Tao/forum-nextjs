@@ -1,0 +1,111 @@
+.editor-paragraph {
+    @apply leading-7 [&:not(:first-child)]:mt-6
+}
+
+.editor-quote {
+    @apply mt-6 border-l-2 pl-6 italic
+}
+
+.editor-heading-h1 {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl
+}
+
+.editor-heading-h2 {
+    @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0
+}
+
+.editor-heading-h3 {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight
+}
+
+.editor-nested-listitem {
+    @apply list-none
+}
+
+.editor-list-ol {
+    @apply my-6 ml-6 list-decimal
+}
+
+.editor-list-ul {
+    @apply my-6 ml-6 list-disc
+}
+
+.editor-listItem {
+    @apply ml-4
+}
+
+.editor-hashtag {
+    @apply text-primary-foreground border-b-2 border-primary-foreground
+}
+
+.editor-link {
+    @apply text-blue-800 no-underline
+}
+
+.editor-textBold {
+    @apply font-bold
+}
+
+.editor-textCode {
+    @apply rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold
+}
+
+.editor-textItalic {
+    @apply italic
+}
+
+.editor-textStrikethrough {
+    @apply line-through
+}
+
+.editor-textSubscript {
+    @apply align-sub text-xs
+}
+
+.editor-textSuperscript {
+    @apply align-super text-xs
+}
+
+.editor-textUnderline {
+    @apply underline
+}
+
+.editor-textUnderlineStrikethrough {
+    @apply underline line-through
+}
+
+.editor-code {
+    @apply bg-slate-800 font-mono p-4 leading-7 m-4 overflow-auto relative
+}
+
+.editor-tokenAttr {
+    @apply text-blue-600
+}
+
+.editor-tokenProperty {
+    @apply text-red-600
+}
+
+.editor-tokenSelector {
+    @apply text-green-600
+}
+
+.editor-tokenComment {
+    @apply text-gray-400
+}
+
+.editor-tokenFunction {
+    @apply text-cyan-500
+}
+
+.editor-tokenOperator {
+    @apply text-fuchsia-500
+}
+
+.editor-tokenVariable {
+    @apply text-orange-500
+}
+
+.editor-tokenPunctuation {
+    @apply text-slate-300
+}

@@ -9,7 +9,6 @@ import { HorizontalRulePlugin } from '@lexical/react/LexicalHorizontalRulePlugin
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
-import useLexicalEditable from '@lexical/react/useLexicalEditable'
 import * as React from 'react'
 import { useState } from 'react'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
@@ -17,16 +16,15 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import CodeActionMenuPlugin from './plugins/CodeActionMenuPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
-import DraggableBlockPlugin from './plugins/DraggableBlockPlugin'
 import EquationsPlugin from './plugins/EquationsPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
-import FloatingTextFormatToolbarPlugin from './plugins/FloatingTextFormatToolbarPlugin'
 import LinkPlugin from './plugins/LinkPlugin'
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin'
 import TableOfContentsPlugin from './plugins/TableOfContentsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 
 import Nodes from './nodes'
+import EditorTheme from './EditorTheme'
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 
@@ -41,18 +39,21 @@ export default function Editor() {
     }
   }
 
-  const editorTheme = {}
+  function onError(error) {
+    console.error(error)
+  }
 
   const editorConfig = {
     namespace: 'PostEditor',
     nodes: [...Nodes],
-    theme: editorTheme,
+    theme: EditorTheme,
+    onError,
   }
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      {<ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />}
-      <div>
+      <div className="editor-container flex flex-col w-full justify-center">
+        <ToolbarPlugin setIsLinkEditMode={setIsLinkEditMode} />
         <AutoFocusPlugin />
         <ClearEditorPlugin />
         <HashtagPlugin />
@@ -60,7 +61,7 @@ export default function Editor() {
         <HistoryPlugin />
         <RichTextPlugin
           contentEditable={
-            <div className="editor-scroller">
+            <div className="editor-scroller outline-none min-w-[1000px]">
               <div className="editor" ref={onRef}>
                 <ContentEditable />
               </div>
@@ -79,14 +80,12 @@ export default function Editor() {
         <TabIndentationPlugin />
         {floatingAnchorElem && (
           <>
-            <DraggableBlockPlugin anchorElem={floatingAnchorElem} />
             <CodeActionMenuPlugin anchorElem={floatingAnchorElem} />
             <FloatingLinkEditorPlugin
               anchorElem={floatingAnchorElem}
               isLinkEditMode={isLinkEditMode}
               setIsLinkEditMode={setIsLinkEditMode}
             />
-            <FloatingTextFormatToolbarPlugin anchorElem={floatingAnchorElem} />
           </>
         )}
       </div>

@@ -118,7 +118,7 @@ function CodeActionMenuContainer({ anchorElem }) {
     <>
       {isShown ? (
         <div
-          className="absolute flex items-center flex-row select-none h-9 text-xs"
+          className="code-action-menu-container absolute flex items-center flex-row select-none h-9 text-xs"
           style={{ ...position }}
         >
           <div className="mr-1">{codeFriendlyName}</div>
@@ -134,7 +134,7 @@ function getMouseInfo(event) {
   const target = event.target
 
   if (target && target instanceof HTMLElement) {
-    const codeDOMNode = target.closest('code.PlaygroundEditorTheme__code') // if current element or its parents do not match with selectors then return null otherwise the element
+    const codeDOMNode = target.closest('code.editor-textCode') // if current element or its parents do not match with selectors then return null otherwise the element
 
     const isOutside = !(
       codeDOMNode || target.closest('div.code-action-menu-container')

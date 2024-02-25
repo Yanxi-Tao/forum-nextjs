@@ -560,7 +560,7 @@ export default function ToolbarPlugin({ setIsLinkEditMode }) {
   )
 
   return (
-    <div className="flex">
+    <div className="flex w-fit">
       <Button
         disabled={!canUndo || !isEditable}
         onClick={() => {
