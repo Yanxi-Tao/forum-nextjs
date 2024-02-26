@@ -34,6 +34,11 @@
     @apply ml-4
 }
 
+.editor-listItemChecked,
+.editor-listItemUnchecked {
+    @apply relative mx-2 px-4 list-none outline-none
+}
+
 .editor-hashtag {
     @apply text-primary-foreground border-b-2 border-primary-foreground
 }
