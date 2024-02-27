@@ -34,7 +34,7 @@ export default function Editor() {
           <RichTextPlugin
             contentEditable={
               <div className="editor" ref={editorRef}>
-                <ContentEditable />
+                <ContentEditable className="p-4 outline-none" />
               </div>
             }
             ErrorBoundary={LexicalErrorBoundary}

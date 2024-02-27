@@ -406,7 +406,7 @@ export default function ToolbarPlugin() {
   )
 
   return (
-    <div>
+    <div className="flex flex-row justify-evenly my-4">
       <Button
         disabled={!canUndo}
         onClick={() => {
