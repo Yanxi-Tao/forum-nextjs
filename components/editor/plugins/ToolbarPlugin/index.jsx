@@ -48,6 +48,7 @@ import {
   Underline,
   Strikethrough,
   Code,
+  Sigma,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@radix-ui/react-dropdown-menu'
@@ -58,7 +59,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Toggle } from '@/components/ui/toggle'
+
+import { InsertEquationDialog } from '../EquationsPlugin'
 
 const blockTypeToBlockName = {
   bullet: 'Bulleted List',
@@ -204,7 +207,7 @@ function BlockFormatDropdown({ editor, blockType }) {
   }
   return (
     <Select value={blockType} onValueChange={formatBlock}>
-      <SelectTrigger className="w-[180px] outline-none">
+      <SelectTrigger className="w-[180px] focus:ring-0 focus:ring-offset-0">
         <SelectValue>{blockTypeToBlockName[blockType]}</SelectValue>
       </SelectTrigger>
       <SelectContent>
@@ -223,38 +226,59 @@ function BlockFormatDropdown({ editor, blockType }) {
 }
 
 function TextFormatToggleGroup({ editor, textFormatToggled }) {
-  const formatText = (value) => {
-    editor.dispatchCommand(FORMAT_TEXT_COMMAND, value)
-  }
+  const { isBold, isItalic, isUnderline, isStrikethrough, isCode } =
+    textFormatToggled
+
   return (
-    <ToggleGroup
-      type="multiple"
-      value={textFormatToggled}
-      onValueChange={formatText}
-    >
-      <ToggleGroupItem value="bold">
+    <div className="flex flex-row space-x-1">
+      <Toggle
+        pressed={isBold}
+        onPressedChange={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
+        }}
+      >
         <Bold className="h-4 w-4" />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="italic">
+      </Toggle>
+      <Toggle
+        pressed={isItalic}
+        onPressedChange={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
+        }}
+      >
         <Italic className="h-4 w-4" />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="underline">
+      </Toggle>
+      <Toggle
+        pressed={isUnderline}
+        onPressedChange={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
+        }}
+      >
         <Underline className="h-4 w-4" />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="strikethrough">
+      </Toggle>
+      <Toggle
+        pressed={isStrikethrough}
+        onPressedChange={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
+        }}
+      >
         <Strikethrough className="h-4 w-4" />
-      </ToggleGroupItem>
-      <ToggleGroupItem value="code">
+      </Toggle>
+      <Toggle
+        pressed={isCode}
+        onPressedChange={() => {
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
+        }}
+      >
         <Code className="h-4 w-4" />
-      </ToggleGroupItem>
-    </ToggleGroup>
+      </Toggle>
+    </div>
   )
 }
 
 function CodeLanguageDropdown({ onCodeLanguageSelect, codeLanguage }) {
   return (
     <Select value={codeLanguage} onValueChange={onCodeLanguageSelect}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[180px] focus:ring-0 focus:ring-offset-0">
         <SelectValue>{getLanguageFriendlyName(codeLanguage)}</SelectValue>
       </SelectTrigger>
       <SelectContent>
@@ -285,27 +309,6 @@ export default function ToolbarPlugin() {
   const [isUnderline, setIsUnderline] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isCode, setIsCode] = useState(false)
-
-  const textFormatToggled = useMemo(() => {
-    const toggled = []
-    if (isBold) {
-      toggled.push('bold')
-    }
-    if (isItalic) {
-      toggled.push('italic')
-    }
-    if (isUnderline) {
-      toggled.push('underline')
-    }
-    if (isStrikethrough) {
-      toggled.push('strikethrough')
-    }
-    if (isCode) {
-      toggled.push('code')
-    }
-
-    return toggled
-  }, [isBold, isItalic, isUnderline, isStrikethrough, isCode])
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -433,10 +436,19 @@ export default function ToolbarPlugin() {
           codeLanguage={codeLanguage}
         />
       ) : (
-        <TextFormatToggleGroup
-          editor={editor}
-          textFormatToggled={textFormatToggled}
-        />
+        <>
+          <TextFormatToggleGroup
+            editor={editor}
+            textFormatToggled={{
+              isBold,
+              isItalic,
+              isUnderline,
+              isStrikethrough,
+              isCode,
+            }}
+          />
+          <InsertEquationDialog editor={editor} />
+        </>
       )}
     </div>
   )

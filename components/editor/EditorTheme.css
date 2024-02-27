@@ -80,7 +80,7 @@
 }
 
 .editor-code {
-    @apply bg-slate-800 font-mono p-4 leading-7 m-4 overflow-auto relative
+    @apply relative bg-slate-800 font-mono p-4 leading-7 mx-2 my-5 overflow-auto block rounded-md
 }
 
 .editor-tokenAttr {
@@ -113,4 +113,8 @@
 
 .editor-tokenPunctuation {
     @apply text-slate-300
+}
+
+div.editor-equation {
+    @apply flex justify-center text-sm
 }

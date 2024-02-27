@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import {
   DialogClose,
   DialogDescription,
@@ -15,15 +15,12 @@ import KatexRenderer from './EquationRenderer'
 
 // equation editor dialog component
 export default function EquationEditor({
-  equationValue,
-  setEquationValue,
-  inlineValue,
-  setInlineValue,
+  equationValue = '',
+  inlineValue = true,
   onConfirm,
 }) {
-  const onCheckBoxChange = useCallback(() => {
-    setInlineValue(!inlineValue)
-  }, [setInlineValue, inlineValue])
+  const [editorEquation, setEditorEquation] = useState(equationValue)
+  const [editorInline, setEditorInline] = useState(inlineValue)
 
   // dialog content
   // shows when equation node is clicked/inserted
@@ -34,22 +31,28 @@ export default function EquationEditor({
         <DialogTitle>Insert Equatoin</DialogTitle>
         <DialogDescription>Enter TeX Equation</DialogDescription>
       </DialogHeader>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center space-y-2">
         <div>
-          <Textarea onChange={(event) => setEquationValue(event.target.value)}>
-            {equationValue}
-          </Textarea>
+          <Textarea
+            onChange={(event) => setEditorEquation(event.target.value)}
+            value={editorEquation}
+            className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 resize-none overflow-auto"
+          />
         </div>
-        <div>
-          <KatexRenderer equation={equationValue} inline={inlineValue} />
+        <div className="border rounded-md overflow-x-auto w-96 h-28">
+          <KatexRenderer
+            equation={editorEquation}
+            inline={inlineValue}
+            className="h-fit w-fit block text-center px-3 py-2 pointer-events-none text-xs"
+          />
         </div>
       </div>
       <DialogFooter>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mr-6">
           <Checkbox
             id="inline"
-            checked={inlineValue}
-            onChange={onCheckBoxChange}
+            checked={editorInline}
+            onCheckedChange={setEditorInline}
           />
           <label
             htmlFor="inline"
@@ -58,9 +61,17 @@ export default function EquationEditor({
             Inline
           </label>
         </div>
-        <DialogClose>
+        <DialogClose asChild>
           <Button>Close</Button>
-          <Button onClick={onConfirm}>Confirm</Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button
+            onClick={() => {
+              onConfirm(editorEquation, editorInline)
+            }}
+          >
+            Confirm
+          </Button>
         </DialogClose>
       </DialogFooter>
     </>

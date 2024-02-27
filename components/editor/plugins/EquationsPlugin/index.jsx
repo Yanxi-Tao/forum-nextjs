@@ -15,8 +15,39 @@ import { useCallback, useEffect } from 'react'
 import * as React from 'react'
 
 import { $createEquationNode, EquationNode } from '../../nodes/EquationNode'
+import EquationEditor from '../../components/EquationComponent/EquationEditor'
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Sigma } from 'lucide-react'
 
 export const INSERT_EQUATION_COMMAND = createCommand('INSERT_EQUATION_COMMAND')
+
+export function InsertEquationDialog({ editor }) {
+  const onConfirm = useCallback(
+    (equation, inline) => {
+      editor.dispatchCommand(INSERT_EQUATION_COMMAND, { equation, inline })
+    },
+    [editor]
+  )
+
+  return (
+    <Dialog>
+      <DialogTrigger>
+        <Sigma className="h-4 w-4" />
+      </DialogTrigger>
+      <DialogContent>
+        <EquationEditor onConfirm={onConfirm} />
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 export default function EquationsPlugin() {
   const [editor] = useLexicalComposerContext()

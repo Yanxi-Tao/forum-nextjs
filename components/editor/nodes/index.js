@@ -3,6 +3,8 @@ import { ListItemNode, ListNode } from '@lexical/list'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 
+import { EquationNode } from './EquationNode'
+
 const EditorNodes = [
   HeadingNode,
   QuoteNode,
@@ -13,6 +15,7 @@ const EditorNodes = [
   TableCellNode,
   TableNode,
   TableRowNode,
+  EquationNode,
 ]
 
 export default EditorNodes

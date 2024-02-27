@@ -5,8 +5,10 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 
-import CodeActionMenuPlugin from './plugins/CodeActionPlugin'
+// import CodeActionMenuPlugin from './plugins/CodeActionPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
+
+import EquationsPlugin from './plugins/EquationsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
@@ -32,6 +34,7 @@ export default function Editor() {
       <div className="editor-container max-w-[600px] mx-auto my-32">
         <ToolbarPlugin />
         <div className="editor-inner">
+          <AutoFocusPlugin />
           <RichTextPlugin
             contentEditable={
               <div className="editor" ref={editorRef}>
@@ -41,10 +44,10 @@ export default function Editor() {
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
-          <AutoFocusPlugin />
           <CodeHighlightPlugin />
           <ListPlugin />
-          <CodeActionMenuPlugin anchorElem={editorRef.current} />
+          {/* <CodeActionMenuPlugin anchorElem={editorRef.current} /> */}
+          <EquationsPlugin />
         </div>
       </div>
     </LexicalComposer>

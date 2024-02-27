@@ -11,30 +11,31 @@ import { $isEquationNode } from '../../nodes/EquationNode'
 
 export default function EquationComponent({ equation, inline, nodeKey }) {
   const [editor] = useLexicalComposerContext()
-  const [equationValue, setEquationValue] = useState(equation)
-  const [inlineValue, setInlineValue] = useState(inline)
+  // const [equationValue, setEquationValue] = useState(equation)
+  // const [inlineValue, setInlineValue] = useState(inline)
 
-  const onConfirm = useCallback(() => {
-    editor.update(() => {
-      const node = $getNodeByKey(nodeKey)
-      if ($isEquationNode(node)) {
-        node.setEquation(equationValue)
-        node.setInline(inlineValue)
-      }
-    })
-  }, [editor, equationValue, inlineValue, nodeKey])
+  const onConfirm = useCallback(
+    (updatedEquation, updatedInline) => {
+      editor.update(() => {
+        const node = $getNodeByKey(nodeKey)
+        if ($isEquationNode(node)) {
+          node.setEquation(updatedEquation)
+          node.setInline(updatedInline)
+        }
+      })
+    },
+    [editor, nodeKey]
+  )
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <KatexRenderer equation={equationValue} inline={inlineValue} />
+      <DialogTrigger>
+        <KatexRenderer equation={equation} inline={inline} />
       </DialogTrigger>
       <DialogContent>
         <EquationEditor
-          equationValue={equationValue}
-          setEquationValue={setEquationValue}
-          inlineValue={inlineValue}
-          setInlineValue={setInlineValue}
+          equationValue={equation}
+          inlineValue={inline}
           onConfirm={onConfirm}
         />
       </DialogContent>

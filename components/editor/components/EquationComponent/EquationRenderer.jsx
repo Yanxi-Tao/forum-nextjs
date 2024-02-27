@@ -1,9 +1,10 @@
 import katex from 'katex'
 import * as React from 'react'
 import { useEffect, useRef } from 'react'
+import { cn } from '@/lib/utils'
 
 // katex renderer component
-export default function KatexRenderer({ equation, inline }) {
+export default function KatexRenderer({ equation, inline, className }) {
   const katexElementRef = useRef(null)
 
   // update render content
@@ -24,7 +25,12 @@ export default function KatexRenderer({ equation, inline }) {
   return (
     <>
       <img src="#" alt="" />
-      <span role="button" tabIndex={-1} ref={katexElementRef} />
+      <span
+        role="button"
+        tabIndex={-1}
+        ref={katexElementRef}
+        className={cn(className)}
+      />
       <img src="#" alt="" />
     </>
   )
