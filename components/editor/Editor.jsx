@@ -15,6 +15,7 @@ import { useRef } from 'react'
 
 import EditorTheme from './EditorTheme'
 import EditorNodes from './nodes'
+import './EditorTheme.css'
 
 const editorConfig = {
   theme: EditorTheme,

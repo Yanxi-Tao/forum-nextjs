@@ -36,6 +36,7 @@ import {
   CODE_LANGUAGE_FRIENDLY_NAME_MAP,
   getLanguageFriendlyName,
 } from '@lexical/code'
+import { $setBlocksType } from '@lexical/selection'
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
 
@@ -125,7 +126,8 @@ function BlockFormatDropdown({ editor, blockType }) {
         }
       },
       h1: () => {
-        if (blockType !== headingSize) {
+        console.log('format function called')
+        if (blockType !== 'h1') {
           editor.update(() => {
             const selection = $getSelection()
             $setBlocksType(selection, () => $createHeadingNode('h1'))
@@ -133,7 +135,7 @@ function BlockFormatDropdown({ editor, blockType }) {
         }
       },
       h2: () => {
-        if (blockType !== headingSize) {
+        if (blockType !== 'h2') {
           editor.update(() => {
             const selection = $getSelection()
             $setBlocksType(selection, () => $createHeadingNode('h2'))
@@ -141,7 +143,7 @@ function BlockFormatDropdown({ editor, blockType }) {
         }
       },
       h3: () => {
-        if (blockType !== headingSize) {
+        if (blockType !== 'h3') {
           editor.update(() => {
             const selection = $getSelection()
             $setBlocksType(selection, () => $createHeadingNode('h3'))
@@ -149,7 +151,7 @@ function BlockFormatDropdown({ editor, blockType }) {
         }
       },
       h4: () => {
-        if (blockType !== headingSize) {
+        if (blockType !== 'h4') {
           editor.update(() => {
             const selection = $getSelection()
             $setBlocksType(selection, () => $createHeadingNode('h4'))
@@ -157,7 +159,7 @@ function BlockFormatDropdown({ editor, blockType }) {
         }
       },
       h5: () => {
-        if (blockType !== headingSize) {
+        if (blockType !== 'h5') {
           editor.update(() => {
             const selection = $getSelection()
             $setBlocksType(selection, () => $createHeadingNode('h5'))
@@ -165,7 +167,7 @@ function BlockFormatDropdown({ editor, blockType }) {
         }
       },
       h6: () => {
-        if (blockType !== headingSize) {
+        if (blockType !== 'h6') {
           editor.update(() => {
             const selection = $getSelection()
             $setBlocksType(selection, () => $createHeadingNode('h6'))
@@ -179,7 +181,12 @@ function BlockFormatDropdown({ editor, blockType }) {
           editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
         }
       },
-      paragraph: 'Normal',
+      paragraph: () => {
+        editor.update(() => {
+          const selection = $getSelection()
+          $setBlocksType(selection, () => $createParagraphNode())
+        })
+      },
       quote: () => {
         if (blockType !== 'quote') {
           editor.update(() => {
@@ -192,15 +199,12 @@ function BlockFormatDropdown({ editor, blockType }) {
   }, [blockType, editor])
 
   const formatBlock = (value) => {
-    formatFunctions[value]
+    console.log(value)
+    formatFunctions[value]()
   }
   return (
-    <Select>
-      <SelectTrigger
-        value={blockType}
-        onValueChange={formatBlock}
-        className="w-[180px]"
-      >
+    <Select value={blockType} onValueChange={formatBlock}>
+      <SelectTrigger className="w-[180px] outline-none">
         <SelectValue>{blockTypeToBlockName[blockType]}</SelectValue>
       </SelectTrigger>
       <SelectContent>
@@ -249,12 +253,8 @@ function TextFormatToggleGroup({ editor, textFormatToggled }) {
 
 function CodeLanguageDropdown({ onCodeLanguageSelect, codeLanguage }) {
   return (
-    <Select>
-      <SelectTrigger
-        value={codeLanguage}
-        onValueChange={onCodeLanguageSelect}
-        className="w-[180px]"
-      >
+    <Select value={codeLanguage} onValueChange={onCodeLanguageSelect}>
+      <SelectTrigger className="w-[180px]">
         <SelectValue>{getLanguageFriendlyName(codeLanguage)}</SelectValue>
       </SelectTrigger>
       <SelectContent>
