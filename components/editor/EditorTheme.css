@@ -1,5 +1,5 @@
 .editor-paragraph {
-    @apply leading-7 [&:not(:first-child)]:mt-6
+    @apply leading-7 [&:not(:first-child)]:mt-2
 }
 
 .editor-quote {
@@ -23,11 +23,11 @@
 }
 
 .editor-list-ol {
-    @apply my-6 ml-6 list-decimal
+    @apply ml-6 list-decimal
 }
 
 .editor-list-ul {
-    @apply my-6 ml-6 list-disc
+    @apply ml-6 list-disc
 }
 
 .editor-listItem {

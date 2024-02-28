@@ -4,6 +4,7 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
+import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
 
 // import CodeActionMenuPlugin from './plugins/CodeActionPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
@@ -46,9 +47,9 @@ export default function Editor() {
           />
           <HistoryPlugin />
           <CodeHighlightPlugin />
+          <TabIndentationPlugin />
           <TreeViewPlugin />
           <ListPlugin />
-          {/* <CodeActionMenuPlugin anchorElem={editorRef.current} /> */}
           <EquationsPlugin />
         </div>
       </div>

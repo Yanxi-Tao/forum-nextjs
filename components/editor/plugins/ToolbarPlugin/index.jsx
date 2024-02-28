@@ -17,7 +17,6 @@ import {
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
-  INSERT_CHECK_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
   $isListNode,
   ListNode,
@@ -97,13 +96,6 @@ function BlockFormatDropdown({ editor, blockType }) {
       bullet: () => {
         if (blockType !== 'bullet') {
           editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
-        } else {
-          editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
-        }
-      },
-      check: () => {
-        if (blockType !== 'check') {
-          editor.dispatchCommand(INSERT_CHECK_LIST_COMMAND, undefined)
         } else {
           editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
         }
@@ -202,13 +194,9 @@ function BlockFormatDropdown({ editor, blockType }) {
   }, [blockType, editor])
 
   const formatBlock = (value) => {
-    console.log(value)
     formatFunctions[value]()
   }
 
-  const focus = () => {
-    editor.focus()
-  }
   return (
     <Select
       value={blockType}
@@ -230,7 +218,6 @@ function BlockFormatDropdown({ editor, blockType }) {
         <SelectItem value="h3">Heading 3</SelectItem>
         <SelectItem value="bullet">Bulleted List</SelectItem>
         <SelectItem value="number">Numbered List</SelectItem>
-        <SelectItem value="check">Check List</SelectItem>
         <SelectItem value="quote">Quote</SelectItem>
         <SelectItem value="code">Code Block</SelectItem>
       </SelectContent>
