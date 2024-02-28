@@ -288,13 +288,17 @@ function TextFormatToggleGroup({ editor, textFormatToggled }) {
   )
 }
 
-function CodeLanguageDropdown({ onCodeLanguageSelect, codeLanguage }) {
+function CodeLanguageDropdown({ onCodeLanguageSelect, codeLanguage, editor }) {
   return (
     <Select value={codeLanguage} onValueChange={onCodeLanguageSelect}>
       <SelectTrigger className="w-[180px] focus:ring-0 focus:ring-offset-0">
         <SelectValue>{getLanguageFriendlyName(codeLanguage)}</SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        onCloseAutoFocus={() => {
+          editor.focus()
+        }}
+      >
         {CODE_LANGUAGE_OPTIONS.map(([value, name]) => {
           return (
             <SelectItem value={value} key={value}>
@@ -439,19 +443,7 @@ export default function ToolbarPlugin() {
       >
         <Redo2 className="h-4 w-4" />
       </Button>
-      <Button
-        onClick={() => {
-          console.log('format function called')
-          if (blockType !== 'h1') {
-            editor.update(() => {
-              const selection = $getSelection()
-              $setBlocksType(selection, () => $createHeadingNode('h1'))
-            })
-          }
-        }}
-      >
-        Heading
-      </Button>
+
       <Separator orientation="vertical" />
       {blockType in blockTypeToBlockName && (
         <BlockFormatDropdown editor={editor} blockType={blockType} />
@@ -460,6 +452,7 @@ export default function ToolbarPlugin() {
         <CodeLanguageDropdown
           onCodeLanguageSelect={onCodeLanguageSelect}
           codeLanguage={codeLanguage}
+          editor={editor}
         />
       ) : (
         <>

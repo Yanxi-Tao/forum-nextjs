@@ -80,7 +80,11 @@
 }
 
 .editor-code {
-    @apply relative bg-slate-800 font-mono p-4 leading-7 mx-2 my-5 overflow-auto block rounded-md
+    @apply relative bg-slate-800 font-mono p-4 leading-7 my-5 overflow-auto block rounded-md caret-foreground
+}
+
+.editor-code::after {
+    @apply absolute hover:content-[attr(data-highlight-language)] top-0 right-1 p-2 uppercase text-muted-foreground text-xs
 }
 
 .editor-tokenAttr {

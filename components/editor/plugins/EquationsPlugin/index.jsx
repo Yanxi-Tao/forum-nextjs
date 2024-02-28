@@ -43,7 +43,11 @@ export function InsertEquationDialog({ editor }) {
       <DialogTrigger>
         <Sigma className="h-4 w-4" />
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        onCloseAutoFocus={() => {
+          editor.focus()
+        }}
+      >
         <EquationEditor onConfirm={onConfirm} />
       </DialogContent>
     </Dialog>
