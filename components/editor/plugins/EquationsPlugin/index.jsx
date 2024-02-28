@@ -29,6 +29,7 @@ import { Sigma } from 'lucide-react'
 
 export const INSERT_EQUATION_COMMAND = createCommand('INSERT_EQUATION_COMMAND')
 
+// for inserting a new quation dialog when clicking toolbar
 export function InsertEquationDialog({ editor }) {
   const onConfirm = useCallback(
     (equation, inline) => {

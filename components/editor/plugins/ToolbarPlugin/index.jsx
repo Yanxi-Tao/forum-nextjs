@@ -17,6 +17,7 @@ import {
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
+  INSERT_CHECK_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
   $isListNode,
   ListNode,
@@ -48,10 +49,9 @@ import {
   Underline,
   Strikethrough,
   Code,
-  Sigma,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@radix-ui/react-dropdown-menu'
+import { Separator } from '@/components/ui/separator'
 import {
   Select,
   SelectContent,
@@ -205,12 +205,25 @@ function BlockFormatDropdown({ editor, blockType }) {
     console.log(value)
     formatFunctions[value]()
   }
+
+  const focus = () => {
+    editor.focus()
+  }
   return (
-    <Select value={blockType} onValueChange={formatBlock}>
+    <Select
+      value={blockType}
+      onValueChange={(value) => {
+        formatBlock(value)
+      }}
+    >
       <SelectTrigger className="w-[180px] focus:ring-0 focus:ring-offset-0">
         <SelectValue>{blockTypeToBlockName[blockType]}</SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        onCloseAutoFocus={() => {
+          editor.focus()
+        }}
+      >
         <SelectItem value="paragraph">Normal</SelectItem>
         <SelectItem value="h1">Heading 1</SelectItem>
         <SelectItem value="h2">Heading 2</SelectItem>
@@ -409,7 +422,7 @@ export default function ToolbarPlugin() {
   )
 
   return (
-    <div className="flex flex-row justify-evenly my-4">
+    <div className="flex h-10 flex-row justify-evenly items-center my-4">
       <Button
         disabled={!canUndo}
         onClick={() => {
@@ -425,6 +438,19 @@ export default function ToolbarPlugin() {
         }}
       >
         <Redo2 className="h-4 w-4" />
+      </Button>
+      <Button
+        onClick={() => {
+          console.log('format function called')
+          if (blockType !== 'h1') {
+            editor.update(() => {
+              const selection = $getSelection()
+              $setBlocksType(selection, () => $createHeadingNode('h1'))
+            })
+          }
+        }}
+      >
+        Heading
       </Button>
       <Separator orientation="vertical" />
       {blockType in blockTypeToBlockName && (
@@ -447,6 +473,7 @@ export default function ToolbarPlugin() {
               isCode,
             }}
           />
+          <Separator orientation="vertical" className="mx-2" />
           <InsertEquationDialog editor={editor} />
         </>
       )}

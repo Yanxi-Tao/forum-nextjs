@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import KatexRenderer from './EquationRenderer'
 
-// equation editor dialog component
+// equation editor dialog component (dialog content)
 export default function EquationEditor({
   equationValue = '',
   inlineValue = true,

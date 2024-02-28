@@ -9,6 +9,7 @@ import KatexRenderer from './EquationRenderer'
 import EquationEditor from './EquationEditor'
 import { $isEquationNode } from '../../nodes/EquationNode'
 
+// rendered equation node component in lexical
 export default function EquationComponent({ equation, inline, nodeKey }) {
   const [editor] = useLexicalComposerContext()
   // const [equationValue, setEquationValue] = useState(equation)
@@ -29,7 +30,7 @@ export default function EquationComponent({ equation, inline, nodeKey }) {
 
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger className="m-2">
         <KatexRenderer equation={equation} inline={inline} />
       </DialogTrigger>
       <DialogContent>

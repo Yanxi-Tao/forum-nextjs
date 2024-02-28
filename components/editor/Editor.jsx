@@ -7,6 +7,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 
 // import CodeActionMenuPlugin from './plugins/CodeActionPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
+import TreeViewPlugin from './plugins/TreeViewPlugin'
 
 import EquationsPlugin from './plugins/EquationsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
@@ -45,6 +46,7 @@ export default function Editor() {
           />
           <HistoryPlugin />
           <CodeHighlightPlugin />
+          <TreeViewPlugin />
           <ListPlugin />
           {/* <CodeActionMenuPlugin anchorElem={editorRef.current} /> */}
           <EquationsPlugin />
