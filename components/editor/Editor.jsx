@@ -7,9 +7,11 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
 import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
+import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin'
 
 // import CodeActionMenuPlugin from './plugins/CodeActionPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
+import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
 import TreeViewPlugin from './plugins/TreeViewPlugin'
 
 import EquationsPlugin from './plugins/EquationsPlugin'
@@ -18,7 +20,7 @@ import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import EditorTheme from './EditorTheme'
 import EditorNodes from './nodes'
@@ -33,16 +35,23 @@ const editorConfig = {
 }
 
 export default function Editor({ editorRef }) {
+  const onRef = (anchorRef) => {
+    if (anchorRef !== null) {
+      setAnchorElem(anchorRef)
+    }
+  }
+  const [anchorElem, setAnchorElem] = useState(null)
+
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="editor-container max-w-[800px] mx-auto my-32">
+      <div className="editor-container max-w-[700px] max-h-[500px] mx-auto my-32">
         <ToolbarPlugin />
         <div className="editor-inner border rounded-md">
           <AutoFocusPlugin />
           <EditorRefPlugin editorRef={editorRef} />
           <RichTextPlugin
             contentEditable={
-              <div className="editor">
+              <div className="editor" ref={onRef}>
                 <ContentEditable className="p-4 outline-none" />
               </div>
             }
@@ -50,6 +59,8 @@ export default function Editor({ editorRef }) {
           />
           <HistoryPlugin />
           <CodeHighlightPlugin />
+          <FloatingLinkEditorPlugin anchorElem={anchorElem} />
+          <LexicalClickableLinkPlugin />
           <TabIndentationPlugin />
           {/* <TreeViewPlugin /> */}
           <ListPlugin />

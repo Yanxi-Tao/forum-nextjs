@@ -414,22 +414,24 @@ export default function ToolbarPlugin() {
 
   return (
     <div className="flex h-10 flex-row justify-evenly items-center my-4">
-      <Button
-        disabled={!canUndo}
-        onClick={() => {
-          editor.dispatchCommand(UNDO_COMMAND)
-        }}
-      >
-        <Undo2 className="h-4 w-4" />
-      </Button>
-      <Button
-        disabled={!canRedo}
-        onClick={() => {
-          editor.dispatchCommand(REDO_COMMAND)
-        }}
-      >
-        <Redo2 className="h-4 w-4" />
-      </Button>
+      <div className="flex space-x-1">
+        <Button
+          disabled={!canUndo}
+          onClick={() => {
+            editor.dispatchCommand(UNDO_COMMAND)
+          }}
+        >
+          <Undo2 className="h-4 w-4" />
+        </Button>
+        <Button
+          disabled={!canRedo}
+          onClick={() => {
+            editor.dispatchCommand(REDO_COMMAND)
+          }}
+        >
+          <Redo2 className="h-4 w-4" />
+        </Button>
+      </div>
 
       <Separator orientation="vertical" />
       {blockType in blockTypeToBlockName && (

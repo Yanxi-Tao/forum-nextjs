@@ -30,7 +30,7 @@ export default function EquationComponent({ equation, inline, nodeKey }) {
 
   return (
     <Dialog>
-      <DialogTrigger className="m-2">
+      <DialogTrigger className="mx-1">
         <KatexRenderer equation={equation} inline={inline} />
       </DialogTrigger>
       <DialogContent>
