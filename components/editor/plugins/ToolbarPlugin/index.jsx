@@ -48,6 +48,7 @@ import {
   Underline,
   Strikethrough,
   Code,
+  Link,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -61,7 +62,10 @@ import {
 import { Toggle } from '@/components/ui/toggle'
 
 import { InsertEquationDialog } from '../EquationsPlugin'
+import { InsertLinkDialog } from '../FloatingLinkEditorPlugin'
 import useLexicalEditable from '@lexical/react/useLexicalEditable'
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link'
+import { sanitizeUrl } from '@/lib/utils/editor/url'
 
 const blockTypeToBlockName = {
   bullet: 'Bulleted List',
@@ -315,6 +319,7 @@ export default function ToolbarPlugin() {
   const [isUnderline, setIsUnderline] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isCode, setIsCode] = useState(false)
+  const [isLink, setIsLink] = useState(false)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -336,6 +341,13 @@ export default function ToolbarPlugin() {
       setIsUnderline(selection.hasFormat('underline'))
       setIsStrikethrough(selection.hasFormat('strikethrough'))
       setIsCode(selection.hasFormat('code'))
+
+      const maybeLinkNode = selection.anchor.getNode().getParent()
+      if ($isLinkNode(maybeLinkNode)) {
+        setIsLink(true)
+      } else {
+        setIsLink(false)
+      }
 
       // check if is list, heading, or code node
       if (elementDOM !== null) {
@@ -399,6 +411,19 @@ export default function ToolbarPlugin() {
       )
     )
   }, [updateToolbar, editor])
+
+  const insertLink = useCallback(() => {
+    if (!isLink) {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(''))
+      const selection = window.getSelection()
+      console.log(selection)
+      editor.focus()
+      selection.collapseToEnd()
+      console.log(selection)
+    } else {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
+    }
+  }, [editor, isLink])
 
   const onCodeLanguageSelect = useCallback(
     (value) => {
@@ -468,6 +493,7 @@ export default function ToolbarPlugin() {
           />
           <Separator orientation="vertical" className="mx-2" />
           <InsertEquationDialog editor={editor} />
+          <InsertLinkDialog editor={editor} isLink={isLink} />
         </>
       )}
     </div>
