@@ -61,6 +61,7 @@ import {
 import { Toggle } from '@/components/ui/toggle'
 
 import { InsertEquationDialog } from '../EquationsPlugin'
+import useLexicalEditable from '@lexical/react/useLexicalEditable'
 
 const blockTypeToBlockName = {
   bullet: 'Bulleted List',
@@ -300,6 +301,7 @@ function CodeLanguageDropdown({ onCodeLanguageSelect, codeLanguage, editor }) {
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext()
+  const isEditable = useLexicalEditable()
 
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
@@ -416,6 +418,7 @@ export default function ToolbarPlugin() {
     <div className="flex h-10 flex-row justify-evenly items-center my-4">
       <div className="flex space-x-1">
         <Button
+          variant="outline"
           disabled={!canUndo}
           onClick={() => {
             editor.dispatchCommand(UNDO_COMMAND)
@@ -424,12 +427,20 @@ export default function ToolbarPlugin() {
           <Undo2 className="h-4 w-4" />
         </Button>
         <Button
+          variant="outline"
           disabled={!canRedo}
           onClick={() => {
             editor.dispatchCommand(REDO_COMMAND)
           }}
         >
           <Redo2 className="h-4 w-4" />
+        </Button>
+        <Button
+          onClick={() => {
+            editor.setEditable(!isEditable)
+          }}
+        >
+          ToggleMode
         </Button>
       </div>
 

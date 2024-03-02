@@ -34,7 +34,7 @@ export default function EditorComponent({ editorRef }) {
   return (
     <div className="editor-container max-w-[700px] max-h-[500px] mx-auto my-32">
       <ToolbarPlugin />
-      <div className="editor-inner border rounded-md">
+      <div className="editor-inner border rounded-md relative">
         <AutoFocusPlugin />
         <EditorRefPlugin editorRef={editorRef} />
         <RichTextPlugin
@@ -44,6 +44,11 @@ export default function EditorComponent({ editorRef }) {
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}
+          placeholder={
+            <div className="absolute top-[18px] left-4 text-muted-foreground">
+              Enter your answer...
+            </div>
+          }
         />
         <HistoryPlugin />
         <CodeHighlightPlugin />

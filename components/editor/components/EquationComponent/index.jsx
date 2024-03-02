@@ -8,10 +8,12 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import KatexRenderer from './EquationRenderer'
 import EquationEditor from './EquationEditor'
 import { $isEquationNode } from '../../nodes/EquationNode'
+import useLexicalEditable from '@lexical/react/useLexicalEditable'
 
 // rendered equation node component in lexical
 export default function EquationComponent({ equation, inline, nodeKey }) {
   const [editor] = useLexicalComposerContext()
+  const isEditable = useLexicalEditable()
   // const [equationValue, setEquationValue] = useState(equation)
   // const [inlineValue, setInlineValue] = useState(inline)
 
@@ -29,17 +31,29 @@ export default function EquationComponent({ equation, inline, nodeKey }) {
   )
 
   return (
-    <Dialog>
-      <DialogTrigger className="mx-1">
-        <KatexRenderer equation={equation} inline={inline} />
-      </DialogTrigger>
-      <DialogContent>
-        <EquationEditor
-          equationValue={equation}
-          inlineValue={inline}
-          onConfirm={onConfirm}
-        />
-      </DialogContent>
-    </Dialog>
+    <>
+      {isEditable ? (
+        <Dialog>
+          <DialogTrigger asChild>
+            <KatexRenderer
+              equation={equation}
+              inline={inline}
+              className=" cursor-pointer"
+            />
+          </DialogTrigger>
+          <DialogContent>
+            <EquationEditor
+              equationValue={equation}
+              inlineValue={inline}
+              onConfirm={onConfirm}
+            />
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <>
+          <KatexRenderer equation={equation} inline={inline} />
+        </>
+      )}
+    </>
   )
 }
