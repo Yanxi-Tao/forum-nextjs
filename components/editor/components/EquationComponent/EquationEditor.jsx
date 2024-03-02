@@ -34,6 +34,12 @@ export default function EquationEditor({
       <div className="flex flex-col items-center space-y-2">
         <div>
           <Textarea
+            onFocus={(e) => {
+              e.target.setSelectionRange(
+                equationValue.length + 1,
+                equationValue.length + 1
+              )
+            }}
             onChange={(event) => setEditorEquation(event.target.value)}
             value={editorEquation}
             className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 resize-none overflow-auto"
