@@ -42,8 +42,10 @@ export function InsertLinkDialog({ editor, isLink }) {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Link className="h-4 w-4 mx-1.5" />
+      <DialogTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <Link className="h-4 w-4 mx-1.5" />
+        </Button>
       </DialogTrigger>
       <DialogContent
         onCloseAutoFocus={() => {
@@ -252,19 +254,19 @@ function useFloatingLinkEditorToolbar(editor, anchorElem) {
           setIsLink(false)
           return
         }
-      }
 
-      const badSelection = selection.getNodes().find((node) => {
-        const linkNode = $findMatchingParent(node, $isLinkNode)
-        if (!linkNode) {
-          return node
+        const badSelection = selection.getNodes().find((node) => {
+          const linkNode = $findMatchingParent(node, $isLinkNode)
+          if (!linkNode) {
+            return node
+          }
+        })
+
+        if (!badSelection) {
+          setIsLink(true)
+        } else {
+          setIsLink(false)
         }
-      })
-
-      if (!badSelection) {
-        setIsLink(true)
-      } else {
-        setIsLink(false)
       }
     }
 

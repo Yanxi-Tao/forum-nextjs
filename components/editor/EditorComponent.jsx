@@ -6,6 +6,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
 import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
+import { HorizontalRulePlugin } from '@lexical/react/LexicalHorizontalRulePlugin'
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin'
 import useLexicalEditable from '@lexical/react/useLexicalEditable'
 
@@ -52,6 +53,7 @@ export default function EditorComponent({ editorRef }) {
         />
         <HistoryPlugin />
         <CodeHighlightPlugin />
+        <HorizontalRulePlugin />
         <FloatingLinkEditorPlugin anchorElem={anchorElem} />
         {!isEditable && <LexicalClickableLinkPlugin />}
         <TabIndentationPlugin />

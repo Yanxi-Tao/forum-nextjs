@@ -37,6 +37,7 @@ import {
   getLanguageFriendlyName,
 } from '@lexical/code'
 import { $setBlocksType } from '@lexical/selection'
+import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode'
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
 
@@ -48,7 +49,7 @@ import {
   Underline,
   Strikethrough,
   Code,
-  Link,
+  GitCommitHorizontal,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -494,6 +495,15 @@ export default function ToolbarPlugin() {
           <Separator orientation="vertical" className="mx-2" />
           <InsertEquationDialog editor={editor} />
           <InsertLinkDialog editor={editor} isLink={isLink} />
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => {
+              editor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND, undefined)
+            }}
+          >
+            <GitCommitHorizontal className="h-4 w-4" />
+          </Button>
         </>
       )}
     </div>

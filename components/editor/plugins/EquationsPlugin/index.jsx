@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Sigma } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export const INSERT_EQUATION_COMMAND = createCommand('INSERT_EQUATION_COMMAND')
 
@@ -40,8 +41,10 @@ export function InsertEquationDialog({ editor }) {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Sigma className="h-4 w-4 mx-1.5" />
+      <DialogTrigger asChild>
+        <Button size="icon" variant="ghost">
+          <Sigma className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent
         onCloseAutoFocus={() => {

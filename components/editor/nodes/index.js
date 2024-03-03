@@ -3,6 +3,7 @@ import { ListItemNode, ListNode } from '@lexical/list'
 import { CodeHighlightNode, CodeNode } from '@lexical/code'
 import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import { LinkNode, AutoLinkNode } from '@lexical/link'
+import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode'
 
 import { EquationNode } from './EquationNode'
 
@@ -19,6 +20,7 @@ const EditorNodes = [
   EquationNode,
   LinkNode,
   AutoLinkNode,
+  HorizontalRuleNode,
 ]
 
 export default EditorNodes
