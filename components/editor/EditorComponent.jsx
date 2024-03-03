@@ -32,7 +32,7 @@ export default function EditorComponent({ editorRef }) {
   const [anchorElem, setAnchorElem] = useState(null)
 
   return (
-    <div className="editor-container max-w-[700px] max-h-[500px] mx-auto my-32">
+    <div className="editor-container max-w-[800px] max-h-[500px] mx-auto my-32">
       <ToolbarPlugin />
       <div className="editor-inner border rounded-md relative">
         <AutoFocusPlugin />

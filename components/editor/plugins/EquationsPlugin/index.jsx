@@ -41,7 +41,7 @@ export function InsertEquationDialog({ editor }) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Sigma className="h-4 w-4" />
+        <Sigma className="h-4 w-4 mx-1.5" />
       </DialogTrigger>
       <DialogContent
         onCloseAutoFocus={() => {

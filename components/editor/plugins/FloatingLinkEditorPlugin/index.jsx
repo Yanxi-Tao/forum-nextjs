@@ -42,8 +42,8 @@ export function InsertLinkDialog({ editor, isLink }) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Link className="h-4 w-4" />
+      <DialogTrigger>
+        <Link className="h-4 w-4 mx-1.5" />
       </DialogTrigger>
       <DialogContent
         onCloseAutoFocus={() => {
@@ -190,31 +190,51 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
   return (
     <div ref={toolbarRef} className="absolute">
       {isLink && editor.isEditable() ? (
-        <Dialog>
-          <DialogTrigger>Edit Link</DialogTrigger>
-          <DialogContent
-            onCloseAutoFocus={() => {
-              editor.focus()
+        <div className="flex bg-muted-foreground rounded-md p-0.5">
+          <Button variant="ghost" size="sm">
+            <a href={linkUrl} target="_blank">
+              Visit Link
+            </a>
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="sm">
+                Edit Link
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              onCloseAutoFocus={() => {
+                editor.focus()
+              }}
+            >
+              <DialogHeader>
+                <DialogTitle>Link Editor</DialogTitle>
+              </DialogHeader>
+              <Input
+                value={editedLinkUrl}
+                onChange={(event) => {
+                  setEditedLinkUrl(event.target.value)
+                  setIsUrl(validateUrl(editedLinkUrl))
+                }}
+              />
+              <DialogClose>Cancel</DialogClose>
+              <DialogClose asChild>
+                <Button disabled={!isUrl} onClick={handleUrlSubmission}>
+                  Confirm
+                </Button>
+              </DialogClose>
+            </DialogContent>
+          </Dialog>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
             }}
           >
-            <DialogHeader>
-              <DialogTitle>Link Editor</DialogTitle>
-            </DialogHeader>
-            <Input
-              value={editedLinkUrl}
-              onChange={(event) => {
-                setEditedLinkUrl(event.target.value)
-                setIsUrl(validateUrl(editedLinkUrl))
-              }}
-            />
-            <DialogClose>Cancel</DialogClose>
-            <DialogClose asChild>
-              <Button disabled={!isUrl} onClick={handleUrlSubmission}>
-                Confirm
-              </Button>
-            </DialogClose>
-          </DialogContent>
-        </Dialog>
+            Delete Link
+          </Button>
+        </div>
       ) : null}
     </div>
   )
