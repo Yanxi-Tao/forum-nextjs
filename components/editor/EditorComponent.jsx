@@ -55,8 +55,12 @@ export default function EditorComponent({ editorRef }) {
         <HistoryPlugin />
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
-        <FloatingLinkEditorPlugin anchorElem={anchorElem} />
-        <DraggableBlockPlugin anchorElem={anchorElem} />
+        {anchorElem ? (
+          <>
+            <FloatingLinkEditorPlugin anchorElem={anchorElem} />
+            <DraggableBlockPlugin anchorElem={anchorElem} />
+          </>
+        ) : null}
         {!isEditable && <LexicalClickableLinkPlugin />}
         <TabIndentationPlugin />
         {/* <TreeViewPlugin /> */}

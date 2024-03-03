@@ -1,27 +1,25 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { eventFiles } from '@lexical/rich-text'
 import { mergeRegister } from '@lexical/utils'
-
 import {
+  $getNearestNodeFromDOMNode,
+  $getNodeByKey,
+  $getRoot,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
   DRAGOVER_COMMAND,
   DROP_COMMAND,
-  $getRoot,
-  $getNearestNodeFromDOMNode,
-  $getNodeByKey,
 } from 'lexical'
-
 import * as React from 'react'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import * as Portal from '@radix-ui/react-portal'
+import { GripVertical } from 'lucide-react'
+
 import { isHTMLElement } from '@/lib/utils/editor/guard'
 import { Point } from '@/lib/utils/editor/point'
 import { Rect } from '@/lib/utils/editor/rect'
 
-import * as Portal from '@radix-ui/react-portal'
-import { GripVertical } from 'lucide-react'
-
-const SPACE = 1
+const SPACE = 4
 const TARGET_LINE_HALF_HEIGHT = 2
 const DRAGGABLE_BLOCK_MENU_CLASSNAME = 'draggable-block-menu'
 const DRAG_DATA_FORMAT = 'application/x-lexical-drag-block'
@@ -37,7 +35,6 @@ function getCurrentIndex(keysLength) {
   if (keysLength === 0) {
     return Infinity
   }
-
   if (prevIndex >= 0 && prevIndex < keysLength) {
     return prevIndex
   }
@@ -62,7 +59,6 @@ function getCollapsedMargins(elem) {
     elem.nextElementSibling,
     'marginTop'
   )
-
   const collapsedTopMargin = Math.max(
     parseFloat(marginTop),
     prevElemSiblingMarginBottom
@@ -76,7 +72,7 @@ function getCollapsedMargins(elem) {
 }
 
 function getBlockElement(anchorElem, editor, event, useEdgeAsDefault = false) {
-  const anchorElemRect = anchorElem.getBoundingClientRect()
+  const anchorElementRect = anchorElem.getBoundingClientRect()
   const topLevelNodeKeys = getTopLevelNodeKeys(editor)
 
   let blockElem = null
@@ -113,7 +109,7 @@ function getBlockElement(anchorElem, editor, event, useEdgeAsDefault = false) {
       const key = topLevelNodeKeys[index]
       const elem = editor.getElementByKey(key)
       if (elem === null) {
-        return
+        break
       }
       const point = new Point(event.x, event.y)
       const domRect = Rect.fromDOM(elem)
@@ -121,8 +117,8 @@ function getBlockElement(anchorElem, editor, event, useEdgeAsDefault = false) {
 
       const rect = domRect.generateNewRect({
         bottom: domRect.bottom + marginBottom,
-        left: anchorElemRect.left,
-        right: anchorElemRect.right,
+        left: anchorElementRect.left,
+        right: anchorElementRect.right,
         top: domRect.top - marginTop,
       })
 
@@ -143,6 +139,7 @@ function getBlockElement(anchorElem, editor, event, useEdgeAsDefault = false) {
         } else if (isOnBottomSide) {
           direction = Downward
         } else {
+          // stop search block element
           direction = Infinity
         }
       }
@@ -150,7 +147,6 @@ function getBlockElement(anchorElem, editor, event, useEdgeAsDefault = false) {
       index += direction
     }
   })
-
   return blockElem
 }
 
@@ -184,6 +180,7 @@ function setMenuPosition(targetElem, floatingElem, anchorElem) {
 function setDragImage(dataTransfer, draggableBlockElem) {
   const { transform } = draggableBlockElem.style
 
+  // Remove dragImage borders
   draggableBlockElem.style.transform = 'translateZ(0)'
   dataTransfer.setDragImage(draggableBlockElem, 0, 0)
 
@@ -224,10 +221,12 @@ function hideTargetLine(targetLineElem) {
 }
 
 function useDraggableBlockMenu(editor, anchorElem, isEditable) {
-  const [draggableBlockElem, setDraggableBlockElem] = useState(null)
+  const scrollerElem = anchorElem.parentElement
+
   const menuRef = useRef(null)
   const targetLineRef = useRef(null)
   const isDraggingBlockRef = useRef(false)
+  const [draggableBlockElem, setDraggableBlockElem] = useState(null)
 
   useEffect(() => {
     function onMouseMove(event) {
@@ -250,14 +249,14 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       setDraggableBlockElem(null)
     }
 
-    anchorElem?.addEventListener('mousemove', onMouseMove)
-    anchorElem?.addEventListener('mouseleave', onMouseLeave)
+    scrollerElem?.addEventListener('mousemove', onMouseMove)
+    scrollerElem?.addEventListener('mouseleave', onMouseLeave)
 
     return () => {
-      anchorElem?.removeEventListener('mousemove', onMouseMove)
-      anchorElem?.removeEventListener('mouseleave', onMouseLeave)
+      scrollerElem?.removeEventListener('mousemove', onMouseMove)
+      scrollerElem?.removeEventListener('mouseleave', onMouseLeave)
     }
-  }, [editor, anchorElem])
+  }, [scrollerElem, anchorElem, editor])
 
   useEffect(() => {
     if (menuRef.current) {
@@ -266,7 +265,7 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
   }, [anchorElem, draggableBlockElem])
 
   useEffect(() => {
-    function onDragOver(event) {
+    function onDragover(event) {
       if (!isDraggingBlockRef.current) {
         return false
       }
@@ -283,7 +282,6 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       if (targetBlockElem === null || targetLineElem === null) {
         return false
       }
-
       setTargetLine(targetLineElem, targetBlockElem, pageY, anchorElem)
       // Prevent default event to be able to trigger onDrop events
       event.preventDefault()
@@ -333,7 +331,7 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
       editor.registerCommand(
         DRAGOVER_COMMAND,
         (event) => {
-          return onDragOver(event)
+          return onDragover(event)
         },
         COMMAND_PRIORITY_LOW
       ),
@@ -372,16 +370,16 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
   return (
     <Portal.Root container={anchorElem}>
       <div
-        className="icon draggable-block-menu absolute top-0 left-0 cursor-grab active:cursor-grabbing p-2 opacity-0 will-change-transform"
+        className="draggable-block-menu p-2 cursor-grab opacity-0 absolute will-change-transform left-0 top-0"
         ref={menuRef}
         draggable={true}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
       >
-        <GripVertical className="h-5 w-5" />
+        <div className="icon" />
       </div>
       <div
-        className="draggable-block-target-line pointer-events-none bg-muted-foreground h-2 absolute left-0 top-0 opacity-0 will-change-transform"
+        className="draggable-block-target-line pointer-events-none h-1 bg-muted-foreground absolute will-change-transform opacity-0 left-0 top-0"
         ref={targetLineRef}
       />
     </Portal.Root>
@@ -390,5 +388,5 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
 
 export default function DraggableBlockPlugin({ anchorElem = document.body }) {
   const [editor] = useLexicalComposerContext()
-  return useDraggableBlockMenu(editor, anchorElem, editor._editable)
+  return useDraggableBlockMenu(editor, anchorElem, editor.isEditable())
 }
