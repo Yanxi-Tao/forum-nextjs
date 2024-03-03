@@ -10,11 +10,10 @@ import { HorizontalRulePlugin } from '@lexical/react/LexicalHorizontalRulePlugin
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin'
 import useLexicalEditable from '@lexical/react/useLexicalEditable'
 
-// import CodeActionMenuPlugin from './plugins/CodeActionPlugin'
+import TreeViewPlugin from './plugins/TreeViewPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
-import TreeViewPlugin from './plugins/TreeViewPlugin'
-
+import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin'
 import EquationsPlugin from './plugins/EquationsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
@@ -65,6 +64,7 @@ export default function EditorComponent({ editorRef }) {
         <TabIndentationPlugin />
         {/* <TreeViewPlugin /> */}
         <ListPlugin />
+        <ListMaxIndentLevelPlugin maxDepth={7} />
         <LinkPlugin />
         <AutoLinkPlugin />
         <EquationsPlugin />
