@@ -18,6 +18,7 @@ import { GripVertical } from 'lucide-react'
 import { isHTMLElement } from '@/lib/utils/editor/guard'
 import { Point } from '@/lib/utils/editor/point'
 import { Rect } from '@/lib/utils/editor/rect'
+import { Button } from '@/components/ui/button'
 
 const SPACE = 4
 const TARGET_LINE_HALF_HEIGHT = 2
@@ -370,13 +371,13 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
   return (
     <Portal.Root container={anchorElem}>
       <div
-        className="draggable-block-menu p-2 cursor-grab opacity-0 absolute will-change-transform left-0 top-0"
+        className="draggable-block-menu p-2 cursor-grab active:cursor-grabbing opacity-0 absolute will-change-transform left-0 top-0"
         ref={menuRef}
         draggable={true}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
       >
-        <div className="icon" />
+        <div>||</div>
       </div>
       <div
         className="draggable-block-target-line pointer-events-none h-1 bg-muted-foreground absolute will-change-transform opacity-0 left-0 top-0"
