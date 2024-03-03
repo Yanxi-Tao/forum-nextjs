@@ -31,11 +31,13 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import * as Portal from '@radix-ui/react-portal'
 
 import { Link } from 'lucide-react'
 
 import { getSelectedNode } from '@/lib/utils/editor/getSelectedNode'
 
+// initialize/insert a new linkNode
 export function InsertLinkDialog({ editor, isLink }) {
   const [editedLinkUrl, setEditedLinkUrl] = useState('')
   const [isUrl, setIsUrl] = useState(false)
@@ -92,6 +94,7 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
   const [isUrl, setIsUrl] = useState('')
   const toolbarRef = useRef(null)
 
+  // update link editor position callback
   const updateLinkEditorPos = useCallback(() => {
     const selection = $getSelection()
     if ($isRangeSelection(selection)) {
@@ -127,6 +130,8 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
     return true
   }, [anchorElem, linkUrl])
 
+  // update link editor position when
+  // window resized or scrolled
   useEffect(() => {
     const update = () => {
       editor.getEditorState().read(() => {
@@ -147,6 +152,7 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
     }
   }, [editor, anchorElem, updateLinkEditorPos])
 
+  // update link editor position when selection change
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
@@ -165,12 +171,14 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
     )
   }, [editor, updateLinkEditorPos])
 
+  // initialize link editor position
   useEffect(() => {
     editor.getEditorState().read(() => {
       updateLinkEditorPos()
     })
   }, [editor, updateLinkEditorPos])
 
+  // handle link update submission
   const handleUrlSubmission = () => {
     editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(editedLinkUrl))
     editor.update(() => {
@@ -189,6 +197,7 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
     })
   }
 
+  // render link editor only in edit mode
   return (
     <div ref={toolbarRef} className="absolute">
       {isLink && editor.isEditable() ? (
@@ -245,6 +254,8 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
 function useFloatingLinkEditorToolbar(editor, anchorElem) {
   const [isLink, setIsLink] = useState(false)
 
+  // check if selection is linkNode when
+  // selection change or editor state updated
   useEffect(() => {
     function checkSelection() {
       const selection = $getSelection()
@@ -288,11 +299,13 @@ function useFloatingLinkEditorToolbar(editor, anchorElem) {
   }, [editor])
 
   return (
-    <FloatingLinkToolbar
-      editor={editor}
-      anchorElem={anchorElem}
-      isLink={isLink}
-    />
+    <Portal.Root container={anchorElem}>
+      <FloatingLinkToolbar
+        editor={editor}
+        anchorElem={anchorElem}
+        isLink={isLink}
+      />
+    </Portal.Root>
   )
 }
 

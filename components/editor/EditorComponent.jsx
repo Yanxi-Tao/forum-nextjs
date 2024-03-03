@@ -18,6 +18,7 @@ import TreeViewPlugin from './plugins/TreeViewPlugin'
 import EquationsPlugin from './plugins/EquationsPlugin'
 import ToolbarPlugin from './plugins/ToolbarPlugin'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
+import DraggableBlockPlugin from './plugins/DraggableBlockPlugin'
 
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 
@@ -40,8 +41,8 @@ export default function EditorComponent({ editorRef }) {
         <EditorRefPlugin editorRef={editorRef} />
         <RichTextPlugin
           contentEditable={
-            <div className="editor" ref={onRef}>
-              <ContentEditable className="p-4 outline-none min-h-[400px] caret-foreground" />
+            <div className="editor -z-10" ref={onRef}>
+              <ContentEditable className="p-4 outline-none min-h-[400px] caret-foreground pl-8" />
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}
@@ -55,6 +56,7 @@ export default function EditorComponent({ editorRef }) {
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
         <FloatingLinkEditorPlugin anchorElem={anchorElem} />
+        <DraggableBlockPlugin anchorElem={anchorElem} />
         {!isEditable && <LexicalClickableLinkPlugin />}
         <TabIndentationPlugin />
         {/* <TreeViewPlugin /> */}
