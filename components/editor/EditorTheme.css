@@ -80,7 +80,7 @@
 }
 
 .editor-code {
-    @apply relative bg-slate-400 dark:bg-slate-800 font-mono p-4 leading-7 my-5 overflow-auto block rounded-md caret-foreground
+    @apply relative bg-[#282c34] font-mono p-4 leading-7 my-5 overflow-auto block rounded-md caret-white text-[#abb2bf]
 }
 
 .editor-code::after {
@@ -88,27 +88,27 @@
 }
 
 .editor-tokenAttr {
-    @apply text-blue-600
+    @apply text-[#c792ea]
 }
 
 .editor-tokenProperty {
-    @apply text-red-600
+    @apply text-[#d19a66]
 }
 
 .editor-tokenSelector {
-    @apply text-green-600
+    @apply text-[#98c379]
 }
 
 .editor-tokenComment {
-    @apply text-gray-400
+    @apply text-[#5c6370]
 }
 
 .editor-tokenFunction {
-    @apply text-cyan-500
+    @apply text-[#61aeee]
 }
 
 .editor-tokenOperator {
-    @apply text-fuchsia-500
+    @apply text-[#e06c75]
 }
 
 .editor-tokenVariable {
@@ -116,7 +116,7 @@
 }
 
 .editor-tokenPunctuation {
-    @apply text-slate-300
+    @apply text-[#abb2bf]
 }
 
 div.editor-equation {
