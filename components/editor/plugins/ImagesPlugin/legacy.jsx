@@ -11,14 +11,16 @@ import {
   COMMAND_PRIORITY_EDITOR,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
-  createCommand,
   DRAGOVER_COMMAND,
   DRAGSTART_COMMAND,
   DROP_COMMAND,
+  createCommand,
 } from 'lexical'
-import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
+
 import { CAN_USE_DOM } from '@/lib/utils/editor/canUseDom'
+
+import { useRef, useState, useEffect } from 'react'
+import * as React from 'react'
 
 import {
   $createImageNode,
@@ -26,120 +28,7 @@ import {
   ImageNode,
 } from '../../nodes/ImageNode'
 
-import Button from '../../ui/Button'
-import { DialogActions } from '../../ui/Dialog'
-import FileInput from '../../ui/FileInput'
-import Select from '../../ui/Select'
-import TextInput from '../../ui/TextInput'
-
-const getDOMSelection = (targetWindow) =>
-  CAN_USE_DOM ? (targetWindow || window).getSelection() : null
-
 export const INSERT_IMAGE_COMMAND = createCommand('INSERT_IMAGE_COMMAND')
-
-export function InsertInlineImageDialog({ activeEditor, onClose }) {
-  const hasModifier = useRef(false)
-
-  const [src, setSrc] = useState('')
-  const [altText, setAltText] = useState('')
-  const [showCaption, setShowCaption] = useState(false)
-  const [position, setPosition] = useState('left')
-
-  const isDisabled = src === ''
-
-  const handleShowCaptionChange = (e) => {
-    setShowCaption(e.target.checked)
-  }
-
-  const handlePositionChange = (e) => {
-    setPosition(e.target.value)
-  }
-
-  const loadImage = (files) => {
-    const reader = new FileReader()
-    reader.onload = function () {
-      if (typeof reader.result === 'string') {
-        setSrc(reader.result)
-      }
-      return ''
-    }
-    if (files !== null) {
-      reader.readAsDataURL(files[0])
-    }
-  }
-
-  useEffect(() => {
-    hasModifier.current = false
-    const handler = (e) => {
-      hasModifier.current = e.altKey
-    }
-    document.addEventListener('keydown', handler)
-    return () => {
-      document.removeEventListener('keydown', handler)
-    }
-  }, [activeEditor])
-
-  const handleOnClick = () => {
-    const payload = { altText, position, showCaption, src }
-    activeEditor.dispatchCommand(INSERT_INLINE_IMAGE_COMMAND, payload)
-    onClose()
-  }
-
-  return (
-    <>
-      <div style={{ marginBottom: '1em' }}>
-        <FileInput
-          label="Image Upload"
-          onChange={loadImage}
-          accept="image/*"
-          data-test-id="image-modal-file-upload"
-        />
-      </div>
-      <div style={{ marginBottom: '1em' }}>
-        <TextInput
-          label="Alt Text"
-          placeholder="Descriptive alternative text"
-          onChange={setAltText}
-          value={altText}
-          data-test-id="image-modal-alt-text-input"
-        />
-      </div>
-
-      <Select
-        style={{ marginBottom: '1em', width: '290px' }}
-        label="Position"
-        name="position"
-        id="position-select"
-        onChange={handlePositionChange}
-      >
-        <option value="left">Left</option>
-        <option value="right">Right</option>
-        <option value="full">Full Width</option>
-      </Select>
-
-      <div className="Input__wrapper">
-        <input
-          id="caption"
-          className="InlineImageNode_Checkbox"
-          type="checkbox"
-          checked={showCaption}
-          onChange={handleShowCaptionChange}
-        />
-        <label htmlFor="caption">Show Caption</label>
-      </div>
-
-      <DialogActions>
-        <Button
-          data-test-id="image-modal-file-upload-btn"
-          disabled={isDisabled}
-          onClick={() => handleOnClick()}
-        >
-          Confirm
-        </Button>
-      </DialogActions>
-    </>
-  )
-}
 
 export default function ImagesPlugin() {
   const [editor] = useLexicalComposerContext()
@@ -180,6 +69,7 @@ export default function ImagesPlugin() {
       editor.registerCommand(
         DROP_COMMAND,
         (event) => {
+          console.log('test')
           return onDrop(event, editor)
         },
         COMMAND_PRIORITY_HIGH
@@ -190,12 +80,16 @@ export default function ImagesPlugin() {
   return null
 }
 
-const TRANSPARENT_IMAGE =
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-const img = document.createElement('img')
-img.src = TRANSPARENT_IMAGE
+// const TRANSPARENT_IMAGE =
+//   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+// const img = document.createElement('img')
+// img.src = TRANSPARENT_IMAGE
 
 function onDragStart(event) {
+  const TRANSPARENT_IMAGE =
+    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+  const img = document.createElement('img')
+  img.src = TRANSPARENT_IMAGE
   const node = getImageNodeInSelection()
   if (!node) {
     return false
@@ -209,15 +103,7 @@ function onDragStart(event) {
   dataTransfer.setData(
     'application/x-lexical-drag',
     JSON.stringify({
-      data: {
-        altText: node.__altText,
-        caption: node.__caption,
-        height: node.__height,
-        key: node.getKey(),
-        showCaption: node.__showCaption,
-        src: node.__src,
-        width: node.__width,
-      },
+      data: { src: node.__src, key: node.getKey() },
       type: 'image',
     })
   )
@@ -256,7 +142,6 @@ function onDrop(event, editor) {
     $setSelection(rangeSelection)
     editor.dispatchCommand(INSERT_IMAGE_COMMAND, data)
   }
-  return true
 }
 
 function getImageNodeInSelection() {
@@ -307,10 +192,10 @@ function getDragSelection(event) {
     range = document.caretRangeFromPoint(event.clientX, event.clientY)
   } else if (event.rangeParent && domSelection !== null) {
     domSelection.collapse(event.rangeParent, event.rangeOffset || 0)
-    range = domSelection.getRangeAt(0)
   } else {
-    throw Error('Cannot get the selection when dragging')
+    throw Error(`Cannot get the selection when dragging`)
   }
-
-  return range
 }
+
+const getDOMSelection = (targetWindow) =>
+  CAN_USE_DOM ? (targetWindow || window).getSelection() : null

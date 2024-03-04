@@ -84,7 +84,7 @@
 }
 
 .editor-code::after {
-    @apply absolute hover:content-[attr(data-highlight-language)] top-0 right-1 p-2 uppercase text-muted-foreground text-xs
+    @apply absolute hover:content-[attr(data-highlight-language)] top-0 right-1 p-1 uppercase text-muted-foreground text-xs
 }
 
 .editor-tokenAttr {

@@ -46,6 +46,7 @@ export class EquationNode extends DecoratorNode {
       serializedNode.equation,
       serializedNode.inline
     )
+    return node
   }
 
   // for copy/paste between editor sharing same namespace or

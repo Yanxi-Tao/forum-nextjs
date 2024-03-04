@@ -13,6 +13,7 @@ import {
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import * as Portal from '@radix-ui/react-portal'
+import { Separator } from '@/components/ui/separator'
 
 import { isHTMLElement } from '@/lib/utils/editor/guard'
 import { Point } from '@/lib/utils/editor/point'
@@ -379,9 +380,9 @@ function useDraggableBlockMenu(editor, anchorElem, isEditable) {
           >
             <div>||</div>
           </div>
-          <div
-            className="draggable-block-target-line pointer-events-none h-1 bg-muted-foreground absolute will-change-transform opacity-0 left-0 top-0"
+          <Separator
             ref={targetLineRef}
+            className="pointer-events-none h-1 absolute will-change-transform opacity-0 left-0 top-0"
           />
         </Portal.Root>
       ) : null}

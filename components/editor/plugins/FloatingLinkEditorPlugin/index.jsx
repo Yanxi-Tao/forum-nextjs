@@ -75,7 +75,7 @@ export function InsertLinkDialog({ editor, isLink }) {
               )
               editor.update(() => {
                 const node = getSelectedNode($getSelection()).getNextSibling()
-                node.selectEnd()
+                node?.selectEnd()
               })
               setEditedLinkUrl('')
             }}
@@ -199,7 +199,7 @@ function FloatingLinkToolbar({ editor, anchorElem, isLink }) {
 
   // render link editor only in edit mode
   return (
-    <div ref={toolbarRef} className="absolute">
+    <div ref={toolbarRef} className="absolute z-30">
       {isLink && editor.isEditable() ? (
         <div className="flex bg-muted-foreground rounded-md p-0.5">
           <Button variant="ghost" size="sm">
