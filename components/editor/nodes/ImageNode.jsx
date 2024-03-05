@@ -38,6 +38,7 @@ export class ImageNode extends DecoratorNode {
   }
 
   constructor(src, altText, width, height, showCaption, caption, key) {
+    console.log(width, height)
     super(key)
     this.__src = src
     this.__altText = altText
@@ -163,7 +164,6 @@ export class ImageNode extends DecoratorNode {
   }
 
   decorate() {
-    console.log(this.__width, this.__height)
     return (
       <ImageComponent
         src={this.__src}
@@ -180,7 +180,6 @@ export class ImageNode extends DecoratorNode {
 
 export function $createImageNode({
   altText,
-  position,
   height,
   src,
   width,
@@ -189,16 +188,7 @@ export function $createImageNode({
   key,
 }) {
   return $applyNodeReplacement(
-    new ImageNode(
-      src,
-      altText,
-      position,
-      width,
-      height,
-      showCaption,
-      caption,
-      key
-    )
+    new ImageNode(src, altText, width, height, showCaption, caption, key)
   )
 }
 

@@ -43,6 +43,10 @@
     @apply text-primary-foreground border-b-2 border-primary-foreground
 }
 
+.editor-image {
+    @apply flex justify-center items-center
+}
+
 .editor-link {
     @apply text-blue-800 no-underline
 }
