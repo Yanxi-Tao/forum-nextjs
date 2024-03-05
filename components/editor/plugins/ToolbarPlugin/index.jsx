@@ -429,7 +429,7 @@ export default function ToolbarPlugin() {
   )
 
   return (
-    <div className="flex h-10 flex-row justify-evenly items-center my-4">
+    <div className="sticky top-0 flex flex-row h-16 justify-evenly items-center py-3 bg-background border-b">
       <div className="flex space-x-1">
         <Button
           variant="outline"
@@ -449,7 +449,7 @@ export default function ToolbarPlugin() {
         >
           <Redo2 className="h-4 w-4" />
         </Button>
-        <Button
+        {/* <Button
           onClick={() => {
             editor.setEditable(!isEditable)
           }}
@@ -465,7 +465,7 @@ export default function ToolbarPlugin() {
           }}
         >
           Store
-        </Button>
+        </Button> */}
       </div>
 
       <Separator orientation="vertical" />
@@ -491,18 +491,23 @@ export default function ToolbarPlugin() {
             }}
           />
           <Separator orientation="vertical" className="mx-2" />
-          <InsertEquationDialog editor={editor} />
-          <InsertLinkDialog editor={editor} isLink={isLink} />
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => {
-              editor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND, undefined)
-            }}
-          >
-            <GitCommitHorizontal className="h-4 w-4" />
-          </Button>
-          <InsertImageDialog editor={editor} />
+          <div>
+            <InsertEquationDialog editor={editor} />
+            <InsertLinkDialog editor={editor} isLink={isLink} />
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => {
+                editor.dispatchCommand(
+                  INSERT_HORIZONTAL_RULE_COMMAND,
+                  undefined
+                )
+              }}
+            >
+              <GitCommitHorizontal className="h-4 w-4" />
+            </Button>
+            <InsertImageDialog editor={editor} />
+          </div>
         </>
       )}
     </div>

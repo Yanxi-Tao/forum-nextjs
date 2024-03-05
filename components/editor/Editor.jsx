@@ -8,19 +8,10 @@ import './EditorTheme.css'
 import * as React from 'react'
 import { useMemo } from 'react'
 
-const editorConfig = {
-  namespace: 'Post-Editor',
-  theme: EditorTheme,
-  nodes: [...EditorNodes],
-  onError(error) {
-    throw error
-  },
-}
-
 export default function Editor({ isEditMode = true }) {
   const editorConfig = useMemo(
     () => ({
-      namespace: 'Post-Editor',
+      namespace: 'editor',
       theme: EditorTheme,
       nodes: [...EditorNodes],
       onError(error) {

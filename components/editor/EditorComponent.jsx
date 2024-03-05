@@ -34,9 +34,9 @@ export default function EditorComponent({ editorRef }) {
   const [anchorElem, setAnchorElem] = useState(null)
 
   return (
-    <div className="editor-container max-w-[800px] max-h-[500px] mx-auto my-32">
+    <div className="editor-container max-w-[900px] mx-auto my-32 border">
       {isEditable ? <ToolbarPlugin /> : null}
-      <div className="editor-inner border rounded-md relative">
+      <div className="editor-inner rounded-md relative">
         <AutoFocusPlugin />
         <EditorRefPlugin editorRef={editorRef} />
         <RichTextPlugin
