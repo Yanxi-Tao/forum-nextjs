@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection'
 import { mergeRegister } from '@lexical/utils'
@@ -28,7 +30,6 @@ export default function ImageComponent({
   height,
   showCaption,
   caption,
-  position,
 }) {
   const imageRef = useRef(null)
   const [isSelected, setSelected, clearSelection] =
@@ -89,5 +90,7 @@ export default function ImageComponent({
 
   //   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected
-  return <div></div>
+  return (
+    <Image src={src} alt={altText} height={height} width={width} className="" />
+  )
 }

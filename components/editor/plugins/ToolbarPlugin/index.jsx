@@ -64,6 +64,7 @@ import { Toggle } from '@/components/ui/toggle'
 
 import { InsertEquationDialog } from '../EquationsPlugin'
 import { InsertLinkDialog } from '../FloatingLinkEditorPlugin'
+import { InsertImageDialog } from '../ImagesPlugin'
 import useLexicalEditable from '@lexical/react/useLexicalEditable'
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link'
 import { sanitizeUrl } from '@/lib/utils/editor/url'
@@ -504,6 +505,7 @@ export default function ToolbarPlugin() {
           >
             <GitCommitHorizontal className="h-4 w-4" />
           </Button>
+          <InsertImageDialog editor={editor} />
         </>
       )}
     </div>

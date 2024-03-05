@@ -20,7 +20,6 @@ export class ImageNode extends DecoratorNode {
   __height
   __showCaption
   __caption
-  __position
 
   static getType() {
     return 'image'
@@ -30,7 +29,6 @@ export class ImageNode extends DecoratorNode {
     return new ImageNode(
       node.__src,
       node.__altText,
-      node.__position,
       node.__width,
       node.__height,
       node.__showCaption,
@@ -39,24 +37,14 @@ export class ImageNode extends DecoratorNode {
     )
   }
 
-  constructor(
-    src,
-    altText,
-    position,
-    width,
-    height,
-    showCaption,
-    caption,
-    key
-  ) {
+  constructor(src, altText, width, height, showCaption, caption, key) {
     super(key)
     this.__src = src
     this.__altText = altText
-    this.__width = width || 'inherit'
-    this.__height = height || 'inherit'
+    this.__width = width
+    this.__height = height
     this.__showCaption = showCaption || false
-    this.__caption = caption || createEditor()
-    this.__position = position
+    this.__caption = caption || ''
   }
 
   // inverse of exportJSON
@@ -85,13 +73,12 @@ export class ImageNode extends DecoratorNode {
     return {
       altText: this.getAltText(),
       caption: this.__caption.toJSON(),
-      height: this.__height === 'inherit' ? 0 : this.__height,
-      position: this.__position,
+      height: this.__height,
       showCaption: this.__showCaption,
       src: this.getSrc(),
       type: 'image',
       version: 1,
-      width: this.__width === 'inherit' ? 0 : this.__width,
+      width: this.__width,
     }
   }
 
@@ -99,7 +86,7 @@ export class ImageNode extends DecoratorNode {
   // which nodes to insert into the DOM for this Lexical Node
   createDOM(config) {
     const span = document.createElement('span')
-    const className = `${config.theme.image} position-${this.__position}`
+    const className = `${config.theme.image}`
     if (className !== undefined) {
       span.className = className
     }
@@ -157,41 +144,26 @@ export class ImageNode extends DecoratorNode {
     writable.__showCaption = showCaption
   }
 
-  getPosition() {
-    return this.__position
-  }
-
-  setPosition(position) {
-    const writable = this.getWritable()
-    writable.__position = position
-  }
-
   update(payload) {
     const writable = this.getWritable()
-    const { altText, showCaption, position } = payload
+    const { altText, showCaption, caption } = payload
     if (altText !== undefined) {
       writable.__altText = altText
     }
     if (showCaption !== undefined) {
       writable.__showCaption = showCaption
     }
-    if (position !== undefined) {
-      writable.__position = position
+    if (caption !== undefined) {
+      writable.__caption = caption
     }
   }
 
   updateDOM(prevNode, dom, config) {
-    const position = this.__position
-    if (position !== prevNode.__position) {
-      const className = `${config.theme.image} position-${position}`
-      if (className !== undefined) {
-        dom.className = className
-      }
-    }
     return false
   }
 
   decorate() {
+    console.log(this.__width, this.__height)
     return (
       <ImageComponent
         src={this.__src}
@@ -201,7 +173,6 @@ export class ImageNode extends DecoratorNode {
         nodeKey={this.getKey()}
         showCaption={this.__showCaption}
         caption={this.__caption}
-        position={this.__position}
       />
     )
   }
