@@ -38,7 +38,6 @@ export class ImageNode extends DecoratorNode {
   }
 
   constructor(src, altText, width, height, showCaption, caption, key) {
-    console.log(width, height)
     super(key)
     this.__src = src
     this.__altText = altText
@@ -50,21 +49,15 @@ export class ImageNode extends DecoratorNode {
 
   // inverse of exportJSON
   static importJSON(serializedNode) {
-    const { altText, height, width, caption, src, showCaption, position } =
-      serializedNode
+    const { altText, height, width, caption, src, showCaption } = serializedNode
     const node = $createImageNode({
       altText,
       height,
-      position,
       showCaption,
       src,
       width,
+      caption,
     })
-    const nestedEditor = node.__caption
-    const editorState = nestedEditor.parseEditorState(caption.editorState)
-    if (!editorState.isEmpty()) {
-      nestedEditor.setEditorState(editorState)
-    }
     return node
   }
 
@@ -73,25 +66,25 @@ export class ImageNode extends DecoratorNode {
   exportJSON() {
     return {
       altText: this.getAltText(),
-      caption: this.__caption.toJSON(),
+      caption: this.__caption,
       height: this.__height,
+      width: this.__width,
       showCaption: this.__showCaption,
       src: this.getSrc(),
       type: 'image',
       version: 1,
-      width: this.__width,
     }
   }
 
   // Called during the reconciliation process to determine
   // which nodes to insert into the DOM for this Lexical Node
   createDOM(config) {
-    const span = document.createElement('span')
+    const element = document.createElement('span')
     const className = `${config.theme.image}`
     if (className !== undefined) {
-      span.className = className
+      element.className = className
     }
-    return span
+    return element
   }
 
   // control how the equation node is represented as HTML
@@ -143,20 +136,6 @@ export class ImageNode extends DecoratorNode {
   setShowCaption(showCaption) {
     const writable = this.getWritable()
     writable.__showCaption = showCaption
-  }
-
-  update(payload) {
-    const writable = this.getWritable()
-    const { altText, showCaption, caption } = payload
-    if (altText !== undefined) {
-      writable.__altText = altText
-    }
-    if (showCaption !== undefined) {
-      writable.__showCaption = showCaption
-    }
-    if (caption !== undefined) {
-      writable.__caption = caption
-    }
   }
 
   updateDOM(prevNode, dom, config) {

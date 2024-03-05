@@ -20,6 +20,7 @@ function convertEquationElement(domNode) {
     const node = $createEquationNode(equation, inline)
     return { node }
   }
+  return null
 }
 
 export class EquationNode extends DecoratorNode {

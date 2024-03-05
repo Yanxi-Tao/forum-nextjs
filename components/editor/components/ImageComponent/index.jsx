@@ -38,14 +38,12 @@ export default function ImageComponent({
 
   // delete imageNode callback
   const onDelete = useCallback(
-    (payload) => {
+    (event) => {
       if (isSelected && $isNodeSelection($getSelection())) {
-        const event = payload
         event.preventDefault()
         const node = $getNodeByKey(nodeKey)
         if ($isImageNode(node)) {
           node.remove()
-          return true
         }
       }
       return false
@@ -54,18 +52,16 @@ export default function ImageComponent({
   )
 
   useEffect(() => {
-    const unregister = mergeRegister(
+    return mergeRegister(
       editor.registerCommand(
         CLICK_COMMAND,
         (payload) => {
           const event = payload
           if (event.target === imageRef.current) {
-            if (event.shiftKey) {
-              setSelected(!isSelected)
-            } else {
+            if (!event.shiftKey) {
               clearSelection()
-              setSelected(true)
             }
+            setSelected(!isSelected)
             return true
           }
           return false
@@ -83,14 +79,22 @@ export default function ImageComponent({
         COMMAND_PRIORITY_LOW
       )
     )
-    return () => {
-      unregister()
-    }
   }, [clearSelection, editor, isSelected, nodeKey, onDelete, setSelected])
 
   //   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected
   return (
-    <Image src={src} alt={altText} height={height} width={width} className="" />
+    <div>
+      <Image
+        src={src}
+        alt={altText}
+        height={height}
+        width={width}
+        ref={imageRef}
+        className={
+          isFocused ? 'ring-ring ring-2 ring-offset-1.5 rounded-md' : null
+        }
+      />
+    </div>
   )
 }
