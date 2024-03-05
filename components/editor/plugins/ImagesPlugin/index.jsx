@@ -6,30 +6,16 @@ import {
 } from '@lexical/utils'
 import {
   $createParagraphNode,
-  $createRangeSelection,
   $getSelection,
-  $insertNodes,
-  $isNodeSelection,
   $isRangeSelection,
   $isRootOrShadowRoot,
-  $setSelection,
   COMMAND_PRIORITY_EDITOR,
-  COMMAND_PRIORITY_HIGH,
-  COMMAND_PRIORITY_LOW,
   createCommand,
-  DRAGOVER_COMMAND,
-  DRAGSTART_COMMAND,
-  DROP_COMMAND,
 } from 'lexical'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { CAN_USE_DOM } from '@/lib/utils/editor/canUseDom'
 
-import {
-  $createImageNode,
-  $isImageNode,
-  ImageNode,
-} from '../../nodes/ImageNode'
+import { $createImageNode, ImageNode } from '../../nodes/ImageNode'
 
 import {
   Dialog,
@@ -43,9 +29,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 import { Image as ImageIcon } from 'lucide-react'
-
-const getDOMSelection = (targetWindow) =>
-  CAN_USE_DOM ? (targetWindow || window).getSelection() : null
 
 export const INSERT_IMAGE_COMMAND = createCommand('INSERT_IMAGE_COMMAND')
 
