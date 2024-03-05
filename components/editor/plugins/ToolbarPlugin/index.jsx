@@ -12,6 +12,7 @@ import {
   $createParagraphNode,
   $getNodeByKey,
   COMMAND_PRIORITY_LOW,
+  $getRoot,
 } from 'lexical'
 
 import {
@@ -429,7 +430,7 @@ export default function ToolbarPlugin() {
   )
 
   return (
-    <div className="sticky top-0 flex flex-row h-16 justify-evenly items-center py-3 bg-background border-b">
+    <div className="sticky z-10 top-0 flex flex-row h-16 justify-evenly items-center py-3 bg-background border-b">
       <div className="flex space-x-1">
         <Button
           variant="outline"
@@ -455,13 +456,19 @@ export default function ToolbarPlugin() {
           }}
         >
           ToggleMode
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           onClick={() => {
-            const editorState = editor.getEditorState()
-            const json = editorState.toJSON()
-            const jsonString = JSON.stringify(editorState)
-            console.log(jsonString)
+            // const editorState = editor.getEditorState()
+            // const json = editorState.toJSON()
+            // editor.getEditorState().read(() => {
+            //   const root = $getRoot()
+            //   console.log(typeof root.getTextContent())
+            // })
+
+            // console.log(json)
+            // const jsonString = JSON.stringify(editorState)
+            // console.log(jsonString)
           }}
         >
           Store

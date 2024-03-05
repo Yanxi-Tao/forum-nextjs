@@ -47,7 +47,7 @@ export default function EditorComponent({ editorRef }) {
           }
           ErrorBoundary={LexicalErrorBoundary}
           placeholder={
-            <div className="absolute top-[18px] left-8 text-muted-foreground">
+            <div className="absolute top-[18px] z-0 left-8 text-muted-foreground">
               Enter your answer...
             </div>
           }
