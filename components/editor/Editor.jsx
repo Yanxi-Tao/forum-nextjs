@@ -6,6 +6,7 @@ import EditorNodes from './nodes'
 import './EditorTheme.css'
 
 const editorConfig = {
+  namespace: 'Post-Editor',
   theme: EditorTheme,
   nodes: [...EditorNodes],
   onError(error) {
