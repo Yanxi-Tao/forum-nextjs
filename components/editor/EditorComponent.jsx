@@ -35,7 +35,7 @@ export default function EditorComponent({ editorRef }) {
 
   return (
     <div className="editor-container max-w-[800px] max-h-[500px] mx-auto my-32">
-      <ToolbarPlugin />
+      {isEditable ? <ToolbarPlugin /> : null}
       <div className="editor-inner border rounded-md relative">
         <AutoFocusPlugin />
         <EditorRefPlugin editorRef={editorRef} />

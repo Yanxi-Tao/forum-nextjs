@@ -414,19 +414,6 @@ export default function ToolbarPlugin() {
     )
   }, [updateToolbar, editor])
 
-  const insertLink = useCallback(() => {
-    if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(''))
-      const selection = window.getSelection()
-      console.log(selection)
-      editor.focus()
-      selection.collapseToEnd()
-      console.log(selection)
-    } else {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
-    }
-  }, [editor, isLink])
-
   const onCodeLanguageSelect = useCallback(
     (value) => {
       editor.update(() => {
@@ -468,6 +455,16 @@ export default function ToolbarPlugin() {
           }}
         >
           ToggleMode
+        </Button>
+        <Button
+          onClick={() => {
+            const editorState = editor.getEditorState()
+            const json = editorState.toJSON()
+            const jsonString = JSON.stringify(editorState)
+            console.log(jsonString)
+          }}
+        >
+          Store
         </Button>
       </div>
 
