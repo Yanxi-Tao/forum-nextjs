@@ -5,7 +5,7 @@ import { useRef } from 'react'
 
 import { Button } from '@/components/ui/button'
 
-import Editor from '@/components/editor'
+import Editor from '@/components/Editor'
 
 export default function Home() {
   const editorRef = useRef(null)
