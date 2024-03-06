@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useRef } from 'react'
+import dummy_data from '@/actions/dummy_data'
 
 import { Button } from '@/components/ui/button'
 
@@ -15,6 +16,10 @@ export default function Home() {
       <Editor editorRef={editorRef} initialContent={''} />
       {/* <Feed /> */}
       <Button onClick={() => editorRef.current.setEditable(false)}>Mode</Button>
+      <div
+        className="editor"
+        dangerouslySetInnerHTML={{ __html: dummy_data }}
+      />
     </div>
   )
 }

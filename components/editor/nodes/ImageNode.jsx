@@ -1,4 +1,5 @@
-import { $applyNodeReplacement, createEditor, DecoratorNode } from 'lexical'
+import { $applyNodeReplacement } from 'lexical'
+import { DecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode'
 import * as React from 'react'
 import dynamic from 'next/dynamic'
 
@@ -13,7 +14,7 @@ function convertImageElement(domNode) {
   return null
 }
 
-export class ImageNode extends DecoratorNode {
+export class ImageNode extends DecoratorBlockNode {
   __src
   __altText
   __width
@@ -33,12 +34,13 @@ export class ImageNode extends DecoratorNode {
       node.__height,
       node.__showCaption,
       node.__caption,
+      node.__format,
       node.__key
     )
   }
 
-  constructor(src, altText, width, height, showCaption, caption, key) {
-    super(key)
+  constructor(src, altText, width, height, showCaption, caption, format, key) {
+    super(format, key)
     this.__src = src
     this.__altText = altText
     this.__width = width
@@ -58,6 +60,7 @@ export class ImageNode extends DecoratorNode {
       width,
       caption,
     })
+    node.setFormat(serializedNode.format)
     return node
   }
 
@@ -90,12 +93,14 @@ export class ImageNode extends DecoratorNode {
   // control how the equation node is represented as HTML
   // primarily used to transfer data between Lexical and non-Lexical editors
   exportDOM() {
+    const parent = document.createElement('div')
     const element = document.createElement('img')
     element.setAttribute('src', this.__src)
     element.setAttribute('alt', this.__altText)
     element.setAttribute('width', this.__width.toString())
     element.setAttribute('height', this.__height.toString())
-    return { element }
+    parent.appendChild(element)
+    return { parent }
   }
 
   // control how an HTMLElement is represented in Lexical

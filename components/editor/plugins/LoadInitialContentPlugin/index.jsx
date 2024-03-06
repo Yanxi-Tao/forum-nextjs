@@ -1,12 +1,11 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { $generateNodesFromDOM } from '@lexical/html'
 
-import { useRef, useEffect } from 'react'
+import { useEffect } from 'react'
 import { $getRoot, $insertNodes } from 'lexical'
 
 export default function LoadInitialContentPlugin({ initialContent = '' }) {
   const [editor] = useLexicalComposerContext()
-  const isMounted = useRef(false)
   useEffect(() => {
     if (!initialContent) {
       return
@@ -21,7 +20,7 @@ export default function LoadInitialContentPlugin({ initialContent = '' }) {
       $getRoot().select()
       $insertNodes(nodes)
     })
-  }, [])
+  })
 
   return null
 }

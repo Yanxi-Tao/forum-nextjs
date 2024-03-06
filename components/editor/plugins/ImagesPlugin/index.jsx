@@ -125,9 +125,9 @@ export default function ImagesPlugin() {
           if (focusNode !== null) {
             const imageNode = $createImageNode(payload)
             $insertNodeToNearestRoot(imageNode)
-            if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
-              $wrapNodeInElement(imageNode, $createParagraphNode)
-            }
+            // if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
+            //   $wrapNodeInElement(imageNode, $createParagraphNode)
+            // }
           }
 
           return true
