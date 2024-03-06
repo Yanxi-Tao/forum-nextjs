@@ -8,9 +8,11 @@ import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { HorizontalRulePlugin } from '@lexical/react/LexicalHorizontalRulePlugin'
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin'
+import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
 import useLexicalEditable from '@lexical/react/useLexicalEditable'
 
 import TreeViewPlugin from './plugins/TreeViewPlugin'
+import LoadInitialContentPlugin from './plugins/LoadInitialContentPlugin'
 import CodeHighlightPlugin from './plugins/CodeHighlightPlugin'
 import FloatingLinkEditorPlugin from './plugins/FloatingLinkEditorPlugin'
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin'
@@ -24,7 +26,7 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 
 import { useState } from 'react'
 
-export default function EditorComponent({ editorRef }) {
+export default function EditorComponent({ editorRef, initialContent }) {
   const isEditable = useLexicalEditable()
   const onRef = (anchorRef) => {
     if (anchorRef !== null) {
@@ -39,6 +41,7 @@ export default function EditorComponent({ editorRef }) {
       <div className="editor-inner rounded-md relative">
         <AutoFocusPlugin />
         <EditorRefPlugin editorRef={editorRef} />
+        <LoadInitialContentPlugin initialContent={initialContent} />
         <RichTextPlugin
           contentEditable={
             <div className="editor -z-10" ref={onRef}>

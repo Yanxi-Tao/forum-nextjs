@@ -19,6 +19,7 @@ const KatexRenderer = forwardRef(function RenderContent(
         displayMode: !inline,
         errorColor: '#cc0000',
         strict: 'warn',
+        output: 'html',
         throwOnError: false,
         trust: false,
       })

@@ -15,6 +15,8 @@ import {
   $getRoot,
 } from 'lexical'
 
+import { $generateHtmlFromNodes } from '@lexical/html'
+
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
@@ -459,16 +461,18 @@ export default function ToolbarPlugin() {
         </Button> */}
         <Button
           onClick={() => {
-            const editorState = editor.getEditorState()
+            // const editorState = editor.getEditorState()
             // const json = editorState.toJSON()
-            // editor.getEditorState().read(() => {
-            //   const root = $getRoot()
-            //   console.log(typeof root.getTextContent())
-            // })
+            editor.getEditorState().read(() => {
+              // const root = $getRoot()
+              // console.log(typeof root.getTextContent())
+              const htmlString = $generateHtmlFromNodes(editor, null)
+              console.log(htmlString)
+            })
 
             // console.log(json)
-            const jsonString = JSON.stringify(editorState)
-            console.log(jsonString)
+            // const jsonString = JSON.stringify(editorState)
+            // console.log(jsonString)
           }}
         >
           Store

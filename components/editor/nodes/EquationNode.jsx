@@ -83,6 +83,7 @@ export class EquationNode extends DecoratorNode {
       displayMode: !this.__inline,
       errorColor: '#cc0000',
       strict: 'warn',
+      output: 'html',
       throwOnError: false,
       trust: false,
     })
