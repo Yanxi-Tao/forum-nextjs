@@ -1,5 +1,6 @@
 import Image from 'next/image'
 
+import { BlockWithAlignableContents } from '@lexical/react/LexicalBlockWithAlignableContents'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection'
 import { mergeRegister } from '@lexical/utils'
@@ -23,6 +24,8 @@ export default function ImageComponent({
   nodeKey,
   width,
   height,
+  format,
+  className,
   showCaption,
   caption,
 }) {
@@ -79,7 +82,11 @@ export default function ImageComponent({
   //   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected
   return (
-    <div>
+    <BlockWithAlignableContents
+      format={format}
+      nodeKey={nodeKey}
+      className={className}
+    >
       <Image
         src={src}
         alt={altText}
@@ -90,6 +97,6 @@ export default function ImageComponent({
           isFocused ? 'ring-ring ring-2 ring-offset-1.5 rounded-md' : null
         }
       />
-    </div>
+    </BlockWithAlignableContents>
   )
 }

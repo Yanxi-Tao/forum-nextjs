@@ -13,7 +13,7 @@ export default function Home() {
   const editorRef = useRef(null)
   return (
     <div>
-      <Editor editorRef={editorRef} initialContent={''} />
+      <Editor editorRef={editorRef} initialContent={dummy_data} />
       {/* <Feed /> */}
       <Button onClick={() => editorRef.current.setEditable(false)}>Mode</Button>
       <div
