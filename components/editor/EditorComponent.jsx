@@ -34,7 +34,7 @@ export default function EditorComponent({ editorRef }) {
   const [anchorElem, setAnchorElem] = useState(null)
 
   return (
-    <div className="editor-container max-w-[900px] mx-auto my-32 border">
+    <div className="editor-container w-full border">
       {isEditable ? <ToolbarPlugin /> : null}
       <div className="editor-inner rounded-md relative">
         <AutoFocusPlugin />
@@ -42,7 +42,7 @@ export default function EditorComponent({ editorRef }) {
         <RichTextPlugin
           contentEditable={
             <div className="editor -z-10" ref={onRef}>
-              <ContentEditable className="editor-contentEditable p-4 outline-none min-h-[400px] caret-foreground pl-8" />
+              <ContentEditable className="editor-contentEditable p-4 outline-none caret-foreground pl-8" />
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}

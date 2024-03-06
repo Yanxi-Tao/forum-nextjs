@@ -1,42 +1,30 @@
 import * as React from 'react'
-import { forwardRef } from 'react'
+import { useRef } from 'react'
+
+import Editor from '../Editor'
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+  FeedRoot,
+  FeedContent,
+  FeedPreview,
+  FeedToolbar,
+} from './components/FeedContainers'
 
-const FeedRoot = forwardRef(({ children, ...props }, ref) => {
+export default function Feed({}) {
+  const editorRef = useRef(null)
+  const editorState = ''
+
   return (
-    <Collapsible {...props} ref={ref}>
-      {children}
-    </Collapsible>
+    <FeedRoot>
+      <FeedPreview>Test</FeedPreview>
+      <FeedContent>
+        <Editor
+          editorRef={editorRef}
+          isEditMode={false}
+          editorState={editorState}
+        />
+      </FeedContent>
+      <FeedToolbar />
+    </FeedRoot>
   )
-})
-
-FeedRoot.displayName = 'FeedRoot'
-
-const FeedPreview = forwardRef(({ children, title, ...props }, ref) => {
-  return (
-    <>
-      <CollapsibleTrigger {...props} ref={ref}>
-        {children}
-      </CollapsibleTrigger>
-    </>
-  )
-})
-
-FeedPreview.displayName = 'FeedPreview'
-
-const FeedContent = forwardRef(({ children }, ref) => {
-  return <CollapsibleContent>{children}</CollapsibleContent>
-})
-
-FeedContent.displayName = 'FeedContent'
-
-const FeedToolbar = forwardRef(({}) => {})
-
-FeedToolbar.displayName = 'FeedToolbar'
-
-export { FeedRoot, FeedPreview, FeedContent, FeedToolbar }
+}

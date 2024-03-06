@@ -457,9 +457,9 @@ export default function ToolbarPlugin() {
         >
           ToggleMode
         </Button> */}
-        {/* <Button
+        <Button
           onClick={() => {
-            // const editorState = editor.getEditorState()
+            const editorState = editor.getEditorState()
             // const json = editorState.toJSON()
             // editor.getEditorState().read(() => {
             //   const root = $getRoot()
@@ -467,12 +467,12 @@ export default function ToolbarPlugin() {
             // })
 
             // console.log(json)
-            // const jsonString = JSON.stringify(editorState)
-            // console.log(jsonString)
+            const jsonString = JSON.stringify(editorState)
+            console.log(jsonString)
           }}
         >
           Store
-        </Button> */}
+        </Button>
       </div>
 
       <Separator orientation="vertical" />

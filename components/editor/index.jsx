@@ -8,7 +8,7 @@ import './EditorTheme.css'
 import * as React from 'react'
 import { useMemo } from 'react'
 
-export default function Editor({ isEditMode, editorRef }) {
+export default function Editor({ isEditMode, editorRef, editorState }) {
   const editorConfig = useMemo(
     () => ({
       namespace: 'editor',
@@ -18,6 +18,8 @@ export default function Editor({ isEditMode, editorRef }) {
         throw error
       },
       editable: isEditMode,
+      editorState:
+        '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"3bgrbgerjktbntkjbntekbnkntghb","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"equation":"wegre \\\\frac 33","inline":true,"type":"equation","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
     }),
     [isEditMode]
   )

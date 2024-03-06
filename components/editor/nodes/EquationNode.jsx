@@ -53,8 +53,9 @@ export class EquationNode extends DecoratorNode {
   // for copy/paste between editor sharing same namespace or
   // for permenant storage
   exportJSON() {
+    const equation = this.getEquation().replace('\\', '\\\\')
     return {
-      equation: this.getEquation(),
+      equation: equation,
       inline: this.getInline(),
       type: 'equation',
       version: 1,
