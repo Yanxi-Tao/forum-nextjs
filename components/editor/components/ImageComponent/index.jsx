@@ -1,18 +1,22 @@
 import Image from 'next/image'
 
-import { BlockWithAlignableContents } from '@lexical/react/LexicalBlockWithAlignableContents'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { useLexicalNodeSelection } from '@lexical/react/useLexicalNodeSelection'
 import { mergeRegister } from '@lexical/utils'
 import {
+  $createParagraphNode,
   $getNodeByKey,
   $getSelection,
+  $insertNodes,
   $isNodeSelection,
   CLICK_COMMAND,
   COMMAND_PRIORITY_LOW,
   KEY_BACKSPACE_COMMAND,
   KEY_DELETE_COMMAND,
+  KEY_ENTER_COMMAND,
+  ParagraphNode,
 } from 'lexical'
+import { BlockWithAlignableContents } from '@lexical/react/LexicalBlockWithAlignableContents'
 import * as React from 'react'
 import { useCallback, useEffect, useRef } from 'react'
 
@@ -24,7 +28,6 @@ export default function ImageComponent({
   nodeKey,
   width,
   height,
-  format,
   className,
   showCaption,
   caption,
@@ -49,44 +52,59 @@ export default function ImageComponent({
     [isSelected, nodeKey]
   )
 
+  const onEnter = useCallback(
+    (event) => {
+      if (isSelected && $isNodeSelection($getSelection())) {
+        const node = $getNodeByKey(nodeKey)
+        node.selectNext()
+      }
+    },
+    [isSelected, nodeKey]
+  )
+
   useEffect(() => {
     return mergeRegister(
-      editor.registerCommand(
-        CLICK_COMMAND,
-        (payload) => {
-          const event = payload
-          if (event.target === imageRef.current) {
-            if (!event.shiftKey) {
-              clearSelection()
-            }
-            setSelected(!isSelected)
-            return true
-          }
-          return false
-        },
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        KEY_DELETE_COMMAND,
-        onDelete,
-        COMMAND_PRIORITY_LOW
-      ),
-      editor.registerCommand(
-        KEY_BACKSPACE_COMMAND,
-        onDelete,
-        COMMAND_PRIORITY_LOW
-      )
+      // editor.registerCommand(
+      //   CLICK_COMMAND,
+      //   (payload) => {
+      //     const event = payload
+      //     if (event.target === imageRef.current) {
+      //       if (!event.shiftKey) {
+      //         clearSelection()
+      //       }
+      //       setSelected(!isSelected)
+      //       return true
+      //     }
+      //     return false
+      //   },
+      //   COMMAND_PRIORITY_LOW
+      // ),
+      // // editor.registerCommand(
+      // //   KEY_DELETE_COMMAND,
+      // //   onDelete,
+      // //   COMMAND_PRIORITY_LOW
+      // // ),
+      // // editor.registerCommand(
+      // //   KEY_BACKSPACE_COMMAND,
+      // //   onDelete,
+      // //   COMMAND_PRIORITY_LOW
+      // // ),
+      editor.registerCommand(KEY_ENTER_COMMAND, onEnter, COMMAND_PRIORITY_LOW)
     )
-  }, [clearSelection, editor, isSelected, nodeKey, onDelete, setSelected])
+  }, [
+    clearSelection,
+    editor,
+    isSelected,
+    nodeKey,
+    onDelete,
+    onEnter,
+    setSelected,
+  ])
 
   //   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = isSelected
   return (
-    <BlockWithAlignableContents
-      format={format}
-      nodeKey={nodeKey}
-      className={className}
-    >
+    <BlockWithAlignableContents nodeKey={nodeKey} className={className}>
       <Image
         src={src}
         alt={altText}

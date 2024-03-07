@@ -128,6 +128,7 @@ export default function ImagesPlugin() {
             // if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
             //   $wrapNodeInElement(imageNode, $createParagraphNode)
             // }
+            return true
           }
 
           return true

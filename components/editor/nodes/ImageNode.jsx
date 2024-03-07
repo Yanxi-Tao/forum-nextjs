@@ -1,12 +1,15 @@
-import { $applyNodeReplacement } from 'lexical'
-import { DecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode'
+import { $applyNodeReplacement, DecoratorNode } from 'lexical'
 import * as React from 'react'
 import dynamic from 'next/dynamic'
+
+import { DecoratorBlockNode } from '@lexical/react/LexicalDecoratorBlockNode'
 
 const ImageComponent = dynamic(() => import('../components/ImageComponent'))
 
 function convertImageElement(domNode) {
+  console.log(domNode)
   if (domNode instanceof HTMLImageElement) {
+    console.log(domNode)
     const { alt: altText, src, width, height } = domNode
     const node = $createImageNode({ altText, height, src, width })
     return { node }
@@ -82,23 +85,26 @@ export class ImageNode extends DecoratorBlockNode {
 
   // Called during the reconciliation process to determine
   // which nodes to insert into the DOM for this Lexical Node
-  // createDOM(config) {
-  //   const element = document.createElement('span')
-  //   const className = `${config.theme.image}`
-  //   if (className !== undefined) {
-  //     element.className = className
-  //   }
-  //   return element
-  // }
+  createDOM(config) {
+    const element = document.createElement('div')
+    const className = `${config.theme.image}`
+    if (className !== undefined) {
+      element.className = className
+    }
+    return element
+  }
 
   // control how the equation node is represented as HTML
   // primarily used to transfer data between Lexical and non-Lexical editors
   exportDOM() {
-    const element = document.createElement('img')
-    element.setAttribute('src', this.__src)
-    element.setAttribute('alt', this.__altText)
-    element.setAttribute('width', this.__width.toString())
-    element.setAttribute('height', this.__height.toString())
+    const element = document.createElement('div')
+    element.className = 'editor-image'
+    const img = document.createElement('img')
+    img.setAttribute('src', this.__src)
+    img.setAttribute('alt', this.__altText)
+    img.setAttribute('width', this.__width.toString())
+    img.setAttribute('height', this.__height.toString())
+    element.appendChild(img)
     return { element }
   }
 
@@ -107,10 +113,13 @@ export class ImageNode extends DecoratorBlockNode {
   // inverse of exportDOM()
   static importDOM() {
     return {
-      img: (node) => ({
-        conversion: convertImageElement,
-        priority: 0,
-      }),
+      div: (node) => {
+        console.log(node)
+        return {
+          conversion: convertImageElement,
+          priority: 0,
+        }
+      },
     }
   }
 
@@ -146,9 +155,9 @@ export class ImageNode extends DecoratorBlockNode {
     return false
   }
 
-  decorate(_editor, config) {
+  decorate() {
     const className = {
-      base: config.theme.image,
+      base: '',
       focus: '',
     }
     return (
@@ -158,9 +167,8 @@ export class ImageNode extends DecoratorBlockNode {
         width={this.__width}
         height={this.__height}
         nodeKey={this.getKey()}
-        format={this.__format}
-        showCaption={this.__showCaption}
         className={className}
+        showCaption={this.__showCaption}
         caption={this.__caption}
       />
     )
