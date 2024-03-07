@@ -89,6 +89,14 @@ export class ImageNode extends DecoratorBlockNode {
     return { element }
   }
 
+  getSrc() {
+    return this.__src
+  }
+
+  getAltText() {
+    return this.__altText
+  }
+
   decorate(_editor, config) {
     const imageTheme = config.theme.image || {}
     const className = {

@@ -1,7 +1,6 @@
 import katex from 'katex'
 import * as React from 'react'
 import { useEffect, useRef, forwardRef } from 'react'
-import { cn } from '@/lib/utils'
 
 // katex renderer component
 const KatexRenderer = forwardRef(function RenderEquation(
@@ -26,7 +25,7 @@ const KatexRenderer = forwardRef(function RenderEquation(
   return (
     <span ref={ref} {...props} className="inline-block h-fit">
       <img src="#" alt="" />
-      <span ref={katexElementRef} className={className} />
+      <span role="button" ref={katexElementRef} className={className} />
       <img src="#" alt="" />
     </span>
   )
