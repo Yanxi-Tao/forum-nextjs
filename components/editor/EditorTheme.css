@@ -44,7 +44,7 @@
 }
 
 .editor-image-base {
-    @apply flex justify-center items-center
+    @apply flex justify-center items-center my-3
 }
 
 .editor-image-focus {

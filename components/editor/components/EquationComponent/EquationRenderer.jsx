@@ -28,11 +28,9 @@ const KatexRenderer = forwardRef(function RenderContent(
 
   return (
     <>
-      <img src="#" alt="" />
       <div {...props} ref={ref} className="inline-block">
         <span ref={katexElementRef} className={cn('mx-1', className)} />
       </div>
-      <img src="#" alt="" />
     </>
   )
 })

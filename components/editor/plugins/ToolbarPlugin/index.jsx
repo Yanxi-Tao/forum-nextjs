@@ -461,16 +461,16 @@ export default function ToolbarPlugin() {
         </Button> */}
         <Button
           onClick={() => {
-            // const editorState = editor.getEditorState()
-            // const json = editorState.toJSON()
-            editor.getEditorState().read(() => {
-              // const root = $getRoot()
-              // console.log(typeof root.getTextContent())
-              const htmlString = $generateHtmlFromNodes(editor, null)
-              console.log(htmlString)
-            })
+            const editorState = editor.getEditorState()
+            const json = editorState.toJSON()
+            // editor.getEditorState().read(() => {
+            //   // const root = $getRoot()
+            //   // console.log(typeof root.getTextContent())
+            //   const htmlString = $generateHtmlFromNodes(editor, null)
+            //   console.log(htmlString)
+            // })
 
-            // console.log(json)
+            console.log(json)
             // const jsonString = JSON.stringify(editorState)
             // console.log(jsonString)
           }}
