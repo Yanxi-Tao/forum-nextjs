@@ -22,7 +22,10 @@ const EditorTheme = {
     listitemUnchecked: 'editor-listItemUnchecked',
   },
   hashtag: 'editor-hashtag',
-  image: 'editor-image',
+  image: {
+    base: 'editor-image-base',
+    focus: 'editor-image-focus',
+  },
   link: 'editor-link',
   text: {
     bold: 'editor-textBold',

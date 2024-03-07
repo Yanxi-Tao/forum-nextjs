@@ -43,8 +43,12 @@
     @apply text-primary-foreground border-b-2 border-primary-foreground
 }
 
-.editor-image {
+.editor-image-base {
     @apply flex justify-center items-center
+}
+
+.editor-image-focus {
+    @apply ring-ring ring-2 rounded-md
 }
 
 .editor-link {

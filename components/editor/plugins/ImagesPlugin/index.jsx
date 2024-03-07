@@ -62,7 +62,7 @@ export function InsertImageDialog({ editor }) {
 
   const handleOnClick = () => {
     const { height, width } = imgSize
-    const payload = { altText, src, height, width }
+    const payload = { src, altText, width, height }
     editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload)
   }
 
@@ -113,28 +113,14 @@ export default function ImagesPlugin() {
       throw new Error('ImagesPlugin: ImageNode not registered on editor')
     }
 
-    return mergeRegister(
-      editor.registerCommand(
-        INSERT_IMAGE_COMMAND,
-        (payload) => {
-          const selection = $getSelection()
-          if (!$isRangeSelection(selection)) {
-            return false
-          }
-          const focusNode = selection.focus.getNode()
-          if (focusNode !== null) {
-            const imageNode = $createImageNode(payload)
-            $insertNodeToNearestRoot(imageNode)
-            // if ($isRootOrShadowRoot(imageNode.getParentOrThrow())) {
-            //   $wrapNodeInElement(imageNode, $createParagraphNode)
-            // }
-            return true
-          }
-
-          return true
-        },
-        COMMAND_PRIORITY_EDITOR
-      )
+    return editor.registerCommand(
+      INSERT_IMAGE_COMMAND,
+      (payload) => {
+        const imageNode = $createImageNode(payload)
+        $insertNodeToNearestRoot(imageNode)
+        return true
+      },
+      COMMAND_PRIORITY_EDITOR
     )
   }, [editor])
 
