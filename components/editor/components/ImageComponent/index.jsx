@@ -13,6 +13,8 @@ import {
   $isNodeSelection,
   CLICK_COMMAND,
   COMMAND_PRIORITY_LOW,
+  KEY_BACKSPACE_COMMAND,
+  KEY_DELETE_COMMAND,
   KEY_ENTER_COMMAND,
 } from 'lexical'
 
@@ -40,6 +42,20 @@ export default function ImageComponent({
     [isSelected, nodeKey]
   )
 
+  const onDelete = useCallback(
+    (event) => {
+      if (isSelected && $isNodeSelection($getSelection())) {
+        event.preventDefault()
+        const node = $getNodeByKey(nodeKey)
+        if ($isEquationNode(node)) {
+          node.remove()
+        }
+      }
+      return true
+    },
+    [isSelected, nodeKey]
+  )
+
   useEffect(() => {
     return mergeRegister(
       editor.registerCommand(
@@ -57,7 +73,17 @@ export default function ImageComponent({
         },
         COMMAND_PRIORITY_LOW
       ),
-      editor.registerCommand(KEY_ENTER_COMMAND, onEnter, COMMAND_PRIORITY_LOW)
+      editor.registerCommand(KEY_ENTER_COMMAND, onEnter, COMMAND_PRIORITY_LOW),
+      editor.registerCommand(
+        KEY_DELETE_COMMAND,
+        onDelete,
+        COMMAND_PRIORITY_LOW
+      ),
+      editor.registerCommand(
+        KEY_BACKSPACE_COMMAND,
+        onDelete,
+        COMMAND_PRIORITY_LOW
+      )
     )
   })
 

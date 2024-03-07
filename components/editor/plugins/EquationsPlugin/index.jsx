@@ -31,8 +31,8 @@ export const INSERT_EQUATION_COMMAND = createCommand('INSERT_EQUATION_COMMAND')
 // for inserting a new quation dialog when clicking toolbar
 export function InsertEquationDialog({ editor }) {
   const onConfirm = useCallback(
-    (equation, inline) => {
-      editor.dispatchCommand(INSERT_EQUATION_COMMAND, { equation, inline })
+    (equation) => {
+      editor.dispatchCommand(INSERT_EQUATION_COMMAND, equation)
     },
     [editor]
   )
@@ -68,18 +68,12 @@ export default function EquationsPlugin() {
     return editor.registerCommand(
       INSERT_EQUATION_COMMAND,
       (payload) => {
-        const { equation, inline } = payload
-        const equationNode = $createEquationNode(equation, inline)
-        if (inline) {
-          $insertNodes([equationNode])
-        } else {
-          $insertNodeToNearestRoot(equationNode)
-        }
+        const equationNode = $createEquationNode(payload)
 
-        // $insertNodes([equationNode])
-        // if (inline && $isRootOrShadowRoot(equationNode.getParentOrThrow())) {
-        //   $wrapNodeInElement(equationNode, $createParagraphNode)
-        // }
+        $insertNodes([equationNode])
+        if ($isRootOrShadowRoot(equationNode.getParentOrThrow())) {
+          $wrapNodeInElement(equationNode, $createParagraphNode)
+        }
 
         return true
       },

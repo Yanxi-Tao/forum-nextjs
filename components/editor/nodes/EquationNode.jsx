@@ -8,16 +8,11 @@ const EquationComponent = dynamic(() =>
   import('../components/EquationComponent')
 )
 
-// equation data stored in data attribute when exported
-// when import must convert back
 function convertEquationElement(domNode) {
-  let equation = domNode.getAttribute('data-lexical-equation')
-  const inline = domNode.getAttribute('data-lexical-inline') === 'true'
-
-  // decode the equation from base64
+  let equation = domNode.getAttribute('data-equation')
   equation = atob(equation || '')
   if (equation) {
-    const node = $createEquationNode(equation, inline)
+    const node = $createEquationNode(equation)
     return { node }
   }
   return null
@@ -25,88 +20,58 @@ function convertEquationElement(domNode) {
 
 export class EquationNode extends DecoratorNode {
   __equation
-  __inline
 
   static getType() {
     return 'equation'
   }
 
   static clone(node) {
-    return new EquationNode(node.__equation, node.__inline, node.__key)
+    return new EquationNode(node.__equation, node.__key)
   }
 
-  constructor(equation, inline, key) {
+  constructor(equation, key) {
     super(key)
     this.__equation = equation
-    this.__inline = inline ?? false
   }
 
-  // inverse of exportJSON
   static importJSON(serializedNode) {
-    const node = $createEquationNode(
-      serializedNode.equation,
-      serializedNode.inline
-    )
+    const node = $createEquationNode(serializedNode.equation)
     return node
   }
 
-  // for copy/paste between editor sharing same namespace or
-  // for permenant storage
   exportJSON() {
-    const equation = this.getEquation().replace('\\', '\\\\')
     return {
-      equation: equation,
-      inline: this.getInline(),
+      equation: this.__equation,
       type: 'equation',
       version: 1,
     }
   }
 
-  // Called during the reconciliation process to determine
-  // which nodes to insert into the DOM for this Lexical Node
-  createDOM(_config) {
-    const element = document.createElement(this.__inline ? 'span' : 'div')
-    element.className = 'editor-equation'
+  createDOM(config) {
+    const element = document.createElement('span')
+    element.className = config.theme.equation
     return element
   }
 
-  // control how the equation node is represented as HTML
-  // primarily used to transfer data between Lexical and non-Lexical editors
   exportDOM() {
-    const element = document.createElement(this.__inline ? 'span' : 'div')
-
-    // encode the equation as base64 to avoid issues with special characters
+    const element = document.createElement('span')
+    element.className = 'editor-equation'
     const equation = btoa(this.__equation)
-    element.setAttribute('data-lexical-equation', equation)
-    element.setAttribute('data-lexical-inline', `${this.__inline}`)
+    element.setAttribute('data-equation', equation)
     katex.render(this.__equation, element, {
-      displayMode: !this.__inline,
       errorColor: '#cc0000',
       strict: 'warn',
       output: 'html',
       throwOnError: false,
       trust: false,
     })
-
     return { element }
   }
 
-  // control how an HTMLElement is represented in Lexical
-  // convert pasted HTML element to equation node
-  // inverse of exportDOM()
   static importDOM() {
     return {
-      div: (domNode) => {
-        if (!domNode.hasAttribute('data-lexical-equation')) {
-          return null
-        }
-        return {
-          conversion: convertEquationElement,
-          priority: 2,
-        }
-      },
       span: (domNode) => {
-        if (!domNode.hasAttribute('data-lexical-equation')) {
+        if (!domNode.hasAttribute('data-equation')) {
           return null
         }
         return {
@@ -117,11 +82,8 @@ export class EquationNode extends DecoratorNode {
     }
   }
 
-  // If the inline property changes, replace the element
-  // with updated element tag name
-  // unmount and remount element
-  updateDOM(prevNode) {
-    return this.__inline !== prevNode.__inline
+  updateDOM() {
+    return false
   }
 
   getTextContent() {
@@ -132,33 +94,18 @@ export class EquationNode extends DecoratorNode {
     return this.__equation
   }
 
-  getInline() {
-    return this.__inline
-  }
-
   setEquation(equation) {
     const writable = this.getWritable()
     writable.__equation = equation
   }
 
-  setInline(inline) {
-    const writable = this.getWritable()
-    writable.__inline = inline
-  }
-
   decorate() {
-    return (
-      <EquationComponent
-        equation={this.__equation}
-        inline={this.__inline}
-        nodeKey={this.__key}
-      />
-    )
+    return <EquationComponent equation={this.__equation} nodeKey={this.__key} />
   }
 }
 
-export function $createEquationNode(equation = '', inline = false) {
-  return new EquationNode(equation, inline)
+export function $createEquationNode(equation = '') {
+  return $applyNodeReplacement(new EquationNode(equation))
 }
 
 export function $isEquationNode(node) {

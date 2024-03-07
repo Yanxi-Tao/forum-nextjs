@@ -51,6 +51,10 @@
     @apply ring-ring ring-2 rounded-md
 }
 
+.editor-equation {
+    @apply inline-block h-fit mx-1
+}
+
 .editor-link {
     @apply text-blue-800 no-underline
 }

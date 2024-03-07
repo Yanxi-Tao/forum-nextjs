@@ -37,6 +37,7 @@ const EditorTheme = {
     underline: 'editor-textUnderline',
     underlineStrikethrough: 'editor-textUnderlineStrikethrough',
   },
+  equation: 'editor-equation',
   code: 'editor-code',
   codeHighlight: {
     atrule: 'editor-tokenAttr',

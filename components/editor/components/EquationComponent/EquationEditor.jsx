@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   DialogClose,
   DialogDescription,
@@ -10,21 +10,17 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Checkbox } from '@/components/ui/checkbox'
 import KatexRenderer from './EquationRenderer'
 
 // equation editor dialog component (dialog content)
-export default function EquationEditor({
-  equationValue = '',
-  inlineValue = true,
-  onConfirm,
-}) {
+export default function EquationEditor({ equationValue = '', onConfirm }) {
   const [editorEquation, setEditorEquation] = useState(equationValue)
-  const [editorInline, setEditorInline] = useState(inlineValue)
+  const [isEmpty, setIsEmpty] = useState(true)
 
-  // dialog content
-  // shows when equation node is clicked/inserted
-  // allows editing/setting equation node
+  useEffect(() => {
+    editorEquation ? setIsEmpty(false) : setIsEmpty(true)
+  }, [editorEquation])
+
   return (
     <>
       <DialogHeader>
@@ -48,32 +44,19 @@ export default function EquationEditor({
         <div className="border rounded-md overflow-x-auto w-96 h-28">
           <KatexRenderer
             equation={editorEquation}
-            inline={inlineValue}
             className="h-fit w-fit block text-center px-3 py-2 pointer-events-none text-xs"
           />
         </div>
       </div>
       <DialogFooter>
-        <div className="flex items-center space-x-2 mr-6">
-          <Checkbox
-            id="inline"
-            checked={editorInline}
-            onCheckedChange={setEditorInline}
-          />
-          <label
-            htmlFor="inline"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Inline
-          </label>
-        </div>
         <DialogClose asChild>
           <Button>Close</Button>
         </DialogClose>
         <DialogClose asChild>
           <Button
+            disabled={isEmpty}
             onClick={() => {
-              onConfirm(editorEquation, editorInline)
+              onConfirm(editorEquation)
             }}
           >
             Confirm
