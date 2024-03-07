@@ -87,11 +87,11 @@
     @apply underline line-through
 }
 
-.editor-code {
+.editor-code, .editor pre {
     @apply relative bg-[#282c34] font-mono p-4 leading-7 my-5 overflow-auto block rounded-md caret-white text-[#abb2bf]
 }
 
-.editor-code::after {
+.editor-code::after, .editor pre::after {
     @apply absolute hover:content-[attr(data-highlight-language)] top-0 right-1 p-1 uppercase text-muted-foreground text-xs
 }
 

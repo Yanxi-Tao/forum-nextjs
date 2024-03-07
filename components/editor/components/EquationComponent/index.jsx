@@ -38,7 +38,7 @@ export default function EquationComponent({ equation, inline, nodeKey }) {
             <KatexRenderer
               equation={equation}
               inline={inline}
-              className=" cursor-pointer"
+              className="h-fit cursor-pointer"
             />
           </DialogTrigger>
           <DialogContent>
@@ -51,7 +51,11 @@ export default function EquationComponent({ equation, inline, nodeKey }) {
         </Dialog>
       ) : (
         <>
-          <KatexRenderer equation={equation} inline={inline} />
+          <KatexRenderer
+            equation={equation}
+            inline={inline}
+            className="h-fit"
+          />
         </>
       )}
     </>

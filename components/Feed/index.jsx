@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { useRef } from 'react'
 
-import Editor from '../Editor'
-
 import {
   FeedRoot,
   FeedContent,
@@ -10,19 +8,12 @@ import {
   FeedToolbar,
 } from './components/FeedContainers'
 
-export default function Feed({}) {
-  const editorRef = useRef(null)
-  const editorState = ''
-
+export default function Feed({ data }) {
   return (
     <FeedRoot>
       <FeedPreview>Test</FeedPreview>
       <FeedContent>
-        <Editor
-          editorRef={editorRef}
-          isEditMode={false}
-          editorState={editorState}
-        />
+        <div dangerouslySetInnerHTML={{ __html: data }} />
       </FeedContent>
       <FeedToolbar />
     </FeedRoot>

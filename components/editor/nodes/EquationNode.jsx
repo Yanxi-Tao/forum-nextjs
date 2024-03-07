@@ -158,8 +158,7 @@ export class EquationNode extends DecoratorNode {
 }
 
 export function $createEquationNode(equation = '', inline = false) {
-  const equationNode = new EquationNode(equation, inline)
-  return $applyNodeReplacement(equationNode)
+  return new EquationNode(equation, inline)
 }
 
 export function $isEquationNode(node) {

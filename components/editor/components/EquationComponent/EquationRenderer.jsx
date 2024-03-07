@@ -28,8 +28,8 @@ const KatexRenderer = forwardRef(function RenderContent(
 
   return (
     <>
-      <div {...props} ref={ref} className="inline-block">
-        <span ref={katexElementRef} className={cn('mx-1', className)} />
+      <div {...props} ref={ref} className="inline-block h-fit">
+        <div ref={katexElementRef} className={cn('mx-1', className)} />
       </div>
     </>
   )

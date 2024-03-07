@@ -36,7 +36,7 @@ const FeedContent = forwardRef(({ children }, ref) => {
 FeedContent.displayName = 'FeedContent'
 
 const FeedToolbar = forwardRef(({ ...props }, ref) => {
-  return <div>Test</div>
+  return <div></div>
 })
 
 FeedToolbar.displayName = 'FeedToolbar'

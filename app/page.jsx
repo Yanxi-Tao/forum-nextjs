@@ -7,15 +7,15 @@ import dummy_data from '@/actions/dummy_data'
 import { Button } from '@/components/ui/button'
 
 import Editor from '@/components/Editor'
-// import Feed from '@/components/Feed'
+import Feed from '@/components/Feed'
 
 export default function Home() {
   const editorRef = useRef(null)
   return (
     <div>
       <Editor editorRef={editorRef} initialContent={dummy_data} />
-      {/* <Feed /> */}
-      <Button onClick={() => editorRef.current.setEditable(false)}>Mode</Button>
+      {/* <Feed data={dummy_data} /> */}
+      {/* <Button onClick={() => editorRef.current.setEditable(false)}>Mode</Button> */}
       <div
         className="editor"
         dangerouslySetInnerHTML={{ __html: dummy_data }}

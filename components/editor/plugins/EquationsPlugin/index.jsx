@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $wrapNodeInElement } from '@lexical/utils'
+import { $insertNodeToNearestRoot, $wrapNodeInElement } from '@lexical/utils'
 
 import {
   $createParagraphNode,
@@ -70,11 +70,16 @@ export default function EquationsPlugin() {
       (payload) => {
         const { equation, inline } = payload
         const equationNode = $createEquationNode(equation, inline)
-
-        $insertNodes([equationNode])
-        if ($isRootOrShadowRoot(equationNode.getParentOrThrow())) {
-          $wrapNodeInElement(equationNode, $createParagraphNode).selectEnd()
+        if (inline) {
+          $insertNodes([equationNode])
+        } else {
+          $insertNodeToNearestRoot(equationNode)
         }
+
+        // $insertNodes([equationNode])
+        // if (inline && $isRootOrShadowRoot(equationNode.getParentOrThrow())) {
+        //   $wrapNodeInElement(equationNode, $createParagraphNode)
+        // }
 
         return true
       },
