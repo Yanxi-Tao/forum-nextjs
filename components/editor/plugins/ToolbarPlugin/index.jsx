@@ -464,8 +464,13 @@ export default function ToolbarPlugin() {
             const editorState = editor.getEditorState()
             // const json = editorState.toJSON()
             editor.getEditorState().read(() => {
-              // const root = $getRoot()
-              // console.log(typeof root.getTextContent())
+              const root = $getRoot()
+              console.log(
+                root
+                  .getTextContent()
+                  .replace(/[\n\r]/g, ' ')
+                  .slice(0, 100)
+              )
               const htmlString = $generateHtmlFromNodes(editor, null)
               console.log(htmlString)
             })

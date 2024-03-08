@@ -29,8 +29,8 @@ const FeedPreview = forwardRef(({ children, title, ...props }, ref) => {
 
 FeedPreview.displayName = 'FeedPreview'
 
-const FeedContent = forwardRef(({ children }, ref) => {
-  return <CollapsibleContent>{children}</CollapsibleContent>
+const FeedContent = forwardRef(({ children, ...props }, ref) => {
+  return <CollapsibleContent {...props}>{children}</CollapsibleContent>
 })
 
 FeedContent.displayName = 'FeedContent'

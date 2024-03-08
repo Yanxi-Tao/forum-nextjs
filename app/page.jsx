@@ -13,8 +13,8 @@ export default function Home() {
   const editorRef = useRef(null)
   return (
     <div className="flex justify-center">
-      {/* <Editor editorRef={editorRef} initialContent={dummy_data} /> */}
-      <Feed data={dummy_data} />
+      <Editor editorRef={editorRef} initialContent={dummy_data} />
+      {/* <Feed data={dummy_data} /> */}
       {/* <Button onClick={() => editorRef.current.setEditable(false)}>Mode</Button> */}
       {/* <div
         className="editor"
