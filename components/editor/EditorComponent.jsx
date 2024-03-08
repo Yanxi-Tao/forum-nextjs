@@ -21,6 +21,7 @@ import ToolbarPlugin from './plugins/ToolbarPlugin'
 import AutoLinkPlugin from './plugins/AutoLinkPlugin'
 import DraggableBlockPlugin from './plugins/DraggableBlockPlugin'
 import ImagesPlugin from './plugins/ImagesPlugin'
+import MarkdownPlugin from './plugins/MarkdownShortcutPlugin'
 
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 
@@ -56,6 +57,7 @@ export default function EditorComponent({ editorRef, initialContent }) {
           }
         />
         <HistoryPlugin />
+        <MarkdownPlugin />
         <CodeHighlightPlugin />
         <HorizontalRulePlugin />
         {anchorElem ? (

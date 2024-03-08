@@ -88,7 +88,7 @@
 }
 
 .editor-textUnderlineStrikethrough {
-    @apply underline line-through
+    @apply [text-decoration:underline_line-through]
 }
 
 .editor-code, .editor pre {
