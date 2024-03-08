@@ -17,6 +17,7 @@ import {
   KEY_DELETE_COMMAND,
   KEY_ENTER_COMMAND,
 } from 'lexical'
+import { $isImageNode } from '../../nodes/ImageNode'
 
 export default function ImageComponent({
   src,
@@ -47,7 +48,7 @@ export default function ImageComponent({
       if (isSelected && $isNodeSelection($getSelection())) {
         event.preventDefault()
         const node = $getNodeByKey(nodeKey)
-        if ($isEquationNode(node)) {
+        if ($isImageNode(node)) {
           node.remove()
         }
       }

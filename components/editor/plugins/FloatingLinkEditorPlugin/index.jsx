@@ -10,6 +10,7 @@ import { $findMatchingParent, mergeRegister } from '@lexical/utils'
 
 import {
   $getSelection,
+  $isLineBreakNode,
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_LOW,
@@ -268,7 +269,7 @@ function useFloatingLinkEditorToolbar(editor, anchorElem) {
 
         const badSelection = selection.getNodes().find((node) => {
           const linkNode = $findMatchingParent(node, $isLinkNode)
-          if (!linkNode) {
+          if (!linkNode && !$isLineBreakNode(node)) {
             return node
           }
         })

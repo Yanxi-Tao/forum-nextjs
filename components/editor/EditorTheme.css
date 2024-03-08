@@ -47,6 +47,10 @@
     @apply flex justify-center items-center my-3
 }
 
+.editor-inner .editor-image-base {
+    @apply hover:ring-ring hover:ring-2 hover:rounded-md
+}
+
 .editor-image-focus {
     @apply ring-ring ring-2 rounded-md
 }
@@ -87,7 +91,7 @@
     @apply underline
 }
 
-.editor-textUnderlineStrikethrough {
+.editor-inner .editor-textUnderlineStrikethrough {
     @apply [text-decoration:underline_line-through]
 }
 
