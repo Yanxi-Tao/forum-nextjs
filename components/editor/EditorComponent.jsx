@@ -8,7 +8,6 @@ import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin'
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { HorizontalRulePlugin } from '@lexical/react/LexicalHorizontalRulePlugin'
 import LexicalClickableLinkPlugin from '@lexical/react/LexicalClickableLinkPlugin'
-import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
 import useLexicalEditable from '@lexical/react/useLexicalEditable'
 
 import TreeViewPlugin from './plugins/TreeViewPlugin'

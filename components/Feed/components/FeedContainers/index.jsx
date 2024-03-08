@@ -9,7 +9,7 @@ import {
 
 const FeedRoot = forwardRef(({ children, ...props }, ref) => {
   return (
-    <Collapsible className="editor w-[800px]" {...props} ref={ref}>
+    <Collapsible className="editor w-[750px]" {...props} ref={ref}>
       {children}
     </Collapsible>
   )
