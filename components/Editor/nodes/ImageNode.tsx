@@ -20,18 +20,20 @@ import ImageComponent from '../components/ImageComponent'
 export type ImagePayload = {
   src: string
   altText: string
+  width: number
+  height: number
 }
 
 export type SerializedImageNode = Spread<
-  { src: string; altText: string },
+  { src: string; altText: string; width: number; height: number },
   SerializedDecoratorBlockNode
 >
 
 function convertImageElement(domNode: Node): null | DOMConversionOutput {
   if (domNode instanceof HTMLDivElement) {
     const img = domNode.firstElementChild as HTMLImageElement
-    const { src, alt: altText } = img
-    const node = $createImageNode({ src, altText })
+    const { src, alt: altText, width, height } = img
+    const node = $createImageNode({ src, altText, width, height })
     return { node }
   }
   return null
@@ -40,29 +42,42 @@ function convertImageElement(domNode: Node): null | DOMConversionOutput {
 export class ImageNode extends DecoratorBlockNode {
   __src: string
   __altText: string
+  __width: number
+  __height: number
 
   static getType(): string {
     return 'image'
   }
 
   static clone(node: ImageNode): ImageNode {
-    return new ImageNode(node.__src, node.__altText, node.__format, node.__key)
+    return new ImageNode(
+      node.__src,
+      node.__altText,
+      node.__width,
+      node.__height,
+      node.__format,
+      node.__key
+    )
   }
 
   constructor(
     src: string,
     alt: string,
+    width: number,
+    height: number,
     format?: ElementFormatType,
     key?: NodeKey
   ) {
     super(format, key)
     this.__src = src
     this.__altText = alt
+    this.__width = width
+    this.__height = height
   }
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const { src, altText } = serializedNode
-    const node = $createImageNode({ src, altText })
+    const { src, altText, width, height } = serializedNode
+    const node = $createImageNode({ src, altText, width, height })
     return node
   }
 
@@ -71,6 +86,8 @@ export class ImageNode extends DecoratorBlockNode {
       ...super.exportJSON(),
       src: this.__src,
       altText: this.__altText,
+      width: this.__width,
+      height: this.__height,
       type: 'image',
       version: 1,
     }
@@ -96,6 +113,8 @@ export class ImageNode extends DecoratorBlockNode {
     const img = document.createElement('img')
     img.src = this.__src
     img.alt = this.__altText
+    img.width = this.__width
+    img.height = this.__height
     element.appendChild(img)
     return { element }
   }
@@ -122,6 +141,8 @@ export class ImageNode extends DecoratorBlockNode {
         nodeKey={this.__key}
         src={this.__src}
         altText={this.__altText}
+        width={this.__width}
+        height={this.__height}
       />
     )
   }
@@ -130,11 +151,10 @@ export class ImageNode extends DecoratorBlockNode {
 export function $createImageNode({
   src,
   altText,
-}: {
-  src: string
-  altText: string
-}): ImageNode {
-  return new ImageNode(src, altText)
+  width,
+  height,
+}: ImagePayload): ImageNode {
+  return new ImageNode(src, altText, width, height)
 }
 
 export function $isImageNode(

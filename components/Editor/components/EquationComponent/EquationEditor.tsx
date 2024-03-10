@@ -34,9 +34,15 @@ export default function EquationEditor({
         <DialogTitle>Equation Editor</DialogTitle>
         <DialogDescription>Enter Tex Equation</DialogDescription>
       </DialogHeader>
-      <div>
+      <div className="flex flex-col items-center space-y-2">
         <div>
           <Textarea
+            onFocus={(e) => {
+              e.target.setSelectionRange(
+                editorEquation.length + 1,
+                editorEquation.length + 1
+              )
+            }}
             onChange={(event) => {
               setEditorEquation(event.target.value)
             }}
@@ -44,8 +50,12 @@ export default function EquationEditor({
             className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 resize-none overflow-auto"
           />
         </div>
-        <div>
-          <KatexRenderer equation={editorEquation} inline={false} />
+        <div className="border rounded-md overflow-x-auto w-96 h-28">
+          <KatexRenderer
+            equation={editorEquation}
+            inline={false}
+            className="h-fit w-fit block text-center px-3 py-2 pointer-events-none text-xs"
+          />
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -65,7 +75,7 @@ export default function EquationEditor({
       </div>
       <DialogFooter>
         <DialogClose>Cancel</DialogClose>
-        <DialogClose>
+        <DialogClose asChild>
           <Button
             disabled={isEmpty}
             onClick={() => {

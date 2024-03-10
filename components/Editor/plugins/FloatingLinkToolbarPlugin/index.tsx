@@ -74,6 +74,13 @@ export function InsertLinkDialog({
                 TOGGLE_LINK_COMMAND,
                 sanitizeUrl(editedLinkUrl)
               )
+              editor.update(() => {
+                const selection = $getSelection()
+                if ($isRangeSelection(selection)) {
+                  const node = getSelectedNode(selection).getNextSibling()
+                  node?.selectEnd()
+                }
+              })
               setEditedLinkUrl('')
             }}
           >

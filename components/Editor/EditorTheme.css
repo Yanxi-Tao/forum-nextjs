@@ -7,7 +7,7 @@
 }
 
 .editor-heading-h1 {
-  @apply scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl;
+  @apply scroll-m-20 text-3xl font-extrabold tracking-tight pb-2;
 }
 
 .editor-heading-h2 {
@@ -15,7 +15,7 @@
 }
 
 .editor-heading-h3 {
-  @apply scroll-m-20 text-xl font-semibold tracking-tight;
+  @apply scroll-m-20 text-xl font-semibold tracking-tight pb-2;
 }
 
 .editor-nested-listitem {
@@ -47,7 +47,8 @@
   @apply inline-block h-fit mx-1;
 }
 
-.editor-embedBlock {
+.editor-embedBlock,
+.editor-image {
   @apply flex justify-center items-center my-3;
 }
 

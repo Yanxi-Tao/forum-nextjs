@@ -245,7 +245,11 @@ function BlockFormatDropdown({
       <SelectTrigger className="w-[180px] focus:ring-0 focus:ring-offset-0">
         <SelectValue>{blockTypeToBlockName[blockType]}</SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent
+        onCloseAutoFocus={() => {
+          editor.focus()
+        }}
+      >
         <SelectItem value="paragraph">Normal</SelectItem>
         <SelectItem value="h1">Heading 1</SelectItem>
         <SelectItem value="h2">Heading 2</SelectItem>

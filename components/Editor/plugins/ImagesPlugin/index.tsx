@@ -20,10 +20,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogContent,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { ImageIcon } from 'lucide-react'
-import { DialogContent } from '@radix-ui/react-dialog'
 import { Input } from '@/components/ui/input'
 
 export const INSERT_IMAGE_COMMAND: LexicalCommand<ImagePayload> = createCommand(
@@ -37,8 +37,20 @@ export function InsertImageDialog({
 }): JSX.Element {
   const [src, setSrc] = useState('')
   const [altText, setAltText] = useState('')
+  const [imageDimensions, setImageDimensions] = useState({
+    width: 0,
+    height: 0,
+  })
 
   const isDisabled = src === '' || altText === ''
+
+  useEffect(() => {
+    const img = new Image()
+    img.src = src
+    img.onload = function () {
+      setImageDimensions({ height: img.height, width: img.width })
+    }
+  }, [src])
 
   const loadImage = (files: FileList | null) => {
     const reader = new FileReader()
@@ -54,7 +66,13 @@ export function InsertImageDialog({
   }
 
   const handleConfirm = () => {
-    editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src, altText })
+    const { width, height } = imageDimensions
+    editor.dispatchCommand(INSERT_IMAGE_COMMAND, {
+      src,
+      altText,
+      width,
+      height,
+    })
   }
 
   return (
@@ -64,7 +82,12 @@ export function InsertImageDialog({
           <ImageIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        onCloseAutoFocus={() => {
+          editor.focus()
+          setAltText('')
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Insert Image</DialogTitle>
         </DialogHeader>
