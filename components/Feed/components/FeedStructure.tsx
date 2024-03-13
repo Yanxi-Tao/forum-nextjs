@@ -12,15 +12,27 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Toggle } from '@/components/ui/toggle'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
-import { ChevronDown } from 'lucide-react'
-
-import { ArrowUp, ArrowDown } from 'lucide-react'
+import {
+  ChevronDown,
+  ArrowUp,
+  ArrowDown,
+  Flag,
+  MessageCircle,
+  Star,
+} from 'lucide-react'
 
 import * as React from 'react'
 import { forwardRef } from 'react'
-import { Button } from '@/components/ui/button'
 
 type FeedProps = React.ComponentProps<typeof Card> & {
   title: string
@@ -94,13 +106,37 @@ const FeedToolbar = forwardRef<
 >(({ isAuthor, open, setOpen }, ref) => {
   return (
     <CardFooter className="flex justify-between py-2 sticky bottom-0 bg-card rounded-lg">
-      <div>
-        <Toggle>
-          <ArrowUp className="h-4 w-4" />
-        </Toggle>
-        <Toggle>
-          <ArrowDown className="h-4 w-4" />
-        </Toggle>
+      <div className="flex">
+        <ToggleGroup type="single">
+          <ToggleGroupItem value="upVote">
+            <ArrowUp className="h-5 w-5" />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="downVote">
+            <ArrowDown className="h-5 w-5" />
+          </ToggleGroupItem>
+        </ToggleGroup>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost">
+              <MessageCircle className="h-5 w-5 mr-2" />
+              Comment
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Comment</DialogTitle>
+            </DialogHeader>
+            <div>some comments</div>
+          </DialogContent>
+        </Dialog>
+        <Button variant="ghost">
+          <Star className="h-5 w-5 mr-2" />
+          Save
+        </Button>
+        <Button variant="ghost">
+          <Flag className="h-5 w-5 mr-2" />
+          Report
+        </Button>
       </div>
       {open ? <Button onClick={() => setOpen(!open)}>Close</Button> : null}
     </CardFooter>
