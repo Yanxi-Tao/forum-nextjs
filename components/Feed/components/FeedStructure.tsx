@@ -14,11 +14,12 @@ import {
 } from '@/components/ui/card'
 import { Toggle } from '@/components/ui/toggle'
 
+import { ChevronDown } from 'lucide-react'
+
 import { ArrowUp, ArrowDown } from 'lucide-react'
 
 import * as React from 'react'
 import { forwardRef } from 'react'
-import { on } from 'events'
 import { Button } from '@/components/ui/button'
 
 type FeedProps = React.ComponentProps<typeof Card> & {
@@ -30,8 +31,8 @@ type FeedProps = React.ComponentProps<typeof Card> & {
 const FeedRoot = forwardRef<React.ElementRef<typeof Card>, FeedProps>(
   ({ children, title, titleURL, description }, ref) => {
     return (
-      <Card className="w-[400px]">
-        <CardHeader>
+      <Card className="w-[800px]">
+        <CardHeader className="pb-2">
           <CardTitle>
             <Link href={titleURL}>{title}</Link>
           </CardTitle>
@@ -55,9 +56,19 @@ const FeedContent = forwardRef<
   FeedContentProps
 >(({ content, preview, open, onOpenChange }, ref) => {
   return (
-    <CardContent>
+    <CardContent className="py-3">
       <Collapsible open={open} onOpenChange={onOpenChange}>
-        {open ? null : <CollapsibleTrigger>{preview}</CollapsibleTrigger>}
+        {open ? null : (
+          <CollapsibleTrigger asChild>
+            <span role="button" className=" hover:opacity-80">
+              {preview}
+              <span className=" text-blue-500/80">
+                more
+                <ChevronDown className="h-4 w-4 inline-block" />
+              </span>
+            </span>
+          </CollapsibleTrigger>
+        )}
         <CollapsibleContent>
           <div
             className="editor"
@@ -82,14 +93,16 @@ const FeedToolbar = forwardRef<
   FeedToolbarProps
 >(({ isAuthor, open, setOpen }, ref) => {
   return (
-    <CardFooter>
-      <Toggle>
-        <ArrowUp className="h-4 w-4" />
-      </Toggle>
-      <Toggle>
-        <ArrowDown className="h-4 w-4" />
-      </Toggle>
-      <Button onClick={() => setOpen(!open)}>Close</Button>
+    <CardFooter className="flex justify-between py-2 sticky bottom-0 bg-card rounded-lg">
+      <div>
+        <Toggle>
+          <ArrowUp className="h-4 w-4" />
+        </Toggle>
+        <Toggle>
+          <ArrowDown className="h-4 w-4" />
+        </Toggle>
+      </div>
+      {open ? <Button onClick={() => setOpen(!open)}>Close</Button> : null}
     </CardFooter>
   )
 })
