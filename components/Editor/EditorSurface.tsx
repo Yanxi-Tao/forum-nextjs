@@ -38,7 +38,7 @@ export default function EditorSurface({
   const [anchorElem, setAnchorElem] = useState<HTMLDivElement | null>(null)
 
   return (
-    <div className="editor-container w-full border">
+    <div className="editor-container border">
       <ToolbarPlugin />
       <div className="editor-inner rounded-md relative">
         <AutoFocusPlugin />
@@ -47,7 +47,7 @@ export default function EditorSurface({
         <RichTextPlugin
           contentEditable={
             <div className="editor -z-10" ref={onRef}>
-              <ContentEditable className="editor-contentEditable p-4 outline-none caret-foreground pl-8" />
+              <ContentEditable className="editor-contentEditable w-[798px] p-4 outline-none caret-foreground pl-8" />
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}

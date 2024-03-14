@@ -43,9 +43,9 @@ type FeedProps = React.ComponentProps<typeof Card> & {
 const FeedRoot = forwardRef<React.ElementRef<typeof Card>, FeedProps>(
   ({ children, title, titleURL, description }, ref) => {
     return (
-      <Card className="w-[800px]">
-        <CardHeader className="pb-2">
-          <CardTitle>
+      <Card className="w-[800px] rounded-none border-y-[0.5px]">
+        <CardHeader className="pt-4 pb-2">
+          <CardTitle className=" truncate py-2 hover:text-blue-500/80">
             <Link href={titleURL}>{title}</Link>
           </CardTitle>
           <CardDescription>{description}</CardDescription>
@@ -68,7 +68,7 @@ const FeedContent = forwardRef<
   FeedContentProps
 >(({ content, preview, open, onOpenChange }, ref) => {
   return (
-    <CardContent className="py-3">
+    <CardContent className="py-0 pb-2">
       <Collapsible open={open} onOpenChange={onOpenChange}>
         {open ? null : (
           <CollapsibleTrigger asChild>
@@ -105,7 +105,7 @@ const FeedToolbar = forwardRef<
   FeedToolbarProps
 >(({ isAuthor, open, setOpen }, ref) => {
   return (
-    <CardFooter className="flex justify-between py-2 sticky bottom-0 bg-card rounded-lg">
+    <CardFooter className="flex justify-between py-2 sticky bottom-0 bg-card">
       <div className="flex">
         <ToggleGroup type="single">
           <ToggleGroupItem value="upVote">
