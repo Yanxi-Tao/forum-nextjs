@@ -5,14 +5,8 @@ import EditorTheme from './EditorTheme'
 import EditorNodes from './nodes'
 
 import * as React from 'react'
-import { LexicalEditor } from 'lexical'
 
-export type EditorProps = {
-  editorRef:
-    | React.RefCallback<LexicalEditor>
-    | React.MutableRefObject<LexicalEditor | null | undefined>
-  initialContent: string
-}
+import { EditorProps } from '@/types/Editor'
 
 const editorConfig = {
   namespace: 'editor',
