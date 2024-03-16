@@ -43,7 +43,7 @@ type FeedProps = React.ComponentProps<typeof Card> & {
 const FeedRoot = forwardRef<React.ElementRef<typeof Card>, FeedProps>(
   ({ children, title, titleURL, description }, ref) => {
     return (
-      <Card className="w-[840px] rounded-none border-0 px-6">
+      <Card className="w-[800px] rounded-none border-0 px-1 shadow-none">
         <div className="border-b">
           <CardHeader className="p-0 pt-4 pb-2">
             <CardTitle className=" truncate py-2 pr-2 hover:text-blue-500/80 text-xl">

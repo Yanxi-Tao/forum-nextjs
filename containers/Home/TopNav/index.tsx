@@ -8,9 +8,9 @@ import { Codesandbox, Bell } from 'lucide-react'
 
 export default function TopNav(): JSX.Element {
   return (
-    <div className="flex justify-evenly items-center h-14 border-b drop-shadow-sm sticky top-0 bg-background z-10">
-      <div>IBZN</div>
-      <div>
+    <div className="flex items-center h-14 border-b drop-shadow-sm sticky top-0 bg-background z-10">
+      <div className=" basis-1/3 flex justify-center">IBZN</div>
+      <div className="basis-1/3">
         <form className="flex space-x-2 w-[500px] items-center">
           <Input
             autoComplete="off"
@@ -21,7 +21,7 @@ export default function TopNav(): JSX.Element {
           <Button type="button">Ask</Button>
         </form>
       </div>
-      <div className="flex space-x-2 items-center">
+      <div className="basis-1/3 flex space-x-2 items-center justify-center">
         <Button title="Workspace" variant="ghost">
           <Codesandbox className="h-5 w-5 mr-2" />
           Workspace
