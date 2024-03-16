@@ -28,7 +28,7 @@ import {
   ArrowDown,
   Flag,
   MessageCircle,
-  Star,
+  Bookmark,
 } from 'lucide-react'
 
 import * as React from 'react'
@@ -43,14 +43,16 @@ type FeedProps = React.ComponentProps<typeof Card> & {
 const FeedRoot = forwardRef<React.ElementRef<typeof Card>, FeedProps>(
   ({ children, title, titleURL, description }, ref) => {
     return (
-      <Card className="w-[800px] rounded-none border-y-[0.5px]">
-        <CardHeader className="pt-4 pb-2">
-          <CardTitle className=" truncate py-2 hover:text-blue-500/80">
-            <Link href={titleURL}>{title}</Link>
-          </CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        {children}
+      <Card className="w-[840px] rounded-none border-0 px-6">
+        <div className="border-b">
+          <CardHeader className="p-0 pt-4 pb-2">
+            <CardTitle className=" truncate py-2 pr-2 hover:text-blue-500/80 text-xl">
+              <Link href={titleURL}>{title}</Link>
+            </CardTitle>
+            <CardDescription>{description}</CardDescription>
+          </CardHeader>
+          {children}
+        </div>
       </Card>
     )
   }
@@ -68,7 +70,7 @@ const FeedContent = forwardRef<
   FeedContentProps
 >(({ content, preview, open, onOpenChange }, ref) => {
   return (
-    <CardContent className="py-0 pb-2">
+    <CardContent className="p-0 pb-2">
       <Collapsible open={open} onOpenChange={onOpenChange}>
         {open ? null : (
           <CollapsibleTrigger asChild>
@@ -105,7 +107,11 @@ const FeedToolbar = forwardRef<
   FeedToolbarProps
 >(({ isAuthor, open, setOpen }, ref) => {
   return (
-    <CardFooter className="flex justify-between py-2 sticky bottom-0 bg-card">
+    <CardFooter
+      className={`flex justify-between p-0 py-2 bg-card ${
+        open ? 'sticky bottom-0 ' : ''
+      }`}
+    >
       <div className="flex">
         <ToggleGroup type="single">
           <ToggleGroupItem value="upVote">
@@ -130,7 +136,7 @@ const FeedToolbar = forwardRef<
           </DialogContent>
         </Dialog>
         <Button variant="ghost">
-          <Star className="h-5 w-5 mr-2" />
+          <Bookmark className="h-5 w-5 mr-2" />
           Save
         </Button>
         <Button variant="ghost">
