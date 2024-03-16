@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useEffect, useState } from 'react'
 import KatexRenderer from './KatexRenderer'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 export default function EquationEditor({
   equation,
@@ -65,12 +66,7 @@ export default function EquationEditor({
               setEditorInline(checked ? true : false)
             }
           />
-          <label
-            htmlFor="inline"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Inline
-          </label>
+          <Label htmlFor="inline">Inline</Label>
         </div>
       </div>
       <DialogFooter>

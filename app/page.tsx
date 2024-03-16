@@ -6,13 +6,14 @@ import SideNav from '@/containers/Home/SideNav'
 import TopNav from '@/containers/Home/TopNav'
 
 export default function Page(): JSX.Element {
-  return (
-    <>
-      <TopNav />
+  return <></>
+}
+
+// home
+{
+  /* <TopNav />
       <div className="flex">
         <SideNav />
         <Main />
-      </div>
-    </>
-  )
+      </div> */
 }

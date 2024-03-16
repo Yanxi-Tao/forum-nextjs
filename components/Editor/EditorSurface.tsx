@@ -23,7 +23,7 @@ import MarkdownPlugin from './plugins/MarkdownShortcutPlugin'
 
 import { useState } from 'react'
 
-import { EditorProps } from '@/types/Editor'
+import { EditorProps } from '@/lib/types'
 
 export default function EditorSurface({
   editorRef,

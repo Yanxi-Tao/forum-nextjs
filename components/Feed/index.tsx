@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { FeedContent, FeedRoot, FeedToolbar } from './components/FeedStructure'
 
-import { FeedProps } from '@/types/Feed'
+import { FeedProps } from '@/lib/types'
 
 export default function Feed({
   title,

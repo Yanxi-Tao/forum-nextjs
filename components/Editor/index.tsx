@@ -6,7 +6,7 @@ import EditorNodes from './nodes'
 
 import * as React from 'react'
 
-import { EditorProps } from '@/types/Editor'
+import { EditorProps } from '@/lib/types'
 
 const editorConfig = {
   namespace: 'editor',
