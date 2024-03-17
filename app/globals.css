@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url(@/components/Editor/EditorTheme.css);
+@import url(@/components/forms/Editor/EditorTheme.css);
 @import url(katex/dist/katex.css);
 
 @layer base {

@@ -1,14 +1,11 @@
-import * as React from 'react'
+import { Bell, Codesandbox } from 'lucide-react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Codesandbox, Bell } from 'lucide-react'
-
-export default function TopNav(): JSX.Element {
+export default function Topbar(): JSX.Element {
   return (
-    <div className="flex items-center h-14 border-b drop-shadow-sm sticky top-0 bg-background z-10">
+    <nav className="fixed top-0 left-0 right-0 flex items-center h-14 border-b drop-shadow-sm bg-background z-30">
       <div className=" basis-1/3 flex justify-center">IBZN</div>
       <div className="basis-1/3">
         <form className="flex space-x-2 w-[500px] items-center">
@@ -35,6 +32,6 @@ export default function TopNav(): JSX.Element {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>
-    </div>
+    </nav>
   )
 }

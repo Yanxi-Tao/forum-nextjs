@@ -1,12 +1,14 @@
+'use client'
 import * as React from 'react'
 
-import Feed from '@/components/Feed'
-import { dummy_data } from '@/data'
+import { z } from 'zod'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import Feed from '@/components/cards/Feed'
+import { dummy_data } from '@/data'
 
-export default function Main(): JSX.Element {
+export default function Page(): JSX.Element {
   return (
-    <ScrollArea className="basis-[82%] h-[calc(100vh-56px)]">
+    <ScrollArea className="h-full">
       <div className="px-10">
         <Feed
           title={'Test Pjbnrgekjbnkbnn'}
