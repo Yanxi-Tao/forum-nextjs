@@ -1,7 +1,6 @@
 'use client'
 import * as React from 'react'
 
-import { z } from 'zod'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Feed from '@/components/cards/Feed'
 import { dummy_data } from '@/data'
