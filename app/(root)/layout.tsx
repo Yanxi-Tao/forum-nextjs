@@ -29,9 +29,9 @@ export default function RootLayout({
           <Topbar />
           <main className="flex">
             <LeftSidebar />
-            <section className="flex h-screen pt-14 overflow-auto">
+            <div className="flex h-screen pt-14 overflow-auto">
               <div className="w-full">{children}</div>
-            </section>
+            </div>
           </main>
         </ThemeProvider>
       </body>
