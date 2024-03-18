@@ -46,7 +46,7 @@ export default function EditorSurface({
         <LoadInitialContentPlugin initialContent={initialContent} />
         <RichTextPlugin
           contentEditable={
-            <div className="editor -z-10" ref={onRef}>
+            <div className="editor" ref={onRef}>
               <ContentEditable className="editor-contentEditable w-[798px] p-4 outline-none caret-foreground pl-8" />
             </div>
           }

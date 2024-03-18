@@ -1,4 +1,3 @@
-'use client'
 import * as React from 'react'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -7,8 +6,8 @@ import { dummy_data } from '@/data'
 
 export default function Page(): JSX.Element {
   return (
-    <ScrollArea className="h-full">
-      <div className="px-10">
+    <ScrollArea className="h-full px-10">
+      <div>
         <Feed
           title={'Test Pjbnrgekjbnkbnn'}
           description={'Yanyu Chen'}
