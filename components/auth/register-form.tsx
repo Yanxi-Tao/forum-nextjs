@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RegisterSchema } from '@/lib/validations'
-import { register } from '@/actions/auth'
+import { register } from '@/actions/register'
 
 import {
   Form,
@@ -19,8 +19,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { AuthWrapper } from './auth-wrapper'
-import { FormError } from './form-alerts'
-import { FormSuccess } from './form-alerts'
+import { FormError, FormSuccess } from './form-alerts'
 import { OAuthGroup } from './oauth-providers'
 
 export const RegisterForm = () => {
