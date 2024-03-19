@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { useState } from 'react'
 
-import { FeedContent, FeedRoot, FeedToolbar } from './components/FeedStructure'
+import { FeedContent, FeedRoot, FeedToolbar } from './components/feed-structure'
 
 import { FeedProps } from '@/lib/types'
 

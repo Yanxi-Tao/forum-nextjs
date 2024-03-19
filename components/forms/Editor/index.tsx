@@ -1,6 +1,6 @@
 'use client'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
-import EditorSurface from './EditorSurface'
+import EditorSurface from './editor-surface'
 
 import EditorTheme from './EditorTheme'
 import EditorNodes from './nodes'

@@ -9,9 +9,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { getSelectedNode } from '@/components/forms/Editor/utils/getSelectedNode'
-import { setFloatingLinkToolbarPosition } from '@/components/forms/Editor/utils/setFloatingLinkToolbarPosition'
-import { sanitizeUrl, validateUrl } from '@/components/forms/Editor/utils/url'
+import { getSelectedNode } from '@/components/forms/editor/utils/getSelectedNode'
+import { setFloatingLinkToolbarPosition } from '@/components/forms/editor/utils/setFloatingLinkToolbarPosition'
+import { sanitizeUrl, validateUrl } from '@/components/forms/editor/utils/url'
 import {
   $createLinkNode,
   $isAutoLinkNode,

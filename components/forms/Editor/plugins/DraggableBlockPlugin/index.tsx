@@ -17,8 +17,8 @@ import * as Portal from '@radix-ui/react-portal'
 import { Separator } from '@/components/ui/separator'
 
 import { isHTMLElement } from '@/lib/utils'
-import { Point } from '@/components/forms/Editor/utils/point'
-import { Rect } from '@/components/forms/Editor/utils/rect'
+import { Point } from '@/components/forms/editor/utils/point'
+import { Rect } from '@/components/forms/editor/utils/rect'
 
 const SPACE = 5.5
 const TARGET_LINE_HALF_HEIGHT = 2

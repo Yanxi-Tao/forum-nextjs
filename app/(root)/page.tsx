@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
-import Feed from '@/components/cards/Feed'
+import Feed from '@/components/cards/feed'
 import { dummy_data } from '@/data'
 
 export default function Page(): JSX.Element {
