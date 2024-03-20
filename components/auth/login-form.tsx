@@ -52,48 +52,55 @@ export const LoginForm = () => {
       headerLabel="Welcom back"
       redirectLabel="Dont have an account? Register here"
       redirecrPath="/auth/register"
+      showProvider={!isPending}
     >
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="email" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {isPending ? (
-            <div className="flex justify-center">
-              <RingLoader />
+      {isPending ? (
+        <div className="flex justify-center">
+          <RingLoader />
+        </div>
+      ) : (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="email" disabled={isPending} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="password" disabled={isPending} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-          ) : null}
-          <FormAlert message={alert.message} type={alert.type} />
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-        </form>
-      </Form>
+            {isPending ? (
+              <div className="flex justify-center">
+                <RingLoader />
+              </div>
+            ) : null}
+            <FormAlert message={alert.message} type={alert.type} />
+            <Button type="submit" className="w-full" disabled={isPending}>
+              Login
+            </Button>
+          </form>
+        </Form>
+      )}
     </AuthCardWrapper>
   )
 }
