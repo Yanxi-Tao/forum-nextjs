@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -24,6 +25,12 @@ import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
 
 export const LoginForm = () => {
+  const searchParams = useSearchParams()
+  const urlError =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'Email used by different provider'
+      : ''
+
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -42,7 +49,7 @@ export const LoginForm = () => {
     setAlert({ type: '', message: '' })
     startTransition(() => {
       login(data).then((data) => {
-        setAlert(data)
+        setAlert(data || { type: 'error', message: 'An error occurred' })
       })
     })
   }
@@ -94,7 +101,10 @@ export const LoginForm = () => {
                 <RingLoader />
               </div>
             ) : null}
-            <FormAlert message={alert.message} type={alert.type} />
+            <FormAlert
+              message={alert.message || urlError}
+              type={alert.type || 'error'}
+            />
             <Button type="submit" className="w-full" disabled={isPending}>
               Login
             </Button>

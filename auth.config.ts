@@ -1,13 +1,23 @@
 import type { NextAuthConfig } from 'next-auth'
-import credentials from 'next-auth/providers/credentials'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
 
 import { LoginSchema } from '@/schemas'
-import { getUserByEmail } from './db/user'
+import { getUserByEmail } from '@/db/user'
 
 export default {
   providers: [
-    credentials({
+    GithubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    CredentialsProvider({
       // in case malicious login attempts directly to the auth API are made
       async authorize(credentials) {
         const validatedCredentials = LoginSchema.safeParse(credentials)

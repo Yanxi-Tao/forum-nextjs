@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
 import {
   Card,
@@ -12,6 +13,7 @@ import { Button } from '@/components/ui/button'
 
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 
 type AuthCardWrapperProps = {
   children: React.ReactNode
@@ -44,13 +46,26 @@ export const AuthCardWrapper = ({
 }
 
 const AuthProviders = () => {
+  const onClick = (provider: 'github' | 'google') => {
+    signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT })
+  }
   return (
     <CardFooter className="flex gap-x-2">
-      <Button variant="secondary" size="lg" className="w-full">
+      <Button
+        variant="secondary"
+        size="lg"
+        className="w-full"
+        onClick={() => onClick('google')}
+      >
         <FcGoogle className="h-6 w-6 mr-2" />
         Google
       </Button>
-      <Button variant="secondary" size="lg" className="w-full">
+      <Button
+        variant="secondary"
+        size="lg"
+        className="w-full"
+        onClick={() => onClick('github')}
+      >
         <FaGithub className="h-6 w-6 mr-2" />
         Github
       </Button>

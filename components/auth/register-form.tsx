@@ -52,7 +52,7 @@ export const RegisterForm = () => {
   return (
     <AuthCardWrapper
       headerLabel="Create an account"
-      redirectLabel="Dont have an account? Register here"
+      redirectLabel="Already have an account? Login here"
       redirecrPath="/auth/login"
       showProvider={!isPending}
     >
