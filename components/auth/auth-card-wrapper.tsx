@@ -1,3 +1,6 @@
+'use client'
+
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 
@@ -46,8 +49,10 @@ export const AuthCardWrapper = ({
 }
 
 const AuthProviders = () => {
+  const searchParams = useSearchParams()
+  const callBackUrl = searchParams.get('callBackUrl')
   const onClick = (provider: 'github' | 'google') => {
-    signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT })
+    signIn(provider, { callbackUrl: callBackUrl || DEFAULT_LOGIN_REDIRECT })
   }
   return (
     <CardFooter className="flex gap-x-2">

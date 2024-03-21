@@ -27,6 +27,7 @@ import Link from 'next/link'
 
 export const LoginForm = () => {
   const searchParams = useSearchParams()
+  const callBackUrl = searchParams.get('callBackUrl')
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use'
@@ -49,7 +50,7 @@ export const LoginForm = () => {
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     setAlert({ type: '', message: '' })
     startTransition(() => {
-      login(data).then((data) => {
+      login(data, callBackUrl).then((data) => {
         setAlert(data || { type: 'error', message: 'An error occurred' })
       })
     })
