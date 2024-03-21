@@ -58,7 +58,7 @@ export const LoginForm = () => {
 
   return (
     <AuthCardWrapper
-      headerLabel="Welcom back"
+      headerLabel="Welcome back"
       redirectLabel="Dont have an account? Register here"
       redirecrPath="/auth/register"
       showProvider={!isPending}

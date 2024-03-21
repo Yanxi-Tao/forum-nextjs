@@ -3,7 +3,6 @@
 import { z } from 'zod'
 import { ResetSchema } from '@/schemas'
 import { getUserByEmail } from '@/db/user'
-import { redirect } from 'next/navigation'
 import { generatePasswordResetToken } from '@/lib/tokens'
 import { sendPasswordResetTokenEmail } from '@/lib/mail'
 

@@ -41,14 +41,17 @@ export const register = async (
   }
 
   // Check if token is valid or expired
-  if (isUserVerified) {
-    const hasExpired = new Date() > new Date(isUserVerified.expiresAt)
-    if (isUserVerified.token !== token || hasExpired) {
-      return { type: 'error', message: 'Invalid token, please resend code' }
-    }
-    // Delete token when verification is successful
-    await deleteVerificationTokenById(isUserVerified.id)
+  if (!isUserVerified) {
+    return { type: 'error', message: 'Please verify your email' }
   }
+
+  const hasExpired = new Date() > new Date(isUserVerified.expiresAt)
+  if (isUserVerified.token !== token || hasExpired) {
+    return { type: 'error', message: 'Invalid token' }
+  }
+
+  // Delete token when verification is successful
+  await deleteVerificationTokenById(isUserVerified.id)
 
   // Hash password
   const hashedPassword = await bcrypt.hash(password, 10)
