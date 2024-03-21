@@ -18,6 +18,8 @@ export const AUTH_ROUTES: string[] = [
   '/auth/login',
   '/auth/register',
   '/auth/error',
+  '/auth/reset',
+  '/auth/reset-password',
 ]
 
 /**

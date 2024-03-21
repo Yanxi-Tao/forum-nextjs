@@ -5,8 +5,8 @@ import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { LoginSchema } from '@/schemas'
-import { login } from '@/actions/auth/login'
+import { ResetPasswordSchema } from '@/schemas'
+import { resetPassword } from '@/actions/auth/reset-password'
 
 import { RingLoader } from 'react-spinners'
 import {
@@ -23,44 +23,39 @@ import { Button } from '@/components/ui/button'
 
 import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
-import Link from 'next/link'
 
-export const LoginForm = () => {
+export const ResetPasswordForm = () => {
   const searchParams = useSearchParams()
-  const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? 'Email already in use'
-      : ''
-
+  const token = searchParams.get('token')
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
     message: '',
   })
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      email: '',
       password: '',
+      confirmPassword: '',
     },
   })
 
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (data: z.infer<typeof ResetPasswordSchema>) => {
     setAlert({ type: '', message: '' })
     startTransition(() => {
-      login(data).then((data) => {
-        setAlert(data || { type: 'error', message: 'An error occurred' })
+      resetPassword(data, token).then((data) => {
+        setAlert(data)
       })
     })
   }
 
   return (
     <AuthCardWrapper
-      headerLabel="Welcom back"
-      redirectLabel="Dont have an account? Register here"
-      redirecrPath="/auth/register"
-      showProvider={!isPending}
+      headerLabel="Reset Password"
+      redirectLabel="Back to login"
+      redirecrPath="/auth/login"
+      showProvider={false}
     >
       {isPending ? (
         <div className="flex justify-center">
@@ -72,12 +67,17 @@ export const LoginForm = () => {
             <div className="space-y-2">
               <FormField
                 control={form.control}
-                name="email"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>New Password</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isPending} />
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="123456"
+                        disabled={isPending}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -85,21 +85,18 @@ export const LoginForm = () => {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Confirm New Password</FormLabel>
                     <FormControl>
-                      <Input {...field} type="password" disabled={isPending} />
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="123456"
+                        disabled={isPending}
+                      />
                     </FormControl>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      className="px-0 font-normal"
-                      asChild
-                    >
-                      <Link href="/auth/reset">Forgot password?</Link>
-                    </Button>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -110,12 +107,9 @@ export const LoginForm = () => {
                 <RingLoader />
               </div>
             ) : null}
-            <FormAlert
-              message={alert.message || urlError}
-              type={alert.type || 'error'}
-            />
+            <FormAlert message={alert.message} type={alert.type} />
             <Button type="submit" className="w-full" disabled={isPending}>
-              Login
+              Reset Password
             </Button>
           </form>
         </Form>
