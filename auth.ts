@@ -25,12 +25,17 @@ export const {
     },
   },
   callbacks: {
-    // async signIn({ user }) {
-    //   if (!user || !user.id) return false
-    //   const checkUser = await getUserByID(user.id)
-    //   if (!checkUser || !checkUser.emailVerified) return false
-    //   return true
-    // },
+    async signIn({ user, account }) {
+      // allow oauth without email verification
+      if (account?.provider !== 'credentials') return true
+
+      // check if user exist or email is verified
+      if (!user || !user.id) return false
+      const checkUser = await getUserByID(user.id)
+      if (!checkUser || !checkUser.emailVerified) return false
+
+      return true
+    },
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub

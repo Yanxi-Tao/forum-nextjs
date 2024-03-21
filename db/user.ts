@@ -29,7 +29,8 @@ export const getUserByID = async (id: string) => {
 export const createUser = async (
   name: string,
   email: string,
-  password: string
+  password: string,
+  emailVerified: Date
 ) => {
   try {
     const user = await db.user.create({
@@ -37,6 +38,7 @@ export const createUser = async (
         name,
         email,
         password,
+        emailVerified,
       },
     })
     return user

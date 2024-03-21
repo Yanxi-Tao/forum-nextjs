@@ -11,6 +11,7 @@ export const RegisterSchema = z
     password: z.string().min(3, { message: 'Password is required' }),
     confirmPassword: z.string().min(3, { message: 'Password is required' }),
     name: z.string().min(1, { message: 'Name is required' }),
+    token: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',

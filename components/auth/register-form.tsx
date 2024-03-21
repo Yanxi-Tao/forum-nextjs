@@ -17,6 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui/input-otp'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
@@ -37,6 +42,7 @@ export const RegisterForm = () => {
       password: '',
       confirmPassword: '',
       name: '',
+      token: '',
     },
   })
 
@@ -44,7 +50,10 @@ export const RegisterForm = () => {
     setAlert({ type: '', message: '' })
     startTransition(() => {
       register(data).then((data) => {
-        setAlert(data)
+        setAlert(data || { type: 'error', message: 'An error occurred' })
+        if (data?.message === 'Invalid token, please resend code') {
+          form.setValue('token', '')
+        }
       })
     })
   }
@@ -129,6 +138,31 @@ export const RegisterForm = () => {
                         placeholder="123456"
                         disabled={isPending}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="token"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Verification Code</FormLabel>
+                    <FormControl>
+                      <div className="flex gap-x-2">
+                        <InputOTP maxLength={6} {...field} disabled={isPending}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                        <Button>Send code</Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
