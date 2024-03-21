@@ -30,7 +30,7 @@ export const AuthCardWrapper = ({
   showProvider = true,
 }: AuthCardWrapperProps) => {
   return (
-    <Card className="w-[400px] ">
+    <Card className="w-[500px] ">
       <CardHeader>
         <CardTitle className="text-center">{headerLabel}</CardTitle>
       </CardHeader>

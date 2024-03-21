@@ -68,7 +68,7 @@ export const LoginForm = () => {
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            <div className="space-y-4">
+            <div className="space-y-2">
               <FormField
                 control={form.control}
                 name="email"
@@ -76,7 +76,7 @@ export const LoginForm = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} type="email" disabled={isPending} />
+                      <Input {...field} disabled={isPending} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
