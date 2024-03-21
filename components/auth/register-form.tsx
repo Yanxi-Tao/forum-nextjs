@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { RegisterSchema } from '@/schemas'
 import { register } from '@/actions/auth/register'
 
-import { RingLoader } from 'react-spinners'
+import { RingLoader, PuffLoader } from 'react-spinners'
 import {
   Form,
   FormControl,
@@ -29,6 +29,7 @@ import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
 
 export const RegisterForm = () => {
+  const [submitType, setSubmitType] = useState<'register' | 'token'>('token')
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -49,7 +50,7 @@ export const RegisterForm = () => {
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
     setAlert({ type: '', message: '' })
     startTransition(() => {
-      register(data).then((data) => {
+      register(data, submitType).then((data) => {
         setAlert(data || { type: 'error', message: 'An error occurred' })
         if (data?.message === 'Invalid token, please resend code') {
           form.setValue('token', '')
@@ -57,7 +58,6 @@ export const RegisterForm = () => {
       })
     })
   }
-
   return (
     <AuthCardWrapper
       headerLabel="Create an account"
@@ -65,7 +65,7 @@ export const RegisterForm = () => {
       redirecrPath="/auth/login"
       showProvider={!isPending}
     >
-      {isPending ? (
+      {isPending && submitType === 'register' ? (
         <div className="flex justify-center">
           <RingLoader />
         </div>
@@ -150,7 +150,7 @@ export const RegisterForm = () => {
                   <FormItem>
                     <FormLabel>Email Verification Code</FormLabel>
                     <FormControl>
-                      <div className="flex gap-x-2">
+                      <div className="flex gap-x-4">
                         <InputOTP maxLength={6} {...field} disabled={isPending}>
                           <InputOTPGroup>
                             <InputOTPSlot index={0} />
@@ -161,7 +161,17 @@ export const RegisterForm = () => {
                             <InputOTPSlot index={5} />
                           </InputOTPGroup>
                         </InputOTP>
-                        <Button>Send code</Button>
+                        <Button
+                          onClick={() => setSubmitType('token')}
+                          disabled={isPending}
+                        >
+                          Send code
+                        </Button>
+                        {isPending && submitType === 'token' && (
+                          <div className="flex justify-center">
+                            <PuffLoader size={40} />
+                          </div>
+                        )}
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -169,13 +179,13 @@ export const RegisterForm = () => {
                 )}
               />
             </div>
-            {isPending ? (
-              <div className="flex justify-center">
-                <RingLoader />
-              </div>
-            ) : null}
             <FormAlert message={alert.message} type={alert.type} />
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isPending}
+              onClick={() => setSubmitType('register')}
+            >
               Create Account
             </Button>
           </form>

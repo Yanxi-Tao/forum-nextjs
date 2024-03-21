@@ -14,7 +14,10 @@ import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { AuthError } from 'next-auth'
 
-export const register = async (data: z.infer<typeof RegisterSchema>) => {
+export const register = async (
+  data: z.infer<typeof RegisterSchema>,
+  submitType: 'register' | 'token'
+) => {
   const validatedData = RegisterSchema.safeParse(data)
 
   if (!validatedData.success) {
@@ -29,19 +32,22 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
     return { type: 'error', message: 'Email already exists' }
   }
 
-  // Send verification token email
+  // Send verification token email if sumbitType is token
   const isUserVerified = await getVerificationTokenByEmail(email)
-  if (!isUserVerified) {
+  if (submitType === 'token') {
     const verificationToken = await generateVerificationToken(email)
     sendVerificationTokenEmail(verificationToken.email, verificationToken.token)
     return { type: 'success', message: 'Verification code sent' }
   }
 
   // Check if token is valid or expired
-  const hasExpired = new Date() > new Date(isUserVerified.expiresAt)
-  if (isUserVerified.token !== token || hasExpired) {
+  if (isUserVerified) {
+    const hasExpired = new Date() > new Date(isUserVerified.expiresAt)
+    if (isUserVerified.token !== token || hasExpired) {
+      return { type: 'error', message: 'Invalid token, please resend code' }
+    }
+    // Delete token when verification is successful
     await deleteVerificationTokenById(isUserVerified.id)
-    return { type: 'error', message: 'Invalid token, please resend code' }
   }
 
   // Hash password
@@ -49,9 +55,6 @@ export const register = async (data: z.infer<typeof RegisterSchema>) => {
 
   // Create user
   createUser(name, email, hashedPassword, new Date())
-
-  // Delete verification token
-  await deleteVerificationTokenById(isUserVerified.id)
 
   try {
     await signIn('credentials', {
