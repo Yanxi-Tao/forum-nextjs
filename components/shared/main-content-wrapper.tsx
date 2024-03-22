@@ -1,4 +1,5 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Search } from '@/components/form/search'
 
 export const MainContentWrapper = ({
   children,
@@ -6,8 +7,11 @@ export const MainContentWrapper = ({
   children: React.ReactNode
 }>) => {
   return (
-    <div className="flex h-screen justify-center pt-14">
-      <ScrollArea className="h-full px-6">{children}</ScrollArea>
+    <div className="flex flex-col h-screen w-full justify-center items-center">
+      <div className="sticky top-0 flex justify-center items-center w-full bg-muted h-14">
+        <Search />
+      </div>
+      <ScrollArea className="h-full px-20">{children}</ScrollArea>
     </div>
   )
 }

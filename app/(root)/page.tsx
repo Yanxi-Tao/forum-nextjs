@@ -27,7 +27,13 @@ export default function Home() {
       nobis illum at. Lorem ipsum dolor sit, amet consectetur adipisicing elit.
       Nam, animi sapiente. Voluptatibus aut sunt cum culpa neque quibusdam
       perspiciatis vel, totam quasi, consectetur doloremque. Laudantium, iure.
-      Expedita asperiores libero totam.
+      Expedita asperiores libero totam. Lorem ipsum dolor sit amet consectetur
+      adipisicing elit. Ratione magni inventore soluta, repellendus optio
+      laboriosam atque nihil autem accusantium quos incidunt modi eius odio
+      labore perspiciatis maxime! Aliquid, cumque nostrum. Lorem ipsum dolor sit
+      amet consectetur, adipisicing elit. Officiis sunt ad quod iusto obcaecati
+      quibusdam maiores cupiditate. Illo suscipit, optio id obcaecati aspernatur
+      accusamus. Ipsam autem quidem libero cupiditate id.
     </>
   )
 }

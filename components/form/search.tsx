@@ -30,7 +30,7 @@ export const Search = () => {
     <form action={onSearch}>
       <Input
         placeholder="Search"
-        className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 h-11"
+        className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 h-10"
         autoComplete="off"
         name="search"
         onKeyUp={(e) => e.key === 'Enter' && e.currentTarget.blur()}

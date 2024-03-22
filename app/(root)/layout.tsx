@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../globals.css'
-import { Topbar } from '@/components/shared/topbar'
 import { auth } from '@/auth'
 import { SessionProvider } from 'next-auth/react'
 import { LeftSidebar } from '@/components/shared/left-sidebar'
@@ -25,7 +24,6 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <Topbar />
           <main className="flex">
             <LeftSidebar />
             <MainContentWrapper>{children}</MainContentWrapper>
