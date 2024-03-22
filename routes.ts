@@ -32,4 +32,4 @@ export const AUTH_API_ROUTE: string = '/api/auth'
  * Default redirect route after login
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT: string = '/private'
+export const DEFAULT_LOGIN_REDIRECT: string = '/'
