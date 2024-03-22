@@ -4,6 +4,9 @@ import '../globals.css'
 import { Topbar } from '@/components/shared/topbar'
 import { auth } from '@/auth'
 import { SessionProvider } from 'next-auth/react'
+import { LeftSidebar } from '@/components/shared/left-sidebar'
+import { MainContentWrapper } from '@/components/shared/main-content-wrapper'
+import { RightSidebar } from '@/components/shared/right-sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,7 +26,11 @@ export default async function RootLayout({
       <body className={inter.className}>
         <SessionProvider session={session}>
           <Topbar />
-          {children}
+          <main className="flex">
+            <LeftSidebar />
+            <MainContentWrapper>{children}</MainContentWrapper>
+            <RightSidebar />
+          </main>
         </SessionProvider>
       </body>
     </html>
