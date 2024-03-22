@@ -163,6 +163,7 @@ export const RegisterForm = () => {
                         </InputOTP>
                         <Button
                           onClick={() => setSubmitType('token')}
+                          variant="outline"
                           disabled={isPending}
                         >
                           Send code
