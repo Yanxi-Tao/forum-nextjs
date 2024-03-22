@@ -1,7 +1,10 @@
 'use client'
 import { Input } from '@/components/ui/input'
+import { SearchIcon, X } from 'lucide-react'
+import { Butcherman } from 'next/font/google'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
+import { Button } from '../ui/button'
 
 export const Search = () => {
   const router = useRouter()
@@ -26,15 +29,27 @@ export const Search = () => {
     const query = createQueryString('search', search)
     router.push(`${pathname}?${query}`)
   }
+
   return (
-    <form action={onSearch}>
+    <form action={onSearch} className="flex items-center rounded-full border">
+      {/* todo: add filter badhe */}
       <Input
         placeholder="Search"
-        className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 h-10"
+        className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 h-10 rounded-none rounded-l-full border-0"
         autoComplete="off"
         name="search"
         onKeyUp={(e) => e.key === 'Enter' && e.currentTarget.blur()}
       />
+      <div className="flex items-center justify-center rounded-r-full w-10 h-10 bg-background">
+        <Button
+          type="submit"
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+        >
+          <SearchIcon size={20} />
+        </Button>
+      </div>
     </form>
   )
 }

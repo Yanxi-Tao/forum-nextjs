@@ -38,7 +38,7 @@ export const LeftSidebar = () => {
                     href={nav.route}
                     className="relative flex items-center justify-start gap-x-4"
                   >
-                    {<nav.icon size={20} />}
+                    {<nav.icon size={24} />}
                     <p>{nav.label}</p>
                   </Link>
                 </Button>
