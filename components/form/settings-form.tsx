@@ -156,9 +156,19 @@ export const SettingsForm = () => {
                 )}
               </div>
               <FormAlert message={alert.message} type={alert.type} />
-              <Button type="submit" className="w-full" disabled={isPending}>
-                Update Settings
-              </Button>
+              <div className="flex gap-x-3">
+                <Button
+                  type="reset"
+                  className="w-full"
+                  disabled={isPending}
+                  onClick={() => form.reset()}
+                >
+                  Reset Settings
+                </Button>
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  Update Settings
+                </Button>
+              </div>
             </form>
           </Form>
         ) : (

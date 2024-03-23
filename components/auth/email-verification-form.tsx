@@ -46,13 +46,13 @@ export const EmailVerificationForm = () => {
       redirectLabel="Back to settings"
       showProvider={false}
     >
-      <div className="flex items-center w-full justify-center">
-        {!alert.type || !alert.message ? (
+      {!alert.type || !alert.message ? (
+        <div className="flex items-center w-full justify-center">
           <RingLoader />
-        ) : (
-          <FormAlert type={alert.type} message={alert.message} />
-        )}
-      </div>
+        </div>
+      ) : (
+        <FormAlert type={alert.type} message={alert.message} />
+      )}
     </AuthCardWrapper>
   )
 }
