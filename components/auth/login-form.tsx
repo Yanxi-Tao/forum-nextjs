@@ -106,11 +106,6 @@ export const LoginForm = () => {
                 )}
               />
             </div>
-            {isPending ? (
-              <div className="flex justify-center">
-                <RingLoader />
-              </div>
-            ) : null}
             <FormAlert
               message={alert.message || urlError}
               type={alert.type || 'error'}

@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { LogIn, LogOut } from 'lucide-react'
+import { LogIn, LogOut, Settings } from 'lucide-react'
 
 export const UserAccountCard = () => {
   const user = useCurrentUser()
@@ -45,11 +45,17 @@ export const UserAccountCard = () => {
               <div>{user.name}</div>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent collisionPadding={{ right: 20 }}>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              className="justify-start gap-x-3 p-3"
+              onClick={() => router.push('/settings')}
+            >
+              <Settings size={20} />
+              Settings
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="justify-start gap-x-3 py-3 px-10"
+              className="justify-start gap-x-3 p-3"
               onClick={() => signOut()}
             >
               <LogOut size={20} />

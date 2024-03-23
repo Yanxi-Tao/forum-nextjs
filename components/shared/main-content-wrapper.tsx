@@ -11,7 +11,7 @@ export const MainContentWrapper = ({
       <div className="sticky top-0 flex justify-center items-center w-full bg-muted h-14">
         <Search />
       </div>
-      <ScrollArea className="h-full px-20">{children}</ScrollArea>
+      <ScrollArea className="h-full w-full px-20">{children}</ScrollArea>
     </div>
   )
 }
