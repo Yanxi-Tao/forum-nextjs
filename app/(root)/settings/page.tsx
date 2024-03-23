@@ -1,3 +1,5 @@
+import { SettingsForm } from '@/components/form/settings-form'
+
 export default function SettingsPage() {
-  return <div>settings</div>
+  return <SettingsForm />
 }

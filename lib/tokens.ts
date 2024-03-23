@@ -60,7 +60,7 @@ export const generateVerificationToken = async (email: string) => {
 }
 
 export const generateVerificationCode = async (email: string) => {
-  const token = crypto.randomInt(100_100, 1_100_100).toString()
+  const code = crypto.randomInt(100_100, 1_100_100).toString()
   const expiresAt = new Date(new Date().getTime() + 1000 * 60 * 60) // 1 hour
 
   const existingCode = await getVerificationCodeByEmail(email)
@@ -72,7 +72,7 @@ export const generateVerificationCode = async (email: string) => {
   const verificationCode = await db.verificationCode.create({
     data: {
       email,
-      token,
+      code,
       expiresAt,
     },
   })

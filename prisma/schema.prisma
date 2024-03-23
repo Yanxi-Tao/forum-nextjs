@@ -47,10 +47,10 @@ model Account {
 model VerificationCode {
   id        String   @id @default(cuid())
   email     String
-  token       String @unique
+  code       String @unique
   expiresAt DateTime
 
-  @@unique([email, token])
+  @@unique([email, code])
 }
 
 model VerificationToken {

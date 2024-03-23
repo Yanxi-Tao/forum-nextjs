@@ -1,5 +1,39 @@
 import { z } from 'zod'
 
+export const SettingsSchema = z
+  .object({
+    name: z.optional(z.string().min(1, { message: 'Name is required' })),
+    email: z.optional(z.string().email({ message: 'Email is required' })),
+    oldPassword: z.optional(z.string()),
+    newPassword: z.optional(z.string()),
+  })
+  .refine(
+    (data) => {
+      if (data.oldPassword && !data.newPassword) {
+        return false
+      }
+
+      return true
+    },
+    {
+      message: 'New password is required!',
+      path: ['newPassword'],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.newPassword && !data.oldPassword) {
+        return false
+      }
+
+      return true
+    },
+    {
+      message: 'Password is required!',
+      path: ['password'],
+    }
+  )
+
 export const ResetSchema = z.object({
   email: z.string().email({ message: 'Email is required' }),
 })
@@ -25,7 +59,7 @@ export const RegisterSchema = z
     password: z.string().min(3, { message: 'Password is required' }),
     confirmPassword: z.string().min(3, { message: 'Password is required' }),
     name: z.string().min(1, { message: 'Name is required' }),
-    token: z.string(),
+    code: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',

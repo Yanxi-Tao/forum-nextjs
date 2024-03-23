@@ -43,7 +43,7 @@ export const RegisterForm = () => {
       password: '',
       confirmPassword: '',
       name: '',
-      token: '',
+      code: '',
     },
   })
 
@@ -53,7 +53,7 @@ export const RegisterForm = () => {
       register(data, submitType).then((data) => {
         setAlert(data || { type: 'error', message: 'An error occurred' })
         if (data?.message === 'Invalid token, please resend code') {
-          form.setValue('token', '')
+          form.setValue('code', '')
         }
       })
     })
@@ -145,7 +145,7 @@ export const RegisterForm = () => {
               />
               <FormField
                 control={form.control}
-                name="token"
+                name="code"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email Verification Code</FormLabel>

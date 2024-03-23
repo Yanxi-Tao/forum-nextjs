@@ -3,7 +3,7 @@
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import { generateVerificationCode } from '@/lib/tokens'
-import { sendVerificationTokenEmail } from '@/lib/mail'
+import { sendVerificationCodeEmail } from '@/lib/mail'
 import { RegisterSchema } from '@/schemas'
 import { createUser, getUserByEmail } from '@/db/user'
 import { signIn } from '@/auth'
@@ -24,7 +24,7 @@ export const register = async (
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { name, email, password, token } = validatedData.data
+  const { name, email, password, code } = validatedData.data
 
   // Check if email already exists
   const isUserExist = await getUserByEmail(email)
@@ -37,7 +37,10 @@ export const register = async (
   if (submitType === 'token') {
     const verificationCode = await generateVerificationCode(email)
 
-    sendVerificationTokenEmail(verificationCode.email, verificationCode.token)
+    await sendVerificationCodeEmail(
+      verificationCode.email,
+      verificationCode.code
+    )
     return { type: 'success', message: 'Verification code sent' }
   }
 
@@ -47,7 +50,7 @@ export const register = async (
   }
 
   const hasExpired = new Date() > new Date(isUserVerified.expiresAt)
-  if (isUserVerified.token !== token || hasExpired) {
+  if (isUserVerified.code !== code || hasExpired) {
     return { type: 'error', message: 'Invalid token' }
   }
 
