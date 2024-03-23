@@ -1,9 +1,10 @@
+import { Label } from '@radix-ui/react-label'
 import {
   Home,
   Bell,
-  Bookmark,
-  Users,
   CircleUser,
+  Users,
+  Plus,
   LayoutDashboard,
 } from 'lucide-react'
 
@@ -20,9 +21,9 @@ export const sidebarNavs = [
     label: 'Categories',
   },
   {
-    icon: Bookmark,
-    route: '/bookmarks',
-    label: 'Bookmarks',
+    icon: Plus,
+    route: '/create',
+    label: 'Create',
   },
   {
     icon: Users,
@@ -34,4 +35,13 @@ export const sidebarNavs = [
     route: '/profile',
     label: 'Profile',
   },
+]
+
+export const userProfileNavs = [
+  { label: 'Activities', value: 'activities' },
+  { label: 'Questions', value: 'questions' },
+  { label: 'Answers', value: 'answers' },
+  { label: 'Articles', value: 'articles' },
+  { label: 'Bookmarks', value: 'bookmarks' },
+  { label: 'Follows', value: 'follows' },
 ]
