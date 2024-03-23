@@ -2,17 +2,17 @@
 
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
-import { generateVerificationToken } from '@/lib/tokens'
+import { generateVerificationCode } from '@/lib/tokens'
 import { sendVerificationTokenEmail } from '@/lib/mail'
 import { RegisterSchema } from '@/schemas'
 import { createUser, getUserByEmail } from '@/db/user'
-import {
-  deleteVerificationTokenById,
-  getVerificationTokenByEmail,
-} from '@/db/verification-token'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { AuthError } from 'next-auth'
+import {
+  deleteVerificationCodeById,
+  getVerificationCodeByEmail,
+} from '@/db/verification-code'
 
 export const register = async (
   data: z.infer<typeof RegisterSchema>,
@@ -33,10 +33,11 @@ export const register = async (
   }
 
   // Send verification token email if sumbitType is token
-  const isUserVerified = await getVerificationTokenByEmail(email)
+  const isUserVerified = await getVerificationCodeByEmail(email)
   if (submitType === 'token') {
-    const verificationToken = await generateVerificationToken(email)
-    sendVerificationTokenEmail(verificationToken.email, verificationToken.token)
+    const verificationCode = await generateVerificationCode(email)
+
+    sendVerificationTokenEmail(verificationCode.email, verificationCode.token)
     return { type: 'success', message: 'Verification code sent' }
   }
 
@@ -51,7 +52,7 @@ export const register = async (
   }
 
   // Delete token when verification is successful
-  await deleteVerificationTokenById(isUserVerified.id)
+  await deleteVerificationCodeById(isUserVerified.id)
 
   // Hash password
   const hashedPassword = await bcrypt.hash(password, 10)
