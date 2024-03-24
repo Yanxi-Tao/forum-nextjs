@@ -21,6 +21,9 @@ model User {
   image         String?
   password      String?
   accounts      Account[]
+  posts         Post[]
+  comments      Comment[]
+  profile       Profile?
 }
 
 // account model for provider login
@@ -69,4 +72,57 @@ model PasswordResetToken {
   expiresAt DateTime
 
   @@unique([email, token])
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  type       PostType
+  author     User     @relation(fields: [authorId], references: [id])
+  authorId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  votes      Int      @default(0)
+  views      Int      @default(0)
+  bookmarked Int      @default(0)
+
+  questionId String?
+  question   Post?   @relation("QuestionToAnswer", fields: [questionId], references: [id])
+  answers    Post[]  @relation("QuestionToAnswer")
+
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  votes     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author   User    @relation(fields: [authorId], references: [id])
+  authorId String
+  post     Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId   String?
+
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId String?
+  children Comment[] @relation("CommentToComment")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+}
+
+enum PostType {
+  QUESTION
+  ANSWER
+  ARTICLE
 }
