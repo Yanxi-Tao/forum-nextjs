@@ -30,7 +30,8 @@ export const createUser = async (
   name: string,
   email: string,
   password: string,
-  emailVerified: Date
+  emailVerified: Date,
+  slug: string
 ) => {
   try {
     const user = await db.user.create({
@@ -42,6 +43,7 @@ export const createUser = async (
         profile: {
           create: {},
         },
+        slug,
       },
     })
     return user

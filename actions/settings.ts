@@ -9,6 +9,7 @@ import { currentUser } from '@/lib/auth'
 import { db } from '@/db/client'
 import { generateVerificationToken } from '@/lib/tokens'
 import { sendVerificationEmail } from '@/lib/mail'
+import { slugify } from '@/lib/slug'
 
 export const settings = async (data: z.infer<typeof SettingsSchema>) => {
   const user = await currentUser()
@@ -63,12 +64,19 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
     data.newPassword = hashedPassword
   }
 
+  let slug = user.slug
+  // if name is updated, slugify the name
+  if (data.name && data.name !== user.name) {
+    slug = slugify(data.name)
+  }
+
   await db.user.update({
     where: { id: user.id },
     data: {
       name: data.name,
       email: data.email,
       password: data.newPassword,
+      slug,
     },
   })
 

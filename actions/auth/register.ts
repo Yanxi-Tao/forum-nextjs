@@ -13,6 +13,7 @@ import {
   deleteVerificationCodeById,
   getVerificationCodeByEmail,
 } from '@/db/verification-code'
+import { slugify } from '@/lib/slug'
 
 export const register = async (
   data: z.infer<typeof RegisterSchema>,
@@ -60,8 +61,11 @@ export const register = async (
   // Hash password
   const hashedPassword = await bcrypt.hash(password, 10)
 
+  // slugify name
+  const slug = slugify(name)
+
   // Create user
-  createUser(name, email, hashedPassword, new Date())
+  createUser(name, email, hashedPassword, new Date(), slug)
 
   try {
     await signIn('credentials', {

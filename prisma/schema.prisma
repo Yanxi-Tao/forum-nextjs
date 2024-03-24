@@ -17,6 +17,7 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
+  slug          String?   @unique
   emailVerified DateTime?
   image         String?
   password      String?
@@ -74,6 +75,7 @@ model PasswordResetToken {
 
 model Post {
   id         String   @id @default(cuid())
+  slug       String   @unique
   title      String
   content    String
   preview    String
@@ -86,19 +88,17 @@ model Post {
   views      Int      @default(0)
   bookmarked Int      @default(0)
 
-  questionId String?
-  question   Post?   @relation("QuestionToAnswer", fields: [questionId], references: [id])
-  answers    Post[]  @relation("QuestionToAnswer")
-
-  comments      Comment[]
-  commentsCount Int       @default(0)
-
+  questionId  String?
+  question    Post?      @relation("QuestionToAnswer", fields: [questionId], references: [id])
+  answers     Post[]     @relation("QuestionToAnswer")
+  comments    Comment[]
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
 }
 
 model Comment {
   id        String   @id @default(cuid())
+  slug      String   @unique
   content   String
   votes     Int      @default(0)
   createdAt DateTime @default(now())
@@ -130,9 +130,9 @@ model Profile {
 
 model Community {
   id          String    @id @default(cuid())
+  slug        String    @unique
   name        String
   description String
-  slug        String    @unique
   posts       Post[]
   members     Profile[]
 

@@ -6,10 +6,13 @@ import { db } from '@/db/client'
 import { getUserByID } from '@/db/user'
 import { getAccountByUserId } from '@/db/account'
 
+import { slugify } from '@/lib/slug'
+
 declare module 'next-auth' {
   interface Session {
     user: {
       isOAuth: boolean
+      slug: string
     } & DefaultSession['user']
   }
 }
@@ -27,9 +30,11 @@ export const {
   events: {
     async linkAccount({ user }) {
       // update emailVerified field to current date for provider accounts
+      if (!user || !user.id || !user.name) return
+      const slug = slugify(user.name)
       await db.user.update({
         where: { id: user.id },
-        data: { emailVerified: new Date(), profile: { create: {} } },
+        data: { emailVerified: new Date(), slug, profile: { create: {} } },
       })
     },
   },
@@ -54,6 +59,7 @@ export const {
         session.user.isOAuth = token.isOAuth as boolean
         session.user.name = token.name
         session.user.email = token.email
+        session.user.slug = token.slug as string
       }
 
       return session
@@ -70,6 +76,7 @@ export const {
       token.isOAuth = !!existingAccount
       token.name = existingUser.name
       token.email = existingUser.email
+      token.slug = existingUser.slug
 
       return token
     },
