@@ -21,8 +21,6 @@ model User {
   image         String?
   password      String?
   accounts      Account[]
-  posts         Post[]
-  comments      Comment[]
   profile       Profile?
 }
 
@@ -78,8 +76,9 @@ model Post {
   id         String   @id @default(cuid())
   title      String
   content    String
+  preview    String
   type       PostType
-  author     User     @relation(fields: [authorId], references: [id])
+  author     Profile  @relation(fields: [authorId], references: [id])
   authorId   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -91,7 +90,11 @@ model Post {
   question   Post?   @relation("QuestionToAnswer", fields: [questionId], references: [id])
   answers    Post[]  @relation("QuestionToAnswer")
 
-  comments Comment[]
+  comments      Comment[]
+  commentsCount Int       @default(0)
+
+  community   Community? @relation(fields: [communityId], references: [id])
+  communityId String?
 }
 
 model Comment {
@@ -101,7 +104,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  author   User    @relation(fields: [authorId], references: [id])
+  author   Profile @relation(fields: [authorId], references: [id])
   authorId String
   post     Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   String?
@@ -117,8 +120,24 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  posts       Post[]
+  comments    Comment[]
+  communities Community[]
+
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique
+}
+
+model Community {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  slug        String    @unique
+  posts       Post[]
+  members     Profile[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum PostType {

@@ -39,6 +39,9 @@ export const createUser = async (
         email,
         password,
         emailVerified,
+        profile: {
+          create: {},
+        },
       },
     })
     return user
