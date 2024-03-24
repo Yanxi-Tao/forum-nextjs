@@ -44,4 +44,5 @@ export const userProfileNavs = [
   { label: 'Articles', value: 'articles' },
   { label: 'Bookmarks', value: 'bookmarks' },
   { label: 'Follows', value: 'follows' },
+  { label: 'Communities', value: 'communities' },
 ]

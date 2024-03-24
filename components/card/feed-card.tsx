@@ -1,6 +1,5 @@
 'use client'
 
-import { Post } from '@prisma/client'
 import Link from 'next/link'
 
 import {
@@ -15,8 +14,9 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
 import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { FeedCardProps } from '@/lib/types'
 
-export const FeedCard = ({ post }: { post: Post }) => {
+export const FeedCard = ({ post }: { post: FeedCardProps }) => {
   return (
     <Card className="hover:bg-muted/10 w-full h-fit py-1">
       <CardHeader className="px-4 py-0 flex flex-row items-center justify-between space-y-0">
@@ -24,14 +24,16 @@ export const FeedCard = ({ post }: { post: Post }) => {
           {post.communityId && (
             <>
               <Button variant="link" size="sm" className="p-0" asChild>
-                <Link href={`/${post.communityId}`}>communityName</Link>
+                <Link href={`/communities/${post.communitySlug}`}>
+                  {post.communityName}
+                </Link>
               </Button>
               <span>/</span>
             </>
           )}
           <Button variant="link" size="sm" asChild className="p-0">
-            <Link href={`/profile/${post.authorId}`} className="m-0">
-              authorName
+            <Link href={`/profile/${post.authorSlug}`} className="m-0">
+              {post.authorName}
             </Link>
           </Button>
         </div>
@@ -39,7 +41,7 @@ export const FeedCard = ({ post }: { post: Post }) => {
           <span className=" text-xs">{post.createdAt.toDateString()}</span>
         </div>
       </CardHeader>
-      <Link href={`/${post.type.toLowerCase()}/${post.questionId}`}>
+      <Link href={`/${post.type.toLowerCase()}/${post.slug}`}>
         <CardHeader className="px-4 py-0">
           <CardTitle className=" text-lg">{post.title}</CardTitle>
         </CardHeader>

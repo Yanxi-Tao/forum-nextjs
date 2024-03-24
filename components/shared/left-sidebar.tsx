@@ -22,7 +22,7 @@ export const LeftSidebar = () => {
             </Link>
             {sidebarNavs.map((nav, index) => {
               const isActive =
-                (pathname.includes(nav.route) && nav.route.length > 1) ||
+                (pathname.startsWith(nav.route) && nav.route.length > 1) ||
                 pathname === nav.route
               return (
                 <Button

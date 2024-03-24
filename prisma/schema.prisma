@@ -74,19 +74,19 @@ model PasswordResetToken {
 }
 
 model Post {
-  id         String   @id @default(cuid())
-  slug       String   @unique
-  title      String
-  content    String
-  preview    String
-  type       PostType
-  author     Profile  @relation(fields: [authorId], references: [id])
-  authorId   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  votes      Int      @default(0)
-  views      Int      @default(0)
-  bookmarked Int      @default(0)
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  content   String
+  preview   String
+  type      PostType
+  author    Profile  @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  votes     Int      @default(0)
+  views     Int      @default(0)
+  bookmarks Int      @default(0)
 
   questionId  String?
   question    Post?      @relation("QuestionToAnswer", fields: [questionId], references: [id])
