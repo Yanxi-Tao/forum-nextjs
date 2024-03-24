@@ -1,10 +1,9 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { SearchIcon, X } from 'lucide-react'
-import { Butcherman } from 'next/font/google'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 
 export const Search = () => {
   const router = useRouter()
@@ -32,7 +31,7 @@ export const Search = () => {
 
   return (
     <form action={onSearch} className="flex items-center rounded-full border">
-      {/* todo: add filter badhe */}
+      {/* todo: add filter badge */}
       <Input
         placeholder="Search"
         className="w-96 focus-visible:ring-0 focus-visible:ring-offset-0 h-10 rounded-none rounded-l-full border-0"

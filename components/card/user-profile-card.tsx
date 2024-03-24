@@ -23,7 +23,7 @@ export const UserProfileCard = () => {
     return null
   }
 
-  const userId = params.profile?.[0] || currentUser.id
+  const userSlug = params.profile?.[0] || currentUser.slug
   const activeTab = params.profile?.[1] || 'activities'
 
   return (
@@ -36,7 +36,7 @@ export const UserProfileCard = () => {
         <Tabs
           value={activeTab}
           onValueChange={(newTab) => {
-            router.push(`/profile/${userId}/${newTab}`)
+            router.push(`/profile/${userSlug}/${newTab}`)
           }}
           className="w-full"
         >
