@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { CommunityCardProps } from '@/lib/types'
+import { formatNumber } from '@/lib/utils'
 
 export const CommunityCard = ({
   community,
@@ -20,9 +21,9 @@ export const CommunityCard = ({
         <CardHeader className="px-4 py-0">
           <CardTitle className=" text-lg">{community.name}</CardTitle>
           <CardDescription className="flex space-x-2 text-sm">
-            <span>{`Posts ${community.postsCount}`}</span>
+            <span>{`Posts ${formatNumber(community.postsCount)}`}</span>
             <span>|</span>
-            <span>{`Members ${community.membersCount}`}</span>
+            <span>{`Members ${formatNumber(community.membersCount)}`}</span>
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 py-1">{community.description}</CardContent>

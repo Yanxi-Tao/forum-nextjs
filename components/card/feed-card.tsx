@@ -15,6 +15,7 @@ import { Toggle } from '@/components/ui/toggle'
 import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FeedCardProps } from '@/lib/types'
+import { formatNumber } from '@/lib/utils'
 
 export const FeedCard = ({ post }: { post: FeedCardProps }) => {
   return (
@@ -38,7 +39,9 @@ export const FeedCard = ({ post }: { post: FeedCardProps }) => {
           </Button>
         </div>
         <div>
-          <span className=" text-xs">{post.createdAt.toDateString()}</span>
+          <span className=" text-xs" suppressHydrationWarning>
+            {post.createdAt.toDateString()}
+          </span>
         </div>
       </CardHeader>
       <Link href={`/${post.type.toLowerCase()}/${post.slug}`}>
@@ -54,7 +57,7 @@ export const FeedCard = ({ post }: { post: FeedCardProps }) => {
           <ToggleGroupItem size="sm" value="up">
             <ArrowBigUp size={24} />
           </ToggleGroupItem>
-          {post.votes}
+          {formatNumber(post.votes)}
           <ToggleGroupItem size="sm" value="down">
             <ArrowBigDown size={24} />
           </ToggleGroupItem>
@@ -62,7 +65,7 @@ export const FeedCard = ({ post }: { post: FeedCardProps }) => {
         <Button variant="ghost" size="sm" asChild>
           <Link href={`/${post.type.toLowerCase()}/${post.questionId}`}>
             <MessageSquare size={22} className="mr-2" />
-            {post.commentsCount}
+            {formatNumber(post.commentsCount)}
           </Link>
         </Button>
         <Toggle size="sm">

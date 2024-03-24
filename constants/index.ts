@@ -1,6 +1,6 @@
 import { Label } from '@radix-ui/react-label'
 import {
-  Home,
+  Radar,
   Bell,
   CircleUser,
   Users,
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 
 export const sidebarNavs = [
-  { icon: Home, route: '/', label: 'Home' },
+  { icon: Radar, route: '/', label: 'Explore' },
   {
     icon: Bell,
     route: '/notifications',
