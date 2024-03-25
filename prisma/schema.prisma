@@ -98,9 +98,8 @@ model Post {
 
 model Comment {
   id        String   @id @default(cuid())
-  slug      String   @unique
   content   String
-  votes     Int      @default(0)
+  likes     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

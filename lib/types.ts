@@ -1,4 +1,4 @@
-import { Community, Post } from '@prisma/client'
+import { Comment, Community, Post } from '@prisma/client'
 
 export type FeedCardProps = Post & {
   commentsCount: number
@@ -12,3 +12,5 @@ export type CommunityCardProps = Community & {
   postsCount: number
   membersCount: number
 }
+
+export type CommentCardProps = Comment
