@@ -1,4 +1,3 @@
-import { Label } from '@radix-ui/react-label'
 import {
   Radar,
   Bell,
@@ -45,4 +44,10 @@ export const userProfileNavs = [
   { label: 'Bookmarks', value: 'bookmarks' },
   { label: 'Follows', value: 'follows' },
   { label: 'Communities', value: 'communities' },
+]
+
+export const createFeedTypes = [
+  { label: 'Question', value: 'question' },
+  { label: 'Article', value: 'article' },
+  { label: 'Answer', value: 'answer' },
 ]

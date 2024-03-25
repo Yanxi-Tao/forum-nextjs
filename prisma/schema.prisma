@@ -14,15 +14,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  slug          String?   @unique
+  id            String      @id @default(cuid())
+  name          String
+  email         String      @unique
+  slug          String      @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
   profile       Profile?
+  posts         Post[]
+  comments      Comment[]
+  communities   Community[]
 }
 
 // account model for provider login
@@ -80,7 +83,7 @@ model Post {
   content   String
   preview   String
   type      PostType
-  author    Profile  @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -103,7 +106,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  author   Profile @relation(fields: [authorId], references: [id])
+  author   User    @relation(fields: [authorId], references: [id])
   authorId String
   post     Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   String?
@@ -119,21 +122,17 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts       Post[]
-  comments    Comment[]
-  communities Community[]
-
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique
 }
 
 model Community {
-  id          String    @id @default(cuid())
-  slug        String    @unique
+  id          String @id @default(cuid())
+  slug        String @unique
   name        String
   description String
   posts       Post[]
-  members     Profile[]
+  members     User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
