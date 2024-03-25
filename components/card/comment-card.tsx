@@ -1,4 +1,4 @@
-import { Comment } from '@prisma/client'
+import { CommentCardProps } from '@/lib/types'
 import { formatNumber } from '@/lib/utils'
 
 import {
@@ -11,8 +11,6 @@ import {
 } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Heart, Reply } from 'lucide-react'
-
-export type CommentCardProps = Comment
 
 export const CommentCard = ({ comment }: { comment: CommentCardProps }) => {
   return (

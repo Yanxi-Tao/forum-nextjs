@@ -1,8 +1,5 @@
 import { db } from './client'
 
-export type GetQuestionBySlugType = Awaited<
-  ReturnType<typeof getQuestionBySlug>
->
 export const getQuestionBySlug = async (slug: string) => {
   try {
     const question = await db.post.findUnique({
@@ -10,6 +7,7 @@ export const getQuestionBySlug = async (slug: string) => {
         slug,
       },
       select: {
+        id: true,
         slug: true,
         title: true,
         content: true,

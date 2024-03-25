@@ -9,11 +9,7 @@ import {
 } from '@/components/ui/card'
 import { formatNumber } from '@/lib/utils'
 import { Community } from '@prisma/client'
-
-export type CommunityCardProps = Community & {
-  postsCount: number
-  membersCount: number
-}
+import { CommunityCardProps } from '@/lib/types'
 
 export const CommunityCard = ({
   community,

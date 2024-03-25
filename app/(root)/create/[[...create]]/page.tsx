@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { createFeedTypes } from '@/constants'
-import { QuestionOrAnswerForm } from '@/components/form/feed-form'
+import { QuestionOrArticleForm } from '@/components/form/feed-form'
 
 export default function CreateFeedPage() {
   const router = useRouter()
@@ -42,10 +42,10 @@ export default function CreateFeedPage() {
             ))}
           </TabsList>
           <TabsContent value={createFeedTypes[0].value} className="w-full">
-            <QuestionOrAnswerForm type="QUESTION" />
+            <QuestionOrArticleForm type="QUESTION" />
           </TabsContent>
           <TabsContent value={createFeedTypes[1].value} className="w-full">
-            <QuestionOrAnswerForm type="ARTICLE" />
+            <QuestionOrArticleForm type="ARTICLE" />
           </TabsContent>
           <TabsContent value={createFeedTypes[2].value} className="w-full">
             <h1>List of Questions to be answered</h1>

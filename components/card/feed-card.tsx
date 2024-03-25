@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Post } from '@prisma/client'
 import { formatNumber } from '@/lib/utils'
 
 import {
@@ -17,16 +16,9 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
 import { Button } from '@/components/ui/button'
 import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
+import { QuestionOrArticleCardProps, AnswerCardProps } from '@/lib/types'
 
-export type FeedCardProps = Post & {
-  commentsCount: number
-  communitySlug: string | undefined
-  communityName: string | undefined
-  authorName: string
-  authorSlug: string
-}
-
-export const PostCard = ({ post }: { post: FeedCardProps }) => {
+export const PostCard = ({ post }: { post: QuestionOrArticleCardProps }) => {
   return (
     <Card className="hover:bg-muted/10 w-full h-fit py-1">
       <CardHeader className="px-4 py-0 flex flex-row items-center justify-between space-y-0">
@@ -85,29 +77,29 @@ export const PostCard = ({ post }: { post: FeedCardProps }) => {
   )
 }
 
-export const AnswerCard = ({ post }: { post: FeedCardProps }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true)
+export const AnswerCard = ({ answer }: { answer: AnswerCardProps }) => {
+  const [isCollapsed, setIsCollapsed] = useState(answer.content.length > 200)
   return (
     <Card className="hover:bg-muted/10 w-full h-fit relative">
       <CardHeader className="flex flex-row items-center py-2 justify-between space-y-0">
         <Button variant="link" size="sm" asChild className="p-0">
-          <Link href={`/profile/${post.authorSlug}`} className="m-0">
-            {post.authorName}
+          <Link href={`/profile/${answer.author.slug}`} className="m-0">
+            {answer.author.name}
           </Link>
         </Button>
         <div>
-          <span className=" text-xs">{post.createdAt.toDateString()}</span>
+          <span className=" text-xs">{answer.createdAt.toDateString()}</span>
         </div>
       </CardHeader>
       <CardContent
         className={`${
-          isCollapsed && 'h-[200px]'
+          isCollapsed && 'h-[100px]'
         } overflow-hidden text-ellipsis py-2`}
       >
-        {post.content}
+        {answer.content}
       </CardContent>
       {isCollapsed && (
-        <div className="absolute bottom-[52px] h-[100px] flex w-full justify-center items-end py-1 bg-gradient-to-t from-background to-transparent">
+        <div className="absolute bottom-[52px] h-[50px] flex w-full justify-center items-end py-1 bg-gradient-to-t from-background to-transparent">
           <Button
             variant="link"
             size="sm"
@@ -127,15 +119,15 @@ export const AnswerCard = ({ post }: { post: FeedCardProps }) => {
             <ToggleGroupItem size="sm" value="up">
               <ArrowBigUp size={24} />
             </ToggleGroupItem>
-            {formatNumber(post.votes)}
+            {formatNumber(answer.votes)}
             <ToggleGroupItem size="sm" value="down">
               <ArrowBigDown size={24} />
             </ToggleGroupItem>
           </ToggleGroup>
           <Button variant="ghost" size="sm" asChild>
-            <Link href={`/${post.type.toLowerCase()}/${post.questionId}`}>
+            <Link href="">
               <MessageSquare size={22} className="mr-2" />
-              {formatNumber(post.commentsCount)}
+              {formatNumber(answer._count.comments)}
             </Link>
           </Button>
           <Toggle size="sm">

@@ -5,8 +5,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { PostType } from '@prisma/client'
-import { createPost } from '@/actions/post'
-import { CreateQuestionOrArticleSchema } from '@/schemas'
+import { createAnswer, createPost } from '@/actions/post'
+import { CreateAnswerScheme, CreateQuestionOrArticleSchema } from '@/schemas'
 
 import {
   Card,
@@ -28,10 +28,9 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
+import { CreatePostType } from '@/lib/types'
 
-export type CreatePostType = Exclude<PostType, 'ANSWER'>
-
-export const QuestionOrAnswerForm = ({ type }: { type: CreatePostType }) => {
+export const QuestionOrArticleForm = ({ type }: { type: CreatePostType }) => {
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -115,71 +114,68 @@ export const QuestionOrAnswerForm = ({ type }: { type: CreatePostType }) => {
   )
 }
 
-// export const AnswerForm = () => {
-//   const [isPending, startTransition] = useTransition()
-//   const [alert, setAlert] = useState<{ type: string; message: string }>({
-//     type: '',
-//     message: '',
-//   })
+export const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isPending, startTransition] = useTransition()
+  const [alert, setAlert] = useState<{ type: string; message: string }>({
+    type: '',
+    message: '',
+  })
 
-//   const form = useForm<z.infer<typeof CreatePostSchema>>({
-//     resolver: zodResolver(CreatePostSchema),
-//     defaultValues: {
-//       title: '',
-//       content: '',
-//     },
-//   })
+  const form = useForm<z.infer<typeof CreateAnswerScheme>>({
+    resolver: zodResolver(CreateAnswerScheme),
+    defaultValues: {
+      content: '',
+    },
+  })
 
-//   const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
-//     setAlert({ type: '', message: '' })
-//     startTransition(() => {
-//       createQuestionPost(data).then((data) => {
-//         setAlert(data || { type: 'error', message: 'An error occurred' })
-//       })
-//     })
-//   }
-//   return (
-//     <Card>
-//       <CardHeader>
-//         <CardTitle>Answer</CardTitle>
-//         <CardDescription>Card Description</CardDescription>
-//       </CardHeader>
-//       <CardContent>
-//         <Form {...form}>
-//           <form onSubmit={form.handleSubmit(onSubmit)}>
-//             <FormField
-//               control={form.control}
-//               name="title"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Title</FormLabel>
-//                   <FormControl>
-//                     <Input {...field} />
-//                   </FormControl>
-//                   <FormMessage />
-//                 </FormItem>
-//               )}
-//             />
-//             <FormField
-//               control={form.control}
-//               name="content"
-//               render={({ field }) => (
-//                 <FormItem>
-//                   <FormLabel>Content</FormLabel>
-//                   <FormControl>
-//                     <Input {...field} />
-//                   </FormControl>
-//                   <FormMessage />
-//                 </FormItem>
-//               )}
-//             />
-//             <Button type="submit">Submit</Button>
-//           </form>
-//         </Form>
-//       </CardContent>
-//       <CardFooter>
-//         <p>Card Footer</p>
-//       </CardFooter>
-//     </Card>
-//   )
-// }
+  const onSubmit = (data: z.infer<typeof CreateAnswerScheme>) => {
+    setAlert({ type: '', message: '' })
+    startTransition(() => {
+      createAnswer(data, questionId)
+        .then((data) => {
+          setAlert(data)
+          if (data.type === 'success') {
+            form.reset()
+          }
+        })
+        .catch(() => {
+          setAlert({ type: 'error', message: 'An error occurred' })
+        })
+    })
+  }
+  return (
+    <Card className="py-2 border-0 shadow-none">
+      <CardHeader className="py-2">
+        <CardTitle className="text-xl">Your Answer</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <div className="flex flex-col space-y-2">
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        disabled={isPending}
+                        className="resize-none min-h-[100px]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormAlert message={alert.message} type={alert.type} />
+            <Button type="submit" disabled={isPending} className="w-full">
+              Post Answer
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  )
+}

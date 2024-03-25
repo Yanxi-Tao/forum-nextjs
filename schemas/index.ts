@@ -73,3 +73,7 @@ export const CreateQuestionOrArticleSchema = z.object({
     .max(100, { message: 'Title is too long' }),
   content: z.string().min(3, { message: 'Content is required' }),
 })
+
+export const CreateAnswerScheme = z.object({
+  content: z.string().min(3, { message: 'Content is required' }),
+})

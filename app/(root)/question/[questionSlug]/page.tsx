@@ -4,8 +4,6 @@ import { useEffect, useState, useTransition } from 'react'
 import { fetchQuestionInitial } from '@/actions/post'
 import Link from 'next/link'
 import { formatNumber } from '@/lib/utils'
-import { GetQuestionBySlugType } from '@/db/post'
-import { GetAnswersByQuestionSlugType } from '@/db/answer'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +17,10 @@ import {
 import { Toggle } from '@/components/ui/toggle'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { ArrowBigDown, ArrowBigUp, Bookmark, MessageSquare } from 'lucide-react'
+import { AnswerForm } from '@/components/form/feed-form'
+import { AnswerCard } from '@/components/card/feed-card'
+import { AnswerCardProps, QuestionDisplayProps } from '@/lib/types'
+import { Separator } from '@/components/ui/separator'
 
 export default function QuestionPage({
   params,
@@ -26,12 +28,13 @@ export default function QuestionPage({
   params: { questionSlug: string }
 }) {
   const questionSlug = params.questionSlug
-  const [answers, setAnswers] = useState<GetAnswersByQuestionSlugType | null>(
+  const [answers, setAnswers] = useState<AnswerCardProps[] | null | undefined>(
     null
   )
-  const [question, setQuestion] = useState<GetQuestionBySlugType | null>(null)
+  const [question, setQuestion] = useState<QuestionDisplayProps>(null)
   const [isInitalLoading, startInitialLoading] = useTransition()
   const [myCursor, setMyCursor] = useState<string | undefined>(undefined)
+  const [isAnswewrFormOpen, setAnswerFormOpen] = useState(false)
 
   useEffect(() => {
     startInitialLoading(() => {
@@ -50,7 +53,7 @@ export default function QuestionPage({
 
   return (
     <div>
-      {question && !isInitalLoading ? (
+      {question && !isInitalLoading && (
         <Card className="border-0 shadow-none">
           <CardHeader>
             <div className="flex flex-row justify-between items-center">
@@ -83,28 +86,42 @@ export default function QuestionPage({
             <CardTitle>{question.title}</CardTitle>
           </CardHeader>
           <CardContent>{question.content}</CardContent>
-          <CardFooter className="flex items-center gap-x-2 font-medium text-sm">
-            <ToggleGroup type="single">
-              <ToggleGroupItem size="sm" value="up">
-                <ArrowBigUp size={24} />
-              </ToggleGroupItem>
-              {formatNumber(question.votes)}
-              <ToggleGroupItem size="sm" value="down">
-                <ArrowBigDown size={24} />
-              </ToggleGroupItem>
-            </ToggleGroup>
-            <Button variant="ghost" size="sm">
-              <MessageSquare size={22} className="mr-2" />
-              {formatNumber(question._count.answers)}
+          <CardFooter className="flex justify-between font-medium text-sm">
+            <div className="flex items-center gap-x-2">
+              <ToggleGroup type="single">
+                <ToggleGroupItem size="sm" value="up">
+                  <ArrowBigUp size={24} />
+                </ToggleGroupItem>
+                {formatNumber(question.votes)}
+                <ToggleGroupItem size="sm" value="down">
+                  <ArrowBigDown size={24} />
+                </ToggleGroupItem>
+              </ToggleGroup>
+              <Button variant="ghost" size="sm">
+                <MessageSquare size={22} className="mr-2" />
+                {formatNumber(question._count.answers)}
+              </Button>
+              <Toggle size="sm">
+                <Bookmark size={22} className="mr-2" />
+                Bookmark
+              </Toggle>
+            </div>
+            <Button onClick={() => setAnswerFormOpen(!isAnswewrFormOpen)}>
+              {isAnswewrFormOpen ? 'Close' : 'Answer'}
             </Button>
-            <Toggle size="sm">
-              <Bookmark size={22} className="mr-2" />
-              Bookmark
-            </Toggle>
           </CardFooter>
         </Card>
-      ) : (
-        <div>Loading</div>
+      )}
+      {question && isAnswewrFormOpen && !isInitalLoading && (
+        <AnswerForm questionId={question.id} />
+      )}
+      <Separator className="mb-6" />
+      {answers && !isInitalLoading && (
+        <div className="flex flex-col items-center gap-y-4">
+          {answers.map((answer) => (
+            <AnswerCard key={answer.id} answer={answer} />
+          ))}
+        </div>
       )}
     </div>
   )

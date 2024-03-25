@@ -78,10 +78,10 @@ model PasswordResetToken {
 
 model Post {
   id        String   @id @default(cuid())
-  slug      String   @unique
-  title     String
+  slug      String?  @unique
+  title     String?
   content   String
-  preview   String
+  preview   String?
   type      PostType
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String

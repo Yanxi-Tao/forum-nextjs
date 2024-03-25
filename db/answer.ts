@@ -1,8 +1,5 @@
 import { db } from './client'
 
-export type GetAnswersByQuestionSlugType = Awaited<
-  ReturnType<typeof getAnswersByQuestionSlug>
->
 export const getAnswersByQuestionSlug = async (slug: string, take: number) => {
   try {
     const fistQuery = await db.post.findUnique({
@@ -31,8 +28,6 @@ export const getAnswersByQuestionSlug = async (slug: string, take: number) => {
         },
       },
     })
-    console.log(fistQuery)
-
     return fistQuery?.answers
   } catch {
     return null
