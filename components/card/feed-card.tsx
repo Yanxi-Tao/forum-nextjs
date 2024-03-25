@@ -1,6 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
+import { Post } from '@prisma/client'
+import { formatNumber } from '@/lib/utils'
 
 import {
   Card,
@@ -12,11 +15,16 @@ import {
 } from '@/components/ui/card'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
-import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FeedCardProps } from '@/lib/types'
-import { formatNumber } from '@/lib/utils'
-import { useState } from 'react'
+import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
+
+export type FeedCardProps = Post & {
+  commentsCount: number
+  communitySlug: string | undefined
+  communityName: string | undefined
+  authorName: string
+  authorSlug: string
+}
 
 export const PostCard = ({ post }: { post: FeedCardProps }) => {
   return (

@@ -65,3 +65,11 @@ export const RegisterSchema = z
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   })
+
+export const CreateQuestionOrArticleSchema = z.object({
+  title: z
+    .string()
+    .min(3, { message: 'Title is required' })
+    .max(100, { message: 'Title is too long' }),
+  content: z.string().min(3, { message: 'Content is required' }),
+})

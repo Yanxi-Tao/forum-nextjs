@@ -1,3 +1,6 @@
+import { Comment } from '@prisma/client'
+import { formatNumber } from '@/lib/utils'
+
 import {
   Card,
   CardContent,
@@ -7,13 +10,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
 import { Heart, Reply } from 'lucide-react'
 
-import { Comment } from '@prisma/client'
-import { formatNumber } from '@/lib/utils'
+export type CommentCardProps = Comment
 
-export const CommentCard = ({ comment }: { comment: Comment }) => {
+export const CommentCard = ({ comment }: { comment: CommentCardProps }) => {
   return (
     <Card className="flex w-full space-x-4 py-2 px-4">
       <Avatar>
