@@ -3,66 +3,37 @@ import { db } from './client'
 export const getAnswersByQuestionSlug = async (
   slug: string,
   take: number,
-  cursor?: string
+  cursor: string | undefined
 ) => {
   try {
-    const fistQuery = cursor
-      ? await db.post.findUnique({
-          where: {
-            slug,
-          },
+    const fistQuery = await db.post.findUnique({
+      where: {
+        slug,
+      },
+      select: {
+        answers: {
+          take,
+          skip: cursor ? 1 : 0,
+          cursor: cursor ? { id: cursor } : undefined,
           select: {
-            answers: {
-              take,
-              skip: 1,
-              cursor: {
-                id: cursor,
-              },
+            id: true,
+            author: true,
+            content: true,
+            votes: true,
+            comments: true,
+            createdAt: true,
+            _count: {
               select: {
-                id: true,
-                author: true,
-                content: true,
-                votes: true,
                 comments: true,
-                createdAt: true,
-                _count: {
-                  select: {
-                    comments: true,
-                  },
-                },
-              },
-              orderBy: {
-                votes: 'asc',
               },
             },
           },
-        })
-      : await db.post.findUnique({
-          where: {
-            slug,
+          orderBy: {
+            votes: 'asc',
           },
-          select: {
-            answers: {
-              take,
-              select: {
-                id: true,
-                author: true,
-                content: true,
-                votes: true,
-                comments: true,
-                createdAt: true,
-                _count: {
-                  select: {
-                    comments: true,
-                  },
-                },
-              },
-              orderBy: {
-                createdAt: 'desc',
-              },
-            },
-          },
-        })
+        },
+      },
+    })
     return fistQuery?.answers
   } catch {
     return null

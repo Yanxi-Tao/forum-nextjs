@@ -27,6 +27,7 @@ export const Search = () => {
     const search = data.get('search') as string
     const query = createQueryString('search', search)
     router.push(`${pathname}?${query}`)
+    router.refresh()
   }
 
   return (

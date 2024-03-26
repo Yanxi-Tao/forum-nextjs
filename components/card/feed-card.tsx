@@ -16,26 +16,26 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Toggle } from '@/components/ui/toggle'
 import { Button } from '@/components/ui/button'
 import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
-import { QuestionOrArticleCardProps, AnswerCardProps } from '@/lib/types'
+import { PostCardProps, AnswerCardProps } from '@/lib/types'
 
-export const PostCard = ({ post }: { post: QuestionOrArticleCardProps }) => {
+export const PostCard = ({ post }: { post: PostCardProps }) => {
   return (
     <Card className="hover:bg-muted/10 w-full h-fit py-1">
       <CardHeader className="px-4 py-0 flex flex-row items-center justify-between space-y-0">
         <div className="flex space-x-1 items-center">
-          {post.communityId && (
+          {post.community && (
             <>
               <Button variant="link" size="sm" className="p-0" asChild>
-                <Link href={`/communities/${post.communitySlug}`}>
-                  {post.communityName}
+                <Link href={`/communities/${post.community.slug}`}>
+                  {post.community.name}
                 </Link>
               </Button>
               <span>/</span>
             </>
           )}
           <Button variant="link" size="sm" asChild className="p-0">
-            <Link href={`/profile/${post.authorSlug}`} className="m-0">
-              {post.authorName}
+            <Link href={`/profile/${post.author.slug}`} className="m-0">
+              {post.author.name}
             </Link>
           </Button>
         </div>
@@ -62,9 +62,13 @@ export const PostCard = ({ post }: { post: QuestionOrArticleCardProps }) => {
           </ToggleGroupItem>
         </ToggleGroup>
         <Button variant="ghost" size="sm" asChild>
-          <Link href={`/${post.type.toLowerCase()}/${post.questionId}`}>
+          <Link href={`/${post.type.toLowerCase()}/${post.slug}`}>
             <MessageSquare size={22} className="mr-2" />
-            {formatNumber(post.commentsCount)}
+            {formatNumber(
+              post.type === 'QUESTION'
+                ? post._count.answers
+                : post._count.comments
+            )}
           </Link>
         </Button>
         <Toggle size="sm">

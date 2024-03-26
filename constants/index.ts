@@ -53,3 +53,4 @@ export const createFeedTypes = [
 ]
 
 export const ANSWERS_FETCH_SPAN = 5
+export const POST_FETCH_SPAN = 5

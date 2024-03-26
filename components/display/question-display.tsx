@@ -109,10 +109,16 @@ export const QuestionDisplay = ({
           </Button>
         </CardFooter>
       </Card>
+      {/* anser form render on click */}
       {isAnswewrFormOpen && (
-        <AnswerForm questionId={question.id} questionSlug={question.slug} />
+        <AnswerForm
+          questionId={question.id}
+          questionSlug={question.slug}
+          setAnswerFormOpen={setAnswerFormOpen}
+        />
       )}
       <Separator className="mb-6" />
+      {/* answers mapping */}
       <div className="flex flex-col items-center gap-y-4">
         {answers?.map((answer) => (
           <AnswerCard key={answer.id} answer={answer} />

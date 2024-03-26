@@ -1,10 +1,13 @@
-'use client'
-
-import { useState, useTransition } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useTransition,
+} from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { PostType } from '@prisma/client'
 import { createAnswer, createPost } from '@/actions/post'
 import { CreateAnswerScheme, CreateQuestionOrArticleSchema } from '@/schemas'
 
@@ -117,9 +120,11 @@ export const QuestionOrArticleForm = ({ type }: { type: CreatePostType }) => {
 export const AnswerForm = ({
   questionId,
   questionSlug,
+  setAnswerFormOpen,
 }: {
   questionId: string
   questionSlug: string | null
+  setAnswerFormOpen: Dispatch<SetStateAction<boolean>>
 }) => {
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
@@ -142,6 +147,7 @@ export const AnswerForm = ({
           setAlert(data)
           if (data.type === 'success') {
             form.reset()
+            setAnswerFormOpen(false)
           }
         })
         .catch(() => {
