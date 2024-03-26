@@ -15,8 +15,8 @@ export type QuestionDisplayType = {
 
 // Card Props
 export type AnswerCardProps = NonNullable<
-  Awaited<ReturnType<typeof getAnswersByQuestionSlug>>
->[0]
+  FetchQuestionInitial['initialAnswers']
+>[number]
 
 export type CommentCardProps = Comment
 

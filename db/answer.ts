@@ -58,7 +58,7 @@ export const getAnswersByQuestionSlug = async (
                 },
               },
               orderBy: {
-                votes: 'asc',
+                createdAt: 'desc',
               },
             },
           },

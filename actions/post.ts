@@ -9,6 +9,7 @@ import { CreatePostType } from '@/lib/types'
 
 import { getQuestionBySlug } from '@/db/post'
 import { getAnswersByQuestionSlug } from '@/db/answer'
+import { revalidatePath } from 'next/cache'
 
 export const createPost = async (
   data: z.infer<typeof CreateQuestionOrArticleSchema>,
@@ -41,7 +42,8 @@ export const createPost = async (
 
 export const createAnswer = async (
   data: z.infer<typeof CreateAnswerScheme>,
-  questionId: string
+  questionId: string,
+  questionSlug: string | null
 ) => {
   const validatedData = CreateAnswerScheme.safeParse(data)
   const user = await currentUser()
@@ -63,6 +65,7 @@ export const createAnswer = async (
     },
   })
 
+  revalidatePath(`/question/${questionSlug}`)
   return { type: 'success', message: 'Answer created' }
 }
 

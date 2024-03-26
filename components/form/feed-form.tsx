@@ -114,7 +114,13 @@ export const QuestionOrArticleForm = ({ type }: { type: CreatePostType }) => {
   )
 }
 
-export const AnswerForm = ({ questionId }: { questionId: string }) => {
+export const AnswerForm = ({
+  questionId,
+  questionSlug,
+}: {
+  questionId: string
+  questionSlug: string | null
+}) => {
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -131,7 +137,7 @@ export const AnswerForm = ({ questionId }: { questionId: string }) => {
   const onSubmit = (data: z.infer<typeof CreateAnswerScheme>) => {
     setAlert({ type: '', message: '' })
     startTransition(() => {
-      createAnswer(data, questionId)
+      createAnswer(data, questionId, questionSlug)
         .then((data) => {
           setAlert(data)
           if (data.type === 'success') {
