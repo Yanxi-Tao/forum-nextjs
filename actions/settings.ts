@@ -4,7 +4,7 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 
 import { SettingsSchema } from '@/schemas'
-import { getUserByEmail, getUserByID } from '@/db/user'
+import { getUserByEmail, getUserByID } from '@/data/user'
 import { currentUser } from '@/lib/auth'
 import { db } from '@/db/client'
 import { generateVerificationToken } from '@/lib/tokens'

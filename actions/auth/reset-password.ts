@@ -3,8 +3,8 @@
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import { ResetPasswordSchema } from '@/schemas'
-import { getPasswordResetTokenByToken } from '@/db/password-reset-token'
-import { getUserByEmail } from '@/db/user'
+import { getPasswordResetTokenByToken } from '@/data/password-reset-token'
+import { getUserByEmail } from '@/data/user'
 import { db } from '@/db/client'
 import { redirect } from 'next/navigation'
 

@@ -3,8 +3,8 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import authConfig from '@/auth.config'
 
 import { db } from '@/db/client'
-import { getUserByID } from '@/db/user'
-import { getAccountByUserId } from '@/db/account'
+import { getUserByID } from '@/data/user'
+import { getAccountByUserId } from '@/data/account'
 
 import { slugify } from '@/lib/slug'
 

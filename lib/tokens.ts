@@ -6,12 +6,12 @@ import { db } from '@/db/client'
 import {
   deleteVerificationTokenById,
   getVerificationTokenByEmail,
-} from '@/db/verification-token'
-import { getPasswordResetTokenByEmail } from '@/db/password-reset-token'
+} from '@/data/verification-token'
+import { getPasswordResetTokenByEmail } from '@/data/password-reset-token'
 import {
   deleteVerificationCodeById,
   getVerificationCodeByEmail,
-} from '@/db/verification-code'
+} from '@/data/verification-code'
 
 export const generatePasswordResetToken = async (email: string) => {
   const token = nanoid()

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { sidebarNavs } from '@/constants'
+import { sidebarNavs } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { UserAccountCard } from '@/components/card/user-account-card'

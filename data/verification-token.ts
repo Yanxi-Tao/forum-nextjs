@@ -1,4 +1,4 @@
-import { db } from './client'
+import { db } from '@/db/client'
 
 export const getVerificationTokenByEmail = async (email: string) => {
   try {

@@ -5,14 +5,14 @@ import { z } from 'zod'
 import { generateVerificationCode } from '@/lib/tokens'
 import { sendVerificationCodeEmail } from '@/lib/mail'
 import { RegisterSchema } from '@/schemas'
-import { createUser, getUserByEmail } from '@/db/user'
+import { createUser, getUserByEmail } from '@/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { AuthError } from 'next-auth'
 import {
   deleteVerificationCodeById,
   getVerificationCodeByEmail,
-} from '@/db/verification-code'
+} from '@/data/verification-code'
 import { slugify } from '@/lib/slug'
 
 export const register = async (

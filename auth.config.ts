@@ -5,7 +5,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
 
 import { LoginSchema } from '@/schemas'
-import { getUserByEmail } from '@/db/user'
+import { getUserByEmail } from '@/data/user'
 
 export default {
   providers: [

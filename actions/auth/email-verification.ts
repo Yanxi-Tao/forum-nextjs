@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/db/client'
-import { getVerificationTokenByToken } from '@/db/verification-token'
+import { getVerificationTokenByToken } from '@/data/verification-token'
 import { currentUser } from '@/lib/auth'
 
 export const emialVerification = async (token: string) => {
