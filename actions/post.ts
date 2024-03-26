@@ -68,7 +68,7 @@ export const createAnswer = async (
     },
   })
 
-  revalidatePath(`/question/${questionSlug}`)
+  // revalidatePath('/(root)/question/[slug]', 'page')
   return { type: 'success', message: 'Answer created' }
 }
 
@@ -79,12 +79,10 @@ export const fetchPostsInitial = async (
   if (!search) {
     const initialPosts = await getDefaultPosts(take, undefined)
     const myCursor = initialPosts?.[initialPosts.length - 1]?.id
-    revalidatePath('/')
     return { initialPosts, myCursor }
   } else {
     const initialPosts = await getPostsBySerch(search, take, undefined)
     const myCursor = initialPosts?.[initialPosts.length - 1]?.id
-    revalidatePath('/')
     return { initialPosts, myCursor }
   }
 }
@@ -97,12 +95,10 @@ export const fetchMorePosts = async (
   if (!search) {
     const newPosts = await getDefaultPosts(take, cursor)
     const myCursor = newPosts?.[newPosts.length - 1]?.id
-    revalidatePath('/')
     return { newPosts, myCursor }
   } else {
     const newPosts = await getPostsBySerch(search, take, cursor)
     const myCursor = newPosts?.[newPosts.length - 1]?.id
-    revalidatePath('/')
     return { newPosts, myCursor }
   }
 }

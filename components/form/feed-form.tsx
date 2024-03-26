@@ -32,6 +32,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostType } from '@/lib/types'
+import { useRouter } from 'next/navigation'
 
 export const QuestionOrArticleForm = ({ type }: { type: CreatePostType }) => {
   const [isPending, startTransition] = useTransition()
@@ -126,6 +127,7 @@ export const AnswerForm = ({
   questionSlug: string | null
   setAnswerFormOpen: Dispatch<SetStateAction<boolean>>
 }) => {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -149,6 +151,7 @@ export const AnswerForm = ({
             form.reset()
             setAnswerFormOpen(false)
           }
+          router.refresh()
         })
         .catch(() => {
           setAlert({ type: 'error', message: 'An error occurred' })

@@ -2,6 +2,8 @@ import { fetchQuestionInitial } from '@/actions/post'
 import { QuestionDisplay } from '@/components/display/question-display'
 import { ANSWERS_FETCH_SPAN } from '@/constants'
 
+export const revalidate = 0
+
 export default async function QuestionPage({
   params,
 }: {
@@ -14,6 +16,7 @@ export default async function QuestionPage({
   if (!question) {
     return <div>Question not found</div>
   }
+  console.log(initialAnswers)
 
   return (
     <QuestionDisplay
