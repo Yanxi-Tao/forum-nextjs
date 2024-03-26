@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { formatNumber } from '@/lib/utils'
 
 import {
@@ -78,7 +78,8 @@ export const PostCard = ({ post }: { post: QuestionOrArticleCardProps }) => {
 }
 
 export const AnswerCard = ({ answer }: { answer: AnswerCardProps }) => {
-  const [isCollapsed, setIsCollapsed] = useState(answer.content.length > 200)
+  const [isCollapsed, setIsCollapsed] = useState(true)
+  const shouldCollapse = useRef(answer.content.length > 200)
   return (
     <Card className="hover:bg-muted/10 w-full h-fit relative">
       <CardHeader className="flex flex-row items-center py-2 justify-between space-y-0">
@@ -98,7 +99,7 @@ export const AnswerCard = ({ answer }: { answer: AnswerCardProps }) => {
       >
         {answer.content}
       </CardContent>
-      {isCollapsed && (
+      {isCollapsed && shouldCollapse.current && (
         <div className="absolute bottom-[52px] h-[50px] flex w-full justify-center items-end py-1 bg-gradient-to-t from-background to-transparent">
           <Button
             variant="link"
@@ -135,7 +136,7 @@ export const AnswerCard = ({ answer }: { answer: AnswerCardProps }) => {
             Bookmark
           </Toggle>
         </div>
-        {!isCollapsed && (
+        {!isCollapsed && shouldCollapse.current && (
           <Button variant="link" size="sm" onClick={() => setIsCollapsed(true)}>
             Close
           </Button>

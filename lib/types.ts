@@ -1,6 +1,17 @@
+import { fetchQuestionInitial } from '@/actions/post'
 import { getAnswersByQuestionSlug } from '@/db/answer'
 import { getQuestionBySlug } from '@/db/post'
 import { Comment, Community, Post, PostType } from '@prisma/client'
+
+// db query return types
+type FetchQuestionInitial = Awaited<ReturnType<typeof fetchQuestionInitial>>
+
+// Page Display Props
+export type QuestionDisplayType = {
+  question: NonNullable<FetchQuestionInitial['question']>
+  initialAnswers: NonNullable<FetchQuestionInitial>['initialAnswers']
+  myCursor: NonNullable<FetchQuestionInitial>['myCursor']
+}
 
 // Card Props
 export type AnswerCardProps = NonNullable<
@@ -21,9 +32,6 @@ export type QuestionOrArticleCardProps = Post & {
   authorName: string
   authorSlug: string
 }
-
-// Page Props
-export type QuestionDisplayProps = Awaited<ReturnType<typeof getQuestionBySlug>>
 
 // Form Props
 export type CreatePostType = Exclude<PostType, 'ANSWER'>

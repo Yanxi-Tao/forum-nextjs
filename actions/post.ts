@@ -83,10 +83,17 @@ export const fetchPost = async () => {
 
 export const fetchQuestionInitial = async (slug: string, take: number) => {
   const question = await getQuestionBySlug(slug)
-  if (!question) {
-    throw new Error('Question not found')
-  }
-  const answers = await getAnswersByQuestionSlug(slug, take)
-  const myCursor = answers?.[answers.length - 1]?.id
-  return { question, answers, myCursor }
+  const initialAnswers = await getAnswersByQuestionSlug(slug, take)
+  const myCursor = initialAnswers?.[initialAnswers.length - 1]?.id
+  return { question, initialAnswers, myCursor }
+}
+
+export const fetchMoreAnswers = async (
+  slug: string,
+  take: number,
+  cursor: string
+) => {
+  const newAnswers = await getAnswersByQuestionSlug(slug, take, cursor)
+  const myCursor = newAnswers?.[newAnswers.length - 1]?.id
+  return { newAnswers, myCursor }
 }

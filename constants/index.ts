@@ -51,3 +51,5 @@ export const createFeedTypes = [
   { label: 'Article', value: 'article' },
   { label: 'Answer', value: 'answer' },
 ]
+
+export const ANSWERS_FETCH_SPAN = 5
