@@ -67,24 +67,10 @@ export const RegisterSchema = z
     path: ['confirmPassword'],
   })
 
-export const CreatePostSchema = z
-  .object({
-    title: z.optional(
-      z
-        .string()
-        .min(3, { message: 'Title is too short' })
-        .max(100, { message: 'Title is too long' })
-    ),
-    type: z.nativeEnum(PostType),
-    content: z.string().min(3, { message: 'Content is required' }),
-    questionId: z.optional(z.string()),
-    communityId: z.optional(z.string()),
-  })
-  .refine(
-    (data) => {
-      if (data.type !== PostType.ANSWER && !data.title) {
-        return false
-      }
-    },
-    { message: 'Title is required', path: ['title'] }
-  )
+export const CreatePostSchema = z.object({
+  title: z.string(),
+  type: z.nativeEnum(PostType),
+  content: z.string().min(3, { message: 'Content is required' }),
+  questionId: z.optional(z.string()),
+  communityName: z.optional(z.string()),
+})

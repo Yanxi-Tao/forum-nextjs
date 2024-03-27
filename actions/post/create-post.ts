@@ -19,8 +19,18 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { title, content, type, questionId, communityId } = validatedData.data
-  const preview = type === 'ANSWER' ? undefined : content.slice(0, 100)
+  const { title, content, type, questionId, communityName } = validatedData.data
+  const preview = content.slice(0, 100)
+
+  // Find the community ID by name
+  const communityId = communityName
+    ? (
+        await db.community.findUnique({
+          where: { name: communityName },
+          select: { id: true },
+        })
+      )?.id
+    : undefined
 
   try {
     await db.post.create({
@@ -35,6 +45,7 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         communityId,
       },
     })
+    return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }
   }
