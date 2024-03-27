@@ -79,7 +79,7 @@ model PasswordResetToken {
 
 model Post {
   id        String   @id @default(cuid())
-  key       String
+  slug      String   @unique
   title     String
   content   String
   preview   String
@@ -101,8 +101,7 @@ model Post {
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
 
-  @@unique([title, key])
-  @@index([title, key])
+  @@index([slug])
   @@index([title, content])
 }
 

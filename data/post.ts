@@ -2,13 +2,14 @@ import { db } from '@/db/client'
 
 export const getPostsBySearchParams = async (
   search: string,
+  communityName: string | undefined,
   cursor: string | undefined,
   take: number
 ) => {
   try {
     const posts = await db.post.findMany({
       where: {
-        AND: [
+        OR: [
           {
             title: {
               search: search.split(' ').join(' & '),
@@ -21,12 +22,13 @@ export const getPostsBySearchParams = async (
               mode: 'insensitive',
             },
           },
-          {
-            type: {
-              in: ['QUESTION', 'ARTICLE'],
-            },
-          },
         ],
+        type: {
+          in: ['QUESTION', 'ARTICLE'],
+        },
+        community: {
+          name: communityName,
+        },
       },
       cursor: cursor ? { id: cursor } : undefined,
       take,
@@ -36,12 +38,11 @@ export const getPostsBySearchParams = async (
       select: {
         id: true,
         title: true,
+        slug: true,
         type: true,
         content: true,
         preview: true,
         votes: true,
-        createdAt: true,
-        updatedAt: true,
         author: {
           select: {
             slug: true,
@@ -86,12 +87,11 @@ export const getDefaultPosts = async (
       select: {
         id: true,
         title: true,
+        slug: true,
         type: true,
         content: true,
         preview: true,
         votes: true,
-        createdAt: true,
-        updatedAt: true,
         author: {
           select: {
             slug: true,

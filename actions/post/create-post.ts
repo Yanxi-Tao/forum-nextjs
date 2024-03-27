@@ -5,7 +5,8 @@ import { db } from '@/db/client'
 import { z } from 'zod'
 import { CreatePostSchema } from '@/schemas'
 import { currentUser } from '@/lib/auth'
-import { nanoid } from '@/lib/utils'
+import { slugify } from '@/lib/slug'
+import { revalidatePath } from 'next/cache'
 
 export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   const validatedData = CreatePostSchema.safeParse(data)
@@ -35,7 +36,7 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   try {
     await db.post.create({
       data: {
-        key: nanoid(),
+        slug: slugify(title),
         title,
         content,
         preview,
@@ -45,6 +46,7 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         communityId,
       },
     })
+    revalidatePath('/')
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }
