@@ -5,21 +5,19 @@ import { getDefaultPosts, getPostsBySearchParams } from '@/data/post'
 export const fetchPosts = async (
   search: string | undefined,
   communityName: string | undefined,
-  cursor: string | undefined,
+  offset: number | undefined,
   take: number
 ) => {
   if (search) {
     const posts = await getPostsBySearchParams(
       search,
       communityName,
-      cursor,
+      offset,
       take
     )
-    const myCursor = posts[posts.length - 1]?.id
-    return { posts, cursor: myCursor }
+    return { posts, offset: posts.length }
   } else {
-    const posts = await getDefaultPosts(cursor, take)
-    const myCursor = posts[posts.length - 1]?.id
-    return { posts, cursor: myCursor }
+    const posts = await getDefaultPosts(offset, take)
+    return { posts, offset: posts.length }
   }
 }

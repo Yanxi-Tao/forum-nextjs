@@ -1,5 +1,7 @@
 import { fetchPosts } from '@/actions/post/fetch-post'
 import { PostCard } from '@/components/card/post-card'
+import { PostCardList } from '@/components/card/post-card-list'
+import { POST_FETCH_SPAN } from '@/lib/constants'
 
 export default async function ExplorePage({
   searchParams,
@@ -7,13 +9,6 @@ export default async function ExplorePage({
   searchParams: { search: string | undefined }
 }) {
   const search = searchParams?.search
-  const { posts, cursor } = await fetchPosts(search, undefined, undefined, 10)
-  return (
-    <div>
-      <h1>Home</h1>
-      {posts.map((post) => (
-        <PostCard key={post.id} {...post} />
-      ))}
-    </div>
-  )
+  const data = await fetchPosts(search, undefined, undefined, POST_FETCH_SPAN)
+  return <PostCardList data={data} />
 }
