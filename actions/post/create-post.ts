@@ -6,7 +6,6 @@ import { z } from 'zod'
 import { CreatePostSchema } from '@/schemas'
 import { currentUser } from '@/lib/auth'
 import { slugify } from '@/lib/slug'
-import { revalidatePath } from 'next/cache'
 
 export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   const validatedData = CreatePostSchema.safeParse(data)

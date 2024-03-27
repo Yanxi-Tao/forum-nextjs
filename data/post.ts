@@ -3,7 +3,7 @@ import { db } from '@/db/client'
 export const getPostsBySearchParams = async (
   search: string,
   communityName: string | undefined,
-  cursor: string | undefined,
+  offset: number | undefined,
   take: number
 ) => {
   try {
@@ -30,7 +30,7 @@ export const getPostsBySearchParams = async (
           name: communityName,
         },
       },
-      cursor: cursor ? { id: cursor } : undefined,
+      skip: offset,
       take,
       orderBy: {
         createdAt: 'desc',
@@ -69,7 +69,7 @@ export const getPostsBySearchParams = async (
 }
 
 export const getDefaultPosts = async (
-  cursor: string | undefined,
+  offset: number | undefined,
   take: number
 ) => {
   try {
@@ -79,7 +79,7 @@ export const getDefaultPosts = async (
           in: ['QUESTION', 'ARTICLE'],
         },
       },
-      cursor: cursor ? { id: cursor } : undefined,
+      skip: offset,
       take,
       orderBy: {
         createdAt: 'desc',

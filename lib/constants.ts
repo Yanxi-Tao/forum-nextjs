@@ -1,11 +1,4 @@
-import {
-  Radar,
-  Bell,
-  CircleUser,
-  Users,
-  Plus,
-  LayoutDashboard,
-} from 'lucide-react'
+import { Bell, CircleUser, Users, Plus, LayoutDashboard } from 'lucide-react'
 
 export const sidebarNavs = [
   { icon: LayoutDashboard, route: '/', label: 'Explore' },
