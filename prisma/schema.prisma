@@ -92,10 +92,12 @@ model Post {
   views     Int      @default(0)
   bookmarks Int      @default(0)
 
-  questionId  String?
-  question    Post?      @relation("QuestionToAnswer", fields: [questionId], references: [id])
-  answers     Post[]     @relation("QuestionToAnswer")
-  comments    Comment[]
+  questionId String?
+  question   Post?   @relation("QuestionToAnswer", fields: [questionId], references: [id])
+  answers    Post[]  @relation("QuestionToAnswer")
+
+  comments Comment[]
+
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
 }

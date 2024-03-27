@@ -8,16 +8,11 @@ import {
 } from 'lucide-react'
 
 export const sidebarNavs = [
-  { icon: Radar, route: '/', label: 'Explore' },
+  { icon: LayoutDashboard, route: '/', label: 'Explore' },
   {
     icon: Bell,
     route: '/notifications',
     label: 'Notifications',
-  },
-  {
-    icon: LayoutDashboard,
-    route: '/categories',
-    label: 'Categories',
   },
   {
     icon: Plus,
