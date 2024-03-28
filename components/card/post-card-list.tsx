@@ -68,21 +68,23 @@ export const PostCardList = ({
 }
 
 export const AnswerCardList = ({
-  data: initialAnswer,
+  answers: optimisticAnswers,
+  offset: initialOffset,
   questionSlug,
 }: {
-  data: AnswersDataProps
+  answers: AnswersDataProps['answers']
+  offset: number
   questionSlug: string
 }) => {
-  const [answers, setAnswers] = useState(initialAnswer.answers)
-  const [offset, setOffset] = useState(initialAnswer.offset)
+  const [answers, setAnswers] = useState(optimisticAnswers)
+  const [offset, setOffset] = useState(initialOffset)
   const [hasNextPage, setHasNextPage] = useState(true)
 
   // make sure data is up to date
   useEffect(() => {
-    setAnswers(initialAnswer.answers)
-    setOffset(initialAnswer.offset)
-  }, [initialAnswer])
+    setAnswers(optimisticAnswers)
+    setOffset(initialOffset)
+  }, [optimisticAnswers, initialOffset])
 
   const fetchMoreAnswers = useCallback(async () => {
     const data = await fetchAnswers(questionSlug, offset, ANSWERS_FETCH_SPAN)

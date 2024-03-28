@@ -170,7 +170,13 @@ export const getAnswersBySlug = async (
           select: {
             id: true,
             content: true,
-            author: true,
+            author: {
+              select: {
+                slug: true,
+                name: true,
+                image: true,
+              },
+            },
             updatedAt: true,
             votes: true,
             _count: {

@@ -8,7 +8,13 @@ export default async function QuestionPage({
   params: { slug: string }
 }) {
   const question = await fetchPost(params.slug)
-  const answers = await fetchAnswers(params.slug, 0, ANSWERS_FETCH_SPAN)
+  const { answers, offset } = await fetchAnswers(
+    params.slug,
+    0,
+    ANSWERS_FETCH_SPAN
+  )
   if (!question) return <div>Question not found</div>
-  return <QuesionDisplay question={question} answers={answers} />
+  return (
+    <QuesionDisplay question={question} answers={answers} offset={offset} />
+  )
 }

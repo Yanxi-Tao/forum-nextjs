@@ -16,7 +16,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { ArrowBigDown, ArrowBigUp, Bookmark, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import { formatNumber } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useOptimistic } from 'react'
 import { AnswerForm } from '@/components/form/post-form'
 import { Separator } from '@/components/ui/separator'
 import { AnswerCardList } from '../card/post-card-list'
@@ -24,11 +24,19 @@ import { AnswerCardList } from '../card/post-card-list'
 export const QuesionDisplay = ({
   question,
   answers,
+  offset,
 }: {
   question: NonNullable<PostDataProps>
-  answers: AnswersDataProps
+  answers: AnswersDataProps['answers']
+  offset: number
 }) => {
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false)
+  const [optimisticAnswers, addOptimisticAnswers] = useOptimistic<
+    AnswersDataProps['answers'],
+    AnswersDataProps['answers'][number]
+  >(answers, (prev, next: AnswersDataProps['answers'][number]) => {
+    return [next, ...prev]
+  })
 
   return (
     <div>
@@ -94,10 +102,16 @@ export const QuesionDisplay = ({
           title={question.title}
           communityName={question.community?.name}
           questionId={question.id}
+          addOptimisticAnswers={addOptimisticAnswers}
+          setIsAnswerFormOpen={setIsAnswerFormOpen}
         />
       )}
       <Separator className="my-3" />
-      <AnswerCardList data={answers} questionSlug={question.slug} />
+      <AnswerCardList
+        answers={optimisticAnswers}
+        offset={offset}
+        questionSlug={question.slug}
+      />
     </div>
   )
 }

@@ -1,6 +1,4 @@
-'use client'
-
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -18,10 +16,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 
 import { PostFormWrapper } from './post-form-wrapper'
-import { useState, useTransition } from 'react'
+import { SetStateAction, useState, useTransition } from 'react'
 import { CreatePostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
 import { useRouter } from 'next/navigation'
+import { AnswersDataProps } from '@/lib/types'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 export const QuestionForm = ({
   communityName,
@@ -189,11 +189,16 @@ export const AnswerForm = ({
   communityName,
   questionId,
   title,
+  addOptimisticAnswers,
+  setIsAnswerFormOpen,
 }: {
   communityName: string | undefined
   questionId: string
   title: string
+  addOptimisticAnswers: (action: AnswersDataProps['answers'][number]) => void
+  setIsAnswerFormOpen: (value: SetStateAction<boolean>) => void
 }) => {
+  const user = useCurrentUser()
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -211,18 +216,32 @@ export const AnswerForm = ({
   })
 
   const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
-    setAlert({ type: '', message: '' })
-    startTransition(() => {
-      createPost(data)
-        .then((data) => {
-          setAlert(data)
-          if (data.type === 'success') {
-            form.reset()
-          }
-        })
-        .catch(() => {
-          setAlert({ type: 'error', message: 'An error occurred' })
-        })
+    const validatedData = CreatePostSchema.safeParse(data)
+    if (!validatedData.success || !user) return
+    setIsAnswerFormOpen(false) // close form immediately
+
+    // optimistic update
+    startTransition(async () => {
+      if (!user.name) return
+      addOptimisticAnswers({
+        id: user.id,
+        content: data.content,
+        updatedAt: new Date(),
+        votes: 0,
+        author: {
+          slug: user.slug,
+          name: user.name,
+          image: user.image || null,
+        },
+        _count: {
+          comments: 0,
+        },
+      })
+
+      // server action
+      setAlert({ type: '', message: '' })
+      const response = await createPost(data)
+      setAlert(response)
     })
   }
 
