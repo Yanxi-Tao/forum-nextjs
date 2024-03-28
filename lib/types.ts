@@ -1,7 +1,9 @@
-import { fetchPosts } from '@/actions/post/fetch-post'
+import { fetchAnswers, fetchPost, fetchPosts } from '@/actions/post/fetch-post'
 
 // Fetched Data Props
-export type PostDataProps = Awaited<ReturnType<typeof fetchPosts>>
+export type PostsDataProps = Awaited<ReturnType<typeof fetchPosts>>
+export type PostDataProps = Awaited<ReturnType<typeof fetchPost>>
+export type AnswersDataProps = Awaited<ReturnType<typeof fetchAnswers>>
 
 // Cards Props
 export type PostCardProps = Awaited<

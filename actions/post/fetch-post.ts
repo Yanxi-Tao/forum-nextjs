@@ -1,6 +1,11 @@
 'use server'
 
-import { getDefaultPosts, getPostsBySearchParams } from '@/data/post'
+import {
+  getAnswersBySlug,
+  getDefaultPosts,
+  getPostBySlug,
+  getPostsBySearchParams,
+} from '@/data/post'
 import { unstable_cache } from 'next/cache'
 
 export const fetchPosts = unstable_cache(
@@ -26,5 +31,25 @@ export const fetchPosts = unstable_cache(
   ['posts'],
   {
     tags: ['posts'],
+  }
+)
+
+export const fetchPost = unstable_cache(
+  async (slug: string) => {
+    return await getPostBySlug(slug)
+  },
+  ['post'],
+  {
+    tags: ['post'],
+  }
+)
+
+export const fetchAnswers = unstable_cache(
+  async (slug: string, offset: number, take: number) => {
+    return await getAnswersBySlug(slug, offset, take)
+  },
+  ['answers'],
+  {
+    tags: ['answers'],
   }
 )

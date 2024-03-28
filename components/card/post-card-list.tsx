@@ -1,17 +1,18 @@
 'use client'
 
-import { PostDataProps } from '@/lib/types'
+import { PostsDataProps } from '@/lib/types'
 import { useCallback, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from './post-card'
 import { useSearchParams } from 'next/navigation'
 import { fetchPosts } from '@/actions/post/fetch-post'
 import { POST_FETCH_SPAN } from '@/lib/constants'
+import { BeatLoader } from 'react-spinners'
 
 export const PostCardList = ({
   data: initialData,
 }: {
-  data: PostDataProps
+  data: PostsDataProps
 }) => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
@@ -44,8 +45,7 @@ export const PostCardList = ({
   }, [inView, fetchMorePosts, hasNextPage])
 
   return (
-    <div>
-      <h1>Home</h1>
+    <div className="flex flex-col space-y-4">
       {posts.map((post, index) => {
         if (index === posts.length - 1) {
           return <PostCard key={post.id} ref={ref} {...post} />
@@ -53,7 +53,16 @@ export const PostCardList = ({
           return <PostCard key={post.id} {...post} />
         }
       })}
-      {/* <div ref={ref} className="h-10" /> */}
+      {inView && hasNextPage && (
+        <div className="flex justify-center items-center h-32">
+          <BeatLoader />
+        </div>
+      )}
+      {!hasNextPage && (
+        <div className="flex justify-center items-center h-24">
+          No more posts
+        </div>
+      )}
     </div>
   )
 }

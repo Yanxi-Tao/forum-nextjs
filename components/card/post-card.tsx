@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { PostCardWrapper } from './post-card-wrapper'
+import { FeedCardWrapper } from './feed-card-wrapper'
 import { PostCardProps } from '@/lib/types'
 
 export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
@@ -11,7 +11,7 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
     const shouldCollapse = preview.length > 200
 
     return (
-      <PostCardWrapper
+      <FeedCardWrapper
         title={title}
         slug={slug}
         shouldCollapse={shouldCollapse}
@@ -24,7 +24,7 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
         ref={ref}
       >
         {preview}
-      </PostCardWrapper>
+      </FeedCardWrapper>
     )
   }
 )

@@ -46,7 +46,7 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         communityId,
       },
     })
-    revalidateTag('posts')
+    // revalidateTag('posts')
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

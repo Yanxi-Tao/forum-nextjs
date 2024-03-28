@@ -1,11 +1,17 @@
 'use client'
 import { Input } from '@/components/ui/input'
-import { SearchIcon, X } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
+import { SearchIcon } from 'lucide-react'
+import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { useEffect } from 'react'
 
 export const Search = () => {
   const search = useSearchParams().get('search') || ''
+  const pathname = usePathname()
+  if (!pathname.startsWith('/communities') && pathname !== '/') {
+    return null
+  }
+
   return (
     <form className="flex items-center rounded-full border">
       {/* todo: add filter badge */}

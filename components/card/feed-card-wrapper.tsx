@@ -19,7 +19,7 @@ import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
 import { forwardRef, useState } from 'react'
 
-export type PostCardWrapperProps = {
+export type FeedCardWrapperProps = {
   children: React.ReactNode
   title: string
   slug: string
@@ -32,7 +32,7 @@ export type PostCardWrapperProps = {
   type: PostType
 }
 
-export const PostCardWrapper = forwardRef<HTMLDivElement, PostCardWrapperProps>(
+export const FeedCardWrapper = forwardRef<HTMLDivElement, FeedCardWrapperProps>(
   (
     {
       children,
@@ -51,7 +51,7 @@ export const PostCardWrapper = forwardRef<HTMLDivElement, PostCardWrapperProps>(
     const [isCollapsed, setIsCollapsed] = useState(true)
 
     return (
-      <Card className="relative hover:bg-muted/10 w-full h-fit py-1" ref={ref}>
+      <Card className="relative hover:bg-muted w-full h-fit py-1" ref={ref}>
         <CardHeader className="px-4 py-0 flex flex-row items-center space-y-0 space-x-1">
           {communityName && (
             <>
@@ -69,16 +69,18 @@ export const PostCardWrapper = forwardRef<HTMLDivElement, PostCardWrapperProps>(
             </Link>
           </Button>
         </CardHeader>
-        <CardHeader className="px-4 py-0">
-          <CardTitle className="text-lg">{title}</CardTitle>
-        </CardHeader>
-        <CardContent
-          className={`${
-            isCollapsed && shouldCollapse && 'h-[100px]'
-          } overflow-hidden text-ellipsis px-4 py-2`}
-        >
-          {children}
-        </CardContent>
+        <Link href={`/${type.toLowerCase()}/${slug}`}>
+          <CardHeader className="px-4 py-0">
+            <CardTitle className="text-lg">{title}</CardTitle>
+          </CardHeader>
+          <CardContent
+            className={`${
+              isCollapsed && shouldCollapse && 'h-[100px]'
+            } overflow-hidden text-ellipsis px-4 py-2`}
+          >
+            {children}
+          </CardContent>
+        </Link>
         {isCollapsed && shouldCollapse && (
           <div className="absolute bottom-[40px] h-[50px] flex w-full justify-center items-end py-1 bg-gradient-to-t from-background to-transparent">
             <Button
@@ -131,4 +133,4 @@ export const PostCardWrapper = forwardRef<HTMLDivElement, PostCardWrapperProps>(
   }
 )
 
-PostCardWrapper.displayName = 'PostCardWrapper'
+FeedCardWrapper.displayName = 'FeedCardWrapper'
