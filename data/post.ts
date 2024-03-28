@@ -3,7 +3,7 @@ import { db } from '@/db/client'
 export const getPostsBySearchParams = async (
   search: string,
   communityName: string | undefined,
-  offset: number | undefined,
+  offset: number,
   take: number
 ) => {
   try {
@@ -68,10 +68,7 @@ export const getPostsBySearchParams = async (
   }
 }
 
-export const getDefaultPosts = async (
-  offset: number | undefined,
-  take: number
-) => {
+export const getDefaultPosts = async (offset: number, take: number) => {
   try {
     const posts = await db.post.findMany({
       where: {

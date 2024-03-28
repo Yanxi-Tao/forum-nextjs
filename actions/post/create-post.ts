@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { CreatePostSchema } from '@/schemas'
 import { currentUser } from '@/lib/auth'
 import { slugify } from '@/lib/slug'
+import { revalidateTag } from 'next/cache'
 
 export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   const validatedData = CreatePostSchema.safeParse(data)
@@ -45,6 +46,7 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         communityId,
       },
     })
+    revalidateTag('posts')
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

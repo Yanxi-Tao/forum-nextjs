@@ -8,6 +8,6 @@ export default async function ExplorePage({
   searchParams: { search: string | undefined }
 }) {
   const search = searchParams?.search
-  const data = await fetchPosts(search, undefined, undefined, POST_FETCH_SPAN)
+  const data = await fetchPosts(search, undefined, 0, POST_FETCH_SPAN)
   return <PostCardList data={data} />
 }
