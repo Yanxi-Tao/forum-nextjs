@@ -173,6 +173,11 @@ export const getAnswersBySlug = async (
             author: true,
             updatedAt: true,
             votes: true,
+            _count: {
+              select: {
+                comments: true,
+              },
+            },
           },
         },
       },

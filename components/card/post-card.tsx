@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
-import { FeedCardWrapper } from './feed-card-wrapper'
-import { PostCardProps } from '@/lib/types'
+import { PostCardWrapper } from './post-card-wrapper'
+import { AnswerCardProps, PostCardProps } from '@/lib/types'
 
 export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
   ({ slug, community, author, title, type, votes, _count, preview }, ref) => {
@@ -8,10 +8,11 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
       return null
     }
     const counts = type === 'QUESTION' ? _count.answers : _count.comments
+
     const shouldCollapse = preview.length > 200
 
     return (
-      <FeedCardWrapper
+      <PostCardWrapper
         title={title}
         slug={slug}
         shouldCollapse={shouldCollapse}
@@ -24,9 +25,36 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
         ref={ref}
       >
         {preview}
-      </FeedCardWrapper>
+      </PostCardWrapper>
     )
   }
 )
 
 PostCard.displayName = 'PostCard'
+
+export const AnswerCard = forwardRef<HTMLDivElement, AnswerCardProps>(
+  ({ content, author, votes, _count }, ref) => {
+    if (!author.slug) {
+      return null
+    }
+    const shouldCollapse = content.length > 200
+    return (
+      <PostCardWrapper
+        ref={ref}
+        authorName={author.name}
+        authorSlug={author.slug}
+        votes={votes}
+        counts={_count.comments}
+        title={undefined}
+        slug={undefined}
+        shouldCollapse={shouldCollapse}
+        type={'QUESTION'}
+        communityName={undefined}
+      >
+        {content}
+      </PostCardWrapper>
+    )
+  }
+)
+
+AnswerCard.displayName = 'AnswerCard'

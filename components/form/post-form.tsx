@@ -21,6 +21,7 @@ import { PostFormWrapper } from './post-form-wrapper'
 import { useState, useTransition } from 'react'
 import { CreatePostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
+import { useRouter } from 'next/navigation'
 
 export const QuestionForm = ({
   communityName,
@@ -107,6 +108,7 @@ export const ArticleForm = ({
 }: {
   communityName: string | undefined
 }) => {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<{ type: string; message: string }>({
     type: '',
@@ -133,6 +135,7 @@ export const ArticleForm = ({
           if (data.type === 'success') {
             form.reset()
           }
+          router.refresh()
         })
         .catch(() => {
           setAlert({ type: 'error', message: 'An error occurred' })
@@ -175,6 +178,76 @@ export const ArticleForm = ({
           <FormAlert message={alert.message} type={alert.type} />
           <Button type="submit" disabled={isPending} className="w-full">
             Create
+          </Button>
+        </form>
+      </Form>
+    </PostFormWrapper>
+  )
+}
+
+export const AnswerForm = ({
+  communityName,
+  questionId,
+  title,
+}: {
+  communityName: string | undefined
+  questionId: string
+  title: string
+}) => {
+  const [isPending, startTransition] = useTransition()
+  const [alert, setAlert] = useState<{ type: string; message: string }>({
+    type: '',
+    message: '',
+  })
+
+  const form = useForm<z.infer<typeof CreatePostSchema>>({
+    resolver: zodResolver(CreatePostSchema),
+    defaultValues: {
+      title: title,
+      content: '',
+      type: 'ANSWER',
+      questionId: questionId,
+      communityName: communityName,
+    },
+  })
+
+  const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
+    setAlert({ type: '', message: '' })
+    startTransition(() => {
+      createPost(data)
+        .then((data) => {
+          setAlert(data)
+          if (data.type === 'success') {
+            form.reset()
+          }
+        })
+        .catch(() => {
+          setAlert({ type: 'error', message: 'An error occurred' })
+        })
+    })
+  }
+
+  return (
+    <PostFormWrapper headerLabel="Create an Answer">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <div className="flex flex-col space-y-2">
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea {...field} disabled={isPending} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormAlert message={alert.message} type={alert.type} />
+          <Button type="submit" disabled={isPending} className="w-full">
+            Answer
           </Button>
         </form>
       </Form>

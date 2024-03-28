@@ -5,8 +5,9 @@ import { db } from '@/db/client'
 import { z } from 'zod'
 import { CreatePostSchema } from '@/schemas'
 import { currentUser } from '@/lib/auth'
-import { slugify } from '@/lib/slug'
-import { revalidateTag } from 'next/cache'
+import slugify from '@sindresorhus/slugify'
+import { postNanoid } from '@/lib/utils'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   const validatedData = CreatePostSchema.safeParse(data)
@@ -22,6 +23,12 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
 
   const { title, content, type, questionId, communityName } = validatedData.data
   const preview = content.slice(0, 100)
+  const slug = `${slugify(title)}-${postNanoid()}`
+
+  // UNDECIDED: do we need to check for duplicate slugs?
+  // while (await db.post.findUnique({ where: { slug } })) {
+  //   slug = `${slugify(title)}-${postNanoid()}`
+  // }
 
   // Find the community ID by name
   const communityId = communityName
@@ -36,7 +43,7 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   try {
     await db.post.create({
       data: {
-        slug: slugify(title),
+        slug,
         title,
         content,
         preview,
@@ -46,9 +53,10 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         communityId,
       },
     })
-    // revalidateTag('posts')
+    // revalidateTag('answers')
     return { type: 'success', message: 'Post created' }
-  } catch {
+  } catch (e) {
+    console.error(e)
     return { type: 'error', message: 'Failed to create post' }
   }
 }

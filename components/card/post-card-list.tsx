@@ -1,12 +1,12 @@
 'use client'
 
-import { PostsDataProps } from '@/lib/types'
+import { AnswersDataProps, PostsDataProps } from '@/lib/types'
 import { useCallback, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { PostCard } from './post-card'
+import { AnswerCard, PostCard } from './post-card'
 import { useSearchParams } from 'next/navigation'
-import { fetchPosts } from '@/actions/post/fetch-post'
-import { POST_FETCH_SPAN } from '@/lib/constants'
+import { fetchAnswers, fetchPosts } from '@/actions/post/fetch-post'
+import { ANSWERS_FETCH_SPAN, POST_FETCH_SPAN } from '@/lib/constants'
 import { BeatLoader } from 'react-spinners'
 
 export const PostCardList = ({
@@ -61,6 +61,58 @@ export const PostCardList = ({
       {!hasNextPage && (
         <div className="flex justify-center items-center h-24">
           No more posts
+        </div>
+      )}
+    </div>
+  )
+}
+
+export const AnswerCardList = ({
+  data: initialAnswer,
+  questionSlug,
+}: {
+  data: AnswersDataProps
+  questionSlug: string
+}) => {
+  const [answers, setAnswers] = useState(initialAnswer.answers)
+  const [offset, setOffset] = useState(initialAnswer.offset)
+  const [hasNextPage, setHasNextPage] = useState(true)
+
+  const fetchMoreAnswers = useCallback(async () => {
+    const data = await fetchAnswers(questionSlug, offset, ANSWERS_FETCH_SPAN)
+    if (!data.answers.length) {
+      setHasNextPage(false)
+      return
+    }
+    setAnswers([...answers, ...data.answers])
+    setOffset(data.offset)
+  }, [offset, answers, questionSlug])
+
+  const { ref, inView } = useInView()
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchMoreAnswers()
+    }
+  }, [inView, fetchMoreAnswers, hasNextPage])
+
+  return (
+    <div className="flex flex-col space-y-4">
+      {answers.map((answer, index) => {
+        if (index === answers.length - 1) {
+          return <AnswerCard key={answer.id} ref={ref} {...answer} />
+        } else {
+          return <AnswerCard key={answer.id} {...answer} />
+        }
+      })}
+      {inView && hasNextPage && (
+        <div className="flex justify-center items-center h-32">
+          <BeatLoader />
+        </div>
+      )}
+      {!hasNextPage && (
+        <div className="flex justify-center items-center h-24">
+          No more answers
         </div>
       )}
     </div>

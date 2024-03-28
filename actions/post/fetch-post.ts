@@ -46,7 +46,8 @@ export const fetchPost = unstable_cache(
 
 export const fetchAnswers = unstable_cache(
   async (slug: string, offset: number, take: number) => {
-    return await getAnswersBySlug(slug, offset, take)
+    const answers = await getAnswersBySlug(slug, offset, take)
+    return { answers, offset: offset + answers.length }
   },
   ['answers'],
   {

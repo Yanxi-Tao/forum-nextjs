@@ -19,10 +19,10 @@ import { ArrowBigDown, ArrowBigUp, MessageSquare, Bookmark } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
 import { forwardRef, useState } from 'react'
 
-export type FeedCardWrapperProps = {
+export type PostCardWrapperProps = {
   children: React.ReactNode
-  title: string
-  slug: string
+  title: string | undefined
+  slug: string | undefined
   shouldCollapse: boolean
   communityName: string | undefined
   authorName: string
@@ -32,7 +32,7 @@ export type FeedCardWrapperProps = {
   type: PostType
 }
 
-export const FeedCardWrapper = forwardRef<HTMLDivElement, FeedCardWrapperProps>(
+export const PostCardWrapper = forwardRef<HTMLDivElement, PostCardWrapperProps>(
   (
     {
       children,
@@ -69,10 +69,20 @@ export const FeedCardWrapper = forwardRef<HTMLDivElement, FeedCardWrapperProps>(
             </Link>
           </Button>
         </CardHeader>
-        <Link href={`/${type.toLowerCase()}/${slug}`}>
-          <CardHeader className="px-4 py-0">
-            <CardTitle className="text-lg">{title}</CardTitle>
-          </CardHeader>
+        {type !== 'ANSWER' ? (
+          <Link href={`/${type.toLowerCase()}/${slug}`}>
+            <CardHeader className="px-4 py-0">
+              <CardTitle className="text-lg">{title}</CardTitle>
+            </CardHeader>
+            <CardContent
+              className={`${
+                isCollapsed && shouldCollapse && 'h-[100px]'
+              } overflow-hidden text-ellipsis px-4 py-2`}
+            >
+              {children}
+            </CardContent>
+          </Link>
+        ) : (
           <CardContent
             className={`${
               isCollapsed && shouldCollapse && 'h-[100px]'
@@ -80,7 +90,7 @@ export const FeedCardWrapper = forwardRef<HTMLDivElement, FeedCardWrapperProps>(
           >
             {children}
           </CardContent>
-        </Link>
+        )}
         {isCollapsed && shouldCollapse && (
           <div className="absolute bottom-[40px] h-[50px] flex w-full justify-center items-end py-1 bg-gradient-to-t from-background to-transparent">
             <Button
@@ -133,4 +143,4 @@ export const FeedCardWrapper = forwardRef<HTMLDivElement, FeedCardWrapperProps>(
   }
 )
 
-FeedCardWrapper.displayName = 'FeedCardWrapper'
+PostCardWrapper.displayName = 'PostCardWrapper'

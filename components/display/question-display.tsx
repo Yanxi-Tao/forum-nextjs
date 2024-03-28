@@ -1,3 +1,5 @@
+'use client'
+
 import { AnswersDataProps, PostDataProps } from '@/lib/types'
 
 import { Button } from '@/components/ui/button'
@@ -14,6 +16,10 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { ArrowBigDown, ArrowBigUp, Bookmark, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import { formatNumber } from '@/lib/utils'
+import { useState } from 'react'
+import { AnswerForm } from '@/components/form/post-form'
+import { Separator } from '@/components/ui/separator'
+import { AnswerCardList } from '../card/post-card-list'
 
 export const QuesionDisplay = ({
   question,
@@ -22,6 +28,7 @@ export const QuesionDisplay = ({
   question: NonNullable<PostDataProps>
   answers: AnswersDataProps
 }) => {
+  const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false)
   return (
     <div>
       <Card className="border-0 shadow-none">
@@ -46,7 +53,7 @@ export const QuesionDisplay = ({
             </div>
             <div>
               <span className="text-xs">
-                {question.updatedAt.toDateString()}
+                {new Date(question.updatedAt).toDateString()}
               </span>
             </div>
           </div>
@@ -73,8 +80,23 @@ export const QuesionDisplay = ({
               Bookmark
             </Toggle>
           </div>
+          <Button
+            size="sm"
+            onClick={() => setIsAnswerFormOpen(!isAnswerFormOpen)}
+          >
+            Answre
+          </Button>
         </CardFooter>
       </Card>
+      {isAnswerFormOpen && (
+        <AnswerForm
+          title={question.title}
+          communityName={question.community?.name}
+          questionId={question.id}
+        />
+      )}
+      <Separator className="my-3" />
+      <AnswerCardList data={answers} questionSlug={question.slug} />
     </div>
   )
 }

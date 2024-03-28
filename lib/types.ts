@@ -10,6 +10,10 @@ export type PostCardProps = Awaited<
   ReturnType<typeof fetchPosts>
 >['posts'][number]
 
+export type AnswerCardProps = Awaited<
+  ReturnType<typeof fetchAnswers>
+>['answers'][number]
+
 // Other Props
 export type FormAlertProps = {
   message: string | null
