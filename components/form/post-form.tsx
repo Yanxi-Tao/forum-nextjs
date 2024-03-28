@@ -199,7 +199,6 @@ export const AnswerForm = ({
     type: '',
     message: '',
   })
-
   const form = useForm<z.infer<typeof CreatePostSchema>>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {

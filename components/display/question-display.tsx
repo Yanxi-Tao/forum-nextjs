@@ -29,6 +29,7 @@ export const QuesionDisplay = ({
   answers: AnswersDataProps
 }) => {
   const [isAnswerFormOpen, setIsAnswerFormOpen] = useState(false)
+
   return (
     <div>
       <Card className="border-0 shadow-none">
@@ -84,7 +85,7 @@ export const QuesionDisplay = ({
             size="sm"
             onClick={() => setIsAnswerFormOpen(!isAnswerFormOpen)}
           >
-            Answre
+            Answer
           </Button>
         </CardFooter>
       </Card>

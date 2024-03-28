@@ -78,6 +78,12 @@ export const AnswerCardList = ({
   const [offset, setOffset] = useState(initialAnswer.offset)
   const [hasNextPage, setHasNextPage] = useState(true)
 
+  // make sure data is up to date
+  useEffect(() => {
+    setAnswers(initialAnswer.answers)
+    setOffset(initialAnswer.offset)
+  }, [initialAnswer])
+
   const fetchMoreAnswers = useCallback(async () => {
     const data = await fetchAnswers(questionSlug, offset, ANSWERS_FETCH_SPAN)
     if (!data.answers.length) {

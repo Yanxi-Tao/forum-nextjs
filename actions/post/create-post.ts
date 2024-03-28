@@ -53,7 +53,11 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         communityId,
       },
     })
-    // revalidateTag('answers')
+
+    // invalidate cache when answer is created
+    revalidateTag('answers') // answer list
+    revalidateTag('posts') // post list
+    revalidateTag('post') // question page
     return { type: 'success', message: 'Post created' }
   } catch (e) {
     console.error(e)
