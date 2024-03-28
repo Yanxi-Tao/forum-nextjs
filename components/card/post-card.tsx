@@ -48,7 +48,7 @@ export const AnswerCard = forwardRef<HTMLDivElement, AnswerCardProps>(
         title={undefined}
         slug={undefined}
         shouldCollapse={shouldCollapse}
-        type={'QUESTION'}
+        type={'ANSWER'}
         communityName={undefined}
       >
         {content}
