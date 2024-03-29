@@ -9,7 +9,7 @@ import { UserAccountCard } from '@/components/card/user-account-card'
 export const LeftSidebar = () => {
   const pathname = usePathname()
   return (
-    <div className="sticky left-0 top-0 h-screen w-fit flex flex-col justify-between pb-6 px-6 pt-14 border-r">
+    <div className="sticky top-12 h-[calc(100vh-48px)] w-[300px] flex flex-col justify-between pb-10 pt-4 px-6 border-r">
       <div className="flex flex-col gap-y-3">
         <Link href="/" className="flex justify-center items-center">
           <p className="text-3xl">IBZN</p>

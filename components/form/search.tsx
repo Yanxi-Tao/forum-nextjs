@@ -3,15 +3,9 @@ import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { onSearch } from '@/actions/search'
 
 export const Search = () => {
-  const router = useRouter()
   const search = useSearchParams().get('search') || ''
-  const pathname = usePathname()
-  // if (!pathname.startsWith('/communities') && pathname !== '/') {
-  //   return null
-  // }
 
   return (
     <form className="flex items-center rounded-full border my-1">

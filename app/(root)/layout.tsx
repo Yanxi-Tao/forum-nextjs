@@ -4,8 +4,8 @@ import '../globals.css'
 import { auth } from '@/auth'
 import { SessionProvider } from 'next-auth/react'
 import { LeftSidebar } from '@/components/shared/left-sidebar'
-import { MainContentWrapper } from '@/components/shared/main-content-wrapper'
 import { RightSidebar } from '@/components/shared/right-sidebar'
+import { TopBar } from '@/components/shared/top-bar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,12 +22,15 @@ export default async function RootLayout({
   const session = await auth()
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} overscroll-y-contain`}>
         <SessionProvider session={session}>
-          <main className="flex">
-            <LeftSidebar />
-            <MainContentWrapper>{children}</MainContentWrapper>
-            <RightSidebar />
+          <TopBar />
+          <main>
+            <div className="relative w-screen flex">
+              <LeftSidebar />
+              <div className="w-full min-h-screen px-20 pt-4">{children}</div>
+              <RightSidebar />
+            </div>
           </main>
         </SessionProvider>
       </body>

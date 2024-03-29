@@ -1,9 +1,9 @@
-import { Search } from '../form/search'
+import { Search } from '@/components/form/search'
 
 export const TopBar = () => {
   return (
-    <div className="fixed top-0 left-0 right-0 z-10 bg-muted flex justify-center">
+    <header className="sticky top-0 flex h-12 bg-muted justify-center z-10">
       <Search />
-    </div>
+    </header>
   )
 }
