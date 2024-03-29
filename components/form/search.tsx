@@ -9,12 +9,9 @@ export const Search = () => {
   const router = useRouter()
   const search = useSearchParams().get('search') || ''
   const pathname = usePathname()
-<<<<<<< Updated upstream
   // if (!pathname.startsWith('/communities') && pathname !== '/') {
   //   return null
   // }
-=======
->>>>>>> Stashed changes
 
   return (
     <form className="flex items-center rounded-full border my-1">

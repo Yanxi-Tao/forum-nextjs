@@ -78,25 +78,27 @@ export const AnswerCardList = ({
 }) => {
   const [answers, setAnswers] = useState(optimisticAnswers)
   const [offset, setOffset] = useState(initialOffset)
-  const [hasNextPage, setHasNextPage] = useState(true)
-
-  // make sure data is up to date
-  useEffect(() => {
-    setAnswers(optimisticAnswers)
-    setOffset(initialOffset)
-  }, [optimisticAnswers, initialOffset])
+  const [hasNextPage, setHasNextPage] = useState(offset !== 0)
 
   const fetchMoreAnswers = useCallback(async () => {
     const data = await fetchAnswers(questionSlug, offset, ANSWERS_FETCH_SPAN)
     if (!data.answers.length) {
+      console.log('no more answers')
+
       setHasNextPage(false)
       return
     }
     setAnswers([...answers, ...data.answers])
     setOffset(data.offset)
+    console.log('fetching more answers')
   }, [offset, answers, questionSlug])
 
   const { ref, inView } = useInView()
+
+  useEffect(() => {
+    setAnswers(optimisticAnswers)
+    setOffset(initialOffset)
+  }, [optimisticAnswers, initialOffset])
 
   useEffect(() => {
     if (inView && hasNextPage) {
