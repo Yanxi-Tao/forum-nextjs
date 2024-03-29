@@ -25,7 +25,8 @@ model User {
   accounts      Account[]
   profile       Profile?
   posts         Post[]
-  comments      Comment[]
+  comments      Comment[]   @relation("author")
+  beReplied     Comment[]   @relation("reply")
   communities   Community[]
 }
 
@@ -110,12 +111,14 @@ model Comment {
   content   String
   likes     Int      @default(0)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  author   User    @relation(fields: [authorId], references: [id])
+  author   User    @relation(name: "author", fields: [authorId], references: [id])
   authorId String
   post     Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   String?
+
+  replyTo   User?   @relation(name: "reply", fields: [replyToId], references: [id])
+  replyToId String?
 
   parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
   parentId String?
