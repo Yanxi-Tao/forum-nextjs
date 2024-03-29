@@ -1,4 +1,5 @@
-import { ArticleForm, QuestionForm } from '@/components/form/post-form'
+import { ArticleForm } from '@/components/form/article-form'
+import { QuestionForm } from '@/components/form/question-form'
 import {
   Card,
   CardContent,

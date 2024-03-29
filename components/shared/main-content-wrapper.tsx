@@ -6,5 +6,12 @@ export const MainContentWrapper = ({
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  return <div className="w-full flex flex-col px-20">{children}</div>
+  return (
+    <div className="flex flex-col h-screen w-full justify-center items-center">
+      <div className="sticky top-0 flex justify-center items-center w-full bg-muted h-14">
+        <Search />
+      </div>
+      <ScrollArea className="h-full w-full px-20 ">{children}</ScrollArea>
+    </div>
+  )
 }

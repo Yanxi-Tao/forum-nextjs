@@ -17,7 +17,7 @@ import { ArrowBigDown, ArrowBigUp, Bookmark, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import { formatNumber } from '@/lib/utils'
 import { useState, useOptimistic } from 'react'
-import { AnswerForm } from '@/components/form/post-form'
+import { AnswerForm } from '@/components/form/answer-form'
 import { Separator } from '@/components/ui/separator'
 import { AnswerCardList } from '../card/post-card-list'
 
