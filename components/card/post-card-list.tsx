@@ -113,7 +113,7 @@ export const AnswerCardList = ({
           return <AnswerCard key={answer.id} {...answer} />
         }
       })}
-      {inView && hasNextPage && (
+      {hasNextPage && (
         <div className="flex justify-center items-center h-32">
           <BeatLoader />
         </div>

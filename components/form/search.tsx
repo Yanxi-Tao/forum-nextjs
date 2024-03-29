@@ -8,12 +8,12 @@ import { useEffect } from 'react'
 export const Search = () => {
   const search = useSearchParams().get('search') || ''
   const pathname = usePathname()
-  if (!pathname.startsWith('/communities') && pathname !== '/') {
-    return null
-  }
+  // if (!pathname.startsWith('/communities') && pathname !== '/') {
+  //   return null
+  // }
 
   return (
-    <form className="flex items-center rounded-full border">
+    <form className="flex items-center rounded-full border my-1">
       {/* todo: add filter badge */}
       <Input
         placeholder="Search"

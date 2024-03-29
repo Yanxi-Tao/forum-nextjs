@@ -6,6 +6,8 @@ import { SessionProvider } from 'next-auth/react'
 import { LeftSidebar } from '@/components/shared/left-sidebar'
 import { MainContentWrapper } from '@/components/shared/main-content-wrapper'
 import { RightSidebar } from '@/components/shared/right-sidebar'
+import AppWrapper from '@/components/shared/app-wrapper'
+import { TopBar } from '@/components/shared/top-bar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,11 +26,14 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <main className="flex">
-            <LeftSidebar />
-            <MainContentWrapper>{children}</MainContentWrapper>
-            <RightSidebar />
-          </main>
+          <div className="h-screen overflow-visible">
+            <TopBar />
+            <div className="flex">
+              <LeftSidebar />
+              <MainContentWrapper>{children}</MainContentWrapper>
+              <RightSidebar />
+            </div>
+          </div>
         </SessionProvider>
       </body>
     </html>
