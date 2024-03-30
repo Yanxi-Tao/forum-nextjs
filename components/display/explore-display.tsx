@@ -3,6 +3,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { fetchPost } from '@/actions/post/fetch-post'
 import { FetchPostQueryKey } from '@/lib/types'
+import { PostCard } from '../card/post-card'
 
 export const ExploreDisplay = () => {
   const queryKey: FetchPostQueryKey = [
@@ -14,7 +15,7 @@ export const ExploreDisplay = () => {
       take: 10,
     },
   ]
-  const { data } = useInfiniteQuery({
+  const { data, isSuccess } = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) => fetchPost(pageParam),
     initialPageParam: { queryKey },
@@ -23,7 +24,13 @@ export const ExploreDisplay = () => {
         ? { ...lastPageParam, offset: lastPage.nextOffset }
         : null,
   })
-  console.log(data)
 
-  return <div>Explore Display</div>
+  return (
+    <div className="flex flex-col space-y-3">
+      {isSuccess &&
+        data.pages.map((page) =>
+          page.posts.map((post) => <PostCard key={post.id} {...post} />)
+        )}
+    </div>
+  )
 }

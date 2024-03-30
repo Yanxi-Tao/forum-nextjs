@@ -21,6 +21,15 @@ export const getDefaultQuestionsOrArticles = async ({
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        _count: {
+          select: {
+            children: true,
+          },
+        },
+        author: true,
+        community: true,
+      },
     })
     return posts
   } catch {
@@ -64,6 +73,15 @@ export const getSearchedQuestionsOrArticles = async ({
       skip: offset,
       orderBy: {
         createdAt: 'desc',
+      },
+      include: {
+        _count: {
+          select: {
+            children: true,
+          },
+        },
+        author: true,
+        community: true,
       },
     })
     return posts
