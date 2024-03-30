@@ -17,7 +17,7 @@ export default async function ExplorePage({}) {
       search: undefined,
       communityName: undefined,
       offset: 0,
-      take: 10,
+      take: 5,
     },
   ]
 
@@ -25,6 +25,7 @@ export default async function ExplorePage({}) {
     queryKey,
     queryFn: ({ pageParam }) => fetchPost(pageParam),
     initialPageParam: { queryKey },
+    gcTime: Infinity,
   })
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

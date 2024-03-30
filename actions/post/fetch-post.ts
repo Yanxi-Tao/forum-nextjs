@@ -38,3 +38,5 @@ export const fetchPost = unstable_cache(
     tags: ['posts'],
   }
 )
+
+export const fetchPostById = async (id: string) => {}

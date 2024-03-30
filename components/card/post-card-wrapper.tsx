@@ -92,10 +92,19 @@ export const PostCardWrapper = ({
             )}
           </ToggleGroupItem>
         </ToggleGroup>
-        <Button variant="ghost">
-          <BsChatSquare size={16} />
-          <span className="ml-2">{formatNumber(_count.children)}</span>
-        </Button>
+        {type === 'question' || type === 'article' ? (
+          <Link href={`/${type}/${id}`}>
+            <Button variant="ghost">
+              <BsChatSquare size={16} />
+              <span className="ml-2">{formatNumber(_count.children)}</span>
+            </Button>
+          </Link>
+        ) : (
+          <Button variant="ghost">
+            <BsChatSquare size={16} />
+            <span className="ml-2">{formatNumber(_count.children)}</span>
+          </Button>
+        )}
         {type !== 'comment' && (
           <Toggle size="sm" onPressedChange={setBookmark}>
             {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
