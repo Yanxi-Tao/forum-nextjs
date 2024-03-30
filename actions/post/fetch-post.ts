@@ -2,6 +2,7 @@
 
 import {
   getDefaultQuestionsOrArticles,
+  getPostById,
   getSearchedQuestionsOrArticles,
 } from '@/data/post'
 import { FetchPostQueryKey } from '@/lib/types'
@@ -39,4 +40,12 @@ export const fetchPost = unstable_cache(
   }
 )
 
-export const fetchPostById = async (id: string) => {}
+export const fetchPostById = unstable_cache(
+  async (id: string) => {
+    return await getPostById(id)
+  },
+  ['post'],
+  {
+    tags: ['post'],
+  }
+)

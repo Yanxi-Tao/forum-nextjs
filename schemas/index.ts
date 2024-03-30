@@ -73,4 +73,5 @@ export const CreatePostSchema = z.object({
   content: z.string().min(3, { message: 'required' }),
   parentId: z.optional(z.string()),
   communityName: z.optional(z.string()),
+  communityId: z.optional(z.string()),
 })

@@ -89,3 +89,25 @@ export const getSearchedQuestionsOrArticles = async ({
     return []
   }
 }
+
+export const getPostById = async (id: string) => {
+  try {
+    const post = await db.post.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        _count: {
+          select: {
+            children: true,
+          },
+        },
+        author: true,
+        community: true,
+      },
+    })
+    return post
+  } catch {
+    return null
+  }
+}

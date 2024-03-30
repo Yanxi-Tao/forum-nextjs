@@ -1,4 +1,9 @@
-import { fetchPost } from '@/actions/post/fetch-post'
+import { fetchPost, fetchPostById } from '@/actions/post/fetch-post'
+
+// Display types
+export type QuestionDisplayProps = NonNullable<
+  Awaited<ReturnType<typeof fetchPostById>>
+>
 
 // Cards types
 export type PostCardProps = Awaited<

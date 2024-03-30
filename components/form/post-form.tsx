@@ -36,7 +36,86 @@ export const QuestionForm = ({
       content: '',
       type: 'question',
       parentId: undefined,
+      communityId: undefined,
       communityName,
+    },
+  })
+
+  const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
+    setAlert(null)
+    setIsPending(true)
+    const state = await createPost(data)
+    setIsPending(false)
+    setAlert(state)
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <div className="flex flex-col space-y-2">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Question</FormLabel>
+                <FormControl>
+                  <Textarea {...field} disabled={isPending} />
+                </FormControl>
+                <FormDescription>Be specific</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea {...field} disabled={isPending} />
+                </FormControl>
+                <FormDescription>
+                  Include all the information someone would need to answer your
+                  question
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormAlert alert={alert} />
+        <Button type="submit" disabled={isPending} className="w-full">
+          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
+        </Button>
+      </form>
+    </Form>
+  )
+}
+
+export const AnswerForm = ({
+  title,
+  parentId,
+  communityId,
+  communityName,
+}: {
+  title: string
+  parentId: string
+  communityId: string
+  communityName: string
+}) => {
+  const [alert, setAlert] = useState<FormAlertProps>(null)
+  const [isPending, setIsPending] = useState(false)
+  const form = useForm<z.infer<typeof CreatePostSchema>>({
+    resolver: zodResolver(CreatePostSchema),
+    defaultValues: {
+      title,
+      content: '',
+      type: 'answer',
+      parentId,
+      communityName,
+      communityId,
     },
   })
 

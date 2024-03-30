@@ -5,6 +5,9 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  experimental: {
+    scrollRestoration: true,
+  },
 }
 
 export default nextConfig
