@@ -25,8 +25,6 @@ model User {
   accounts      Account[]
   profile       Profile?
   posts         Post[]
-  comments      Comment[]   @relation("author")
-  beReplied     Comment[]   @relation("reply")
   communities   Community[]
 }
 
@@ -80,10 +78,8 @@ model PasswordResetToken {
 
 model Post {
   id        String   @id @default(cuid())
-  slug      String   @unique
   title     String
   content   String
-  preview   String
   type      PostType
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
@@ -93,36 +89,15 @@ model Post {
   views     Int      @default(0)
   bookmarks Int      @default(0)
 
-  questionId String?
-  question   Post?   @relation("QuestionToAnswer", fields: [questionId], references: [id])
-  answers    Post[]  @relation("QuestionToAnswer")
-
-  comments Comment[]
+  parent   Post?   @relation("PostToPost", fields: [parentId], references: [id])
+  parentId String?
+  children Post[]  @relation("PostToPost")
 
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
 
-  @@index([slug])
+  @@index([id])
   @@index([title, content])
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  content   String
-  likes     Int      @default(0)
-  createdAt DateTime @default(now())
-
-  author   User    @relation(name: "author", fields: [authorId], references: [id])
-  authorId String
-  post     Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId   String?
-
-  replyTo   User?   @relation(name: "reply", fields: [replyToId], references: [id])
-  replyToId String?
-
-  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
-  parentId String?
-  children Comment[] @relation("CommentToComment")
 }
 
 model Profile {
@@ -147,7 +122,8 @@ model Community {
 }
 
 enum PostType {
-  QUESTION
-  ANSWER
-  ARTICLE
+  question
+  answer
+  article
+  comment
 }

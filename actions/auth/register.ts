@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { generateVerificationCode } from '@/lib/tokens'
 import { sendVerificationCodeEmail } from '@/lib/mail'
 import { RegisterSchema } from '@/schemas'
-import { createUser, getUserByEmail } from '@/data/user'
+import { createUser, getUserByEmail, getUserBySlug } from '@/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { AuthError } from 'next-auth'
@@ -62,7 +62,10 @@ export const register = async (
   const hashedPassword = await bcrypt.hash(password, 10)
 
   // slugify name
-  const slug = slugify(name)
+  let slug = slugify(name)
+  while (await getUserBySlug(slug)) {
+    slug = slugify(name)
+  }
 
   // Create user
   createUser(name, email, hashedPassword, new Date(), slug)

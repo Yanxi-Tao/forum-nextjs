@@ -26,6 +26,19 @@ export const getUserByID = async (id: string) => {
   }
 }
 
+export const getUserBySlug = async (slug: string) => {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        slug,
+      },
+    })
+    return user
+  } catch {
+    return null
+  }
+}
+
 export const createUser = async (
   name: string,
   email: string,

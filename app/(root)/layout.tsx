@@ -28,7 +28,7 @@ export default async function RootLayout({
           <main>
             <div className="relative w-screen flex">
               <LeftSidebar />
-              <div className="w-full min-h-screen px-20 pt-4">{children}</div>
+              <div className="w-full px-20 pt-4">{children}</div>
               <RightSidebar />
             </div>
           </main>

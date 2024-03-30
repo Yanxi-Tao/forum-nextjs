@@ -1,8 +1,9 @@
 import { FormAlertProps } from '@/lib/types'
 import { CircleAlert, CircleCheck } from 'lucide-react'
 
-export const FormAlert = ({ message, type }: FormAlertProps) => {
-  if (!message || !type) return null
+export const FormAlert = ({ alert }: { alert: FormAlertProps }) => {
+  if (!alert || !alert.message || !alert.type) return null
+  const { message, type } = alert
 
   return (
     <>

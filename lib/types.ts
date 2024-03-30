@@ -1,5 +1,5 @@
 // Other Props
 export type FormAlertProps = {
-  message: string | null
-  type: string | null
-}
+  message: string
+  type: string
+} | null
