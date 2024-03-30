@@ -4,8 +4,9 @@ import {
   QueryClient,
 } from '@tanstack/react-query'
 import { ExploreDisplay } from '@/components/display/explore-display'
-import { fetchPost } from '@/actions/post/fetch-post'
+import { fetchPosts } from '@/actions/post/fetch-post'
 import { FetchPostQueryKey } from '@/lib/types'
+import { POST_FETCH_SPAN } from '@/lib/constants'
 
 export default async function ExplorePage({}) {
   const queryClient = new QueryClient()
@@ -16,15 +17,14 @@ export default async function ExplorePage({}) {
       search: undefined,
       communityName: undefined,
       offset: 0,
-      take: 5,
+      take: POST_FETCH_SPAN,
     },
   ]
 
   await queryClient.prefetchInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam }) => fetchPost(pageParam),
+    queryFn: ({ pageParam }) => fetchPosts(pageParam),
     initialPageParam: { queryKey },
-    gcTime: Infinity,
   })
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

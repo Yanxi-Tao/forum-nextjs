@@ -15,6 +15,9 @@ export const getDefaultQuestionsOrArticles = async ({
         community: {
           name: communityName,
         },
+        type: {
+          in: ['question', 'article'],
+        },
       },
       take,
       skip: offset,
@@ -109,5 +112,41 @@ export const getPostById = async (id: string) => {
     return post
   } catch {
     return null
+  }
+}
+
+export const getAnsewrs = async ({
+  parentId,
+  offset,
+  take,
+}: {
+  parentId: string
+  offset: number
+  take: number
+}) => {
+  try {
+    const answers = await db.post.findMany({
+      where: {
+        parentId,
+        type: 'answer',
+      },
+      take,
+      skip: offset,
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        community: true,
+        author: true,
+        _count: {
+          select: {
+            children: true,
+          },
+        },
+      },
+    })
+    return answers
+  } catch {
+    return []
   }
 }

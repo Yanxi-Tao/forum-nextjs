@@ -3,10 +3,11 @@
 import { useInView } from 'react-intersection-observer'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { fetchPost } from '@/actions/post/fetch-post'
+import { fetchPosts } from '@/actions/post/fetch-post'
 import { FetchPostQueryKey } from '@/lib/types'
 import { PostCard } from '@/components/card/post-card'
 import { useEffect } from 'react'
+import { POST_FETCH_SPAN } from '@/lib/constants'
 
 export const ExploreDisplay = () => {
   const { ref, inView } = useInView()
@@ -16,12 +17,12 @@ export const ExploreDisplay = () => {
       search: undefined,
       communityName: undefined,
       offset: 0,
-      take: 5,
+      take: POST_FETCH_SPAN,
     },
   ]
   const { data, isSuccess, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam }) => fetchPost(pageParam),
+    queryFn: ({ pageParam }) => fetchPosts(pageParam),
     initialPageParam: { queryKey },
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
       if (!lastPage.nextOffset) return undefined
@@ -29,8 +30,6 @@ export const ExploreDisplay = () => {
 
       return lastPageParam
     },
-    gcTime: Infinity,
-    refetchIntervalInBackground: true,
   })
 
   useEffect(() => {

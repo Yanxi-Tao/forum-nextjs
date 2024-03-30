@@ -39,6 +39,7 @@ export const QuestionForm = ({
       communityId: undefined,
       communityName,
     },
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
@@ -58,12 +59,11 @@ export const QuestionForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Question</FormLabel>
+                <FormLabel className="text-foreground">Question</FormLabel>
                 <FormControl>
                   <Textarea {...field} disabled={isPending} />
                 </FormControl>
                 <FormDescription>Be specific</FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -72,7 +72,7 @@ export const QuestionForm = ({
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel className="text-foreground">Description</FormLabel>
                 <FormControl>
                   <Textarea {...field} disabled={isPending} />
                 </FormControl>
@@ -80,13 +80,16 @@ export const QuestionForm = ({
                   Include all the information someone would need to answer your
                   question
                 </FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
         </div>
         <FormAlert alert={alert} />
-        <Button type="submit" disabled={isPending} className="w-full">
+        <Button
+          type="submit"
+          disabled={isPending || !form.formState.isValid}
+          className="w-full"
+        >
           {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
         </Button>
       </form>
@@ -102,8 +105,8 @@ export const AnswerForm = ({
 }: {
   title: string
   parentId: string
-  communityId: string
-  communityName: string
+  communityId: string | undefined
+  communityName: string | undefined
 }) => {
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
@@ -117,6 +120,7 @@ export const AnswerForm = ({
       communityName,
       communityId,
     },
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
@@ -130,42 +134,28 @@ export const AnswerForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-        <div className="flex flex-col space-y-2">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Question</FormLabel>
-                <FormControl>
-                  <Textarea {...field} disabled={isPending} />
-                </FormControl>
-                <FormDescription>Be specific</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea {...field} disabled={isPending} />
-                </FormControl>
-                <FormDescription>
-                  Include all the information someone would need to answer your
-                  question
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea {...field} disabled={isPending} />
+              </FormControl>
+              <FormDescription>
+                Include all the information someone would need to answer your
+                question
+              </FormDescription>
+            </FormItem>
+          )}
+        />
         <FormAlert alert={alert} />
-        <Button type="submit" disabled={isPending} className="w-full">
-          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
+        <Button
+          type="submit"
+          disabled={isPending || !form.formState.isValid}
+          className="w-full"
+        >
+          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Answer'}
         </Button>
       </form>
     </Form>
