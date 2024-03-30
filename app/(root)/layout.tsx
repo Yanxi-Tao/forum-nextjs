@@ -7,6 +7,8 @@ import { LeftSidebar } from '@/components/shared/left-sidebar'
 import { RightSidebar } from '@/components/shared/right-sidebar'
 import { TopBar } from '@/components/shared/top-bar'
 
+import { ReactQueryProvider } from '@/lib/providers'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -24,14 +26,16 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} overscroll-y-contain`}>
         <SessionProvider session={session}>
-          <TopBar />
-          <main>
-            <div className="relative w-screen flex">
-              <LeftSidebar />
-              <div className="w-full px-20 pt-4">{children}</div>
-              <RightSidebar />
-            </div>
-          </main>
+          <ReactQueryProvider>
+            <TopBar />
+            <main>
+              <div className="relative w-screen flex">
+                <LeftSidebar />
+                <div className="w-full px-20 pt-4">{children}</div>
+                <RightSidebar />
+              </div>
+            </main>
+          </ReactQueryProvider>
         </SessionProvider>
       </body>
     </html>
