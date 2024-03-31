@@ -4,6 +4,14 @@ import { fetchPosts } from '@/actions/post/fetch-post'
 import { EXPLORE_POSTS_KEY, POST_FETCH_SPAN } from '@/lib/constants'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+/**
+ *
+ * @param search
+ * @returns UseInfiniteQueryResult
+ *
+ * used for fetching posts with infinite scroll
+ * optionally takes a search parameter
+ */
 export const usePostsInfiniteQuery = (search: string | undefined) => {
   return useInfiniteQuery({
     queryKey: [EXPLORE_POSTS_KEY],

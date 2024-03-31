@@ -7,7 +7,7 @@ import { LeftSidebar } from '@/components/shared/left-sidebar'
 import { RightSidebar } from '@/components/shared/right-sidebar'
 import { TopBar } from '@/components/shared/top-bar'
 
-import { ReactQueryProvider } from '@/lib/providers'
+import { ReactQueryProvider, ThemeProvider } from '@/lib/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,20 +23,27 @@ export default async function RootLayout({
 }>) {
   const session = await auth()
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} overscroll-y-contain`}>
-        <SessionProvider session={session}>
-          <ReactQueryProvider>
-            <TopBar />
-            <main>
-              <div className="relative w-screen flex">
-                <LeftSidebar />
-                <div className="w-full px-20">{children}</div>
-                <RightSidebar />
-              </div>
-            </main>
-          </ReactQueryProvider>
-        </SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SessionProvider session={session}>
+            <ReactQueryProvider>
+              <TopBar />
+              <main>
+                <div className="relative w-screen flex">
+                  <LeftSidebar />
+                  <div className="w-full px-20">{children}</div>
+                  <RightSidebar />
+                </div>
+              </main>
+            </ReactQueryProvider>
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
