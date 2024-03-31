@@ -4,11 +4,14 @@ import { useInView } from 'react-intersection-observer'
 import { PostCard } from '@/components/card/post-card'
 import { useEffect } from 'react'
 import { usePostsInfiniteQuery } from '@/hooks/post/usePostsInfiniteQuery'
+import { useSearchParams } from 'next/navigation'
 
 export const ExploreDisplay = () => {
+  const searchParams = useSearchParams()
+  const search = searchParams.get('search') || undefined
   const { ref, inView } = useInView()
   const { data, isSuccess, hasNextPage, fetchNextPage } =
-    usePostsInfiniteQuery(undefined)
+    usePostsInfiniteQuery(search)
 
   useEffect(() => {
     if (inView && hasNextPage) {

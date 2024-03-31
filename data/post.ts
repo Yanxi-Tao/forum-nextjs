@@ -57,17 +57,30 @@ export const getSearchedQuestionsOrArticles = async ({
         community: {
           name: communityName,
         },
+        type: {
+          in: ['question', 'article'],
+        },
         OR: [
           {
             title: {
-              search,
+              search: search.split(' ').join(' & '),
               mode: 'insensitive',
             },
           },
           {
             content: {
-              search,
+              search: search.split(' ').join(' & '),
               mode: 'insensitive',
+            },
+          },
+          {
+            title: {
+              contains: search,
+            },
+          },
+          {
+            content: {
+              contains: search,
             },
           },
         ],
