@@ -30,6 +30,7 @@ import { PostCard } from '../card/post-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { useAnswersInfiniteQuery } from '@/hooks/post/useAnswersInfiniteQuery'
 import { useMutateAnswer } from '@/hooks/post/useMutateAnswer'
+import { BeatLoader } from 'react-spinners'
 
 export default function QuestionDisplay({
   id,
@@ -45,7 +46,7 @@ export default function QuestionDisplay({
   const { ref, inView } = useInView()
 
   const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
-  const { data, isSuccess, hasNextPage, fetchNextPage } =
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
     useAnswersInfiniteQuery({
       parentId: id,
       offset: 0,
@@ -161,7 +162,7 @@ export default function QuestionDisplay({
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
-            if (page.answers.indexOf(post) === page.answers.length - 1) {
+            if (page.answers.indexOf(post) === page.answers.length - 2) {
               return (
                 <div key={post.id} ref={ref}>
                   <PostCard {...post} />
@@ -172,6 +173,14 @@ export default function QuestionDisplay({
             }
           })
         )}
+      {fetchStatus === 'fetching' && (
+        <div className="flex justify-center h-10 my-4">
+          <BeatLoader className="h-10" />
+        </div>
+      )}
+      {!hasNextPage && (
+        <div className="text-center h-10 my-4">End of posts</div>
+      )}
     </div>
   )
 }

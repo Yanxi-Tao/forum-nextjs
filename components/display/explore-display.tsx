@@ -5,12 +5,13 @@ import { PostCard } from '@/components/card/post-card'
 import { useEffect } from 'react'
 import { usePostsInfiniteQuery } from '@/hooks/post/usePostsInfiniteQuery'
 import { useSearchParams } from 'next/navigation'
+import { BeatLoader } from 'react-spinners'
 
 export const ExploreDisplay = () => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
   const { ref, inView } = useInView()
-  const { data, isSuccess, hasNextPage, fetchNextPage } =
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
     usePostsInfiniteQuery(search)
 
   useEffect(() => {
@@ -35,6 +36,14 @@ export const ExploreDisplay = () => {
             }
           })
         )}
+      {fetchStatus === 'fetching' && (
+        <div className="flex justify-center h-10 my-4">
+          <BeatLoader className="h-10" />
+        </div>
+      )}
+      {!hasNextPage && (
+        <div className="text-center h-10 my-4">End of posts</div>
+      )}
     </div>
   )
 }

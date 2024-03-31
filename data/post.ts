@@ -63,13 +63,13 @@ export const getSearchedQuestionsOrArticles = async ({
         OR: [
           {
             title: {
-              search: search.split(' ').join(' & '),
+              search: search.split(' ').join(' | '),
               mode: 'insensitive',
             },
           },
           {
             content: {
-              search: search.split(' ').join(' & '),
+              search: search.split(' ').join(' | '),
               mode: 'insensitive',
             },
           },
@@ -88,7 +88,11 @@ export const getSearchedQuestionsOrArticles = async ({
       take,
       skip: offset,
       orderBy: {
-        createdAt: 'desc',
+        _relevance: {
+          fields: ['title', 'content'],
+          search: search.split(' ').join(' | '),
+          sort: 'desc',
+        },
       },
       include: {
         _count: {
