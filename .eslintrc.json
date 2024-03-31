@@ -1,3 +1,28 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "plugins": ["@ts-safeql/eslint-plugin"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@ts-safeql/check-sql": [
+      "error",
+      {
+        "connections": [
+          {
+            "databaseUrl": "postgresql://postgres:rpPlEJkqlDnTDMDYfwYDZCIwDyZoJyBw@monorail.proxy.rlwy.net:57686/railway",
+            "targets": [
+              {
+                // The sql tags that should be checked.
+                // either `db.$queryRaw` or `db.$executeRaw`:
+                "tag": "db.+($queryRaw|$executeRaw)",
+                // Transform the query result to array
+                "transform": "{type}[]"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

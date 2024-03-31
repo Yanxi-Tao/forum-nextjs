@@ -123,7 +123,7 @@ export default function QuestionDisplay({
                 )}
               </ToggleGroupItem>
             </ToggleGroup>
-            <Button variant="ghost">
+            <Button variant="ghost" size="sm">
               <BsChatSquare size={16} />
               <span className="ml-2">{formatNumber(_count.children)}</span>
             </Button>

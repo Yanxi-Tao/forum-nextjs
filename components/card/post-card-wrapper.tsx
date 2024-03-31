@@ -36,7 +36,7 @@ export const PostCardWrapper = ({
   const [vote, setVote] = useState(0)
   const [bookmark, setBookmark] = useState(false)
   return (
-    <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 pt-4">
+    <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 py-1 pt-2">
       <CardHeader className="py-0 space-y-0.5">
         <CardDescription className="flex space-x-2 text-xs">
           <Link
@@ -57,7 +57,7 @@ export const PostCardWrapper = ({
         </CardDescription>
         {(type === 'question' || type === 'article') && (
           <Link href={`/${type}/${id}`}>
-            <CardTitle className=" text-base">{title}</CardTitle>
+            <CardTitle className="text-base">{title}</CardTitle>
           </Link>
         )}
       </CardHeader>
@@ -94,7 +94,7 @@ export const PostCardWrapper = ({
         </ToggleGroup>
         {type === 'question' || type === 'article' ? (
           <Link href={`/${type}/${id}`}>
-            <Button variant="ghost">
+            <Button variant="ghost" size="sm">
               <BsChatSquare size={16} />
               <span className="ml-2">{formatNumber(_count.children)}</span>
             </Button>
@@ -105,12 +105,10 @@ export const PostCardWrapper = ({
             <span className="ml-2">{formatNumber(_count.children)}</span>
           </Button>
         )}
-        {type !== 'comment' && (
-          <Toggle size="sm" onPressedChange={setBookmark}>
-            {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
-            <span className="ml-2">Bookmark</span>
-          </Toggle>
-        )}
+        <Toggle size="sm" onPressedChange={setBookmark}>
+          {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+          <span className="ml-2">Bookmark</span>
+        </Toggle>
       </CardFooter>
     </Card>
   )
