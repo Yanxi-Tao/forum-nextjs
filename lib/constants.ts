@@ -42,3 +42,7 @@ export const createFeedTypes = [
 
 export const ANSWERS_FETCH_SPAN = 5
 export const POST_FETCH_SPAN = 5
+
+// tanstack queryKeys
+export const QUESTION_ANSWERS_KEY = 'question-answers'
+export const EXPLORE_POSTS_KEY = 'explore-posts'

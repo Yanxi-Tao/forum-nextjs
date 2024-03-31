@@ -4,7 +4,6 @@ import { z } from 'zod'
 import { CreatePostSchema } from '@/schemas'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
-import { revalidateTag } from 'next/cache'
 
 export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   const user = await currentUser()
@@ -47,7 +46,6 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
         authorId: user.id,
       },
     })
-
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

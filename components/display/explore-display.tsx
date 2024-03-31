@@ -1,36 +1,14 @@
 'use client'
 
 import { useInView } from 'react-intersection-observer'
-
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { fetchPosts } from '@/actions/post/fetch-post'
-import { FetchPostQueryKey } from '@/lib/types'
 import { PostCard } from '@/components/card/post-card'
 import { useEffect } from 'react'
-import { POST_FETCH_SPAN } from '@/lib/constants'
+import { usePostsInfiniteQuery } from '@/hooks/post/usePostsInfiniteQuery'
 
 export const ExploreDisplay = () => {
   const { ref, inView } = useInView()
-  const queryKey: FetchPostQueryKey = [
-    'explore',
-    {
-      search: undefined,
-      communityName: undefined,
-      offset: 0,
-      take: POST_FETCH_SPAN,
-    },
-  ]
-  const { data, isSuccess, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey,
-    queryFn: ({ pageParam }) => fetchPosts(pageParam),
-    initialPageParam: { queryKey },
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      if (!lastPage.nextOffset) return undefined
-      lastPageParam.queryKey[1].offset = lastPage.nextOffset
-
-      return lastPageParam
-    },
-  })
+  const { data, isSuccess, hasNextPage, fetchNextPage } =
+    usePostsInfiniteQuery(undefined)
 
   useEffect(() => {
     if (inView && hasNextPage) {

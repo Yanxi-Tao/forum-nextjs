@@ -11,23 +11,17 @@ export type PostCardProps = Awaited<
 >['posts'][number]
 
 // Tanstack query keys types
-export type FetchPostQueryKey = [
-  string,
-  {
-    search?: string
-    communityName?: string
-    offset: number
-    take: number
-  }
-]
-export type FetchAnswerQueryKey = [
-  string,
-  {
-    parentId: string
-    offset: number
-    take: number
-  }
-]
+export type FetchPostQueryKey = {
+  search?: string
+  communityName?: string
+  offset: number
+  take: number
+}
+export type FetchAnswerQueryKey = {
+  parentId: string
+  offset: number
+  take: number
+}
 
 // Other Props
 export type FormAlertProps = {

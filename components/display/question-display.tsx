@@ -16,18 +16,20 @@ import {
   BiDownvote,
 } from 'react-icons/bi'
 import { BsChatSquare, BsBookmark, BsBookmarkFill } from 'react-icons/bs'
-import { formatNumber } from '@/lib/utils'
+import { formatNumber, optimisticAnswer } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { FetchAnswerQueryKey, QuestionDisplayProps } from '@/lib/types'
+import { QuestionDisplayProps } from '@/lib/types'
 import { AnswerForm } from '../form/post-form'
 import { ANSWERS_FETCH_SPAN } from '@/lib/constants'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { fetchAnswers } from '@/actions/post/fetch-post'
+import { useQueryClient } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from '../card/post-card'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useAnswersInfiniteQuery } from '@/hooks/post/useAnswersInfiniteQuery'
+import { useMutateAnswer } from '@/hooks/post/useMutateAnswer'
 
 export default function QuestionDisplay({
   id,
@@ -39,34 +41,30 @@ export default function QuestionDisplay({
   _count,
   votes,
 }: QuestionDisplayProps) {
+  const user = useCurrentUser()
   const { ref, inView } = useInView()
-  const queryKey: FetchAnswerQueryKey = [
-    'question-answers',
-    {
+
+  const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
+  const { data, isSuccess, hasNextPage, fetchNextPage } =
+    useAnswersInfiniteQuery({
       parentId: id,
       offset: 0,
       take: ANSWERS_FETCH_SPAN,
-    },
-  ]
-  const { data, isSuccess, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey,
-    queryFn: ({ pageParam }) => fetchAnswers(pageParam),
-    initialPageParam: { queryKey },
-    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      if (!lastPage.nextOffset) return undefined
-      lastPageParam.queryKey[1].offset = lastPage.nextOffset
+    })
 
-      return lastPageParam
-    },
-  })
   const [vote, setVote] = useState(0)
   const [bookmark, setBookmark] = useState(false)
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage()
     }
   }, [inView, fetchNextPage, hasNextPage])
+
+  if (!user || !user.name || !user.email) {
+    return null
+  }
 
   return (
     <div>
@@ -99,46 +97,67 @@ export default function QuestionDisplay({
           <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent>{content}</CardContent>
-        <CardFooter className="py-0 space-x-4">
-          <ToggleGroup
-            type="single"
-            onValueChange={(value) =>
-              setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)
-            }
-            className=" bg-muted/50 rounded-lg"
+        <CardFooter className="py-0 pb-4 flex justify-between">
+          <div className="flex items-center space-x-4">
+            <ToggleGroup
+              type="single"
+              onValueChange={(value) =>
+                setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)
+              }
+              className=" bg-muted/50 rounded-lg"
+            >
+              <ToggleGroupItem value="up" className="space-x-4" size="sm">
+                {vote === 1 ? (
+                  <BiSolidUpvote size={16} />
+                ) : (
+                  <BiUpvote size={16} />
+                )}
+                <span className="mx-1">{formatNumber(votes + vote)}</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem value="down" size="sm">
+                {vote === -1 ? (
+                  <BiSolidDownvote size={16} />
+                ) : (
+                  <BiDownvote size={16} />
+                )}
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <Button variant="ghost">
+              <BsChatSquare size={16} />
+              <span className="ml-2">{formatNumber(_count.children)}</span>
+            </Button>
+            <Toggle size="sm" onPressedChange={setBookmark}>
+              {bookmark ? (
+                <BsBookmarkFill size={16} />
+              ) : (
+                <BsBookmark size={16} />
+              )}
+              <span className="ml-2">Bookmark</span>
+            </Toggle>
+          </div>
+          <Button
+            variant="secondary"
+            onClick={() => setIsFormOpen(!isFormOpen)}
           >
-            <ToggleGroupItem value="up" className="space-x-4" size="sm">
-              {vote === 1 ? (
-                <BiSolidUpvote size={16} />
-              ) : (
-                <BiUpvote size={16} />
-              )}
-              <span className="mx-1">{formatNumber(votes + vote)}</span>
-            </ToggleGroupItem>
-            <ToggleGroupItem value="down" size="sm">
-              {vote === -1 ? (
-                <BiSolidDownvote size={16} />
-              ) : (
-                <BiDownvote size={16} />
-              )}
-            </ToggleGroupItem>
-          </ToggleGroup>
-          <Button variant="ghost">
-            <BsChatSquare size={16} />
-            <span className="ml-2">{formatNumber(_count.children)}</span>
+            {isFormOpen ? 'Close' : 'Answer'}
           </Button>
-          <Toggle size="sm" onPressedChange={setBookmark}>
-            {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
-            <span className="ml-2">Bookmark</span>
-          </Toggle>
         </CardFooter>
       </Card>
-      <AnswerForm
-        title={title}
-        parentId={id}
-        communityId={community?.id}
-        communityName={community?.name}
-      />
+      {isFormOpen && (
+        <AnswerForm
+          title={title}
+          parentId={id}
+          communityId={community?.id}
+          communityName={community?.name}
+          mutate={mutate}
+          setIsFormOpen={setIsFormOpen}
+        />
+      )}
+      {isPending && (
+        <PostCard
+          {...optimisticAnswer(user, variables.title, variables.content)}
+        />
+      )}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {

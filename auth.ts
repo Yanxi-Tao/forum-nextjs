@@ -8,12 +8,14 @@ import { getAccountByUserId } from '@/data/account'
 
 import { slugify } from '@/lib/slug'
 
+export type ExtendedUser = {
+  isOAuth: boolean
+  slug: string
+} & DefaultSession['user']
+
 declare module 'next-auth' {
   interface Session {
-    user: {
-      isOAuth: boolean
-      slug: string
-    } & DefaultSession['user']
+    user: ExtendedUser
   }
 }
 

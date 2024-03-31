@@ -102,14 +102,17 @@ export const AnswerForm = ({
   parentId,
   communityId,
   communityName,
+  mutate,
+  setIsFormOpen,
 }: {
   title: string
   parentId: string
   communityId: string | undefined
   communityName: string | undefined
+  mutate: (data: z.infer<typeof CreatePostSchema>) => void
+  setIsFormOpen: (value: boolean) => void
 }) => {
-  const [alert, setAlert] = useState<FormAlertProps>(null)
-  const [isPending, setIsPending] = useState(false)
+  // schema
   const form = useForm<z.infer<typeof CreatePostSchema>>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
@@ -123,12 +126,10 @@ export const AnswerForm = ({
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
-    setAlert(null)
-    setIsPending(true)
-    const state = await createPost(data)
-    setIsPending(false)
-    setAlert(state)
+  // form submit handler
+  const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
+    mutate(data)
+    setIsFormOpen(false)
   }
 
   return (
@@ -140,22 +141,20 @@ export const AnswerForm = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea {...field} disabled={isPending} />
+                <Textarea {...field} />
               </FormControl>
               <FormDescription>
-                Include all the information someone would need to answer your
-                question
+                Your answer helps others learn about this topic
               </FormDescription>
             </FormItem>
           )}
         />
-        <FormAlert alert={alert} />
         <Button
           type="submit"
-          disabled={isPending || !form.formState.isValid}
+          disabled={!form.formState.isValid}
           className="w-full"
         >
-          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Answer'}
+          Create Answer
         </Button>
       </form>
     </Form>
