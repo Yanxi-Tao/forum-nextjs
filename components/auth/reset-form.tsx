@@ -22,13 +22,11 @@ import { Button } from '@/components/ui/button'
 
 import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
+import { FormAlertProps } from '@/lib/types'
 
 export const ResetForm = () => {
   const [isPending, startTransition] = useTransition()
-  const [alert, setAlert] = useState<{ type: string; message: string }>({
-    type: '',
-    message: '',
-  })
+  const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<z.infer<typeof ResetSchema>>({
     resolver: zodResolver(ResetSchema),
@@ -80,7 +78,7 @@ export const ResetForm = () => {
                 <RingLoader />
               </div>
             ) : null}
-            <FormAlert message={alert.message} type={alert.type} />
+            <FormAlert alert={alert} />
             <Button type="submit" className="w-full" disabled={isPending}>
               Send reset password email
             </Button>

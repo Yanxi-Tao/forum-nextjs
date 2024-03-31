@@ -31,16 +31,14 @@ import {
 } from '@/components/ui/card'
 import { FormAlert } from './form-alert'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { FormAlertProps } from '@/lib/types'
 
 export const SettingsForm = () => {
   const user = useCurrentUser()
 
   const { update } = useSession()
   const [isPending, startTransition] = useTransition()
-  const [alert, setAlert] = useState<{ type: string; message: string }>({
-    type: '',
-    message: '',
-  })
+  const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
@@ -155,7 +153,7 @@ export const SettingsForm = () => {
                   </>
                 )}
               </div>
-              <FormAlert message={alert.message} type={alert.type} />
+              <FormAlert alert={alert} />
               <div className="flex gap-x-3">
                 <Button
                   type="reset"

@@ -27,14 +27,12 @@ import { Button } from '@/components/ui/button'
 
 import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
+import { FormAlertProps } from '@/lib/types'
 
 export const RegisterForm = () => {
   const [submitType, setSubmitType] = useState<'register' | 'token'>('token')
   const [isPending, startTransition] = useTransition()
-  const [alert, setAlert] = useState<{ type: string; message: string }>({
-    type: '',
-    message: '',
-  })
+  const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -180,7 +178,7 @@ export const RegisterForm = () => {
                 )}
               />
             </div>
-            <FormAlert message={alert.message} type={alert.type} />
+            <FormAlert alert={alert} />
             <Button
               type="submit"
               className="w-full"

@@ -7,17 +7,15 @@ import { FormAlert } from '@/components/form/form-alert'
 import { AuthCardWrapper } from './auth-card-wrapper'
 import { emialVerification } from '@/actions/auth/email-verification'
 import { RingLoader } from 'react-spinners'
+import { FormAlertProps } from '@/lib/types'
 
 export const EmailVerificationForm = () => {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
-  const [alert, setAlert] = useState<{ type: string; message: string }>({
-    type: '',
-    message: '',
-  })
+  const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const onSubmit = useCallback(() => {
-    if (alert.type || alert.message) {
+    if (alert) {
       return
     }
 
@@ -46,12 +44,12 @@ export const EmailVerificationForm = () => {
       redirectLabel="Back to settings"
       showProvider={false}
     >
-      {!alert.type || !alert.message ? (
+      {!alert ? (
         <div className="flex items-center w-full justify-center">
           <RingLoader />
         </div>
       ) : (
-        <FormAlert type={alert.type} message={alert.message} />
+        <FormAlert alert={alert} />
       )}
     </AuthCardWrapper>
   )

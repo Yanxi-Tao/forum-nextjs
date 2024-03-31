@@ -24,20 +24,22 @@ import { Button } from '@/components/ui/button'
 import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
 import Link from 'next/link'
+import { url } from 'inspector'
+import { FormAlertProps } from '@/lib/types'
 
 export const LoginForm = () => {
   const searchParams = useSearchParams()
   const callBackUrl = searchParams.get('callBackUrl')
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? 'Email already in use'
-      : ''
+      ? {
+          type: 'error',
+          message: 'Email already exists',
+        }
+      : null
 
   const [isPending, startTransition] = useTransition()
-  const [alert, setAlert] = useState<{ type: string; message: string }>({
-    type: '',
-    message: '',
-  })
+  const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -106,10 +108,7 @@ export const LoginForm = () => {
                 )}
               />
             </div>
-            <FormAlert
-              message={alert.message || urlError}
-              type={alert.type || 'error'}
-            />
+            <FormAlert alert={alert || urlError} />
             <Button type="submit" className="w-full" disabled={isPending}>
               Login
             </Button>
