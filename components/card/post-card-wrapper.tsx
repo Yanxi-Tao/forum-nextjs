@@ -105,10 +105,12 @@ export const PostCardWrapper = ({
             <span className="ml-2">{formatNumber(_count.children)}</span>
           </Button>
         )}
-        <Toggle size="sm" onPressedChange={setBookmark}>
-          {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
-          <span className="ml-2">Bookmark</span>
-        </Toggle>
+        {type === 'comment' && (
+          <Toggle size="sm" onPressedChange={setBookmark}>
+            {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+            <span className="ml-2">Bookmark</span>
+          </Toggle>
+        )}
       </CardFooter>
     </Card>
   )

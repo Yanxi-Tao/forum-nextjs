@@ -59,8 +59,8 @@ export const {
 
       if (session.user) {
         session.user.isOAuth = token.isOAuth as boolean
-        session.user.name = token.name
-        session.user.email = token.email
+        session.user.name = token.name as string
+        session.user.email = token.email as string
         session.user.slug = token.slug as string
       }
 
