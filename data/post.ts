@@ -85,11 +85,13 @@ export const getSearchedQuestionsOrArticles = async ({
           {
             title: {
               contains: search,
+              mode: 'insensitive',
             },
           },
           {
             content: {
               contains: search,
+              mode: 'insensitive',
             },
           },
         ],
