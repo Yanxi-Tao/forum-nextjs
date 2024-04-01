@@ -32,6 +32,7 @@ import { useInfiniteAnswers } from '@/hooks/post/useInfiniteAnswers'
 import { useMutateAnswer } from '@/hooks/post/useMutateAnswer'
 import { BeatLoader } from 'react-spinners'
 import { Separator } from '../ui/separator'
+import { AvatarCard } from '../card/avatar-card'
 
 export default function QuestionDisplay({
   id,
@@ -73,22 +74,26 @@ export default function QuestionDisplay({
       <Card className="border-0 shadow-none">
         <CardHeader>
           <div className="flex flex-row justify-between items-center">
-            <div className="flex space-x-1 items-center">
+            <div className="text-sm">
               {community && (
                 <>
-                  <Button variant="link" size="sm" className="p-0" asChild>
-                    <Link href={`/communities/${community.name}`}>
-                      {community.name}
-                    </Link>
-                  </Button>
+                  <Link
+                    href={`/communities/${community.name}`}
+                    className="flex items-start space-x-2 text-primary underline-offset-4 hover:underline"
+                  >
+                    <AvatarCard source={null} name={community.name} />
+                    <span>{community.name}</span>
+                  </Link>
                   <span>/</span>
                 </>
               )}
-              <Button variant="link" size="sm" asChild className="p-0">
-                <Link href={`/profile/${author.slug}`} className="m-0">
-                  {author.name}
-                </Link>
-              </Button>
+              <Link
+                href={`/profile/${author.slug}`}
+                className="flex items-center space-x-2 text-primary underline-offset-4 hover:underline"
+              >
+                <AvatarCard source={author.image} name={author.name} />
+                <span>{author.name}</span>
+              </Link>
             </div>
             <div>
               <span className="text-xs">

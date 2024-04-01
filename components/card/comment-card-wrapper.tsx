@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Toggle } from '@/components/ui/toggle'
@@ -21,6 +20,7 @@ import { useState } from 'react'
 import { CommentForm } from '@/components/form/comment-form'
 import { z } from 'zod'
 import { CreateCommentSchema } from '@/schemas'
+import { AvatarCard } from './avatar-card'
 
 export const CommentCardWrapper = ({
   children,
@@ -37,10 +37,10 @@ export const CommentCardWrapper = ({
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
         <Link href={`/profile/${comment.author.slug}`}>
-          <Avatar className="h-7 w-7">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <AvatarCard
+            source={comment.author.image}
+            name={comment.author.name}
+          />
         </Link>
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">
@@ -122,10 +122,10 @@ export const NestedCommentCardWrapper = ({
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
         <Link href={`/profile/${comment.author.slug}`}>
-          <Avatar className="h-7 w-7">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <AvatarCard
+            source={comment.author.image}
+            name={comment.author.name}
+          />
         </Link>
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">

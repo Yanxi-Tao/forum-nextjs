@@ -37,9 +37,9 @@ export const UserAccountCard = () => {
                   <AvatarFallback className="border">{initial}</AvatarFallback>
                 </Avatar>
               ) : (
-                <div className="flex justify-center items-center bg-[#877EFF] rounded-full w-12 h-12">
-                  <span className="text-2xl">{initial}</span>
-                </div>
+                <Avatar>
+                  <AvatarFallback className="border">{initial}</AvatarFallback>
+                </Avatar>
               )}
 
               <div>{user.name}</div>

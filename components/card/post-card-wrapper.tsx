@@ -28,6 +28,7 @@ import { formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import { CommentDisplay } from '../display/comment-display'
+import { AvatarCard } from './avatar-card'
 
 export const PostCardWrapper = ({
   id,
@@ -54,7 +55,10 @@ export const PostCardWrapper = ({
   return (
     <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 py-1 pt-2">
       <CardHeader className="py-0 space-y-0.5">
-        <CardDescription className="flex space-x-2 text-xs">
+        <CardDescription className="flex items-center space-x-2 text-xs">
+          <Link href={`/profile/${author.slug}`}>
+            <AvatarCard source={author.image} name={author.name} />
+          </Link>
           <Link
             href={
               (type === 'question' || type === 'article') && community
