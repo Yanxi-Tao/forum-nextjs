@@ -12,7 +12,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
  * used for fetching posts with infinite scroll
  * optionally takes a search parameter
  */
-export const usePostsInfiniteQuery = (search: string | undefined) => {
+export const useInfinitePosts = (search: string | undefined) => {
   return useInfiniteQuery({
     queryKey: [EXPLORE_POSTS_KEY],
     queryFn: ({ pageParam }) => fetchPosts(pageParam),

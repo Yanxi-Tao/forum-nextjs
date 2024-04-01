@@ -7,9 +7,15 @@ export const getAllComments = async (postId: string) => {
       include: {
         author: true,
         repliesTo: true,
-        children: true,
+        children: {
+          include: {
+            author: true,
+            repliesTo: true,
+          },
+        },
         _count: { select: { children: true } },
       },
+      orderBy: { createdAt: 'desc' },
     })
     return comments
   } catch {

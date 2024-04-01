@@ -3,7 +3,7 @@
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from '@/components/card/post-card'
 import { useEffect } from 'react'
-import { usePostsInfiniteQuery } from '@/hooks/post/usePostsInfiniteQuery'
+import { useInfinitePosts } from '@/hooks/post/useInfinitePosts'
 import { useSearchParams } from 'next/navigation'
 import { BeatLoader } from 'react-spinners'
 
@@ -12,7 +12,7 @@ export const ExploreDisplay = () => {
   const search = searchParams.get('search') || undefined
   const { ref, inView } = useInView()
   const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    usePostsInfiniteQuery(search)
+    useInfinitePosts(search)
 
   useEffect(() => {
     if (inView && hasNextPage) {

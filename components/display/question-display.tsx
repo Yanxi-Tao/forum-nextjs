@@ -28,7 +28,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { PostCard, optimisticAnswer } from '@/components/card/post-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { useAnswersInfiniteQuery } from '@/hooks/post/useAnswersInfiniteQuery'
+import { useInfiniteAnswers } from '@/hooks/post/useInfiniteAnswers'
 import { useMutateAnswer } from '@/hooks/post/useMutateAnswer'
 import { BeatLoader } from 'react-spinners'
 
@@ -47,7 +47,7 @@ export default function QuestionDisplay({
 
   const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
   const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useAnswersInfiniteQuery({
+    useInfiniteAnswers({
       parentId: id,
       offset: 0,
       take: ANSWERS_FETCH_SPAN,

@@ -16,6 +16,11 @@ export type CommentCardProps = Omit<
   'children'
 >
 
+export type NestedCommentCardProps = Pick<
+  Awaited<ReturnType<typeof fetchComments>>[number],
+  'children'
+>['children'][number]
+
 // Tanstack query keys types
 export type FetchPostQueryKey = {
   search?: string

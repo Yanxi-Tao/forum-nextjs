@@ -44,6 +44,7 @@ export const CommentForm = ({
   // form submit handler
   const onSubmit = (data: z.infer<typeof CreateCommentSchema>) => {
     mutate(data)
+    console.log('data')
     setIsFormOpen(false)
   }
 

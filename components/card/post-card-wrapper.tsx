@@ -9,6 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import {
   BiSolidDownvote,
@@ -22,6 +27,7 @@ import { useState } from 'react'
 import { formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
+import { CommentDisplay } from '../display/comment-display'
 
 export const PostCardWrapper = ({
   id,
@@ -73,44 +79,55 @@ export const PostCardWrapper = ({
           {children}
         </CardContent>
       )}
-      <CardFooter className="py-0 space-x-4">
-        <ToggleGroup
-          type="single"
-          onValueChange={(value) =>
-            setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)
-          }
-          className=" bg-muted/50 rounded-lg"
-        >
-          <ToggleGroupItem value="up" className="space-x-4" size="sm">
-            {vote === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
-            <span className="mx-1">{formatNumber(votes + vote)}</span>
-          </ToggleGroupItem>
-          <ToggleGroupItem value="down" size="sm">
-            {vote === -1 ? (
-              <BiSolidDownvote size={16} />
-            ) : (
-              <BiDownvote size={16} />
-            )}
-          </ToggleGroupItem>
-        </ToggleGroup>
-        {type === 'question' || type === 'article' ? (
-          <Link href={`/${type}/${id}`}>
-            <Button variant="ghost" size="sm">
-              <BsChatSquare size={16} />
-              <span className="ml-2">{formatNumber(_count.children)}</span>
-            </Button>
-          </Link>
-        ) : (
-          <Button variant="ghost">
-            <BsChatSquare size={16} />
-            <span className="ml-2">{formatNumber(_count.children)}</span>
-          </Button>
-        )}
-        <Toggle size="sm" onPressedChange={setBookmark}>
-          {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
-          <span className="ml-2">Bookmark</span>
-        </Toggle>
-      </CardFooter>
+      <Collapsible>
+        <CardFooter className="py-0 space-x-4">
+          <ToggleGroup
+            type="single"
+            onValueChange={(value) =>
+              setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)
+            }
+            className=" bg-muted/50 rounded-lg"
+          >
+            <ToggleGroupItem value="up" className="space-x-4" size="sm">
+              {vote === 1 ? (
+                <BiSolidUpvote size={16} />
+              ) : (
+                <BiUpvote size={16} />
+              )}
+              <span className="mx-1">{formatNumber(votes + vote)}</span>
+            </ToggleGroupItem>
+            <ToggleGroupItem value="down" size="sm">
+              {vote === -1 ? (
+                <BiSolidDownvote size={16} />
+              ) : (
+                <BiDownvote size={16} />
+              )}
+            </ToggleGroupItem>
+          </ToggleGroup>
+          {type === 'question' || type === 'article' ? (
+            <Link href={`/${type}/${id}`}>
+              <Button variant="ghost" size="sm">
+                <BsChatSquare size={16} />
+                <span className="ml-2">{formatNumber(_count.children)}</span>
+              </Button>
+            </Link>
+          ) : (
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost">
+                <BsChatSquare size={16} />
+                <span className="ml-2">{formatNumber(_count.children)}</span>
+              </Button>
+            </CollapsibleTrigger>
+          )}
+          <Toggle size="sm" onPressedChange={setBookmark}>
+            {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+            <span className="ml-2">Bookmark</span>
+          </Toggle>
+        </CardFooter>
+        <CollapsibleContent>
+          <CommentDisplay postId={id} />
+        </CollapsibleContent>
+      </Collapsible>
     </Card>
   )
 }
