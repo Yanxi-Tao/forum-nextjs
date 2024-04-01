@@ -12,11 +12,11 @@ export const getAllComments = async (postId: string) => {
             author: true,
             repliesTo: true,
           },
-          orderBy: { createdAt: 'desc' },
+          orderBy: { createdAt: 'asc' },
         },
         _count: { select: { children: true } },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'asc' },
     })
     return comments
   } catch {

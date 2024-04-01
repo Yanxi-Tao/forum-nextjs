@@ -101,7 +101,7 @@ export default function QuestionDisplay({
               </span>
             </div>
           </div>
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className=" leading-normal">{title}</CardTitle>
         </CardHeader>
         <CardContent>{content}</CardContent>
         <CardFooter className="py-0 pb-4 flex justify-between">
