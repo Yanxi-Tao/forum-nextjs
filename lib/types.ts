@@ -1,4 +1,5 @@
 import { fetchPosts, fetchPostById } from '@/actions/post/fetch-post'
+import { fetchComments } from '@/actions/comment/fetch-comment'
 
 // Display types
 export type QuestionDisplayProps = NonNullable<
@@ -9,6 +10,11 @@ export type QuestionDisplayProps = NonNullable<
 export type PostCardProps = Awaited<
   ReturnType<typeof fetchPosts>
 >['posts'][number]
+
+export type CommentCardProps = Omit<
+  Awaited<ReturnType<typeof fetchComments>>[number],
+  'children'
+>
 
 // Tanstack query keys types
 export type FetchPostQueryKey = {

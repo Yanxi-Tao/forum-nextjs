@@ -15,17 +15,19 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(cuid())
-  name          String
-  email         String      @unique
-  slug          String?     @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  accounts      Account[]
-  profile       Profile?
-  posts         Post[]
-  communities   Community[]
+  id              String      @id @default(cuid())
+  name            String
+  email           String      @unique
+  slug            String?     @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  accounts        Account[]
+  profile         Profile?
+  posts           Post[]
+  communities     Community[]
+  comments        Comment[]   @relation("CommentToAuthor")
+  commentsReplies Comment[]   @relation("ReplyToComment")
 }
 
 // account model for provider login
@@ -93,11 +95,33 @@ model Post {
   parentId String?
   children Post[]  @relation("PostToPost")
 
+  comments Comment[]
+
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
 
   @@index([id])
   @@index([title, content])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  author    User     @relation("CommentToAuthor", fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  votes     Int      @default(0)
+
+  post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+
+  children Comment[] @relation("CommentToComment")
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parentId String?
+
+  repliesTo   User?   @relation("ReplyToComment", fields: [repliesToId], references: [id])
+  repliesToId String?
 }
 
 model Profile {
@@ -125,5 +149,4 @@ enum PostType {
   question
   answer
   article
-  comment
 }

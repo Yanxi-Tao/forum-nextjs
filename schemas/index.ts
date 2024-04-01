@@ -75,3 +75,10 @@ export const CreatePostSchema = z.object({
   communityName: z.optional(z.string()),
   communityId: z.optional(z.string()),
 })
+
+export const CreateCommentSchema = z.object({
+  content: z.string().min(1, { message: 'required' }),
+  postId: z.optional(z.string()),
+  parentId: z.optional(z.string()),
+  repliesToId: z.optional(z.string()),
+})

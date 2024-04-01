@@ -7,7 +7,7 @@ import { currentUser } from '@/lib/auth'
 
 export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   const user = await currentUser()
-  if (!user) {
+  if (!user || !user.id) {
     return { type: 'error', message: 'User not found' }
   }
 

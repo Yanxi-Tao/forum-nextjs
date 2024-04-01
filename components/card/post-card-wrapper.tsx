@@ -1,4 +1,5 @@
 'use client'
+
 import Link from 'next/link'
 import {
   Card,
@@ -105,12 +106,10 @@ export const PostCardWrapper = ({
             <span className="ml-2">{formatNumber(_count.children)}</span>
           </Button>
         )}
-        {type === 'comment' && (
-          <Toggle size="sm" onPressedChange={setBookmark}>
-            {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
-            <span className="ml-2">Bookmark</span>
-          </Toggle>
-        )}
+        <Toggle size="sm" onPressedChange={setBookmark}>
+          {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+          <span className="ml-2">Bookmark</span>
+        </Toggle>
       </CardFooter>
     </Card>
   )
