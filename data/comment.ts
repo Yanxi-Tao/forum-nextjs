@@ -12,6 +12,7 @@ export const getAllComments = async (postId: string) => {
             author: true,
             repliesTo: true,
           },
+          orderBy: { createdAt: 'desc' },
         },
         _count: { select: { children: true } },
       },

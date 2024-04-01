@@ -32,6 +32,15 @@ export const getDefaultQuestionsOrArticles = async ({
         },
         author: true,
         community: true,
+        comments: {
+          select: {
+            _count: {
+              select: {
+                children: true,
+              },
+            },
+          },
+        },
       },
     })
     return posts
@@ -102,6 +111,15 @@ export const getSearchedQuestionsOrArticles = async ({
         },
         author: true,
         community: true,
+        comments: {
+          select: {
+            _count: {
+              select: {
+                children: true,
+              },
+            },
+          },
+        },
       },
     })
     return posts
@@ -155,6 +173,15 @@ export const getAnsewrs = async ({
       include: {
         community: true,
         author: true,
+        comments: {
+          select: {
+            _count: {
+              select: {
+                children: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             children: true,

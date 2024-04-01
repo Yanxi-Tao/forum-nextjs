@@ -31,6 +31,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { useInfiniteAnswers } from '@/hooks/post/useInfiniteAnswers'
 import { useMutateAnswer } from '@/hooks/post/useMutateAnswer'
 import { BeatLoader } from 'react-spinners'
+import { Separator } from '../ui/separator'
 
 export default function QuestionDisplay({
   id,
@@ -154,6 +155,7 @@ export default function QuestionDisplay({
           setIsFormOpen={setIsFormOpen}
         />
       )}
+      <Separator className="my-6" />
       {isPending && (
         <PostCard
           {...optimisticAnswer(user, variables.title, variables.content)}

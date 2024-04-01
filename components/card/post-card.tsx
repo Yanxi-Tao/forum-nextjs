@@ -23,6 +23,7 @@ export const optimisticAnswer = (
       image: null,
       password: null,
     },
+    comments: [],
     _count: { children: 0 },
     id: 'temp-id',
     title,

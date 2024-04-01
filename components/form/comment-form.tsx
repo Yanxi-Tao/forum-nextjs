@@ -15,19 +15,22 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateCommentSchema } from '@/schemas'
+import { CommentCardProps, NestedCommentCardProps } from '@/lib/types'
 
 export const CommentForm = ({
-  parentId,
   postId,
+  parentId,
   repliesToId,
+  repliesToName,
+  repliesToSlug,
   mutate,
-  setIsFormOpen,
 }: {
   parentId: string | undefined
   postId: string | undefined
   repliesToId: string | undefined
+  repliesToName: string | undefined
+  repliesToSlug: string | undefined
   mutate: (data: z.infer<typeof CreateCommentSchema>) => void
-  setIsFormOpen: (value: boolean) => void
 }) => {
   // schema
   const form = useForm<z.infer<typeof CreateCommentSchema>>({
@@ -37,6 +40,8 @@ export const CommentForm = ({
       postId,
       parentId,
       repliesToId,
+      repliesToName,
+      repliesToSlug,
     },
     mode: 'onChange',
   })
@@ -44,8 +49,7 @@ export const CommentForm = ({
   // form submit handler
   const onSubmit = (data: z.infer<typeof CreateCommentSchema>) => {
     mutate(data)
-    console.log('data')
-    setIsFormOpen(false)
+    form.reset()
   }
 
   return (

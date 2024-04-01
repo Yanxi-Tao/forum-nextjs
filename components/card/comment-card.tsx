@@ -92,15 +92,16 @@ export const optimisticNestedComment = (
       image: user.image ? user.image : null,
       password: null,
     },
-    repliesTo: null,
-    // repliesTo: {
-    //   id: comment.repliesToId as string,
-    //   name: repliesTo?.name as string,
-    //   email: repliesTo?.email as string,
-    //   slug: repliesTo?.slug as string,
-    //   emailVerified: null,
-    //   image: repliesTo?.image ? repliesTo.image : null,
-    //   password: null,
-    // },
+    repliesTo: comment.repliesToId
+      ? {
+          id: comment.repliesToId as string,
+          name: comment.repliesToName as string,
+          email: '',
+          slug: comment.repliesToSlug as string,
+          emailVerified: null,
+          image: null,
+          password: null,
+        }
+      : null,
   }
 }

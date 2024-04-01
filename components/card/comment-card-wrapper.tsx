@@ -96,7 +96,8 @@ export const CommentCardWrapper = ({
           parentId={comment.id}
           postId={undefined}
           repliesToId={undefined}
-          setIsFormOpen={setIsFormOpen}
+          repliesToName={undefined}
+          repliesToSlug={undefined}
           mutate={mutate}
         />
       )}
@@ -180,7 +181,8 @@ export const NestedCommentCardWrapper = ({
           parentId={parentId}
           postId={undefined}
           repliesToId={comment.author.id}
-          setIsFormOpen={setIsFormOpen}
+          repliesToName={comment.author.name}
+          repliesToSlug={comment.author.slug as string}
           mutate={mutate}
         />
       )}

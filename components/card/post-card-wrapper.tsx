@@ -39,9 +39,18 @@ export const PostCardWrapper = ({
   updatedAt,
   votes,
   _count,
+  comments,
+  content,
 }: PostCardProps & { children: React.ReactNode }) => {
   const [vote, setVote] = useState(0)
   const [bookmark, setBookmark] = useState(false)
+
+  const commentCount =
+    comments.length > 0
+      ? comments.reduce((acc, comment) => acc + comment._count.children, 0) +
+        comments.length
+      : 0
+
   return (
     <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 py-1 pt-2">
       <CardHeader className="py-0 space-y-0.5">
@@ -115,7 +124,7 @@ export const PostCardWrapper = ({
             <CollapsibleTrigger asChild>
               <Button variant="ghost">
                 <BsChatSquare size={16} />
-                <span className="ml-2">{formatNumber(_count.children)}</span>
+                <span className="ml-2">{formatNumber(commentCount)}</span>
               </Button>
             </CollapsibleTrigger>
           )}
@@ -124,7 +133,7 @@ export const PostCardWrapper = ({
             <span className="ml-2">Bookmark</span>
           </Toggle>
         </CardFooter>
-        <CollapsibleContent>
+        <CollapsibleContent className="hover:bg-background">
           <CommentDisplay postId={id} />
         </CollapsibleContent>
       </Collapsible>

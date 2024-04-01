@@ -81,4 +81,6 @@ export const CreateCommentSchema = z.object({
   postId: z.optional(z.string()),
   parentId: z.optional(z.string()),
   repliesToId: z.optional(z.string()),
+  repliesToName: z.optional(z.string()),
+  repliesToSlug: z.optional(z.string()),
 })
