@@ -24,7 +24,6 @@ import { Button } from '@/components/ui/button'
 import { AuthCardWrapper } from './auth-card-wrapper'
 import { FormAlert } from '@/components/form/form-alert'
 import Link from 'next/link'
-import { url } from 'inspector'
 import { FormAlertProps } from '@/lib/types'
 
 export const LoginForm = () => {
