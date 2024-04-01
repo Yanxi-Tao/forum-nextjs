@@ -137,7 +137,7 @@ export const PostCardWrapper = ({
             <span className="ml-2">Bookmark</span>
           </Toggle>
         </CardFooter>
-        <CollapsibleContent className="hover:bg-background">
+        <CollapsibleContent className="bg-background hover:bg-background pt-2">
           <CommentDisplay postId={id} />
         </CollapsibleContent>
       </Collapsible>

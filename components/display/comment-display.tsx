@@ -13,11 +13,12 @@ import {
   optimisticNestedComment,
 } from '@/components/card/comment-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { BeatLoader } from 'react-spinners'
 
 export const CommentDisplay = ({ postId }: { postId: string }) => {
   const user = useCurrentUser()
   const queryClient = useQueryClient()
-  const { data } = useQuery({
+  const { data, fetchStatus } = useQuery({
     queryKey: ['comments', postId],
     queryFn: () => fetchComments(postId),
   })
@@ -72,7 +73,13 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
             </div>
           </div>
         ))}
-        <div className="text-center h-10 my-4">No More Comments</div>
+        {fetchStatus === 'fetching' ? (
+          <div className="flex justify-center h-10 my-4">
+            <BeatLoader className="h-10" />
+          </div>
+        ) : (
+          <div className="text-center h-10 my-4">No More Comments</div>
+        )}
       </div>
     </div>
   )

@@ -1,8 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { customAlphabet } from 'nanoid'
-import { ExtendedUser } from '@/auth'
-import { PostType } from '@prisma/client'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
