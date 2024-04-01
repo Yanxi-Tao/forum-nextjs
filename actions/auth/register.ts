@@ -81,8 +81,6 @@ export const register = async (
       switch (error.type) {
         case 'CredentialsSignin':
           return { type: 'error', message: 'Invalid credentials' }
-        case 'AuthorizedCallbackError':
-          return { type: 'error', message: 'Authorization failed' }
         default:
           return { type: 'error', message: 'An error occurred' }
       }

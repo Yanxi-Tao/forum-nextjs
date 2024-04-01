@@ -14,7 +14,7 @@ import { slugify } from '@/lib/slug'
 export const settings = async (data: z.infer<typeof SettingsSchema>) => {
   const user = await currentUser()
 
-  if (!user) {
+  if (!user || !user.id) {
     return { type: 'error', message: 'Unauthorized' }
   }
 
