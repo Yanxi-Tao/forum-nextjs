@@ -27,7 +27,7 @@ export default async function RootLayout({
       <body className={`${inter.className} overscroll-y-contain`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
