@@ -5,9 +5,7 @@ import { CreateCommentSchema } from '@/schemas'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
 
-export const createComment = async (
-  data: z.infer<typeof CreateCommentSchema>
-) => {
+export const createComment = async (data: z.infer<typeof CreateCommentSchema>) => {
   const user = await currentUser()
   if (!user || !user.id) {
     return { type: 'error', message: 'User not found' }

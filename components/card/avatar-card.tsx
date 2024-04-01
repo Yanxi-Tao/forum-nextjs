@@ -1,12 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-export const AvatarCard = ({
-  source,
-  name,
-}: {
-  source: string | null
-  name: string
-}) => {
+export const AvatarCard = ({ source, name }: { source: string | null; name: string }) => {
   const initial = name[0].toLocaleUpperCase()
   return (
     <Avatar className="h-7 w-7">

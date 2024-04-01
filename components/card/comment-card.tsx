@@ -1,8 +1,5 @@
 import { CommentCardProps, NestedCommentCardProps } from '@/lib/types'
-import {
-  CommentCardWrapper,
-  NestedCommentCardWrapper,
-} from './comment-card-wrapper'
+import { CommentCardWrapper, NestedCommentCardWrapper } from './comment-card-wrapper'
 import { CreateCommentSchema } from '@/schemas'
 import { z } from 'zod'
 import { ExtendedUser } from '@/auth'
@@ -22,29 +19,24 @@ export const CommentCard = ({
 }
 
 export const NestedCommentCard = ({
+  postId,
   parentId,
   comment,
   mutate,
 }: {
+  postId: string
   parentId: string
   comment: NestedCommentCardProps
   mutate: (data: z.infer<typeof CreateCommentSchema>) => void
 }) => {
   return (
-    <NestedCommentCardWrapper
-      comment={comment}
-      mutate={mutate}
-      parentId={parentId}
-    >
+    <NestedCommentCardWrapper comment={comment} mutate={mutate} parentId={parentId} postId={postId}>
       {comment.content}
     </NestedCommentCardWrapper>
   )
 }
 
-export const optimisticComment = (
-  comment: z.infer<typeof CreateCommentSchema>,
-  user: ExtendedUser
-) => {
+export const optimisticComment = (comment: z.infer<typeof CreateCommentSchema>, user: ExtendedUser) => {
   return {
     id: 'temp-comment-id',
     content: comment.content,
@@ -69,10 +61,7 @@ export const optimisticComment = (
   }
 }
 
-export const optimisticNestedComment = (
-  comment: z.infer<typeof CreateCommentSchema>,
-  user: ExtendedUser
-) => {
+export const optimisticNestedComment = (comment: z.infer<typeof CreateCommentSchema>, user: ExtendedUser) => {
   return {
     id: 'temp-nested-comment-id',
     content: comment.content,

@@ -39,13 +39,7 @@ export const getUserBySlug = async (slug: string) => {
   }
 }
 
-export const createUser = async (
-  name: string,
-  email: string,
-  password: string,
-  emailVerified: Date,
-  slug: string
-) => {
+export const createUser = async (name: string, email: string, password: string, emailVerified: Date, slug: string) => {
   try {
     const user = await db.user.create({
       data: {

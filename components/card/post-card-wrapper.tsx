@@ -1,34 +1,35 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+import { useState } from 'react'
+import { PostCardProps } from '@/lib/types'
+import { formatNumber } from '@/lib/utils'
+
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import {
-  BiSolidDownvote,
-  BiUpvote,
-  BiSolidUpvote,
-  BiDownvote,
-} from 'react-icons/bi'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { BiSolidDownvote, BiUpvote, BiSolidUpvote, BiDownvote } from 'react-icons/bi'
 import { BsChatSquare, BsBookmark, BsBookmarkFill } from 'react-icons/bs'
-import { PostCardProps } from '@/lib/types'
-import { useState } from 'react'
-import { formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
-import { CommentDisplay } from '../display/comment-display'
-import { AvatarCard } from './avatar-card'
+import { CommentDisplay } from '@/components/display/comment-display'
+import { AvatarCard } from '@/components/card/avatar-card'
+import { HiDotsHorizontal } from 'react-icons/hi'
+import { HiFlag } from 'react-icons/hi2'
+import { FiEdit } from 'react-icons/fi'
+import { MdDelete } from 'react-icons/md'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { deletePost } from '@/actions/post/delete-post'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
 
 export const PostCardWrapper = ({
   id,
@@ -41,39 +42,58 @@ export const PostCardWrapper = ({
   votes,
   _count,
   comments,
-  content,
 }: PostCardProps & { children: React.ReactNode }) => {
+  const queryClient = useQueryClient()
+  const queryKey = type === 'question' ? EXPLORE_POSTS_KEY : QUESTION_ANSWERS_KEY
+  const { mutate } = useMutation({
+    mutationFn: deletePost,
+    onSettled: async () => await queryClient.invalidateQueries({ queryKey: [queryKey] }),
+  })
   const [vote, setVote] = useState(0)
   const [bookmark, setBookmark] = useState(false)
+  const user = useCurrentUser()
 
-  const commentCount =
-    comments.length > 0
-      ? comments.reduce((acc, comment) => acc + comment._count.children, 0) +
-        comments.length
-      : 0
+  const commentCount = comments.length > 0 ? comments.reduce((acc, comment) => acc + comment._count.children, 0) + comments.length : 0
 
   return (
     <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 py-1 pt-2">
       <CardHeader className="py-0 space-y-0.5">
-        <CardDescription className="flex items-center space-x-2 text-xs">
-          <Link href={`/profile/${author.slug}`}>
-            <AvatarCard source={author.image} name={author.name} />
-          </Link>
-          <Link
-            href={
-              (type === 'question' || type === 'article') && community
-                ? `/communities/${community.name}`
-                : `/profile/${author.slug}`
-            }
-            className="text-primary underline-offset-4 hover:underline"
-          >
-            {(type === 'question' || type === 'article') && community
-              ? `c/${community.name}`
-              : `u/${author.name}`}
-          </Link>
-          <span className="text-muted-foreground">
-            {new Date(updatedAt).toDateString()}
-          </span>
+        <CardDescription className="flex items-center justify-between text-xs">
+          <div className="flex items-center space-x-2">
+            <Link href={`/profile/${author.slug}`}>
+              <AvatarCard source={author.image} name={author.name} />
+            </Link>
+            <Link
+              href={(type === 'question' || type === 'article') && community ? `/communities/${community.name}` : `/profile/${author.slug}`}
+              className="text-primary underline-offset-4 hover:underline"
+            >
+              {(type === 'question' || type === 'article') && community ? `c/${community.name}` : `u/${author.name}`}
+            </Link>
+            <span className="text-muted-foreground">{new Date(updatedAt).toDateString()}</span>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <HiDotsHorizontal size={20} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <HiFlag size={16} className="mr-2" />
+                Reprot
+              </DropdownMenuItem>
+              {user?.id === author.id && (
+                <>
+                  <DropdownMenuItem>
+                    <FiEdit size={16} className="mr-2" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => mutate(id)}>
+                    <MdDelete size={16} className="mr-2" />
+                    Delete
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </CardDescription>
         {(type === 'question' || type === 'article') && (
           <Link href={`/${type}/${id}`}>
@@ -83,38 +103,24 @@ export const PostCardWrapper = ({
       </CardHeader>
       {type === 'question' || type === 'article' ? (
         <Link href={`/${type}/${id}`}>
-          <CardContent className="py-1.5 max-h-[200px] overflow-hidden">
-            {children}
-          </CardContent>
+          <CardContent className="py-1.5 max-h-[200px] overflow-hidden">{children}</CardContent>
         </Link>
       ) : (
-        <CardContent className="py-1.5 max-h-[200px] overflow-hidden">
-          {children}
-        </CardContent>
+        <CardContent className="py-1.5 max-h-[200px] overflow-hidden">{children}</CardContent>
       )}
       <Collapsible>
         <CardFooter className="py-0 space-x-4">
           <ToggleGroup
             type="single"
-            onValueChange={(value) =>
-              setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)
-            }
+            onValueChange={(value) => setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)}
             className=" bg-muted/50 rounded-lg"
           >
             <ToggleGroupItem value="up" className="space-x-4" size="sm">
-              {vote === 1 ? (
-                <BiSolidUpvote size={16} />
-              ) : (
-                <BiUpvote size={16} />
-              )}
+              {vote === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
               <span className="mx-1">{formatNumber(votes + vote)}</span>
             </ToggleGroupItem>
             <ToggleGroupItem value="down" size="sm">
-              {vote === -1 ? (
-                <BiSolidDownvote size={16} />
-              ) : (
-                <BiDownvote size={16} />
-              )}
+              {vote === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
             </ToggleGroupItem>
           </ToggleGroup>
           {type === 'question' || type === 'article' ? (

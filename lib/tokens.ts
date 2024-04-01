@@ -3,15 +3,9 @@ import { nanoid } from 'nanoid'
 
 import { db } from '@/db/client'
 
-import {
-  deleteVerificationTokenById,
-  getVerificationTokenByEmail,
-} from '@/data/verification-token'
+import { deleteVerificationTokenById, getVerificationTokenByEmail } from '@/data/verification-token'
 import { getPasswordResetTokenByEmail } from '@/data/password-reset-token'
-import {
-  deleteVerificationCodeById,
-  getVerificationCodeByEmail,
-} from '@/data/verification-code'
+import { deleteVerificationCodeById, getVerificationCodeByEmail } from '@/data/verification-code'
 
 export const generatePasswordResetToken = async (email: string) => {
   const token = nanoid()
@@ -60,7 +54,7 @@ export const generateVerificationToken = async (email: string) => {
 }
 
 export const generateVerificationCode = async (email: string) => {
-  const code = crypto.randomInt(100_100, 1_100_100).toString()
+  const code = crypto.randomInt(100_100, 1_100_100).toString() // 6 digits
   const expiresAt = new Date(new Date().getTime() + 1000 * 60 * 60) // 1 hour
 
   const existingCode = await getVerificationCodeByEmail(email)

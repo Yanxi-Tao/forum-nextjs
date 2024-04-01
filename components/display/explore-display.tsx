@@ -11,8 +11,7 @@ export const ExploreDisplay = () => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
   const { ref, inView } = useInView()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useInfinitePosts(search)
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfinitePosts(search)
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -41,9 +40,7 @@ export const ExploreDisplay = () => {
           <BeatLoader className="h-10" />
         </div>
       )}
-      {!hasNextPage && (
-        <div className="text-center h-10 my-4">End of posts</div>
-      )}
+      {!hasNextPage && <div className="text-center h-10 my-4">End of posts</div>}
     </div>
   )
 }

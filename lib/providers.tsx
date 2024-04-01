@@ -28,11 +28,7 @@ function getQueryClient() {
   }
 }
 
-export const ReactQueryProvider = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => {
+export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient()
 
   return (

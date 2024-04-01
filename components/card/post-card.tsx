@@ -7,11 +7,7 @@ export const PostCard = (post: PostCardProps) => {
   return <PostCardWrapper {...post}>{post.content}</PostCardWrapper>
 }
 
-export const optimisticAnswer = (
-  user: ExtendedUser,
-  title: string,
-  content: string
-): PostCardProps => {
+export const optimisticAnswer = (user: ExtendedUser, title: string, content: string): PostCardProps => {
   return {
     community: null,
     author: {

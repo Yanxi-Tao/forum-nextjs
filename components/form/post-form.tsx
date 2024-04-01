@@ -5,15 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema } from '@/schemas'
@@ -22,11 +14,7 @@ import { FormAlertProps } from '@/lib/types'
 import { useState } from 'react'
 import { PulseLoader } from 'react-spinners'
 
-export const QuestionForm = ({
-  communityName,
-}: {
-  communityName: string | undefined
-}) => {
+export const QuestionForm = ({ communityName }: { communityName: string | undefined }) => {
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
   const form = useForm<z.infer<typeof CreatePostSchema>>({
@@ -76,20 +64,13 @@ export const QuestionForm = ({
                 <FormControl>
                   <Textarea {...field} disabled={isPending} />
                 </FormControl>
-                <FormDescription>
-                  Include all the information someone would need to answer your
-                  question
-                </FormDescription>
+                <FormDescription>Include all the information someone would need to answer your question</FormDescription>
               </FormItem>
             )}
           />
         </div>
         <FormAlert alert={alert} />
-        <Button
-          type="submit"
-          disabled={isPending || !form.formState.isValid}
-          className="w-full"
-        >
+        <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full">
           {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
         </Button>
       </form>
@@ -143,17 +124,11 @@ export const AnswerForm = ({
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
-              <FormDescription>
-                Your answer helps others learn about this topic
-              </FormDescription>
+              <FormDescription>Your answer helps others learn about this topic</FormDescription>
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={!form.formState.isValid}
-          className="w-full"
-        >
+        <Button type="submit" disabled={!form.formState.isValid} className="w-full">
           Create Answer
         </Button>
       </form>

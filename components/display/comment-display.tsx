@@ -6,29 +6,24 @@ import { CommentForm } from '@/components/form/comment-form'
 import { createComment } from '@/actions/comment/create-comment'
 import { CreateCommentSchema } from '@/schemas'
 import { z } from 'zod'
-import {
-  CommentCard,
-  NestedCommentCard,
-  optimisticComment,
-  optimisticNestedComment,
-} from '@/components/card/comment-card'
+import { CommentCard, NestedCommentCard, optimisticComment, optimisticNestedComment } from '@/components/card/comment-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { BeatLoader } from 'react-spinners'
+import { COMMENT_KEY } from '@/lib/constants'
 
 export const CommentDisplay = ({ postId }: { postId: string }) => {
   const user = useCurrentUser()
   const queryClient = useQueryClient()
   const { data, fetchStatus } = useQuery({
-    queryKey: ['comments', postId],
+    queryKey: [COMMENT_KEY, postId],
     queryFn: () => fetchComments(postId),
   })
 
   const { isPending, mutate, variables } = useMutation({
-    mutationFn: (data: z.infer<typeof CreateCommentSchema>) =>
-      createComment(data),
+    mutationFn: (data: z.infer<typeof CreateCommentSchema>) => createComment(data),
     onSettled: async () => {
       return await queryClient.invalidateQueries({
-        queryKey: ['comments', postId],
+        queryKey: [COMMENT_KEY, postId],
       })
     },
   })
@@ -45,12 +40,7 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
         mutate={mutate}
       />
       <div className=" max-h-[400px] overflow-x-auto px-3">
-        {variables?.postId && isPending && (
-          <CommentCard
-            comment={optimisticComment(variables, user)}
-            mutate={mutate}
-          />
-        )}
+        {variables?.postId && isPending && <CommentCard comment={optimisticComment(variables, user)} mutate={mutate} />}
         {data?.map((comment) => (
           <div key={comment.id}>
             <CommentCard comment={comment} mutate={mutate} />
@@ -60,15 +50,11 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
                   parentId={comment.id}
                   comment={optimisticNestedComment(variables, user)}
                   mutate={mutate}
+                  postId={postId}
                 />
               )}
               {comment.children.map((nestedComment) => (
-                <NestedCommentCard
-                  parentId={comment.id}
-                  key={nestedComment.id}
-                  comment={nestedComment}
-                  mutate={mutate}
-                />
+                <NestedCommentCard parentId={comment.id} key={nestedComment.id} comment={nestedComment} mutate={mutate} postId={postId} />
               ))}
             </div>
           </div>

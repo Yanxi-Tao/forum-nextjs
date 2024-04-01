@@ -196,3 +196,16 @@ export const getAnsewrs = async ({
     return []
   }
 }
+
+export const deletePostById = async (id: string) => {
+  try {
+    await db.post.delete({
+      where: {
+        id,
+      },
+    })
+    return true
+  } catch {
+    return false
+  }
+}

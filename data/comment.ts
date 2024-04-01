@@ -23,3 +23,12 @@ export const getAllComments = async (postId: string) => {
     return []
   }
 }
+
+export const deleteCommentById = async (id: string) => {
+  try {
+    await db.comment.delete({ where: { id } })
+    return true
+  } catch {
+    return false
+  }
+}

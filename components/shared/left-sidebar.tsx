@@ -15,23 +15,17 @@ export const LeftSidebar = () => {
           <p className="text-3xl">IBZN</p>
         </Link>
         {sidebarNavs.map((nav, index) => {
-          const isActive =
-            (pathname.startsWith(nav.route) && nav.route.length > 1) ||
-            pathname === nav.route
+          const isActive = (pathname.startsWith(nav.route) && nav.route.length > 1) || pathname === nav.route
           return (
             <Button
               key={index}
               variant="ghost"
               className={`flex justify-start p-6 ${
-                isActive &&
-                'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground'
+                isActive && 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground'
               }`}
               asChild
             >
-              <Link
-                href={nav.route}
-                className="relative flex items-center justify-start gap-x-4"
-              >
+              <Link href={nav.route} className="relative flex items-center justify-start gap-x-4">
                 {<nav.icon size={24} />}
                 <p>{nav.label}</p>
               </Link>

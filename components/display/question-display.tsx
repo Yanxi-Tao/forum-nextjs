@@ -1,20 +1,20 @@
 'use client'
 
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import {
-  BiSolidDownvote,
-  BiUpvote,
-  BiSolidUpvote,
-  BiDownvote,
-} from 'react-icons/bi'
+import { BiSolidDownvote, BiUpvote, BiSolidUpvote, BiDownvote } from 'react-icons/bi'
+import { HiDotsHorizontal } from 'react-icons/hi'
+import { HiFlag } from 'react-icons/hi2'
+import { FiEdit } from 'react-icons/fi'
+import { MdDelete } from 'react-icons/md'
 import { BsChatSquare, BsBookmark, BsBookmarkFill } from 'react-icons/bs'
 import { formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -33,27 +33,18 @@ import { useMutateAnswer } from '@/hooks/post/useMutateAnswer'
 import { BeatLoader } from 'react-spinners'
 import { Separator } from '../ui/separator'
 import { AvatarCard } from '../card/avatar-card'
+import { deletePost } from '@/actions/post/delete-post'
 
-export default function QuestionDisplay({
-  id,
-  title,
-  content,
-  author,
-  community,
-  updatedAt,
-  _count,
-  votes,
-}: QuestionDisplayProps) {
+export default function QuestionDisplay({ id, title, content, author, community, updatedAt, _count, votes }: QuestionDisplayProps) {
   const user = useCurrentUser()
   const { ref, inView } = useInView()
 
   const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useInfiniteAnswers({
-      parentId: id,
-      offset: 0,
-      take: ANSWERS_FETCH_SPAN,
-    })
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfiniteAnswers({
+    parentId: id,
+    offset: 0,
+    take: ANSWERS_FETCH_SPAN,
+  })
 
   const [vote, setVote] = useState(0)
   const [bookmark, setBookmark] = useState(false)
@@ -95,10 +86,31 @@ export default function QuestionDisplay({
                 <span>{author.name}</span>
               </Link>
             </div>
-            <div>
-              <span className="text-xs">
-                {new Date(updatedAt).toDateString()}
-              </span>
+            <div className="flex items-center space-x-3">
+              <span className="text-xs">{new Date(updatedAt).toDateString()}</span>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <HiDotsHorizontal size={20} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <HiFlag size={16} className="mr-2" />
+                    Reprot
+                  </DropdownMenuItem>
+                  {user?.id === author.id && (
+                    <>
+                      <DropdownMenuItem>
+                        <FiEdit size={16} className="mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => deletePost(id)}>
+                        <MdDelete size={16} className="mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           <CardTitle className=" leading-normal">{title}</CardTitle>
@@ -108,25 +120,15 @@ export default function QuestionDisplay({
           <div className="flex items-center space-x-4">
             <ToggleGroup
               type="single"
-              onValueChange={(value) =>
-                setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)
-              }
+              onValueChange={(value) => setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)}
               className=" bg-muted/50 rounded-lg"
             >
               <ToggleGroupItem value="up" className="space-x-4" size="sm">
-                {vote === 1 ? (
-                  <BiSolidUpvote size={16} />
-                ) : (
-                  <BiUpvote size={16} />
-                )}
+                {vote === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
                 <span className="mx-1">{formatNumber(votes + vote)}</span>
               </ToggleGroupItem>
               <ToggleGroupItem value="down" size="sm">
-                {vote === -1 ? (
-                  <BiSolidDownvote size={16} />
-                ) : (
-                  <BiDownvote size={16} />
-                )}
+                {vote === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
               </ToggleGroupItem>
             </ToggleGroup>
             <Button variant="ghost" size="sm">
@@ -134,18 +136,11 @@ export default function QuestionDisplay({
               <span className="ml-2">{formatNumber(_count.children)}</span>
             </Button>
             <Toggle size="sm" onPressedChange={setBookmark}>
-              {bookmark ? (
-                <BsBookmarkFill size={16} />
-              ) : (
-                <BsBookmark size={16} />
-              )}
+              {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
               <span className="ml-2">Bookmark</span>
             </Toggle>
           </div>
-          <Button
-            variant="secondary"
-            onClick={() => setIsFormOpen(!isFormOpen)}
-          >
+          <Button variant="secondary" onClick={() => setIsFormOpen(!isFormOpen)}>
             {isFormOpen ? 'Close' : 'Answer'}
           </Button>
         </CardFooter>
@@ -161,11 +156,7 @@ export default function QuestionDisplay({
         />
       )}
       <Separator className="my-6" />
-      {isPending && (
-        <PostCard
-          {...optimisticAnswer(user, variables.title, variables.content)}
-        />
-      )}
+      {isPending && <PostCard {...optimisticAnswer(user, variables.title, variables.content)} />}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
@@ -185,9 +176,7 @@ export default function QuestionDisplay({
           <BeatLoader className="h-10" />
         </div>
       )}
-      {!hasNextPage && (
-        <div className="text-center h-10 my-4">End of posts</div>
-      )}
+      {!hasNextPage && <div className="text-center h-10 my-4">End of posts</div>}
     </div>
   )
 }

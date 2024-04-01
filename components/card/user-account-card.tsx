@@ -27,10 +27,7 @@ export const UserAccountCard = () => {
       {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="py-8 gap-x-3 focus-visible:ring-0 focus-visible:ring-offset-0"
-            >
+            <Button variant="ghost" className="py-8 gap-x-3 focus-visible:ring-0 focus-visible:ring-offset-0">
               {user.image ? (
                 <Avatar>
                   <AvatarImage src={user.image} alt="profile pic" />
@@ -46,18 +43,12 @@ export const UserAccountCard = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem
-              className="justify-start gap-x-3 p-3"
-              onClick={() => router.push('/settings')}
-            >
+            <DropdownMenuItem className="justify-start gap-x-3 p-3" onClick={() => router.push('/settings')}>
               <Settings size={20} />
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="justify-start gap-x-3 p-3"
-              onClick={() => signOut()}
-            >
+            <DropdownMenuItem className="justify-start gap-x-3 p-3" onClick={() => signOut()}>
               <LogOut size={20} />
               Logout
             </DropdownMenuItem>
@@ -65,11 +56,7 @@ export const UserAccountCard = () => {
         </DropdownMenu>
       ) : (
         <div>
-          <Button
-            variant="ghost"
-            className="relative flex justify-start gap-x-4 p-6 w-full"
-            onClick={() => router.push('/auth/login')}
-          >
+          <Button variant="ghost" className="relative flex justify-start gap-x-4 p-6 w-full" onClick={() => router.push('/auth/login')}>
             <LogIn size={20} />
             <p>Login</p>
           </Button>

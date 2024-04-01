@@ -39,10 +39,7 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
     }
 
     const verificationToken = await generateVerificationToken(data.email)
-    await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token
-    )
+    await sendVerificationEmail(verificationToken.email, verificationToken.token)
 
     return { type: 'success', message: 'Verification email sent' }
   }
@@ -50,10 +47,7 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
   // if password is updated, check if match database password
   // if match, hash the new password
   if (data.oldPassword && data.newPassword && dbUser.password) {
-    const passwordMatch = await bcrypt.compare(
-      data.oldPassword,
-      dbUser.password
-    )
+    const passwordMatch = await bcrypt.compare(data.oldPassword, dbUser.password)
 
     if (!passwordMatch) {
       return { type: 'error', message: 'Password Incorrect' }
