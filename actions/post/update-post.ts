@@ -2,7 +2,7 @@
 
 import { db } from '@/db/client'
 
-export const updatePostVoteById = async (postId: string, userId: string, voteStatus: number) => {
+export const updatePostVoteById = async (postId: string, userId: string, voteStatus: 0 | 1 | -1) => {
   try {
     await db.post.update({
       where: {
@@ -16,19 +16,11 @@ export const updatePostVoteById = async (postId: string, userId: string, voteSta
                   id: userId,
                 },
               }
-            : voteStatus === 0
-            ? {
+            : {
                 disconnect: {
                   id: userId,
                 },
-              }
-            : voteStatus === -1
-            ? {
-                disconnect: {
-                  id: userId,
-                },
-              }
-            : undefined,
+              },
 
         downVotes:
           voteStatus === -1
@@ -37,19 +29,11 @@ export const updatePostVoteById = async (postId: string, userId: string, voteSta
                   id: userId,
                 },
               }
-            : voteStatus === 0
-            ? {
+            : {
                 disconnect: {
                   id: userId,
                 },
-              }
-            : voteStatus === 1
-            ? {
-                disconnect: {
-                  id: userId,
-                },
-              }
-            : undefined,
+              },
       },
     })
     return true

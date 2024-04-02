@@ -9,16 +9,10 @@ import { createUser, getUserByEmail, getUserBySlug } from '@/data/user'
 import { signIn } from '@/auth'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { AuthError } from 'next-auth'
-import {
-  deleteVerificationCodeById,
-  getVerificationCodeByEmail,
-} from '@/data/verification-code'
+import { deleteVerificationCodeById, getVerificationCodeByEmail } from '@/data/verification-code'
 import { slugify } from '@/lib/slug'
 
-export const register = async (
-  data: z.infer<typeof RegisterSchema>,
-  submitType: 'register' | 'token'
-) => {
+export const register = async (data: z.infer<typeof RegisterSchema>, submitType: 'register' | 'token') => {
   const validatedData = RegisterSchema.safeParse(data)
 
   if (!validatedData.success) {
@@ -36,12 +30,13 @@ export const register = async (
   // Send verification token email if sumbitType is token
   const isUserVerified = await getVerificationCodeByEmail(email)
   if (submitType === 'token') {
-    const verificationCode = await generateVerificationCode(email)
+    let verificationCode = await generateVerificationCode(email)
 
-    await sendVerificationCodeEmail(
-      verificationCode.email,
-      verificationCode.code
-    )
+    while (verificationCode.code.length !== 6) {
+      verificationCode = await generateVerificationCode(email)
+    }
+
+    await sendVerificationCodeEmail(verificationCode.email, verificationCode.code)
     return { type: 'success', message: 'Verification code sent' }
   }
 

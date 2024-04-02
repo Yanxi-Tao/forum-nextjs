@@ -2,7 +2,7 @@
 
 import { db } from '@/db/client'
 
-export const updateCommentVoteById = async (commentId: string, userId: string, voteStatus: number) => {
+export const updateCommentVoteById = async (commentId: string, userId: string, voteStatus: 1 | 0 | -1) => {
   try {
     await db.comment.update({
       where: {
@@ -16,13 +16,11 @@ export const updateCommentVoteById = async (commentId: string, userId: string, v
                   id: userId,
                 },
               }
-            : voteStatus === 0
-            ? {
+            : {
                 disconnect: {
                   id: userId,
                 },
-              }
-            : undefined,
+              },
       },
     })
     return true
