@@ -15,22 +15,27 @@ datasource db {
 }
 
 model User {
-  id              String      @id @default(cuid())
-  name            String
-  email           String      @unique
-  slug            String?     @unique
-  emailVerified   DateTime?
-  image           String?
-  password        String?
-  accounts        Account[]
-  profile         Profile?
-  posts           Post[]      @relation("PostToAuthor")
-  communities     Community[]
-  comments        Comment[]   @relation("CommentToAuthor")
-  commentsReplies Comment[]   @relation("ReplyToComment")
-  upVotedPost     Post[]      @relation("PostToUserUpVoted")
-  upVotedComment  Comment[]   @relation("CommentToUserUpVoted")
-  downVotedPost   Post[]      @relation("PostToUserDownVoted")
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  slug          String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  accounts      Account[]
+
+  profile Profile?
+
+  posts         Post[] @relation("PostToAuthor")
+  upVotedPost   Post[] @relation("PostToUserUpVoted")
+  downVotedPost Post[] @relation("PostToUserDownVoted")
+
+  subscribedCommunities Community[] @relation("UserToCommunity")
+  ownedCommunities      Community[] @relation("OwnerToCommunity")
+
+  comments        Comment[] @relation("CommentToAuthor")
+  commentsReplies Comment[] @relation("ReplyToComment")
+  upVotedComment  Comment[] @relation("CommentToUserUpVoted")
 }
 
 // account model for provider login
@@ -139,11 +144,14 @@ model Profile {
 }
 
 model Community {
-  id          String @id @default(cuid())
-  name        String @unique
+  id          String  @id @default(cuid())
+  name        String  @unique
+  owner       User    @relation("OwnerToCommunity", fields: [ownerId], references: [id])
+  ownerId     String
   description String
+  isPublic    Boolean
   posts       Post[]
-  members     User[]
+  members     User[]  @relation("UserToCommunity")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

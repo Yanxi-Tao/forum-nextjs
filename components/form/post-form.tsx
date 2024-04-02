@@ -12,7 +12,7 @@ import { CreatePostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
 import { FormAlertProps } from '@/lib/types'
 import { useState } from 'react'
-import { PulseLoader } from 'react-spinners'
+import PulseLoader from 'react-spinners/PulseLoader'
 
 export const QuestionForm = ({ communityName }: { communityName: string | undefined }) => {
   const [alert, setAlert] = useState<FormAlertProps>(null)

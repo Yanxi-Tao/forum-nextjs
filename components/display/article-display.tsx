@@ -24,10 +24,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { QuestionDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { AvatarCard } from '../card/avatar-card'
+import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
-import { CommentDisplay } from './comment-display'
+import { CommentDisplay } from '@/components/display/comment-display'
 
 export default function ArticleDisplay({
   id,

@@ -1,5 +1,5 @@
 import { PostCardProps } from '@/lib/types'
-import { PostCardWrapper } from './post-card-wrapper'
+import { PostCardWrapper } from '@/components/card/post-card-wrapper'
 import { ExtendedUser } from '@/auth'
 import { PostType } from '@prisma/client'
 

@@ -1,5 +1,5 @@
 import { CommentCardProps, NestedCommentCardProps } from '@/lib/types'
-import { CommentCardWrapper, NestedCommentCardWrapper } from './comment-card-wrapper'
+import { CommentCardWrapper, NestedCommentCardWrapper } from '@/components/card/comment-card-wrapper'
 import { CreateCommentSchema } from '@/schemas'
 import { z } from 'zod'
 import { ExtendedUser } from '@/auth'

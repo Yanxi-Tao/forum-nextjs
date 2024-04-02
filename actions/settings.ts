@@ -4,7 +4,7 @@ import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 
 import { SettingsSchema } from '@/schemas'
-import { getUserByEmail, getUserByID } from '@/data/user'
+import { getUserByEmail, getUserByID, getUserBySlug } from '@/data/user'
 import { currentUser } from '@/lib/auth'
 import { db } from '@/db/client'
 import { generateVerificationToken } from '@/lib/tokens'
@@ -22,6 +22,11 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
 
   if (!dbUser) {
     return { type: 'error', message: 'User not found' }
+  }
+
+  const validatedData = SettingsSchema.safeParse(data)
+  if (!validatedData.success) {
+    return { type: 'error', message: 'Invalid data' }
   }
 
   if (user.isOAuth) {
@@ -62,17 +67,23 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
   // if name is updated, slugify the name
   if (data.name && data.name !== user.name) {
     slug = slugify(data.name)
+    while (await getUserBySlug(slug)) {
+      slug = slugify(data.name)
+    }
   }
 
-  await db.user.update({
-    where: { id: user.id },
-    data: {
-      name: data.name,
-      email: data.email,
-      password: data.newPassword,
-      slug,
-    },
-  })
-
-  return { type: 'success', message: 'Settings updated' }
+  try {
+    await db.user.update({
+      where: { id: user.id },
+      data: {
+        name: data.name,
+        email: data.email,
+        password: data.newPassword,
+        slug,
+      },
+    })
+    return { type: 'success', message: 'Settings updated' }
+  } catch {
+    return { type: 'error', message: 'Failed to update settings' }
+  }
 }

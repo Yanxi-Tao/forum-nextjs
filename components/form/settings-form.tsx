@@ -3,33 +3,18 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 
 import { SettingsSchema } from '@/schemas'
 import { settings } from '@/actions/settings'
 
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { FormAlert } from './form-alert'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { FormAlert } from '@/components/form/form-alert'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { FormAlertProps } from '@/lib/types'
 
@@ -37,7 +22,7 @@ export const SettingsForm = () => {
   const user = useCurrentUser()
 
   const { update } = useSession()
-  const [isPending, startTransition] = useTransition()
+  const [isPending, setIsPending] = useState(false)
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<z.infer<typeof SettingsSchema>>({
@@ -50,23 +35,15 @@ export const SettingsForm = () => {
     },
   })
 
-  const onSubmit = (data: z.infer<typeof SettingsSchema>) => {
-    setAlert({ type: '', message: '' })
-    startTransition(() => {
-      settings(data)
-        .then((data) => {
-          setAlert(data)
-          if (data.type === 'success') {
-            update()
-          }
-        })
-        .catch(() => {
-          setAlert({
-            type: 'error',
-            message: 'An error occurred. Please try again.',
-          })
-        })
-    })
+  const onSubmit = async (data: z.infer<typeof SettingsSchema>) => {
+    setAlert(null)
+    setIsPending(true)
+    const state = await settings(data)
+    setIsPending(false)
+    setAlert(state)
+    if (state.type === 'success') {
+      update()
+    }
   }
   return (
     <Card className="border-0 shadow-none">
@@ -85,11 +62,7 @@ export const SettingsForm = () => {
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="IBZN"
-                          disabled={isPending}
-                        />
+                        <Input {...field} placeholder="IBZN" disabled={isPending} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -102,11 +75,7 @@ export const SettingsForm = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="ibzn@example.com"
-                          disabled={user.isOAuth || isPending}
-                        />
+                        <Input {...field} placeholder="ibzn@example.com" disabled={user.isOAuth || isPending} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -121,12 +90,7 @@ export const SettingsForm = () => {
                         <FormItem>
                           <FormLabel>Old Password</FormLabel>
                           <FormControl>
-                            <Input
-                              {...field}
-                              type="password"
-                              placeholder="123456"
-                              disabled={isPending}
-                            />
+                            <Input {...field} type="password" placeholder="123456" disabled={isPending} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -139,12 +103,7 @@ export const SettingsForm = () => {
                         <FormItem>
                           <FormLabel>New Password</FormLabel>
                           <FormControl>
-                            <Input
-                              {...field}
-                              type="password"
-                              placeholder="123456"
-                              disabled={isPending}
-                            />
+                            <Input {...field} type="password" placeholder="123456" disabled={isPending} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -155,12 +114,7 @@ export const SettingsForm = () => {
               </div>
               <FormAlert alert={alert} />
               <div className="flex gap-x-3">
-                <Button
-                  type="reset"
-                  className="w-full"
-                  disabled={isPending}
-                  onClick={() => form.reset()}
-                >
+                <Button type="reset" className="w-full" disabled={isPending} onClick={() => form.reset()}>
                   Reset Settings
                 </Button>
                 <Button type="submit" className="w-full" disabled={isPending}>

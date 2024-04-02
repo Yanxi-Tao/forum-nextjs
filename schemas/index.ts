@@ -84,3 +84,9 @@ export const CreateCommentSchema = z.object({
   repliesToName: z.optional(z.string()),
   repliesToSlug: z.optional(z.string()),
 })
+
+export const CreateCommunitySchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  description: z.string().min(1, { message: 'Description is required' }),
+  isPublic: z.boolean(),
+})
