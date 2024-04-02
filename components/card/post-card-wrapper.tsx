@@ -30,6 +30,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { deletePost } from '@/actions/post/delete-post'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
+import { useUpdateVote } from '@/hooks/useUpdateVote'
 
 export const PostCardWrapper = ({
   id,
@@ -39,26 +40,35 @@ export const PostCardWrapper = ({
   author,
   community,
   updatedAt,
-  votes,
+  upVotes,
+  downVotes,
   _count,
   comments,
 }: PostCardProps & { children: React.ReactNode }) => {
+  const updateVote = useUpdateVote('post')
   const queryClient = useQueryClient()
   const queryKey = type === 'question' ? EXPLORE_POSTS_KEY : QUESTION_ANSWERS_KEY
   const { mutate } = useMutation({
     mutationFn: deletePost,
     onSettled: async () => await queryClient.invalidateQueries({ queryKey: [queryKey] }),
   })
-  const [vote, setVote] = useState(0)
-  const [bookmark, setBookmark] = useState(false)
+
   const user = useCurrentUser()
+  const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
+  const baseCount = upVotes.length - downVotes.length - userVoteStatus
+  const [voteStatus, setVoteStatus] = useState(userVoteStatus)
+  const [bookmark, setBookmark] = useState(false)
+
+  if (!user || !user.name || !user.email || !user.id) {
+    return null
+  }
 
   const commentCount = comments.length > 0 ? comments.reduce((acc, comment) => acc + comment._count.children, 0) + comments.length : 0
 
   return (
     <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 py-1 pt-2">
       <CardHeader className="py-0 space-y-0.5">
-        <CardDescription className="flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-2">
             <Link href={`/profile/${author.slug}`}>
               <AvatarCard source={author.image} name={author.name} />
@@ -94,7 +104,7 @@ export const PostCardWrapper = ({
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-        </CardDescription>
+        </div>
         {(type === 'question' || type === 'article') && (
           <Link href={`/${type}/${id}`}>
             <CardTitle className="text-base">{title}</CardTitle>
@@ -112,15 +122,19 @@ export const PostCardWrapper = ({
         <CardFooter className="py-0 space-x-4">
           <ToggleGroup
             type="single"
-            onValueChange={(value) => setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)}
+            onValueChange={(value) => {
+              const voteValue = value === 'up' ? 1 : value === 'down' ? -1 : 0
+              setVoteStatus(voteValue)
+              updateVote(id, user.id as string, voteValue)
+            }}
             className=" bg-muted/50 rounded-lg"
           >
             <ToggleGroupItem value="up" className="space-x-4" size="sm">
-              {vote === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
-              <span className="mx-1">{formatNumber(votes + vote)}</span>
+              {voteStatus === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
+              <span className="mx-1">{formatNumber(baseCount + voteStatus)}</span>
             </ToggleGroupItem>
             <ToggleGroupItem value="down" size="sm">
-              {vote === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
+              {voteStatus === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
             </ToggleGroupItem>
           </ToggleGroup>
           {type === 'question' || type === 'article' ? (

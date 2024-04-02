@@ -30,6 +30,8 @@ export const getDefaultQuestionsOrArticles = async ({
             children: true,
           },
         },
+        upVotes: true,
+        downVotes: true,
         author: true,
         community: true,
         comments: {
@@ -111,6 +113,8 @@ export const getSearchedQuestionsOrArticles = async ({
             children: true,
           },
         },
+        upVotes: true,
+        downVotes: true,
         author: true,
         community: true,
         comments: {
@@ -142,6 +146,8 @@ export const getPostById = async (id: string) => {
             children: true,
           },
         },
+        upVotes: true,
+        downVotes: true,
         author: true,
         community: true,
       },
@@ -152,15 +158,7 @@ export const getPostById = async (id: string) => {
   }
 }
 
-export const getAnsewrs = async ({
-  parentId,
-  offset,
-  take,
-}: {
-  parentId: string
-  offset: number
-  take: number
-}) => {
+export const getAnsewrs = async ({ parentId, offset, take }: { parentId: string; offset: number; take: number }) => {
   try {
     const answers = await db.post.findMany({
       where: {
@@ -173,6 +171,8 @@ export const getAnsewrs = async ({
         createdAt: 'desc',
       },
       include: {
+        upVotes: true,
+        downVotes: true,
         community: true,
         author: true,
         comments: {

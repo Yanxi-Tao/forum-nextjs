@@ -29,6 +29,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { deleteComment } from '@/actions/comment/delete-comment'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { COMMENT_KEY } from '@/lib/constants'
+import { useUpdateVote } from '@/hooks/useUpdateVote'
 
 export const CommentCardWrapper = ({
   children,
@@ -39,14 +40,23 @@ export const CommentCardWrapper = ({
   comment: CommentCardProps
   mutate: (data: z.infer<typeof CreateCommentSchema>) => void
 }) => {
+  const updateVote = useUpdateVote('comment')
   const queryClient = useQueryClient()
-  const [vote, setVote] = useState(0)
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const user = useCurrentUser()
   const { mutate: deleteCurrentComment } = useMutation({
     mutationFn: deleteComment,
     onSettled: async () => await queryClient.invalidateQueries({ queryKey: [COMMENT_KEY, comment.postId] }),
   })
+
+  const user = useCurrentUser()
+
+  const userVoteStatus = comment.upVotes.find((vote) => vote.id === user?.id) ? 1 : 0
+  const baseCount = comment.upVotes.length - userVoteStatus
+  const [voteStatus, setVoteStatus] = useState(userVoteStatus)
+
+  if (!user || !user.name || !user.email || !user.id) {
+    return null
+  }
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
@@ -100,9 +110,16 @@ export const CommentCardWrapper = ({
                 <BsChatSquare size={14} />
                 <span>Reply</span>
               </Toggle>
-              <Toggle className="h-7 p-2 space-x-2" onPressedChange={(value) => setVote(value ? 1 : 0)}>
-                {vote ? <BsHeartFill size={14} /> : <BsHeart size={14} />}
-                <span>{formatNumber(comment.votes + vote)}</span>
+              <Toggle
+                className="h-7 p-2 space-x-2"
+                onPressedChange={(value) => {
+                  const voteValue = value ? 1 : 0
+                  setVoteStatus(voteValue)
+                  updateVote(comment.id, user.id as string, voteValue)
+                }}
+              >
+                {voteStatus ? <BsHeartFill size={14} /> : <BsHeart size={14} />}
+                <span>{formatNumber(baseCount + voteStatus)}</span>
               </Toggle>
             </div>
           </CardFooter>
@@ -135,14 +152,23 @@ export const NestedCommentCardWrapper = ({
   comment: NestedCommentCardProps
   mutate: (data: z.infer<typeof CreateCommentSchema>) => void
 }) => {
+  const updateVote = useUpdateVote('comment')
   const queryClient = useQueryClient()
-  const [vote, setVote] = useState(0)
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const user = useCurrentUser()
   const { mutate: deleteCurrentComment } = useMutation({
     mutationFn: deleteComment,
     onSettled: async () => await queryClient.invalidateQueries({ queryKey: [COMMENT_KEY, postId] }),
   })
+
+  const user = useCurrentUser()
+
+  const userVoteStatus = comment.upVotes.find((vote) => vote.id === user?.id) ? 1 : 0
+  const baseCount = comment.upVotes.length - userVoteStatus
+  const [voteStatus, setVoteStatus] = useState(userVoteStatus)
+
+  if (!user || !user.name || !user.email || !user.id) {
+    return null
+  }
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
@@ -196,9 +222,16 @@ export const NestedCommentCardWrapper = ({
                 <BsChatSquare size={14} />
                 <span>Reply</span>
               </Toggle>
-              <Toggle className="h-7 p-2 space-x-2" onPressedChange={(value) => setVote(value ? 1 : 0)}>
-                {vote ? <BsHeartFill size={14} /> : <BsHeart size={14} />}
-                <span>{formatNumber(comment.votes + vote)}</span>
+              <Toggle
+                className="h-7 p-2 space-x-2"
+                onPressedChange={(value) => {
+                  const voteValue = value ? 1 : 0
+                  setVoteStatus(voteValue)
+                  updateVote(comment.id, user.id as string, voteValue)
+                }}
+              >
+                {voteStatus ? <BsHeartFill size={14} /> : <BsHeart size={14} />}
+                <span>{formatNumber(baseCount + voteStatus)}</span>
               </Toggle>
             </div>
           </CardFooter>

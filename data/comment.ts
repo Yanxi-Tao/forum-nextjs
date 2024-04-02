@@ -5,10 +5,12 @@ export const getAllComments = async (postId: string) => {
     const comments = await db.comment.findMany({
       where: { postId },
       include: {
+        upVotes: true,
         author: true,
         repliesTo: true,
         children: {
           include: {
+            upVotes: true,
             author: true,
             repliesTo: true,
           },

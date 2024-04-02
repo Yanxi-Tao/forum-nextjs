@@ -24,10 +24,13 @@ model User {
   password        String?
   accounts        Account[]
   profile         Profile?
-  posts           Post[]
+  posts           Post[]      @relation("PostToAuthor")
   communities     Community[]
   comments        Comment[]   @relation("CommentToAuthor")
   commentsReplies Comment[]   @relation("ReplyToComment")
+  upVotedPost     Post[]      @relation("PostToUserUpVoted")
+  upVotedComment  Comment[]   @relation("CommentToUserUpVoted")
+  downVotedPost   Post[]      @relation("PostToUserDownVoted")
 }
 
 // account model for provider login
@@ -83,11 +86,12 @@ model Post {
   title     String
   content   String
   type      PostType
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation("PostToAuthor", fields: [authorId], references: [id])
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  votes     Int      @default(0)
+  upVotes   User[]   @relation("PostToUserUpVoted")
+  downVotes User[]   @relation("PostToUserDownVoted")
   views     Int      @default(0)
   bookmarks Int      @default(0)
 
@@ -111,7 +115,7 @@ model Comment {
   authorId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  votes     Int      @default(0)
+  upVotes   User[]   @relation("CommentToUserUpVoted")
 
   post   Post?   @relation(fields: [postId], references: [id])
   postId String?

@@ -34,9 +34,21 @@ import { BeatLoader } from 'react-spinners'
 import { Separator } from '../ui/separator'
 import { AvatarCard } from '../card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
+import { useUpdateVote } from '@/hooks/useUpdateVote'
 
-export default function QuestionDisplay({ id, title, content, author, community, updatedAt, _count, votes }: QuestionDisplayProps) {
+export default function QuestionDisplay({
+  id,
+  title,
+  content,
+  author,
+  community,
+  updatedAt,
+  _count,
+  upVotes,
+  downVotes,
+}: QuestionDisplayProps) {
   const user = useCurrentUser()
+  const updateVote = useUpdateVote('post')
   const { ref, inView } = useInView()
 
   const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
@@ -46,7 +58,9 @@ export default function QuestionDisplay({ id, title, content, author, community,
     take: ANSWERS_FETCH_SPAN,
   })
 
-  const [vote, setVote] = useState(0)
+  const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
+  const baseCount = upVotes.length - downVotes.length - userVoteStatus
+  const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmark, setBookmark] = useState(false)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
@@ -56,7 +70,7 @@ export default function QuestionDisplay({ id, title, content, author, community,
     }
   }, [inView, fetchNextPage, hasNextPage])
 
-  if (!user || !user.name || !user.email) {
+  if (!user || !user.name || !user.email || !user.id) {
     return null
   }
 
@@ -120,15 +134,19 @@ export default function QuestionDisplay({ id, title, content, author, community,
           <div className="flex items-center space-x-4">
             <ToggleGroup
               type="single"
-              onValueChange={(value) => setVote(value === 'up' ? 1 : value === 'down' ? -1 : 0)}
+              onValueChange={(value) => {
+                const voteValue = value === 'up' ? 1 : value === 'down' ? -1 : 0
+                setVoteStatus(voteValue)
+                updateVote(id, user.id as string, voteValue)
+              }}
               className=" bg-muted/50 rounded-lg"
             >
               <ToggleGroupItem value="up" className="space-x-4" size="sm">
-                {vote === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
-                <span className="mx-1">{formatNumber(votes + vote)}</span>
+                {voteStatus === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
+                <span className="mx-1">{formatNumber(baseCount + voteStatus)}</span>
               </ToggleGroupItem>
               <ToggleGroupItem value="down" size="sm">
-                {vote === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
+                {voteStatus === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
               </ToggleGroupItem>
             </ToggleGroup>
             <Button variant="ghost" size="sm">
