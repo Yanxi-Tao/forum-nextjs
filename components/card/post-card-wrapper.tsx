@@ -31,6 +31,7 @@ import { deletePost } from '@/actions/post/delete-post'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
+import { PostType } from '@prisma/client'
 
 export const PostCardWrapper = ({
   id,
@@ -49,7 +50,7 @@ export const PostCardWrapper = ({
   const queryClient = useQueryClient()
   const queryKey = type === 'question' ? EXPLORE_POSTS_KEY : QUESTION_ANSWERS_KEY
   const { mutate } = useMutation({
-    mutationFn: deletePost,
+    mutationFn: ({ id, type }: { id: string; type: PostType }) => deletePost(id, type),
     onSettled: async () => await queryClient.invalidateQueries({ queryKey: [queryKey] }),
   })
 
@@ -96,7 +97,7 @@ export const PostCardWrapper = ({
                     <FiEdit size={16} className="mr-2" />
                     Edit
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => mutate(id)}>
+                  <DropdownMenuItem onSelect={() => mutate({ id, type })}>
                     <MdDelete size={16} className="mr-2" />
                     Delete
                   </DropdownMenuItem>

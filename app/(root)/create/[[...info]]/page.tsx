@@ -1,4 +1,4 @@
-import { QuestionForm } from '@/components/form/post-form'
+import { ArticleForm, QuestionForm } from '@/components/form/post-form'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
@@ -28,7 +28,7 @@ export default function CreatePostPage({ params }: { params: { info: string[] } 
             <QuestionForm communityName={communityName} />
           </TabsContent>
           <TabsContent value="article" className="w-full">
-            article
+            <ArticleForm communityName={communityName} />
           </TabsContent>
           <TabsContent value="answer" className="w-full">
             answer

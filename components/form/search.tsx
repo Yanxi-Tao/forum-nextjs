@@ -1,14 +1,14 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
-import { useSearchParams, usePathname, useRouter } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
 export const Search = () => {
   const search = useSearchParams().get('search') || ''
 
   return (
-    <form className="flex items-center rounded-full border my-1">
+    <form className="flex items-center rounded-full border my-1" action="/">
       {/* todo: add filter badge */}
       <Input
         placeholder="Search"
@@ -19,12 +19,7 @@ export const Search = () => {
         onKeyUp={(e) => e.key === 'Enter' && e.currentTarget.blur()}
       />
       <div className="flex items-center justify-center rounded-r-full w-10 h-10 bg-background">
-        <Button
-          type="submit"
-          variant="ghost"
-          size="icon"
-          className="rounded-full"
-        >
+        <Button type="submit" variant="ghost" size="icon" className="rounded-full">
           <SearchIcon size={20} />
         </Button>
       </div>
