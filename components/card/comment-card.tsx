@@ -36,14 +36,14 @@ export const NestedCommentCard = ({
   )
 }
 
-export const optimisticComment = (comment: z.infer<typeof CreateCommentSchema>, user: ExtendedUser) => {
+export const optimisticComment = (comment: z.infer<typeof CreateCommentSchema>, user: ExtendedUser): CommentCardProps => {
   return {
     id: 'temp-comment-id',
     content: comment.content,
     authorId: user.id as string,
     createdAt: new Date(),
     updatedAt: new Date(),
-    votes: 0,
+    upVotes: [],
     postId: comment.postId as string,
     parentId: null,
     repliesToId: null,
@@ -61,14 +61,14 @@ export const optimisticComment = (comment: z.infer<typeof CreateCommentSchema>, 
   }
 }
 
-export const optimisticNestedComment = (comment: z.infer<typeof CreateCommentSchema>, user: ExtendedUser) => {
+export const optimisticNestedComment = (comment: z.infer<typeof CreateCommentSchema>, user: ExtendedUser): NestedCommentCardProps => {
   return {
     id: 'temp-nested-comment-id',
     content: comment.content,
     authorId: user.id as string,
     createdAt: new Date(),
     updatedAt: new Date(),
-    votes: 0,
+    upVotes: [],
     postId: null,
     parentId: comment.parentId as string,
     repliesToId: comment.repliesToId as string,
