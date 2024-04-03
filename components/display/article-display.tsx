@@ -66,7 +66,7 @@ export default function ArticleDisplay({
                     href={`/communities/${community.slug}`}
                     className="flex items-start space-x-2 text-primary underline-offset-4 hover:underline"
                   >
-                    <AvatarCard source={null} name={community.name} size="profile" />
+                    <AvatarCard source={null} name={community.name} className="w-7 h-7 text-sm" />
                     <span>{community.name}</span>
                   </Link>
                   <span>/</span>
@@ -76,7 +76,7 @@ export default function ArticleDisplay({
                 href={`/profile/${author.slug}`}
                 className="flex items-center space-x-2 text-primary underline-offset-4 hover:underline"
               >
-                <AvatarCard source={author.image} name={author.name} size="profile" />
+                <AvatarCard source={author.image} name={author.name} />
                 <span>{author.name}</span>
               </Link>
             </div>
