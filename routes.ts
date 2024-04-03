@@ -14,13 +14,7 @@ export const PRIVATE_ROUTES: string[] = ['/dashboard']
  * This array contains all the routes that are related to authentication
  * @type {string[]}
  */
-export const AUTH_ROUTES: string[] = [
-  '/auth/login',
-  '/auth/register',
-  '/auth/error',
-  '/auth/reset',
-  '/auth/reset-password',
-]
+export const AUTH_ROUTES: string[] = ['/auth/login', '/auth/register', '/auth/error', '/auth/reset', '/auth/reset-password']
 
 /**
  * This route stores the prefix to the API route for authentication

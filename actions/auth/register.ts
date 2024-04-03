@@ -63,13 +63,13 @@ export const register = async (data: z.infer<typeof RegisterSchema>, submitType:
   }
 
   // Create user
-  createUser(name, email, hashedPassword, new Date(), slug)
+  await createUser(name, email, hashedPassword, new Date(), slug)
 
   try {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: `/profile/${slug}`,
     })
   } catch (error) {
     if (error instanceof AuthError) {
