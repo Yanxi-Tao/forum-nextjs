@@ -1,5 +1,6 @@
 import { fetchPosts, fetchPostById } from '@/actions/post/fetch-post'
 import { fetchComments } from '@/actions/comment/fetch-comment'
+import { fetchCommunities } from '@/actions/community/fetch-community'
 
 // Display types
 export type QuestionDisplayProps = NonNullable<Awaited<ReturnType<typeof fetchPostById>>>
@@ -11,6 +12,8 @@ export type CommentCardProps = Omit<Awaited<ReturnType<typeof fetchComments>>[nu
 
 export type NestedCommentCardProps = Pick<Awaited<ReturnType<typeof fetchComments>>[number], 'children'>['children'][number]
 
+export type CommunityCardProps = Awaited<ReturnType<typeof fetchCommunities>>['communities'][number]
+
 // Tanstack query keys types
 export type FetchPostQueryKey = {
   search?: string
@@ -20,6 +23,12 @@ export type FetchPostQueryKey = {
 }
 export type FetchAnswerQueryKey = {
   parentId: string
+  offset: number
+  take: number
+}
+
+export type FetchCommunityQueryKey = {
+  search?: string
   offset: number
   take: number
 }

@@ -73,11 +73,11 @@ export const PostCardWrapper = ({
           <div className="flex items-center space-x-2">
             {(type === 'question' || type === 'article') && community ? (
               <Link href={`/communities/${community.slug}`}>
-                <AvatarCard source={community.image} name={community.name} size="profile" />
+                <AvatarCard source={community.image} name={community.name} className="w-7 h-7 text-sm" />
               </Link>
             ) : (
               <Link href={`/profile/${author.slug}`}>
-                <AvatarCard source={author.image} name={author.name} size="profile" />
+                <AvatarCard source={author.image} name={author.name} className="w-7 h-7 text-sm" />
               </Link>
             )}
             <Link

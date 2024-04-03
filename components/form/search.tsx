@@ -27,7 +27,10 @@ export const Search = () => {
             variant="ghost"
             size="sm"
             className="rounded-full mx-1 h-8 bg-primary/15"
-            onClick={() => router.push(`/?search=${search}`)}
+            onClick={() => {
+              router.push(`/?search=${search}`)
+              router.refresh()
+            }}
           >
             {communitySlug}
           </Button>
@@ -42,7 +45,6 @@ export const Search = () => {
         }`}
         autoComplete="off"
         name="search"
-        onKeyUp={(e) => e.key === 'Enter' && e.currentTarget.blur()}
       />
       <div className="flex items-center justify-center rounded-r-full w-10 h-10 bg-background">
         <Button type="submit" variant="ghost" size="icon" className="rounded-full">
