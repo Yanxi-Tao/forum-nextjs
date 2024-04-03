@@ -1,6 +1,6 @@
 'use server'
 
-import { getDefaultCommunities, getSearchedCommunities } from '@/data/community'
+import { getCommunitiesByUser, getDefaultCommunities, getSearchedCommunities } from '@/data/community'
 import { FetchCommunityQueryKey } from '@/lib/types'
 import { unstable_noStore } from 'next/cache'
 
@@ -26,4 +26,9 @@ export const fetchCommunities = async ({ search, offset, take }: FetchCommunityQ
       nextOffset: communities.length ? offset + communities.length : undefined,
     }
   }
+}
+
+export const fetchCommunitiesByUser = async (userId: string) => {
+  unstable_noStore()
+  return await getCommunitiesByUser(userId)
 }

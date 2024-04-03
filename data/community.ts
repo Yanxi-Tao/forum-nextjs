@@ -72,3 +72,29 @@ export const getCommunityBySlug = async (slug: string) => {
     return null
   }
 }
+
+export const getCommunitiesByUser = async (userId: string) => {
+  try {
+    const communities = await db.community.findMany({
+      where: {
+        OR: [
+          {
+            members: {
+              some: {
+                id: userId,
+              },
+            },
+          },
+          {
+            owner: {
+              id: userId,
+            },
+          },
+        ],
+      },
+    })
+    return communities
+  } catch {
+    return []
+  }
+}

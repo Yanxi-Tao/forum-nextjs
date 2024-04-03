@@ -6,18 +6,22 @@ import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
-import { fetchCommunities } from '@/actions/community/fetch-community'
+import { fetchCommunities, fetchCommunitiesByUser } from '@/actions/community/fetch-community'
 import { COMMUNITY_FETCH_SPAN, COMMUNITY_KEY } from '@/lib/constants'
 import { CommunityCardList } from '@/components/card/community-card-list'
 import { CommunityCard } from '@/components/card/community-card'
+import { currentUser } from '@/lib/auth'
 
 export default async function CommunitiesPage() {
+  const user = await currentUser()
+  if (!user || !user.id) return null
   const queryClient = new QueryClient()
   await queryClient.prefetchInfiniteQuery({
     queryKey: [COMMUNITY_KEY],
     queryFn: ({ pageParam }) => fetchCommunities(pageParam),
     initialPageParam: { search: undefined, offset: 0, take: COMMUNITY_FETCH_SPAN },
   })
+  const communities = await fetchCommunitiesByUser(user.id)
   return (
     <Card className="border-0 shadow-none">
       <CardHeader className="flex-row space-y-0 justify-between">
@@ -37,23 +41,16 @@ export default async function CommunitiesPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="subscribed" className="w-full">
-            Subscribed
+            <div className="flex flex-col space-y-2 overflow-auto h-[calc(100vh-270px)]">
+              {communities.map((community) => (
+                <CommunityCard key={community.id} {...community} />
+              ))}
+            </div>
           </TabsContent>
           <TabsContent value="browse" className="w-full">
             <HydrationBoundary state={dehydrate(queryClient)}>
               <CommunityCardList />
             </HydrationBoundary>
-            {/* <CommunityCard
-              id={'testId'}
-              name={'testName'}
-              slug={'testSlug'}
-              image={null}
-              ownerId={'testOwnerId'}
-              description={`Hey fellow space adventurers! 🚀 Have you ever stumbled upon a gem of a sci-fi flick that left you in awe, yet hardly anyone seems to know about it? Let's talk about those hidden treasures lurking in the vast expanse of cinematic space! Share your picks and let's uncover the underrated masterpieces together! 🎥✨`}
-              isPublic={true}
-              createdAt={new Date()}
-              updatedAt={new Date()}
-            /> */}
           </TabsContent>
         </Tabs>
       </CardContent>

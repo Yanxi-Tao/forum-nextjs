@@ -48,4 +48,4 @@ export const COMMUNITY_FETCH_SPAN = 5
 export const QUESTION_ANSWERS_KEY = 'question-answers'
 export const EXPLORE_POSTS_KEY = 'explore-posts'
 export const COMMENT_KEY = 'comments'
-export const COMMUNITY_KEY = 'communities'
+export const COMMUNITY_KEY = 'communities-browse'

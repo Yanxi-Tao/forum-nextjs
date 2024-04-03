@@ -59,7 +59,7 @@ export const CommunityCardList = () => {
         <Input placeholder="Search" name="search" className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
       </form>
       <div className="h-11" />
-      <div className="pt-2 overflow-auto h-[calc(100vh-270px)]">
+      <div className="flex flex-col space-y-2 pt-2 overflow-auto h-[calc(100vh-270px)]">
         {isSuccess &&
           data.pages.map((page) =>
             page.communities.map((community) => {
