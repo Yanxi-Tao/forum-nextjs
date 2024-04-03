@@ -1,10 +1,10 @@
 import { db } from '@/db/client'
 
-export const getCommunityByName = async (name: string) => {
+export const getCommunityBySlug = async (slug: string) => {
   try {
     const community = await db.community.findUnique({
       where: {
-        name,
+        slug,
       },
     })
     return community

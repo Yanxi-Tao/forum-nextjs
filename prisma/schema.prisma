@@ -146,6 +146,7 @@ model Profile {
 model Community {
   id          String  @id @default(cuid())
   name        String  @unique
+  slug        String  @unique
   owner       User    @relation("OwnerToCommunity", fields: [ownerId], references: [id])
   ownerId     String
   description String

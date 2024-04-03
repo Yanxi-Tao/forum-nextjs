@@ -35,7 +35,7 @@ export const CommentForm = ({
       repliesToName,
       repliesToSlug,
     },
-    mode: 'onChange',
+    mode: 'all',
   })
 
   // form submit handler

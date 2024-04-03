@@ -27,7 +27,7 @@ export const QuestionForm = ({ communityName }: { communityName: string | undefi
       communityId: undefined,
       communityName,
     },
-    mode: 'onChange',
+    mode: 'all',
   })
 
   const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
@@ -91,7 +91,7 @@ export const ArticleForm = ({ communityName }: { communityName: string | undefin
       communityId: undefined,
       communityName,
     },
-    mode: 'onChange',
+    mode: 'all',
   })
 
   const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
@@ -167,7 +167,7 @@ export const AnswerForm = ({
       communityName,
       communityId,
     },
-    mode: 'onChange',
+    mode: 'all',
   })
 
   // form submit handler

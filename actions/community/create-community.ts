@@ -5,7 +5,8 @@ import { CreateCommunitySchema } from '@/schemas'
 import { currentUser } from '@/lib/auth'
 import { getUserByID } from '@/data/user'
 import { db } from '@/db/client'
-import { getCommunityByName } from '@/data/community'
+import { getCommunityBySlug } from '@/data/community'
+import slugify from '@sindresorhus/slugify'
 
 export const createCommunity = async (data: z.infer<typeof CreateCommunitySchema>) => {
   const user = await currentUser()
@@ -27,7 +28,8 @@ export const createCommunity = async (data: z.infer<typeof CreateCommunitySchema
 
   const { name, description, isPublic } = data
 
-  const existingCommunity = await getCommunityByName(name)
+  const slug = slugify(name)
+  const existingCommunity = await getCommunityBySlug(slug)
   if (existingCommunity) {
     return { type: 'error', message: 'Community already exists' }
   }
@@ -36,6 +38,7 @@ export const createCommunity = async (data: z.infer<typeof CreateCommunitySchema
     await db.community.create({
       data: {
         name,
+        slug,
         description,
         isPublic,
         ownerId: user.id,

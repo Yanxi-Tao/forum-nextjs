@@ -28,6 +28,7 @@ export const CommunityForm = () => {
       description: '',
       isPublic: true,
     },
+    mode: 'all',
   })
 
   const onSubmit = async (data: z.infer<typeof CreateCommunitySchema>) => {
@@ -86,7 +87,7 @@ export const CommunityForm = () => {
             />
             <FormAlert alert={alert} />
             <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full">
-              {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
+              {isPending ? <PulseLoader color="#8585ad" /> : 'Create Community'}
             </Button>
           </form>
         </Form>
