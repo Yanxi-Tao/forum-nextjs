@@ -71,11 +71,17 @@ export const PostCardWrapper = ({
       <CardHeader className="py-0 space-y-0.5">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-2">
-            <Link href={`/profile/${author.slug}`}>
-              <AvatarCard source={author.image} name={author.name} />
-            </Link>
+            {(type === 'question' || type === 'article') && community ? (
+              <Link href={`/communities/${community.slug}`}>
+                <AvatarCard source={community.image} name={community.name} size="profile" />
+              </Link>
+            ) : (
+              <Link href={`/profile/${author.slug}`}>
+                <AvatarCard source={author.image} name={author.name} size="profile" />
+              </Link>
+            )}
             <Link
-              href={(type === 'question' || type === 'article') && community ? `/communities/${community.name}` : `/profile/${author.slug}`}
+              href={(type === 'question' || type === 'article') && community ? `/communities/${community.slug}` : `/profile/${author.slug}`}
               className="text-primary underline-offset-4 hover:underline"
             >
               {(type === 'question' || type === 'article') && community ? `c/${community.name}` : `u/${author.name}`}

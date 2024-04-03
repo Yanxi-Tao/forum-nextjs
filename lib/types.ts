@@ -14,7 +14,7 @@ export type NestedCommentCardProps = Pick<Awaited<ReturnType<typeof fetchComment
 // Tanstack query keys types
 export type FetchPostQueryKey = {
   search?: string
-  communityName?: string
+  communitySlug?: string
   offset: number
   take: number
 }

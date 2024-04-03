@@ -61,7 +61,7 @@ export const CommentCardWrapper = ({
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
         <Link href={`/profile/${comment.author.slug}`}>
-          <AvatarCard source={comment.author.image} name={comment.author.name} />
+          <AvatarCard source={comment.author.image} name={comment.author.name} size="profile" />
         </Link>
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">
@@ -173,7 +173,7 @@ export const NestedCommentCardWrapper = ({
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
         <Link href={`/profile/${comment.author.slug}`}>
-          <AvatarCard source={comment.author.image} name={comment.author.name} />
+          <AvatarCard source={comment.author.image} name={comment.author.name} size="profile" />
         </Link>
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">

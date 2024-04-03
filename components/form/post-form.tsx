@@ -14,7 +14,7 @@ import { FormAlertProps } from '@/lib/types'
 import { useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 
-export const QuestionForm = ({ communityName }: { communityName: string | undefined }) => {
+export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefined }) => {
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
   const form = useForm<z.infer<typeof CreatePostSchema>>({
@@ -24,8 +24,7 @@ export const QuestionForm = ({ communityName }: { communityName: string | undefi
       content: '',
       type: 'question',
       parentId: undefined,
-      communityId: undefined,
-      communityName,
+      communitySlug,
     },
     mode: 'all',
   })
@@ -78,7 +77,7 @@ export const QuestionForm = ({ communityName }: { communityName: string | undefi
   )
 }
 
-export const ArticleForm = ({ communityName }: { communityName: string | undefined }) => {
+export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefined }) => {
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
   const form = useForm<z.infer<typeof CreatePostSchema>>({
@@ -88,8 +87,7 @@ export const ArticleForm = ({ communityName }: { communityName: string | undefin
       content: '',
       type: 'article',
       parentId: undefined,
-      communityId: undefined,
-      communityName,
+      communitySlug,
     },
     mode: 'all',
   })
@@ -144,15 +142,13 @@ export const ArticleForm = ({ communityName }: { communityName: string | undefin
 export const AnswerForm = ({
   title,
   parentId,
-  communityId,
-  communityName,
+  communitySlug,
   mutate,
   setIsFormOpen,
 }: {
   title: string
   parentId: string
-  communityId: string | undefined
-  communityName: string | undefined
+  communitySlug: string | undefined
   mutate: (data: z.infer<typeof CreatePostSchema>) => void
   setIsFormOpen: (value: boolean) => void
 }) => {
@@ -164,8 +160,7 @@ export const AnswerForm = ({
       content: '',
       type: 'answer',
       parentId,
-      communityName,
-      communityId,
+      communitySlug,
     },
     mode: 'all',
   })

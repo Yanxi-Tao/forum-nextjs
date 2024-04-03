@@ -30,7 +30,7 @@ export const createCommunity = async (data: z.infer<typeof CreateCommunitySchema
 
   const slug = slugify(name)
   const existingCommunity = await getCommunityBySlug(slug)
-  if (existingCommunity) {
+  if (slug === 'create' || existingCommunity) {
     return { type: 'error', message: 'Community already exists' }
   }
 

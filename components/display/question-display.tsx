@@ -83,10 +83,10 @@ export default function QuestionDisplay({
               {community && (
                 <>
                   <Link
-                    href={`/communities/${community.name}`}
+                    href={`/communities/${community.slug}`}
                     className="flex items-start space-x-2 text-primary underline-offset-4 hover:underline"
                   >
-                    <AvatarCard source={null} name={community.name} />
+                    <AvatarCard source={null} name={community.name} size="profile" />
                     <span>{community.name}</span>
                   </Link>
                   <span>/</span>
@@ -96,7 +96,7 @@ export default function QuestionDisplay({
                 href={`/profile/${author.slug}`}
                 className="flex items-center space-x-2 text-primary underline-offset-4 hover:underline"
               >
-                <AvatarCard source={author.image} name={author.name} />
+                <AvatarCard source={author.image} name={author.name} size="profile" />
                 <span>{author.name}</span>
               </Link>
             </div>
@@ -164,14 +164,7 @@ export default function QuestionDisplay({
         </CardFooter>
       </Card>
       {isFormOpen && (
-        <AnswerForm
-          title={title}
-          parentId={id}
-          communityId={community?.id}
-          communityName={community?.name}
-          mutate={mutate}
-          setIsFormOpen={setIsFormOpen}
-        />
+        <AnswerForm title={title} parentId={id} communitySlug={community?.slug} mutate={mutate} setIsFormOpen={setIsFormOpen} />
       )}
       <Separator className="my-6" />
       {isPending && <PostCard {...optimisticAnswer(user, variables.title, variables.content)} />}

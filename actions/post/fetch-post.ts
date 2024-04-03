@@ -4,11 +4,11 @@ import { getAnsewrs, getDefaultQuestionsOrArticles, getPostById, getSearchedQues
 import { FetchAnswerQueryKey, FetchPostQueryKey } from '@/lib/types'
 import { unstable_cache, unstable_noStore } from 'next/cache'
 
-export const fetchPosts = async ({ search, communityName, offset, take }: FetchPostQueryKey) => {
+export const fetchPosts = async ({ search, communitySlug, offset, take }: FetchPostQueryKey) => {
   unstable_noStore()
   if (!search) {
     const posts = await getDefaultQuestionsOrArticles({
-      communityName,
+      communitySlug,
       offset,
       take,
     })
@@ -19,7 +19,7 @@ export const fetchPosts = async ({ search, communityName, offset, take }: FetchP
   } else {
     const posts = await getSearchedQuestionsOrArticles({
       search,
-      communityName,
+      communitySlug,
       offset,
       take,
     })

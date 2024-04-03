@@ -1,11 +1,11 @@
 import { db } from '@/db/client'
 
 export const getDefaultQuestionsOrArticles = async ({
-  communityName,
+  communitySlug,
   offset,
   take,
 }: {
-  communityName: string | undefined
+  communitySlug: string | undefined
   offset: number
   take: number
 }) => {
@@ -13,7 +13,7 @@ export const getDefaultQuestionsOrArticles = async ({
     const posts = await db.post.findMany({
       where: {
         community: {
-          name: communityName,
+          slug: communitySlug,
         },
         type: {
           in: ['question', 'article'],
@@ -53,12 +53,12 @@ export const getDefaultQuestionsOrArticles = async ({
 
 export const getSearchedQuestionsOrArticles = async ({
   search,
-  communityName,
+  communitySlug,
   offset,
   take,
 }: {
   search: string
-  communityName: string | undefined
+  communitySlug: string | undefined
   offset: number
   take: number
 }) => {
@@ -66,7 +66,7 @@ export const getSearchedQuestionsOrArticles = async ({
     const posts = await db.post.findMany({
       where: {
         community: {
-          name: communityName,
+          slug: communitySlug,
         },
         type: {
           in: ['question', 'article'],

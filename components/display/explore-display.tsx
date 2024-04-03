@@ -10,8 +10,9 @@ import { BeatLoader } from 'react-spinners'
 export const ExploreDisplay = () => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
+  const communitySlug = searchParams.get('community') || undefined
   const { ref, inView } = useInView()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfinitePosts(search)
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfinitePosts(search, communitySlug)
 
   useEffect(() => {
     if (inView && hasNextPage) {
