@@ -41,3 +41,29 @@ export const updatePostVoteById = async (postId: string, userId: string, voteSta
     return false
   }
 }
+
+export const updatePostBookmarkById = async (postId: string, userId: string, bookmarked: boolean) => {
+  try {
+    await db.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        bookmarks: bookmarked
+          ? {
+              connect: {
+                id: userId,
+              },
+            }
+          : {
+              disconnect: {
+                id: userId,
+              },
+            },
+      },
+    })
+    return true
+  } catch {
+    return false
+  }
+}

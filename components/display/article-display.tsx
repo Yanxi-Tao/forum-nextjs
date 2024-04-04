@@ -28,6 +28,7 @@ import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { CommentDisplay } from '@/components/display/comment-display'
+import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 
 export default function ArticleDisplay({
   id,
@@ -36,17 +37,19 @@ export default function ArticleDisplay({
   author,
   community,
   updatedAt,
+  bookmarks,
   upVotes,
   downVotes,
   comments,
 }: QuestionDisplayProps) {
   const user = useCurrentUser()
   const updateVote = useUpdateVote('post')
-
+  const updateBookmark = useUpdateBookmark()
   const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
+  const userBookmarkStatus = bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
-  const [bookmark, setBookmark] = useState(false)
+  const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
 
   if (!user || !user.name || !user.email || !user.id) {
     return null
@@ -136,8 +139,14 @@ export default function ArticleDisplay({
                   <span className="ml-2">{formatNumber(commentCount)}</span>
                 </Button>
               </CollapsibleTrigger>
-              <Toggle size="sm" onPressedChange={setBookmark}>
-                {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+              <Toggle
+                size="sm"
+                onPressedChange={(value) => {
+                  setBookmarkStatus(value)
+                  updateBookmark(id, user.id as string, value)
+                }}
+              >
+                {bookmarkStatus ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
                 <span className="ml-2">Bookmark</span>
               </Toggle>
             </div>

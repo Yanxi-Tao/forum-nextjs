@@ -14,6 +14,7 @@ export const getUserProfileBySlug = async (slug: string) => {
                 children: true,
               },
             },
+            bookmarks: true,
             upVotes: true,
             downVotes: true,
             author: true,
@@ -36,6 +37,30 @@ export const getUserProfileBySlug = async (slug: string) => {
                 children: true,
               },
             },
+            bookmarks: true,
+            upVotes: true,
+            downVotes: true,
+            author: true,
+            community: true,
+            comments: {
+              select: {
+                _count: {
+                  select: {
+                    children: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        bookmarkedPosts: {
+          include: {
+            _count: {
+              select: {
+                children: true,
+              },
+            },
+            bookmarks: true,
             upVotes: true,
             downVotes: true,
             author: true,

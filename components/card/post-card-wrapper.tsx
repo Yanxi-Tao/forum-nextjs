@@ -32,6 +32,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { PostType } from '@prisma/client'
+import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 
 export const PostCardWrapper = ({
   id,
@@ -43,10 +44,12 @@ export const PostCardWrapper = ({
   updatedAt,
   upVotes,
   downVotes,
+  bookmarks,
   _count,
   comments,
 }: PostCardProps & { children: React.ReactNode }) => {
   const updateVote = useUpdateVote('post')
+  const updateBookmark = useUpdateBookmark()
   const queryClient = useQueryClient()
   const queryKey = type === 'question' ? EXPLORE_POSTS_KEY : QUESTION_ANSWERS_KEY
   const { mutate } = useMutation({
@@ -56,9 +59,10 @@ export const PostCardWrapper = ({
 
   const user = useCurrentUser()
   const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
+  const userBookmarkStatus = bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
-  const [bookmark, setBookmark] = useState(false)
+  const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
 
   if (!user || !user.name || !user.email || !user.id) {
     return null
@@ -159,8 +163,14 @@ export const PostCardWrapper = ({
               </Button>
             </CollapsibleTrigger>
           )}
-          <Toggle size="sm" onPressedChange={setBookmark}>
-            {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+          <Toggle
+            size="sm"
+            onPressedChange={(value) => {
+              setBookmarkStatus(value)
+              updateBookmark(id, user.id as string, value)
+            }}
+          >
+            {bookmarkStatus ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
             <span className="ml-2">Bookmark</span>
           </Toggle>
         </CardFooter>

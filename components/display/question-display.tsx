@@ -35,6 +35,7 @@ import { Separator } from '@/components/ui/separator'
 import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
+import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 
 export default function QuestionDisplay({
   id,
@@ -42,12 +43,14 @@ export default function QuestionDisplay({
   content,
   author,
   community,
+  bookmarks,
   updatedAt,
   _count,
   upVotes,
   downVotes,
 }: QuestionDisplayProps) {
   const user = useCurrentUser()
+  const updateBookmark = useUpdateBookmark()
   const updateVote = useUpdateVote('post')
   const { ref, inView } = useInView()
 
@@ -59,9 +62,10 @@ export default function QuestionDisplay({
   })
 
   const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
+  const userBookmarkStatus = bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
-  const [bookmark, setBookmark] = useState(false)
+  const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   useEffect(() => {
@@ -153,8 +157,14 @@ export default function QuestionDisplay({
               <BsChatSquare size={16} />
               <span className="ml-2">{formatNumber(_count.children)}</span>
             </Button>
-            <Toggle size="sm" onPressedChange={setBookmark}>
-              {bookmark ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+            <Toggle
+              size="sm"
+              onPressedChange={(value) => {
+                setBookmarkStatus(value)
+                updateBookmark(id, user.id as string, value)
+              }}
+            >
+              {bookmarkStatus ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
               <span className="ml-2">Bookmark</span>
             </Toggle>
           </div>

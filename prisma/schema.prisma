@@ -30,6 +30,8 @@ model User {
   upVotedPosts   Post[] @relation("PostToUserUpVoted")
   downVotedPosts Post[] @relation("PostToUserDownVoted")
 
+  bookmarkedPosts Post[] @relation("PostToUserBookmarked")
+
   subscribedCommunities Community[] @relation("UserToCommunity")
   ownedCommunities      Community[] @relation("OwnerToCommunity")
 
@@ -98,7 +100,8 @@ model Post {
   upVotes   User[]   @relation("PostToUserUpVoted")
   downVotes User[]   @relation("PostToUserDownVoted")
   views     Int      @default(0)
-  bookmarks Int      @default(0)
+
+  bookmarks User[] @relation("PostToUserBookmarked")
 
   parent   Post?   @relation("PostToPost", fields: [parentId], references: [id])
   parentId String?
