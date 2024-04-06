@@ -31,7 +31,7 @@ export const optimisticAnswer = (user: ExtendedUser, title: string, content: str
     upVotes: [],
     downVotes: [],
     views: 0,
-    bookmarks: 0,
+    bookmarks: [],
     parentId: null,
     communityId: null,
   }
