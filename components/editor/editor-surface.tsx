@@ -14,8 +14,9 @@ import ToolbarPlugin from './plugins/toolbar-plugin'
 import CodeHighlightPlugin from './plugins/code-hightlight-plugin'
 import AutoLinkPlugin from './plugins/autolink-plugin'
 import EquationPlugin from './plugins/equation-plugin'
+import ListMaxIndentLevelPlugin from './plugins/list-max-indent-plugin'
 
-export const EditorSurface = () => {
+export const EditorSurface = (): JSX.Element => {
   return (
     <div>
       <ToolbarPlugin />
@@ -31,6 +32,7 @@ export const EditorSurface = () => {
         <HorizontalRulePlugin />
         <TabIndentationPlugin />
         <ListPlugin />
+        <ListMaxIndentLevelPlugin maxDepth={7} />
         <LinkPlugin />
         <AutoLinkPlugin />
         <EquationPlugin />
