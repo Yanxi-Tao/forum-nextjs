@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url(katex/dist/katex.css);
+@import url(@/components/editor/editor-theme.css);
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -46,6 +49,17 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
 
