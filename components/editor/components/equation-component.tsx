@@ -47,7 +47,7 @@ export const EquationComponent: React.FC<EquationComponentProps> = ({ equation, 
   return (
     <Dialog>
       <DialogTrigger className="max-w-full" asChild>
-        <Button variant="ghost" className="flex items-center">
+        <Button variant="ghost" className="flex items-center p-0 px-2">
           <KatexRenderer equation={equation} inline={inline} />
         </Button>
       </DialogTrigger>

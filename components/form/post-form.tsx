@@ -53,6 +53,12 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
     const state = await createPost(data)
     setIsPending(false)
     setAlert(state)
+    if (state?.type === 'success') {
+      form.reset()
+      editorRef.current?.update(() => {
+        $getRoot().clear()
+      })
+    }
   }
 
   return (
@@ -110,12 +116,32 @@ export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefin
     mode: 'all',
   })
 
+  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
+    editorState.read(() => {
+      form.setValue('content', $getRoot().getTextContent(), { shouldValidate: true })
+    })
+    return
+  }
+
+  const editorRef = useRef<LexicalEditor | null>(null)
+
   const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
+    if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
+    editorRef.current?.getEditorState().read(() => {
+      if (!editorRef.current) return
+      data.content = $generateHtmlFromNodes(editorRef.current, null)
+    })
     const state = await createPost(data)
     setIsPending(false)
     setAlert(state)
+    if (state?.type === 'success') {
+      form.reset()
+      editorRef.current?.update(() => {
+        $getRoot().clear()
+      })
+    }
   }
 
   return (
@@ -138,11 +164,11 @@ export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefin
           <FormField
             control={form.control}
             name="content"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="text-foreground">Content</FormLabel>
                 <FormControl>
-                  <Textarea {...field} disabled={isPending} />
+                  <Editor editorRef={editorRef} onChange={handleOnChange} />
                 </FormControl>
               </FormItem>
             )}
@@ -183,22 +209,36 @@ export const AnswerForm = ({
     mode: 'all',
   })
 
+  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
+    editorState.read(() => {
+      form.setValue('content', $getRoot().getTextContent(), { shouldValidate: true })
+    })
+    return
+  }
+
+  const editorRef = useRef<LexicalEditor | null>(null)
+
   // form submit handler
   const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
+    if (!editorRef.current) return
+    editorRef.current?.getEditorState().read(() => {
+      if (!editorRef.current) return
+      data.content = $generateHtmlFromNodes(editorRef.current, null)
+    })
     mutate(data)
     setIsFormOpen(false)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-6">
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea {...field} />
+                <Editor editorRef={editorRef} onChange={handleOnChange} />
               </FormControl>
               <FormDescription>Your answer helps others learn about this topic</FormDescription>
             </FormItem>

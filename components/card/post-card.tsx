@@ -6,7 +6,7 @@ import { PostType } from '@prisma/client'
 export const PostCard = (post: PostCardProps) => {
   return (
     <PostCardWrapper {...post}>
-      <div className="editor max-w-[700px]" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <div className="editor max-w-[760px]" dangerouslySetInnerHTML={{ __html: post.content }} />
     </PostCardWrapper>
   )
 }

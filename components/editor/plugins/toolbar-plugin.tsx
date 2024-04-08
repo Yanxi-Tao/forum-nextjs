@@ -167,7 +167,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
         <Redo2 size={18} />
       </Button>
       {/* <Button onClick={() => console.log(JSON.stringify(editor.getEditorState()))}>StoreJSON</Button> */}
-      <Button
+      {/* <Button
         type="button"
         onClick={() =>
           editor.getEditorState().read(() => {
@@ -200,7 +200,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
         }
       >
         SetHTML
-      </Button>
+      </Button> */}
       {blockType in blockTypeToBlockName && <BlockFormatDropdown editor={editor} blockType={blockType} />}
       {blockType === 'code' ? (
         <CodeLanguageDropdown onCodeLanguageSelect={onCodeLanguageSelect} codeLanguage={codeLanguage} editor={editor} />

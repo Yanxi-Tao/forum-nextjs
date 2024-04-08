@@ -31,9 +31,9 @@ export const EditorSurface: React.FC<EditorSurfaceProps> = ({ editorRef, onChang
       <div className="relative">
         <AutoFocusPlugin />
         <RichTextPlugin
-          contentEditable={<ContentEditable className="editor outline-none w-[700px]" />}
+          contentEditable={<ContentEditable className="editor outline-none max-w-[760px] min-h-40" />}
           ErrorBoundary={LexicalErrorBoundary}
-          placeholder={<div className="absolute top-1 text-muted-foreground">Start here...</div>}
+          placeholder={<div className="absolute top-0.5 text-muted-foreground">Start here...</div>}
         />
         <HistoryPlugin />
         <CodeHighlightPlugin />
