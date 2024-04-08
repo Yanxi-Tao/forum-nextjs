@@ -151,7 +151,7 @@ div.editor-equation {
 }
 
 .katex-display > .katex {
-  @apply inline-block max-w-full overflow-x-auto no-scrollbar text-lg;
+  @apply inline-flex max-w-full overflow-x-auto no-scrollbar text-lg;
 }
 
 .katex {

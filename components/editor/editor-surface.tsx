@@ -9,14 +9,22 @@ import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin
 import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { HorizontalRulePlugin } from '@lexical/react/LexicalHorizontalRulePlugin'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
+import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin'
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 
 import ToolbarPlugin from './plugins/toolbar-plugin'
 import CodeHighlightPlugin from './plugins/code-hightlight-plugin'
 import AutoLinkPlugin from './plugins/autolink-plugin'
 import EquationPlugin from './plugins/equation-plugin'
 import ListMaxIndentLevelPlugin from './plugins/list-max-indent-plugin'
+import { EditorState, LexicalEditor } from 'lexical'
 
-export const EditorSurface = (): JSX.Element => {
+export type EditorSurfaceProps = {
+  editorRef: ((instance: LexicalEditor | null) => void) | React.MutableRefObject<LexicalEditor | null | undefined>
+  onChange: (editorState: EditorState, editor: LexicalEditor, tags?: Set<string>) => void
+}
+
+export const EditorSurface: React.FC<EditorSurfaceProps> = ({ editorRef, onChange }): JSX.Element => {
   return (
     <div>
       <ToolbarPlugin />
@@ -36,6 +44,8 @@ export const EditorSurface = (): JSX.Element => {
         <LinkPlugin />
         <AutoLinkPlugin />
         <EquationPlugin />
+        <EditorRefPlugin editorRef={editorRef} />
+        <OnChangePlugin onChange={onChange} />
       </div>
     </div>
   )

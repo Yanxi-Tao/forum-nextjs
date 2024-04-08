@@ -46,8 +46,10 @@ export const EquationComponent: React.FC<EquationComponentProps> = ({ equation, 
 
   return (
     <Dialog>
-      <DialogTrigger className="max-w-full">
-        <KatexRenderer equation={equation} inline={inline} />
+      <DialogTrigger className="max-w-full" asChild>
+        <Button variant="ghost" className="flex items-center">
+          <KatexRenderer equation={equation} inline={inline} />
+        </Button>
       </DialogTrigger>
       <EquationEditor equation={equation} inline={inline} onConfirm={onConfirm} />
     </Dialog>
@@ -118,5 +120,5 @@ export const KatexRenderer: React.FC<{ equation: string; inline: boolean }> = ({
     }
   }, [equation, inline])
 
-  return <span role="button" ref={katexRef} className="w-full" />
+  return <span ref={katexRef} className="w-full" />
 }

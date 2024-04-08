@@ -4,7 +4,11 @@ import { ExtendedUser } from '@/auth'
 import { PostType } from '@prisma/client'
 
 export const PostCard = (post: PostCardProps) => {
-  return <PostCardWrapper {...post}>{post.content}</PostCardWrapper>
+  return (
+    <PostCardWrapper {...post}>
+      <div className="editor max-w-[700px]" dangerouslySetInnerHTML={{ __html: post.content }} />
+    </PostCardWrapper>
+  )
 }
 
 export const optimisticAnswer = (user: ExtendedUser, title: string, content: string): PostCardProps => {

@@ -145,6 +145,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
   return (
     <div className="flex space-x-1">
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         disabled={!canUndo}
@@ -155,6 +156,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
         <Undo2 size={18} />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         disabled={!canRedo}
@@ -166,6 +168,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
       </Button>
       {/* <Button onClick={() => console.log(JSON.stringify(editor.getEditorState()))}>StoreJSON</Button> */}
       <Button
+        type="button"
         onClick={() =>
           editor.getEditorState().read(() => {
             console.log($generateHtmlFromNodes(editor, null))
@@ -175,6 +178,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
         StoreHTML
       </Button>
       <Button
+        type="button"
         onClick={() =>
           editor.update(() => {
             // In the browser you can use the native DOMParser API to parse the HTML string.
@@ -214,6 +218,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
           />
           <InsertEquationDialog editor={editor} />
           <Button
+            type="button"
             variant="ghost"
             size="icon"
             onClick={() => {

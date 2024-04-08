@@ -11,8 +11,12 @@ import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
 import { FormAlertProps } from '@/lib/types'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
+import { $getRoot, EditorState, LexicalEditor } from 'lexical'
+import { Editor } from '../editor'
+import { $generateHtmlFromNodes } from '@lexical/html'
+import { EditorSurfaceProps } from '../editor/editor-surface'
 
 export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefined }) => {
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -29,9 +33,23 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
     mode: 'all',
   })
 
+  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
+    editorState.read(() => {
+      form.setValue('content', $getRoot().getTextContent(), { shouldValidate: true })
+    })
+    return
+  }
+
+  const editorRef = useRef<LexicalEditor | null>(null)
+
   const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
+    if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
+    editorRef.current?.getEditorState().read(() => {
+      if (!editorRef.current) return
+      data.content = $generateHtmlFromNodes(editorRef.current, null)
+    })
     const state = await createPost(data)
     setIsPending(false)
     setAlert(state)
@@ -57,11 +75,11 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
           <FormField
             control={form.control}
             name="content"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="text-foreground">Description</FormLabel>
                 <FormControl>
-                  <Textarea {...field} disabled={isPending} />
+                  <Editor editorRef={editorRef} onChange={handleOnChange} />
                 </FormControl>
                 <FormDescription>Include all the information someone would need to answer your question</FormDescription>
               </FormItem>

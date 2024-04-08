@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url(katex/dist/katex.css);
+@import url(katex/dist/katex.min.css);
 @import url(@/components/editor/editor-theme.css);
 
 @layer base {
@@ -54,7 +54,7 @@
 
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
-    display: none;
+    @apply hidden;
   }
 
   .no-scrollbar {
