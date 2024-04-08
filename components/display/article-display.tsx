@@ -112,7 +112,9 @@ export default function ArticleDisplay({
           </div>
           <CardTitle className=" leading-normal">{title}</CardTitle>
         </CardHeader>
-        <CardContent>{content}</CardContent>
+        <CardContent className="max-w-[820px]">
+          <div className="editor w-full" dangerouslySetInnerHTML={{ __html: content }} />
+        </CardContent>
         <Collapsible>
           <CardFooter className="py-0 pb-4 flex justify-between">
             <div className="flex items-center space-x-4">
