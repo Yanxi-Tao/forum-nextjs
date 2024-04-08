@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { FormAlertProps } from '@/lib/types'
 import { createCommunity } from '@/actions/community/create-community'
 import { Textarea } from '@/components/ui/textarea'
-import { FormAlert } from './form-alert'
+import { FormAlert } from '@/components/form/form-alert'
 import PulseLoader from 'react-spinners/PulseLoader'
 
 export const CommunityForm = () => {

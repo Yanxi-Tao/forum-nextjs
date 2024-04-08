@@ -211,6 +211,7 @@ export const getAnsewrs = async ({ parentId, offset, take }: { parentId: string;
 }
 
 export const deletePostById = async (id: string) => {
+  //todo - cascade delete
   try {
     await db.post.delete({
       where: {
