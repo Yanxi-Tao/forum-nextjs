@@ -143,7 +143,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
   )
 
   return (
-    <div className="flex space-x-1">
+    <div className="sticky p-2 top-12 z-10 bg-background flex space-x-1">
       <Button
         type="button"
         variant="ghost"
