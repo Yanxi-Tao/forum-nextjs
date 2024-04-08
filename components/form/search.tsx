@@ -13,7 +13,9 @@ export const Search = () => {
   const search = searchParams.get('search') || ''
   const communitySlug =
     searchParams.get('community') ||
-    (pathname.split('/')[1] === 'communities' && pathname.split('/')[2] && pathname.split('/')[2] !== 'create'
+    (pathname.split('/').length > 2 &&
+    pathname.split('/')[2] !== 'create' &&
+    (pathname.split('/')[1] === 'communities' || pathname.split('/')[1] === 'create')
       ? pathname.split('/')[2]
       : null)
 

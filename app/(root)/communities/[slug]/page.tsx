@@ -1,7 +1,5 @@
 import { getCommunityBySlug } from '@/data/community'
-
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { AvatarCard } from '@/components/card/avatar-card'
 
 export default async function CommunitiesPage({ params: { slug } }: { params: { slug: string } }) {

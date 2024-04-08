@@ -85,7 +85,7 @@ export const CommentCardWrapper = ({
               <DropdownMenuContent>
                 <DropdownMenuItem>
                   <HiFlag size={16} className="mr-2" />
-                  Reprot
+                  Report
                 </DropdownMenuItem>
                 {user?.id === comment.authorId && (
                   <>
@@ -197,7 +197,7 @@ export const NestedCommentCardWrapper = ({
               <DropdownMenuContent>
                 <DropdownMenuItem>
                   <HiFlag size={16} className="mr-2" />
-                  Reprot
+                  Report
                 </DropdownMenuItem>
                 {user?.id === comment.authorId && (
                   <>

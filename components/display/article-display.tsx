@@ -92,7 +92,7 @@ export default function ArticleDisplay({
                 <DropdownMenuContent>
                   <DropdownMenuItem>
                     <HiFlag size={16} className="mr-2" />
-                    Reprot
+                    Report
                   </DropdownMenuItem>
                   {user?.id === author.id && (
                     <>

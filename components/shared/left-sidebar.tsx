@@ -16,6 +16,14 @@ export const LeftSidebar = () => {
         </Link>
         {sidebarNavs.map((nav, index) => {
           const isActive = (pathname.startsWith(nav.route) && nav.route.length > 1) || pathname === nav.route
+          const route =
+            (nav.route === '/communities' || nav.route === '/create') &&
+            pathname.split('/').length > 2 &&
+            pathname.split('/')[2] !== 'create' &&
+            pathname.split('/')[1] !== 'question' &&
+            pathname.split('/')[1] !== 'article'
+              ? nav.route + pathname.substring(pathname.indexOf('/', 1))
+              : nav.route
           return (
             <Button
               key={index}
@@ -25,7 +33,7 @@ export const LeftSidebar = () => {
               }`}
               asChild
             >
-              <Link href={nav.route} className="relative flex items-center justify-start gap-x-4">
+              <Link href={route} className="relative flex items-center justify-start gap-x-4">
                 {<nav.icon size={24} />}
                 <p>{nav.label}</p>
               </Link>

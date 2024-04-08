@@ -71,7 +71,7 @@ export const PostCardWrapper = ({
   const commentCount = comments.length > 0 ? comments.reduce((acc, comment) => acc + comment._count.children, 0) + comments.length : 0
 
   return (
-    <Card className="shadow-none border-0 space-y-1 hover:bg-slate-100/50 py-1 pt-2">
+    <Card className="shadow-none border-0 space-y-1 hover:bg-muted py-1 pt-2">
       <CardHeader className="py-0 space-y-0.5">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-2">
@@ -99,7 +99,7 @@ export const PostCardWrapper = ({
             <DropdownMenuContent>
               <DropdownMenuItem>
                 <HiFlag size={16} className="mr-2" />
-                Reprot
+                Report
               </DropdownMenuItem>
               {user?.id === author.id && (
                 <>

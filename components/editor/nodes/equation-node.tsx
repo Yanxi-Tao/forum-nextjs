@@ -54,6 +54,7 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
   exportDOM(editor: LexicalEditor): DOMExportOutput {
     const element = document.createElement(this.__inline ? 'span' : 'div')
     const euqation = btoa(this.__equation)
+    element.className = 'editor-equation'
     element.setAttribute('data-lexical-equation', euqation)
     element.setAttribute('data-lexical-inline', this.__inline ? 'true' : 'false')
     katex.render(this.__equation, element, {

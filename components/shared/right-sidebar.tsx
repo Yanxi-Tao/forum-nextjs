@@ -7,7 +7,7 @@ export const RightSidebar = () => {
   const isCommunity = pathname.startsWith('/communities') && pathname !== '/communities/create'
   return (
     <div className="sticky top-12 h-[calc(100vh-48px)] w-[450px] border-l px-4 flex justify-center">
-      <Button>Recommanded user</Button>
+      <Button>Placeholder ...</Button>
     </div>
   )
 }
