@@ -3,6 +3,9 @@ import { db } from '@/db/client'
 export const getDefaultCommunities = async ({ offset, take }: { offset: number; take: number }) => {
   try {
     const communities = await db.community.findMany({
+      where: {
+        isPublic: true,
+      },
       take,
       skip: offset,
     })
@@ -42,6 +45,7 @@ export const getSearchedCommunities = async ({ search, offset, take }: { search:
             },
           },
         ],
+        isPublic: true,
       },
       orderBy: {
         _relevance: {

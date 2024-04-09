@@ -20,6 +20,7 @@ import { FormAlertProps } from '@/lib/types'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { deleteUser } from '@/actions/user/delete-user'
+import RingLoader from 'react-spinners/RingLoader'
 
 export const SettingsForm = () => {
   const user = useCurrentUser()
@@ -55,57 +56,34 @@ export const SettingsForm = () => {
   const onDelete = () => {
     startDeleting(() => {
       deleteUser(user?.id as string).then((data) => {
-        signOut()
+        if (data) {
+          signOut()
+          router.push('/auth/register')
+        }
       })
     })
   }
   return (
-    <Card className="border-0 shadow-none">
-      <CardHeader>
-        <CardTitle>Settings</CardTitle>
-      </CardHeader>
-      {user ? (
+    <Card className="border-0 shadow-none h-full">
+      {!isDeleting ? (
         <>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                <div className="space-y-2">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="IBZN" disabled={isPending} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="ibzn@example.com" disabled={user.isOAuth || isPending} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {!user.isOAuth && (
-                    <>
+          <CardHeader>
+            <CardTitle>Settings</CardTitle>
+          </CardHeader>
+          {user ? (
+            <>
+              <CardContent>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                    <div className="space-y-2">
                       <FormField
                         control={form.control}
-                        name="oldPassword"
+                        name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Old Password</FormLabel>
+                            <FormLabel>Username</FormLabel>
                             <FormControl>
-                              <Input {...field} type="password" placeholder="123456" disabled={isPending} />
+                              <Input {...field} placeholder="IBZN" disabled={isPending} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -113,38 +91,74 @@ export const SettingsForm = () => {
                       />
                       <FormField
                         control={form.control}
-                        name="newPassword"
+                        name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>New Password</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <FormControl>
-                              <Input {...field} type="password" placeholder="123456" disabled={isPending} />
+                              <Input {...field} placeholder="ibzn@example.com" disabled={user.isOAuth || isPending} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    </>
-                  )}
-                </div>
-                <FormAlert alert={alert} />
-                <div className="flex gap-x-3">
-                  <Button type="reset" className="w-full" disabled={isPending} onClick={() => form.reset()}>
-                    Reset Settings
-                  </Button>
-                  <Button type="submit" className="w-full" disabled={isPending}>
-                    Update Settings
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-          <CardFooter>
-            <Button onClick={onDelete}>Delete Account</Button>
-          </CardFooter>
+                      {!user.isOAuth && (
+                        <>
+                          <FormField
+                            control={form.control}
+                            name="oldPassword"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Old Password</FormLabel>
+                                <FormControl>
+                                  <Input {...field} type="password" placeholder="123456" disabled={isPending} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="newPassword"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>New Password</FormLabel>
+                                <FormControl>
+                                  <Input {...field} type="password" placeholder="123456" disabled={isPending} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <FormAlert alert={alert} />
+                    <div className="flex gap-x-3">
+                      <Button type="reset" className="w-full" disabled={isPending} onClick={() => form.reset()}>
+                        Reset Settings
+                      </Button>
+                      <Button type="submit" className="w-full" disabled={isPending}>
+                        Update Settings
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </CardContent>
+              <CardFooter className="justify-center">
+                <Button variant="destructive" onClick={onDelete}>
+                  Delete Account
+                </Button>
+              </CardFooter>
+            </>
+          ) : (
+            <p>Settings Unavailable</p>
+          )}
         </>
       ) : (
-        <p>Settings Unavailable</p>
+        <div className="flex h-full justify-center items-center">
+          <RingLoader />
+        </div>
       )}
     </Card>
   )
