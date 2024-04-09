@@ -1,4 +1,5 @@
 import { db } from '@/db/client'
+import { PostType } from '@prisma/client'
 
 export const getDefaultQuestionsOrArticles = async ({
   communitySlug,
@@ -210,8 +211,30 @@ export const getAnsewrs = async ({ parentId, offset, take }: { parentId: string;
   }
 }
 
-export const deletePostById = async (id: string) => {
+export const deletePostById = async (id: string, type: PostType) => {
   //todo - cascade delete
+  if (type === 'question') {
+    console.log('delete question')
+
+    try {
+      await db.post.update({
+        where: {
+          id,
+        },
+        data: {
+          author: {
+            disconnect: true,
+          },
+        },
+        include: {
+          author: true,
+        },
+      })
+      return true
+    } catch {
+      return false
+    }
+  }
   try {
     await db.post.delete({
       where: {

@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import Link from 'next/link'
-import { SearchIcon } from 'lucide-react'
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
 import { fetchCommunities, fetchCommunitiesByUser } from '@/actions/community/fetch-community'
 import { COMMUNITY_FETCH_SPAN, COMMUNITY_KEY } from '@/lib/constants'
@@ -19,6 +18,8 @@ export default async function CommunitiesPage() {
     queryKey: [COMMUNITY_KEY],
     queryFn: ({ pageParam }) => fetchCommunities(pageParam),
     initialPageParam: { search: undefined, offset: 0, take: COMMUNITY_FETCH_SPAN },
+    gcTime: Infinity,
+    staleTime: Infinity,
   })
   const communities = await fetchCommunitiesByUser(user.id)
   return (

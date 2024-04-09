@@ -60,15 +60,23 @@ export const CommentCardWrapper = ({
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
-        <Link href={`/profile/${comment.author.slug}`}>
-          <AvatarCard source={comment.author.image} name={comment.author.name} className="w-7 h-7 text-sm" />
-        </Link>
+        {comment.author ? (
+          <Link href={`/profile/${comment.author.slug}`}>
+            <AvatarCard source={comment.author.image} name={comment.author.name} className="w-7 h-7 text-sm" />
+          </Link>
+        ) : (
+          <AvatarCard source={null} name="deleted user" className="w-7 h-7 text-sm" />
+        )}
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">
             <CardDescription className="flex items-center space-x-1 text-sm">
-              <Link href={`/profile/${comment.author.slug}`} className="text-primary underline-offset-4 hover:underline">
-                {comment.author.name}
-              </Link>
+              {comment.author ? (
+                <Link href={`/profile/${comment.author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  {comment.author.name}
+                </Link>
+              ) : (
+                <span>deleted user</span>
+              )}
               {comment.repliesTo && (
                 <>
                   <ChevronRight size={20} />
@@ -172,15 +180,23 @@ export const NestedCommentCardWrapper = ({
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
-        <Link href={`/profile/${comment.author.slug}`}>
-          <AvatarCard source={comment.author.image} name={comment.author.name} className="w-7 h-7 text-sm" />
-        </Link>
+        {comment.author ? (
+          <Link href={`/profile/${comment.author.slug}`}>
+            <AvatarCard source={comment.author.image} name={comment.author.name} className="w-7 h-7 text-sm" />
+          </Link>
+        ) : (
+          <AvatarCard source={null} name="deleted user" className="w-7 h-7 text-sm" />
+        )}
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">
             <CardDescription className="flex items-center space-x-1 text-sm">
-              <Link href={`/profile/${comment.author.slug}`} className="text-primary underline-offset-4 hover:underline">
-                {comment.author.name}
-              </Link>
+              {comment.author ? (
+                <Link href={`/profile/${comment.author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  {comment.author.name}
+                </Link>
+              ) : (
+                <span>deleted user</span>
+              )}
               {comment.repliesTo && (
                 <>
                   <ChevronRight size={20} />
@@ -237,7 +253,7 @@ export const NestedCommentCardWrapper = ({
           </CardFooter>
         </div>
       </div>
-      {isFormOpen && (
+      {isFormOpen && comment.author && (
         <CommentForm
           parentId={parentId}
           postId={undefined}

@@ -75,13 +75,21 @@ export default function ArticleDisplay({
                   <span>/</span>
                 </>
               )}
-              <Link
-                href={`/profile/${author.slug}`}
-                className="flex items-center space-x-2 text-primary underline-offset-4 hover:underline"
-              >
-                <AvatarCard source={author.image} name={author.name} />
-                <span>{author.name}</span>
-              </Link>
+              {author ? (
+                <>
+                  <Link href={`/profile/${author.slug}`}>
+                    <AvatarCard source={author.image} name={author.name} className="w-7 h-7 text-sm" />
+                  </Link>
+                  <Link href={`/profile/${author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                    <span>{author.name}</span>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <AvatarCard source={null} name="Deleted user" />
+                  <span>Deleted user</span>
+                </>
+              )}
             </div>
             <div className="flex items-center space-x-3">
               <span className="text-xs">{new Date(updatedAt).toDateString()}</span>
@@ -94,7 +102,7 @@ export default function ArticleDisplay({
                     <HiFlag size={16} className="mr-2" />
                     Report
                   </DropdownMenuItem>
-                  {user?.id === author.id && (
+                  {user?.id === author?.id && (
                     <>
                       <DropdownMenuItem>
                         <FiEdit size={16} className="mr-2" />

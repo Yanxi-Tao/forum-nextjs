@@ -41,7 +41,7 @@ export const ExploreDisplay = () => {
           <BeatLoader className="h-10" />
         </div>
       )}
-      {!hasNextPage && (
+      {!hasNextPage && fetchStatus !== 'fetching' && (
         <div className="flex items-center h-10 my-4 px-20">
           <div className="w-full border-b-2" />
         </div>

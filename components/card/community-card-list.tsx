@@ -23,6 +23,8 @@ export const CommunityCardList = () => {
       take: COMMUNITY_FETCH_SPAN,
     },
     getNextPageParam: (lastPage) => {
+      console.log(lastPage)
+
       if (!lastPage.nextOffset) return undefined
       return {
         search,
@@ -46,7 +48,6 @@ export const CommunityCardList = () => {
     const search = formData.get('search') as string
     setSearch(search)
     queryClient.invalidateQueries({ queryKey: [COMMUNITY_KEY] })
-    console.log(search)
   }
 
   return (
@@ -63,7 +64,7 @@ export const CommunityCardList = () => {
         {isSuccess &&
           data.pages.map((page) =>
             page.communities.map((community) => {
-              if (page.communities.indexOf(community) === page.communities.length - 2) {
+              if (page.communities.indexOf(community) === page.communities.length - 1) {
                 return (
                   <div key={community.id} ref={ref}>
                     <CommunityCard key={community.id} {...community} />

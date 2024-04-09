@@ -28,7 +28,12 @@ export const getAllComments = async (postId: string) => {
 
 export const deleteCommentById = async (id: string) => {
   try {
-    await db.comment.delete({ where: { id } })
+    await db.comment.update({
+      where: { id },
+      data: {
+        content: '[deleted]',
+      },
+    })
     return true
   } catch {
     return false

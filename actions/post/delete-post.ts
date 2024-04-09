@@ -4,5 +4,5 @@ import { PostType } from '@prisma/client'
 
 export const deletePost = async (id: string, type: PostType) => {
   // todo - if allow delete of question since answers will be deleted as well
-  return await deletePostById(id)
+  return await deletePostById(id, type)
 }

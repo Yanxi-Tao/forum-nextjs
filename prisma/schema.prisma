@@ -93,8 +93,8 @@ model Post {
   title     String
   content   String
   type      PostType
-  author    User     @relation("PostToAuthor", fields: [authorId], references: [id])
-  authorId  String
+  author    User?    @relation("PostToAuthor", fields: [authorId], references: [id])
+  authorId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   upVotes   User[]   @relation("PostToUserUpVoted")
@@ -125,7 +125,7 @@ model Comment {
   updatedAt DateTime @updatedAt
   upVotes   User[]   @relation("CommentToUserUpVoted")
 
-  post   Post?   @relation(fields: [postId], references: [id])
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String?
 
   children Comment[] @relation("CommentToComment")

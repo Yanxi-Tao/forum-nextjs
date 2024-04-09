@@ -95,12 +95,21 @@ export default function QuestionDisplay({
                   <span>/</span>
                 </>
               )}
-              <Link href={`/profile/${author.slug}`}>
-                <AvatarCard source={author.image} name={author.name} className="w-7 h-7 text-sm" />
-              </Link>
-              <Link href={`/profile/${author.slug}`} className="text-primary underline-offset-4 hover:underline">
-                <span>{author.name}</span>
-              </Link>
+              {author ? (
+                <>
+                  <Link href={`/profile/${author.slug}`}>
+                    <AvatarCard source={author.image} name={author.name} className="w-7 h-7 text-sm" />
+                  </Link>
+                  <Link href={`/profile/${author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                    <span>{author.name}</span>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <AvatarCard source={null} name="Deleted user" className="w-7 h-7 text-sm" />
+                  <span>Deleted user</span>
+                </>
+              )}
             </div>
             <div className="flex items-center space-x-3">
               <span className="text-xs">{new Date(updatedAt).toDateString()}</span>
@@ -113,7 +122,7 @@ export default function QuestionDisplay({
                     <HiFlag size={16} className="mr-2" />
                     Report
                   </DropdownMenuItem>
-                  {user?.id === author.id && (
+                  {user?.id === author?.id && (
                     <>
                       <DropdownMenuItem>
                         <FiEdit size={16} className="mr-2" />
@@ -181,7 +190,7 @@ export default function QuestionDisplay({
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
-            if (page.answers.indexOf(post) === page.answers.length - 2) {
+            if (page.answers.indexOf(post) === page.answers.length - 1) {
               return (
                 <div key={post.id} ref={ref}>
                   <PostCard {...post} />
@@ -197,7 +206,7 @@ export default function QuestionDisplay({
           <BeatLoader className="h-10" />
         </div>
       )}
-      {!hasNextPage && (
+      {!hasNextPage && fetchStatus !== 'fetching' && (
         <div className="flex items-center h-10 my-4 px-20">
           <div className="w-full border-b-2" />
         </div>
