@@ -119,8 +119,8 @@ model Post {
 model Comment {
   id        String   @id @default(cuid())
   content   String
-  author    User     @relation("CommentToAuthor", fields: [authorId], references: [id])
-  authorId  String
+  author    User?    @relation("CommentToAuthor", fields: [authorId], references: [id])
+  authorId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   upVotes   User[]   @relation("CommentToUserUpVoted")
@@ -151,8 +151,8 @@ model Community {
   name        String  @unique
   slug        String  @unique
   image       String?
-  owner       User    @relation("OwnerToCommunity", fields: [ownerId], references: [id])
-  ownerId     String
+  owner       User?   @relation("OwnerToCommunity", fields: [ownerId], references: [id])
+  ownerId     String?
   description String
   isPublic    Boolean
   posts       Post[]

@@ -48,7 +48,8 @@ export const PostCardWrapper = ({
   bookmarks,
   _count,
   comments,
-}: PostCardProps & { children: React.ReactNode }) => {
+  shouldCollapse,
+}: PostCardProps & { children: React.ReactNode; shouldCollapse: boolean }) => {
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()
   const queryClient = useQueryClient()
@@ -138,7 +139,7 @@ export const PostCardWrapper = ({
       ) : (
         <CardContent className={`${isCollapsed && 'max-h-[200px] overflow-hidden'} py-1.5`}>{children}</CardContent>
       )}
-      {isCollapsed && type === 'answer' && (
+      {shouldCollapse && type === 'answer' && isCollapsed && (
         <div className="absolute bottom-[40px] h-[200px] flex w-full justify-center items-end py-1 bg-gradient-to-t from-background to-transparent">
           <Button variant="link" size="sm" onClick={() => setIsCollapsed(false)} className="bg-background w-full">
             Read More

@@ -10,7 +10,7 @@ export default async function CreatePostPage({ params }: { params: { info: strin
     <Card className="border-0 shadow-none">
       <CardHeader>
         <CardTitle>WorkSpace</CardTitle>
-        <CardDescription>{`Community: ${communityName}`}</CardDescription>
+        <CardDescription className="pt-3 text-base">{`Community: ${communityName}`}</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs className="w-full" defaultValue="question">

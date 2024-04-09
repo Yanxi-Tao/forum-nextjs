@@ -75,7 +75,7 @@ export const CommentCardWrapper = ({
                   {comment.author.name}
                 </Link>
               ) : (
-                <span>deleted user</span>
+                <span>Deleted user</span>
               )}
               {comment.repliesTo && (
                 <>
@@ -195,7 +195,7 @@ export const NestedCommentCardWrapper = ({
                   {comment.author.name}
                 </Link>
               ) : (
-                <span>deleted user</span>
+                <span>Deleted user</span>
               )}
               {comment.repliesTo && (
                 <>

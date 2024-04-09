@@ -4,8 +4,9 @@ import { ExtendedUser } from '@/auth'
 import { PostType } from '@prisma/client'
 
 export const PostCard = (post: PostCardProps) => {
+  const shouldCollapse = post.content.length > 500
   return (
-    <PostCardWrapper {...post}>
+    <PostCardWrapper {...post} shouldCollapse={shouldCollapse}>
       <div className="editor max-w-[760px]" dangerouslySetInnerHTML={{ __html: post.content }} />
     </PostCardWrapper>
   )
