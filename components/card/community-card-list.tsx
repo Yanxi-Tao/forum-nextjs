@@ -23,8 +23,6 @@ export const CommunityCardList = () => {
       take: COMMUNITY_FETCH_SPAN,
     },
     getNextPageParam: (lastPage) => {
-      console.log(lastPage)
-
       if (!lastPage.nextOffset) return undefined
       return {
         search,

@@ -34,6 +34,7 @@ import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { PostType } from '@prisma/client'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
+import { usePathname } from 'next/navigation'
 
 export const PostCardWrapper = ({
   id,
@@ -50,6 +51,7 @@ export const PostCardWrapper = ({
   comments,
   shouldCollapse,
 }: PostCardProps & { children: React.ReactNode; shouldCollapse: boolean }) => {
+  const pathname = usePathname()
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()
   const queryClient = useQueryClient()
@@ -79,7 +81,7 @@ export const PostCardWrapper = ({
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-2">
             {(type === 'question' || type === 'article') && community ? (
-              <Link href={`/communities/${community.slug}`}>
+              <Link href={`/community/${community.slug}`}>
                 <AvatarCard source={community.image} name={community.name} className="w-7 h-7 text-sm" />
               </Link>
             ) : author ? (
@@ -90,7 +92,7 @@ export const PostCardWrapper = ({
               <AvatarCard source={null} name="Deleted user" className="w-7 h-7 text-sm" />
             )}
             {(type === 'question' || type === 'article') && community ? (
-              <Link href={`/communities/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
+              <Link href={`/community/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
                 {`c/${community.name}`}
               </Link>
             ) : author ? (
@@ -127,13 +129,13 @@ export const PostCardWrapper = ({
           </DropdownMenu>
         </div>
         {(type === 'question' || type === 'article') && (
-          <Link href={`/${type}/${id}`}>
+          <Link href={pathname !== '/' ? `${pathname}/${type}/${id}` : `/${type}/${id}`}>
             <CardTitle className="text-base">{title}</CardTitle>
           </Link>
         )}
       </CardHeader>
       {type === 'question' || type === 'article' ? (
-        <Link href={`/${type}/${id}`}>
+        <Link href={pathname !== '/' ? `${pathname}/${type}/${id}` : `/${type}/${id}`}>
           <CardContent className="py-1.5 max-h-[200px] overflow-hidden">{children}</CardContent>
         </Link>
       ) : (

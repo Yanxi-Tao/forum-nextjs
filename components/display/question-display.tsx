@@ -86,10 +86,10 @@ export default function QuestionDisplay({
             <div className="flex items-center space-x-2 text-sm">
               {community && (
                 <>
-                  <Link href={`/communities/${community.slug}`}>
+                  <Link href={`/community/${community.slug}`}>
                     <AvatarCard source={null} name={community.name} className="w-7 h-7 text-sm" />
                   </Link>
-                  <Link href={`/communities/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link href={`/community/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
                     <span>{community.name}</span>
                   </Link>
                   <span>/</span>

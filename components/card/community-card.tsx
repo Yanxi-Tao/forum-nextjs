@@ -11,7 +11,7 @@ export const CommunityCard = ({ name, description, image, slug }: CommunityCardP
         <AvatarCard source={image} name={name} className=" h-14 w-14 text-xl" />
       </Link>
       <div className="w-full">
-        <Link href={`/communities/${slug}`}>
+        <Link href={`/community/${slug}`}>
           <CardHeader className="py-0 px-3">
             <CardTitle className=" text-lg">{name}</CardTitle>
             <CardDescription className="text-sm">{description}</CardDescription>

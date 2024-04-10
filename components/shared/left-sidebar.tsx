@@ -15,15 +15,11 @@ export const LeftSidebar = () => {
           <p className="text-3xl">IBZN</p>
         </Link>
         {sidebarNavs.map((nav, index) => {
-          const isActive = (pathname.startsWith(nav.route) && nav.route.length > 1) || pathname === nav.route
-          const route =
-            (nav.route === '/communities' || nav.route === '/create') &&
-            pathname.split('/').length > 2 &&
-            pathname.split('/')[2] !== 'create' &&
-            pathname.split('/')[1] !== 'question' &&
-            pathname.split('/')[1] !== 'article'
-              ? nav.route + pathname.substring(pathname.indexOf('/', 1))
-              : nav.route
+          const isActive =
+            (pathname.startsWith(nav.route) && nav.route.length > 1) || pathname === nav.route || pathname.endsWith(nav.route)
+          if (pathname.startsWith('/community') && nav.route === '/create') {
+            nav.route = `${pathname}/create`
+          }
           return (
             <Button
               key={index}
@@ -33,7 +29,7 @@ export const LeftSidebar = () => {
               }`}
               asChild
             >
-              <Link href={route} className="relative flex items-center justify-start gap-x-4">
+              <Link href={nav.route} className="relative flex items-center justify-start gap-x-4">
                 {<nav.icon size={24} />}
                 <p>{nav.label}</p>
               </Link>

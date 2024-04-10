@@ -14,7 +14,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
  */
 export const useInfinitePosts = (search: string | undefined, communitySlug: string | undefined) => {
   return useInfiniteQuery({
-    queryKey: [EXPLORE_POSTS_KEY],
+    queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
     queryFn: ({ pageParam }) => fetchPosts(pageParam),
     initialPageParam: {
       search,

@@ -65,11 +65,10 @@ export default function ArticleDisplay({
             <div className="text-sm">
               {community && (
                 <>
-                  <Link
-                    href={`/communities/${community.slug}`}
-                    className="flex items-start space-x-2 text-primary underline-offset-4 hover:underline"
-                  >
+                  <Link href={`/community/${community.slug}`}>
                     <AvatarCard source={null} name={community.name} className="w-7 h-7 text-sm" />
+                  </Link>
+                  <Link href={`/community/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
                     <span>{community.name}</span>
                   </Link>
                   <span>/</span>

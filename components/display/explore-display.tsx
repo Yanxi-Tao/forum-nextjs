@@ -7,10 +7,9 @@ import { useInfinitePosts } from '@/hooks/post/useInfinitePosts'
 import { useSearchParams } from 'next/navigation'
 import { BeatLoader } from 'react-spinners'
 
-export const ExploreDisplay = () => {
+export const ExploreDisplay = ({ communitySlug }: { communitySlug?: string }) => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
-  const communitySlug = searchParams.get('community') || undefined
   const { ref, inView } = useInView()
   const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfinitePosts(search, communitySlug)
 

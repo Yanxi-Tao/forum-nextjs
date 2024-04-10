@@ -1,11 +1,7 @@
 import { ArticleForm, QuestionForm } from '@/components/form/post-form'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getCommunityBySlug } from '@/data/community'
-export default async function CreatePostPage({ params }: { params: { info: string[] } }) {
-  const communitySlug = params.info?.[0] || undefined
-  const communityName = communitySlug ? (await getCommunityBySlug(communitySlug))?.name : 'General'
-
+export const CreatePostDisplay = ({ communitySlug, communityName }: { communitySlug?: string; communityName: string }) => {
   return (
     <Card className="border-0 shadow-none">
       <CardHeader>
