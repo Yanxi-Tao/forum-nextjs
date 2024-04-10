@@ -2,17 +2,19 @@ import { fetchProfile } from '@/actions/profile/fetch-profile'
 import { AvatarCard } from '@/components/card/avatar-card'
 import { PostCard } from '@/components/card/post-card'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { HiDotsHorizontal } from 'react-icons/hi'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { currentUser } from '@/lib/auth'
 
-export default async function ProfilePage({ params: { slug } }: { params: { slug: string[] } }) {
-  const user = await currentUser()
-  if (!user) {
-    return <div>Not logged in</div>
-  }
-  const userSlug = slug?.[0] ? slug[0] : user.slug
-
-  const profile = await fetchProfile(userSlug)
+export default async function ProfilePage({ params: { slug } }: { params: { slug: string } }) {
+  const profile = await fetchProfile(slug)
   if (!profile) {
     return <div>Profile not found</div>
   }
@@ -24,15 +26,17 @@ export default async function ProfilePage({ params: { slug } }: { params: { slug
           <div className="absolute left-28 top-28">
             <CardTitle className="bg-muted rounded-lg p-1 px-2">{profile.name}</CardTitle>
           </div>
-          <div>actions</div>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="h-fit">
+              <HiDotsHorizontal size={20} />
+            </DropdownMenuTrigger>
+            {/* <DropdownMenuContent></DropdownMenuContent> */}
+          </DropdownMenu>
         </div>
       </CardHeader>
       <CardContent className="w-full px-0">
-        <Tabs className="w-full" defaultValue="activities">
+        <Tabs className="w-full" defaultValue="questions">
           <TabsList className="w-full">
-            <TabsTrigger value="activities" className="w-full">
-              Activities
-            </TabsTrigger>
             <TabsTrigger value="questions" className="w-full">
               Questions
             </TabsTrigger>
@@ -46,11 +50,6 @@ export default async function ProfilePage({ params: { slug } }: { params: { slug
               Bookmarks
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="activities" className="w-full">
-            {profile.upVotedPosts.map((post) => (
-              <PostCard key={post.id} {...post} />
-            ))}
-          </TabsContent>
           <TabsContent value="questions" className="w-full">
             {profile.posts.map((post) => post.type === 'question' && <PostCard key={post.id} {...post} />)}
           </TabsContent>
