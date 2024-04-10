@@ -129,13 +129,13 @@ export const PostCardWrapper = ({
           </DropdownMenu>
         </div>
         {(type === 'question' || type === 'article') && (
-          <Link href={pathname !== '/' ? `${pathname}/${type}/${id}` : `/${type}/${id}`}>
+          <Link href={community ? `/community/${community.slug}/${type}/${id}` : `/${type}/${id}`}>
             <CardTitle className="text-base">{title}</CardTitle>
           </Link>
         )}
       </CardHeader>
       {type === 'question' || type === 'article' ? (
-        <Link href={pathname !== '/' ? `${pathname}/${type}/${id}` : `/${type}/${id}`}>
+        <Link href={community ? `/community/${community.slug}/${type}/${id}` : `/${type}/${id}`}>
           <CardContent className="py-1.5 max-h-[200px] overflow-hidden">{children}</CardContent>
         </Link>
       ) : (
@@ -169,7 +169,7 @@ export const PostCardWrapper = ({
               </ToggleGroupItem>
             </ToggleGroup>
             {type === 'question' || type === 'article' ? (
-              <Link href={`/${type}/${id}`}>
+              <Link href={community ? `/community/${community.slug}/${type}/${id}` : `/${type}/${id}`}>
                 <Button variant="ghost" size="sm">
                   <BsChatSquare size={16} />
                   <span className="ml-2">{formatNumber(_count.children)}</span>

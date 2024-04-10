@@ -134,14 +134,16 @@ export const CommentCardWrapper = ({
         </div>
       </div>
       {isFormOpen && (
-        <CommentForm
-          parentId={comment.id}
-          postId={undefined}
-          repliesToId={undefined}
-          repliesToName={undefined}
-          repliesToSlug={undefined}
-          mutate={mutate}
-        />
+        <div className="pl-9">
+          <CommentForm
+            parentId={comment.id}
+            postId={undefined}
+            repliesToId={undefined}
+            repliesToName={undefined}
+            repliesToSlug={undefined}
+            mutate={mutate}
+          />
+        </div>
       )}
     </Card>
   )
@@ -254,14 +256,16 @@ export const NestedCommentCardWrapper = ({
         </div>
       </div>
       {isFormOpen && comment.author && (
-        <CommentForm
-          parentId={parentId}
-          postId={undefined}
-          repliesToId={comment.author.id}
-          repliesToName={comment.author.name}
-          repliesToSlug={comment.author.slug as string}
-          mutate={mutate}
-        />
+        <div className="pl-9">
+          <CommentForm
+            parentId={parentId}
+            postId={undefined}
+            repliesToId={comment.author.id}
+            repliesToName={comment.author.name}
+            repliesToSlug={comment.author.slug as string}
+            mutate={mutate}
+          />
+        </div>
       )}
     </Card>
   )

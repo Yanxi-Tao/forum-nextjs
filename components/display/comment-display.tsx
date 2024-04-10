@@ -17,6 +17,8 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
   const { data, fetchStatus } = useQuery({
     queryKey: [COMMENT_KEY, postId],
     queryFn: () => fetchComments(postId),
+    gcTime: Infinity,
+    staleTime: Infinity,
   })
 
   const { isPending, mutate, variables } = useMutation({
@@ -30,7 +32,7 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
 
   if (!user) return null
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-4 px-6">
       <CommentForm
         postId={postId}
         parentId={undefined}

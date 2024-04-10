@@ -11,11 +11,10 @@ export const Search = () => {
   const router = useRouter()
   const search = searchParams.get('search') || ''
   const communitySlug = pathname.split('/')[1] === 'community' ? pathname.split('/')[2] || null : null
-  const actionRedirect = communitySlug ? `/communities/${communitySlug}` : '/'
+  const actionRedirect = communitySlug ? `/community/${communitySlug}` : '/'
 
   return (
     <form className="flex items-center rounded-full border my-1 bg-background" action={actionRedirect}>
-      {communitySlug && <input name="community" value={communitySlug} className=" hidden" readOnly />}
       {communitySlug && (
         <>
           <Button

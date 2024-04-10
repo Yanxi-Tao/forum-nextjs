@@ -14,11 +14,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
  *
  * used for fetching answers to a question with infinite scroll
  */
-export const useInfiniteAnswers = ({
-  parentId,
-  offset,
-  take,
-}: FetchAnswerQueryKey) => {
+export const useInfiniteAnswers = ({ parentId, offset, take }: FetchAnswerQueryKey) => {
   return useInfiniteQuery({
     queryKey: [QUESTION_ANSWERS_KEY],
     queryFn: ({ pageParam }) => fetchAnswers(pageParam),
@@ -31,5 +27,7 @@ export const useInfiniteAnswers = ({
         take,
       }
     },
+    gcTime: Infinity,
+    staleTime: Infinity,
   })
 }

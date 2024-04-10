@@ -17,6 +17,8 @@ export default async function QuestionDisplayPage({ params }: { params: { id: st
       offset: 0,
       take: ANSWERS_FETCH_SPAN,
     },
+    gcTime: Infinity,
+    staleTime: Infinity,
   })
 
   return (

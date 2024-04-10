@@ -43,7 +43,7 @@ export default async function CommunityPage({
   })
 
   return (
-    <Card className="border-0 shadow-none">
+    <Card className="border-0 shadow-none space-y-3">
       <CardHeader className="bg-muted rounded-xl">
         <div className="relative flex justify-between">
           <AvatarCard source={community.image} name={community.name} className="h-36 w-36 text-3xl" />
