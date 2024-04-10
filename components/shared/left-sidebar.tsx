@@ -16,7 +16,9 @@ export const LeftSidebar = () => {
         </Link>
         {sidebarNavs.map((nav, index) => {
           const isActive =
-            (pathname.startsWith(nav.route) && nav.route.length > 1) || pathname === nav.route || pathname.endsWith(nav.route)
+            (pathname.startsWith(nav.route) && nav.route.length > 1) ||
+            pathname === nav.route ||
+            (pathname.endsWith(nav.route) && pathname.startsWith('/community'))
           if (pathname.startsWith('/community') && nav.route === '/create') {
             nav.route = `${pathname}/create`
           }

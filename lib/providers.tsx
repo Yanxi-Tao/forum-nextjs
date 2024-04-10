@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { type ThemeProviderProps } from 'next-themes/dist/types'
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -42,4 +43,13 @@ export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) 
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+}
+
+export function ProgressBarProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <ProgressBar height="2px" options={{ showSpinner: false }} shallowRouting />
+      {children}
+    </>
+  )
 }

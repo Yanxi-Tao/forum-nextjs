@@ -7,7 +7,7 @@ import { LeftSidebar } from '@/components/shared/left-sidebar'
 import { RightSidebar } from '@/components/shared/right-sidebar'
 import { TopBar } from '@/components/shared/top-bar'
 
-import { ReactQueryProvider, ThemeProvider } from '@/lib/providers'
+import { ProgressBarProvider, ReactQueryProvider, ThemeProvider } from '@/lib/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,14 +28,16 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <SessionProvider session={session}>
             <ReactQueryProvider>
-              <TopBar />
-              <main>
-                <div className="relative w-screen flex">
-                  <LeftSidebar />
-                  <div className="w-full px-20 pt-4">{children}</div>
-                  <RightSidebar />
-                </div>
-              </main>
+              <ProgressBarProvider>
+                <TopBar />
+                <main>
+                  <div className="relative w-screen flex">
+                    <LeftSidebar />
+                    <div className="w-full px-20 pt-4">{children}</div>
+                    <RightSidebar />
+                  </div>
+                </main>
+              </ProgressBarProvider>
             </ReactQueryProvider>
           </SessionProvider>
         </ThemeProvider>

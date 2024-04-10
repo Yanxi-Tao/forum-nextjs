@@ -71,3 +71,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+#nprogress .bar {
+  @apply !bg-foreground !top-12;
+}
+
+#nprogress .peg {
+  @apply !hidden;
+}
