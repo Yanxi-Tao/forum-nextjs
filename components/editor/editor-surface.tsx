@@ -26,7 +26,7 @@ export type EditorSurfaceProps = {
 
 export const EditorSurface: React.FC<EditorSurfaceProps> = ({ editorRef, onChange }): JSX.Element => {
   return (
-    <div>
+    <div className="border border-input rounded-md p-2 px-4 focus-within:ring-1 focus-within:ring-ring">
       <ToolbarPlugin />
       <div className="relative">
         <AutoFocusPlugin />

@@ -142,6 +142,7 @@ export const CommentCardWrapper = ({
             repliesToName={undefined}
             repliesToSlug={undefined}
             mutate={mutate}
+            setIsFormOpen={setIsFormOpen}
           />
         </div>
       )}
@@ -264,6 +265,7 @@ export const NestedCommentCardWrapper = ({
             repliesToName={comment.author.name}
             repliesToSlug={comment.author.slug as string}
             mutate={mutate}
+            setIsFormOpen={setIsFormOpen}
           />
         </div>
       )}

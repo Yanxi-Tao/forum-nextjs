@@ -15,6 +15,7 @@ export const CommentForm = ({
   repliesToName,
   repliesToSlug,
   mutate,
+  setIsFormOpen,
 }: {
   parentId: string | undefined
   postId: string | undefined
@@ -22,6 +23,7 @@ export const CommentForm = ({
   repliesToName: string | undefined
   repliesToSlug: string | undefined
   mutate: (data: z.infer<typeof CreateCommentSchema>) => void
+  setIsFormOpen?: (value: boolean) => void
 }) => {
   // schema
   const form = useForm<z.infer<typeof CreateCommentSchema>>({
@@ -52,7 +54,13 @@ export const CommentForm = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea {...field} className=" min-h-10" placeholder="Enter your comment here..." />
+                <Textarea
+                  autoFocus={!!!postId}
+                  {...field}
+                  className=" min-h-10"
+                  placeholder="Enter your comment here..."
+                  onBlur={() => setIsFormOpen && setIsFormOpen(false)}
+                />
               </FormControl>
             </FormItem>
           )}
