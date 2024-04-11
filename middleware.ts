@@ -1,7 +1,4 @@
-import authConfig from '@/auth.config'
-import NextAuth from 'next-auth'
-
-const { auth } = NextAuth(authConfig)
+import { auth } from '@/auth'
 
 import { PUBLIC_ROUTES, PRIVATE_ROUTES, AUTH_ROUTES, AUTH_API_ROUTE, DEFAULT_LOGIN_REDIRECT } from '@/routes'
 

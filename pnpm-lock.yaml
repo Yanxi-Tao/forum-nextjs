@@ -114,7 +114,7 @@ dependencies:
     specifier: 14.1.4
     version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
   next-auth:
-    specifier: ^5.0.0-beta.16
+    specifier: 5.0.0-beta.16
     version: 5.0.0-beta.16(next@14.1.4)(react@18.2.0)
   next-nprogress-bar:
     specifier: ^2.3.11
