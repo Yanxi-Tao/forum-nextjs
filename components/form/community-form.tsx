@@ -48,7 +48,7 @@ export const CommunityForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" autoComplete="off">
             <FormField
               control={form.control}
               name="name"

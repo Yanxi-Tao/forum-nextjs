@@ -53,6 +53,7 @@ export const CommunityCardList = () => {
       <form
         className="absolute top-0 left-0 right-0 flex items-center border-b rounded-none focus-within:border-ring mx-4 h-11"
         onSubmit={handleSubmit}
+        autoComplete="off"
       >
         <SearchIcon size={20} />
         <Input placeholder="Search" name="search" className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
