@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LogIn, LogOut, Settings } from 'lucide-react'
+import Link from 'next/link'
 
 export const UserAccountCard = () => {
   const user = useCurrentUser()
@@ -43,10 +44,12 @@ export const UserAccountCard = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem className="justify-start gap-x-3 p-3" onClick={() => router.push('/settings')}>
-              <Settings size={20} />
-              Settings
-            </DropdownMenuItem>
+            <Link href="/settings">
+              <DropdownMenuItem className="justify-start gap-x-3 p-3">
+                <Settings size={20} />
+                Settings
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="justify-start gap-x-3 p-3" onClick={() => signOut()}>
               <LogOut size={20} />

@@ -69,10 +69,6 @@ export const PostCardWrapper = ({
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
   const [isCollapsed, setIsCollapsed] = useState(true)
 
-  if (!user || !user.name || !user.email || !user.id) {
-    return null
-  }
-
   const commentCount = comments.length > 0 ? comments.reduce((acc, comment) => acc + comment._count.children, 0) + comments.length : 0
 
   return (
@@ -154,6 +150,7 @@ export const PostCardWrapper = ({
             <ToggleGroup
               type="single"
               onValueChange={(value) => {
+                if (!user) return
                 const voteValue = value === 'up' ? 1 : value === 'down' ? -1 : 0
                 setVoteStatus(voteValue)
                 updateVote(id, user.id as string, voteValue)
@@ -186,6 +183,7 @@ export const PostCardWrapper = ({
             <Toggle
               size="sm"
               onPressedChange={(value) => {
+                if (!user) return
                 setBookmarkStatus(value)
                 updateBookmark(id, user.id as string, value)
               }}

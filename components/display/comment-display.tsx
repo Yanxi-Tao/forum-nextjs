@@ -14,7 +14,7 @@ import { COMMENT_KEY } from '@/lib/constants'
 export const CommentDisplay = ({ postId }: { postId: string }) => {
   const user = useCurrentUser()
   const queryClient = useQueryClient()
-  const { data, fetchStatus } = useQuery({
+  const { data, fetchStatus, isSuccess } = useQuery({
     queryKey: [COMMENT_KEY, postId],
     queryFn: () => fetchComments(postId),
     gcTime: Infinity,
@@ -43,24 +43,25 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
       />
       <div className=" max-h-[400px] overflow-x-auto px-3">
         {variables?.postId && isPending && <CommentCard comment={optimisticComment(variables, user)} mutate={mutate} />}
-        {data?.map((comment) => (
-          <div key={comment.id}>
-            <CommentCard comment={comment} mutate={mutate} />
-            <div className=" pl-12 w-full">
-              {variables?.parentId === comment.id && isPending && (
-                <NestedCommentCard
-                  parentId={comment.id}
-                  comment={optimisticNestedComment(variables, user)}
-                  mutate={mutate}
-                  postId={postId}
-                />
-              )}
-              {comment.children.map((nestedComment) => (
-                <NestedCommentCard parentId={comment.id} key={nestedComment.id} comment={nestedComment} mutate={mutate} postId={postId} />
-              ))}
+        {isSuccess &&
+          data.map((comment) => (
+            <div key={comment.id}>
+              <CommentCard comment={comment} mutate={mutate} />
+              <div className=" pl-12 w-full">
+                {variables?.parentId === comment.id && isPending && (
+                  <NestedCommentCard
+                    parentId={comment.id}
+                    comment={optimisticNestedComment(variables, user)}
+                    mutate={mutate}
+                    postId={postId}
+                  />
+                )}
+                {comment.children.map((nestedComment) => (
+                  <NestedCommentCard parentId={comment.id} key={nestedComment.id} comment={nestedComment} mutate={mutate} postId={postId} />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         {fetchStatus === 'fetching' ? (
           <div className="flex justify-center h-10 my-4">
             <BeatLoader className="h-10" />

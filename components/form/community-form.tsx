@@ -73,7 +73,7 @@ export const CommunityForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="isPublic"
               render={({ field }) => (
@@ -84,7 +84,7 @@ export const CommunityForm = () => {
                   </FormControl>
                 </FormItem>
               )}
-            />
+            /> */}
             <FormAlert alert={alert} />
             <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full">
               {isPending ? <PulseLoader color="#8585ad" /> : 'Create Community'}
