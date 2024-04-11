@@ -35,7 +35,7 @@ export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) 
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       {children}
     </QueryClientProvider>
   )
