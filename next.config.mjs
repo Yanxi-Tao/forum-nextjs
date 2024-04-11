@@ -5,6 +5,9 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  experimental: {
+    serverComponentsExternalPackages: ['ws'],
+  },
 }
 
 export default nextConfig
