@@ -1,15 +1,7 @@
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
-
-const createAcceleratedPrismaClient = () => {
-  return new PrismaClient().$extends(withAccelerate())
-}
-
-// Define a type for the accelerated client.
-type PrismaClientAccelerated = ReturnType<typeof createAcceleratedPrismaClient>
+import { PrismaClient } from '@prisma/client'
 
 declare global {
-  var prisma: PrismaClientAccelerated | undefined
+  var prisma: PrismaClient | undefined
 }
 
 // In the db/client.ts file, we are creating a new PrismaClient instance and exporting
@@ -17,7 +9,7 @@ declare global {
 // and if it does, we assign the PrismaClient instance to it.
 // This is useful for hot-reloading in development,
 // as it allows us to keep the same PrismaClient instance across multiple requests.
-export const db = globalThis.prisma || new PrismaClient().$extends(withAccelerate())
+export const db = globalThis.prisma || new PrismaClient()
 
 if (process.env.NODE_ENV === 'development') {
   globalThis.prisma = db
