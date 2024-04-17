@@ -95,7 +95,7 @@ export default function ArticleDisplay({
   return (
     <div>
       <Card className="border-0 shadow-none">
-        <CardHeader>
+        <CardHeader className="max-w-[820px] break-words">
           <div className="flex flex-row justify-between items-center">
             <div className="text-sm">
               {community && (
@@ -170,7 +170,7 @@ export default function ArticleDisplay({
               </DropdownMenu>
             </div>
           </div>
-          <CardTitle className=" leading-normal">{title}</CardTitle>
+          <CardTitle className="leading-normal">{title}</CardTitle>
         </CardHeader>
         <CardContent className="max-w-[820px] break-words">
           <div
@@ -189,7 +189,7 @@ export default function ArticleDisplay({
                   setVoteStatus(voteValue)
                   updateVote(id, user.id as string, voteValue)
                 }}
-                className=" bg-muted/50 rounded-lg"
+                className="bg-muted/50 rounded-lg"
               >
                 <ToggleGroupItem value="up" className="space-x-4" size="sm">
                   {voteStatus === 1 ? (

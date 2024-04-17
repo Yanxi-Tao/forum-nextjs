@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
-import { useSearchParams, usePathname, useRouter } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { IoCloseCircleOutline } from 'react-icons/io5'
@@ -10,7 +10,6 @@ import { useEffect, useMemo, useState } from 'react'
 export const Search = () => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
-  const router = useRouter()
   const search = searchParams.get('search') || ''
   const updatedCommunitySlug = useMemo(
     () =>

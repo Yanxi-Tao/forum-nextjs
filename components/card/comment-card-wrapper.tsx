@@ -1,7 +1,14 @@
 'use client'
 import { CommentCardProps, NestedCommentCardProps } from '@/lib/types'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,12 +52,17 @@ export const CommentCardWrapper = ({
   const [isFormOpen, setIsFormOpen] = useState(false)
   const { mutate: deleteCurrentComment } = useMutation({
     mutationFn: deleteComment,
-    onSettled: async () => await queryClient.invalidateQueries({ queryKey: [COMMENT_KEY, comment.postId] }),
+    onSettled: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: [COMMENT_KEY, comment.postId],
+      }),
   })
 
   const user = useCurrentUser()
 
-  const userVoteStatus = comment.upVotes.find((vote) => vote.id === user?.id) ? 1 : 0
+  const userVoteStatus = comment.upVotes.find((vote) => vote.id === user?.id)
+    ? 1
+    : 0
   const baseCount = comment.upVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
 
@@ -59,19 +71,30 @@ export const CommentCardWrapper = ({
   }
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
-      <div className="flex">
+      <div className="flex break-words">
         {comment.author ? (
           <Link href={`/profile/${comment.author.slug}`}>
-            <AvatarCard source={comment.author.image} name={comment.author.name} className="w-7 h-7 text-sm" />
+            <AvatarCard
+              source={comment.author.image}
+              name={comment.author.name}
+              className="w-7 h-7 text-sm"
+            />
           </Link>
         ) : (
-          <AvatarCard source={null} name="deleted user" className="w-7 h-7 text-sm" />
+          <AvatarCard
+            source={null}
+            name="deleted user"
+            className="w-7 h-7 text-sm"
+          />
         )}
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">
             <CardDescription className="flex items-center space-x-1 text-sm">
               {comment.author ? (
-                <Link href={`/profile/${comment.author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                <Link
+                  href={`/profile/${comment.author.slug}`}
+                  className="text-primary underline-offset-4 hover:underline"
+                >
                   {comment.author.name}
                 </Link>
               ) : (
@@ -80,7 +103,10 @@ export const CommentCardWrapper = ({
               {comment.repliesTo && (
                 <>
                   <ChevronRight size={20} />
-                  <Link href={`/profile/${comment.repliesTo.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href={`/profile/${comment.repliesTo.slug}`}
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     {comment.repliesTo.name}
                   </Link>
                 </>
@@ -101,7 +127,9 @@ export const CommentCardWrapper = ({
                       <FiEdit size={16} className="mr-2" />
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => deleteCurrentComment(comment.id)}>
+                    <DropdownMenuItem
+                      onSelect={() => deleteCurrentComment(comment.id)}
+                    >
                       <MdDelete size={16} className="mr-2" />
                       Delete
                     </DropdownMenuItem>
@@ -110,11 +138,18 @@ export const CommentCardWrapper = ({
               </DropdownMenuContent>
             </DropdownMenu>
           </CardHeader>
-          <CardContent className="py-0  px-3">{children}</CardContent>
+          <CardContent className="py-0 px-3 max-w-[740px] break-words">
+            {children}
+          </CardContent>
           <CardFooter className="flex justify-between py-0 px-3 space-x-4">
-            <span className="text-xs">{new Date(comment.createdAt).toDateString()}</span>
+            <span className="text-xs">
+              {new Date(comment.createdAt).toDateString()}
+            </span>
             <div className="flex items-center align-baseline">
-              <Toggle className="h-7 p-2 space-x-2" onPressedChange={() => setIsFormOpen(!isFormOpen)}>
+              <Toggle
+                className="h-7 p-2 space-x-2"
+                onPressedChange={() => setIsFormOpen(!isFormOpen)}
+              >
                 <BsChatSquare size={14} />
                 <span>Reply</span>
               </Toggle>
@@ -168,12 +203,15 @@ export const NestedCommentCardWrapper = ({
   const [isFormOpen, setIsFormOpen] = useState(false)
   const { mutate: deleteCurrentComment } = useMutation({
     mutationFn: deleteComment,
-    onSettled: async () => await queryClient.invalidateQueries({ queryKey: [COMMENT_KEY, postId] }),
+    onSettled: async () =>
+      await queryClient.invalidateQueries({ queryKey: [COMMENT_KEY, postId] }),
   })
 
   const user = useCurrentUser()
 
-  const userVoteStatus = comment.upVotes.find((vote) => vote.id === user?.id) ? 1 : 0
+  const userVoteStatus = comment.upVotes.find((vote) => vote.id === user?.id)
+    ? 1
+    : 0
   const baseCount = comment.upVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
 
@@ -185,16 +223,27 @@ export const NestedCommentCardWrapper = ({
       <div className="flex">
         {comment.author ? (
           <Link href={`/profile/${comment.author.slug}`}>
-            <AvatarCard source={comment.author.image} name={comment.author.name} className="w-7 h-7 text-sm" />
+            <AvatarCard
+              source={comment.author.image}
+              name={comment.author.name}
+              className="w-7 h-7 text-sm"
+            />
           </Link>
         ) : (
-          <AvatarCard source={null} name="deleted user" className="w-7 h-7 text-sm" />
+          <AvatarCard
+            source={null}
+            name="deleted user"
+            className="w-7 h-7 text-sm"
+          />
         )}
         <div className="w-full">
           <CardHeader className="flex flex-row justify-between items-center py-0 px-3 space-y-0">
             <CardDescription className="flex items-center space-x-1 text-sm">
               {comment.author ? (
-                <Link href={`/profile/${comment.author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                <Link
+                  href={`/profile/${comment.author.slug}`}
+                  className="text-primary underline-offset-4 hover:underline"
+                >
                   {comment.author.name}
                 </Link>
               ) : (
@@ -203,7 +252,10 @@ export const NestedCommentCardWrapper = ({
               {comment.repliesTo && (
                 <>
                   <ChevronRight size={20} />
-                  <Link href={`/profile/${comment.repliesTo.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href={`/profile/${comment.repliesTo.slug}`}
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     {comment.repliesTo.name}
                   </Link>
                 </>
@@ -224,7 +276,9 @@ export const NestedCommentCardWrapper = ({
                       <FiEdit size={16} className="mr-2" />
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => deleteCurrentComment(comment.id)}>
+                    <DropdownMenuItem
+                      onSelect={() => deleteCurrentComment(comment.id)}
+                    >
                       <MdDelete size={16} className="mr-2" />
                       Delete
                     </DropdownMenuItem>
@@ -235,9 +289,14 @@ export const NestedCommentCardWrapper = ({
           </CardHeader>
           <CardContent className="py-0  px-3">{children}</CardContent>
           <CardFooter className="flex justify-between py-0 px-3 space-x-4">
-            <span className="text-xs">{new Date(comment.createdAt).toDateString()}</span>
+            <span className="text-xs">
+              {new Date(comment.createdAt).toDateString()}
+            </span>
             <div className="flex items-center align-baseline">
-              <Toggle className="h-7 p-2 space-x-2" onPressedChange={() => setIsFormOpen(!isFormOpen)}>
+              <Toggle
+                className="h-7 p-2 space-x-2"
+                onPressedChange={() => setIsFormOpen(!isFormOpen)}
+              >
                 <BsChatSquare size={14} />
                 <span>Reply</span>
               </Toggle>

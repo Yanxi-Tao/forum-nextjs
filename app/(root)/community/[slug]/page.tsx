@@ -1,10 +1,21 @@
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
 import { ExploreDisplay } from '@/components/display/explore-display'
 import { fetchPosts } from '@/actions/post/fetch-post'
 import { EXPLORE_POSTS_KEY, POST_FETCH_SPAN } from '@/lib/constants'
 
 import { getCommunityBySlug } from '@/data/community'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,7 +41,6 @@ export default async function CommunityPage({
 
   const queryClient = new QueryClient()
   const search = searchParams.search
-  console.log(search)
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: [EXPLORE_POSTS_KEY, { communitySlug: slug }],
@@ -50,9 +60,15 @@ export default async function CommunityPage({
       {!search && (
         <CardHeader className="bg-muted rounded-xl">
           <div className="relative flex justify-between">
-            <AvatarCard source={community.image} name={community.name} className="h-36 w-36 text-3xl" />
+            <AvatarCard
+              source={community.image}
+              name={community.name}
+              className="h-36 w-36 text-3xl"
+            />
             <div className="absolute left-28 top-28">
-              <CardTitle className="bg-muted rounded-lg p-1 px-2">{community.name}</CardTitle>
+              <CardTitle className="bg-muted rounded-lg p-1 px-2">
+                {community.name}
+              </CardTitle>
             </div>
             <div className="flex flex-col justify-between items-end">
               <DropdownMenu>

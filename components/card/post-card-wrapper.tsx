@@ -158,7 +158,7 @@ export const PostCardWrapper = ({
             </span>
           </div>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="focus:outline-none">
               <HiDotsHorizontal size={20} />
             </DropdownMenuTrigger>
             <DropdownMenuContent>

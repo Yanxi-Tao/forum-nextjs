@@ -106,7 +106,7 @@ export default function QuestionDisplay({
   return (
     <div>
       <Card className="border-0 shadow-none">
-        <CardHeader className="max-w-[820px] truncate">
+        <CardHeader className="max-w-[820px] break-words">
           <div className="flex flex-row justify-between items-center">
             <div className="flex items-center space-x-2 text-sm">
               {community && (
