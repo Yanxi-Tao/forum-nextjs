@@ -22,10 +22,10 @@ export const CreatePostDisplay = ({ communitySlug, communityName }: { communityS
             </TabsTrigger>
           </TabsList>
           <TabsContent value="question" className="w-full">
-            <QuestionForm communitySlug={communitySlug} />
+            <QuestionForm communitySlug={communitySlug} redirectTo={communitySlug ? `/community/${communitySlug}` : '/'} />
           </TabsContent>
           <TabsContent value="article" className="w-full">
-            <ArticleForm communitySlug={communitySlug} />
+            <ArticleForm communitySlug={communitySlug} redirectTo={communitySlug ? `/community/${communitySlug}` : '/'} />
           </TabsContent>
           <TabsContent value="answer" className="w-full">
             answer

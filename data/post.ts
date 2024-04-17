@@ -1,5 +1,6 @@
 import { db } from '@/db/client'
 import { PostType } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 
 export const getDefaultQuestionsOrArticles = async ({
   communitySlug,
@@ -171,7 +172,15 @@ export const getPostById = async (id: string) => {
   }
 }
 
-export const getAnsewrs = async ({ parentId, offset, take }: { parentId: string; offset: number; take: number }) => {
+export const getAnsewrs = async ({
+  parentId,
+  offset,
+  take,
+}: {
+  parentId: string
+  offset: number
+  take: number
+}) => {
   try {
     const answers = await db.post.findMany({
       where: {
@@ -212,10 +221,8 @@ export const getAnsewrs = async ({ parentId, offset, take }: { parentId: string;
 }
 
 export const deletePostById = async (id: string, type: PostType) => {
-  //todo - cascade delete
+  // todo - cascade delete
   if (type === 'question') {
-    console.log('delete question')
-
     try {
       await db.post.update({
         where: {
@@ -230,6 +237,7 @@ export const deletePostById = async (id: string, type: PostType) => {
           author: true,
         },
       })
+      revalidatePath('/profile')
       return true
     } catch {
       return false
@@ -241,6 +249,7 @@ export const deletePostById = async (id: string, type: PostType) => {
         id,
       },
     })
+    revalidatePath('/profile')
     return true
   } catch {
     return false

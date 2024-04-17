@@ -1,6 +1,13 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +17,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { BiSolidDownvote, BiUpvote, BiSolidUpvote, BiDownvote } from 'react-icons/bi'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import {
+  BiSolidDownvote,
+  BiUpvote,
+  BiSolidUpvote,
+  BiDownvote,
+} from 'react-icons/bi'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { HiFlag } from 'react-icons/hi2'
 import { FiEdit } from 'react-icons/fi'
@@ -21,7 +37,7 @@ import { formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { QuestionDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { AvatarCard } from '@/components/card/avatar-card'
@@ -45,17 +61,36 @@ export default function ArticleDisplay({
   const user = useCurrentUser()
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()
-  const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
-  const userBookmarkStatus = bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false
+  const userVoteStatus = useMemo(
+    () =>
+      upVotes.find((vote) => vote.id === user?.id)
+        ? 1
+        : downVotes.find((vote) => vote.id === user?.id)
+        ? -1
+        : 0,
+    [upVotes, downVotes, user]
+  )
+  const userBookmarkStatus = useMemo(
+    () =>
+      bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false,
+    [bookmarks, user]
+  )
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
 
+  const commentCount = useMemo(
+    () =>
+      comments.length > 0
+        ? comments.reduce((acc, comment) => acc + comment._count.children, 0) +
+          comments.length
+        : 0,
+    [comments]
+  )
+
   if (!user || !user.name || !user.email || !user.id) {
     return null
   }
-
-  const commentCount = comments.length > 0 ? comments.reduce((acc, comment) => acc + comment._count.children, 0) + comments.length : 0
 
   return (
     <div>
@@ -66,9 +101,16 @@ export default function ArticleDisplay({
               {community && (
                 <>
                   <Link href={`/community/${community.slug}`}>
-                    <AvatarCard source={null} name={community.name} className="w-7 h-7 text-sm" />
+                    <AvatarCard
+                      source={null}
+                      name={community.name}
+                      className="w-7 h-7 text-sm"
+                    />
                   </Link>
-                  <Link href={`/community/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href={`/community/${community.slug}`}
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     <span>{community.name}</span>
                   </Link>
                   <span>/</span>
@@ -77,9 +119,16 @@ export default function ArticleDisplay({
               {author ? (
                 <>
                   <Link href={`/profile/${author.slug}`}>
-                    <AvatarCard source={author.image} name={author.name} className="w-7 h-7 text-sm" />
+                    <AvatarCard
+                      source={author.image}
+                      name={author.name}
+                      className="w-7 h-7 text-sm"
+                    />
                   </Link>
-                  <Link href={`/profile/${author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href={`/profile/${author.slug}`}
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     <span>{author.name}</span>
                   </Link>
                 </>
@@ -91,7 +140,9 @@ export default function ArticleDisplay({
               )}
             </div>
             <div className="flex items-center space-x-3">
-              <span className="text-xs">{new Date(updatedAt).toDateString()}</span>
+              <span className="text-xs">
+                {new Date(updatedAt).toDateString()}
+              </span>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <HiDotsHorizontal size={20} />
@@ -107,7 +158,9 @@ export default function ArticleDisplay({
                         <FiEdit size={16} className="mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => deletePost(id, 'article')}>
+                      <DropdownMenuItem
+                        onSelect={() => deletePost(id, 'article')}
+                      >
                         <MdDelete size={16} className="mr-2" />
                         Delete
                       </DropdownMenuItem>
@@ -119,8 +172,11 @@ export default function ArticleDisplay({
           </div>
           <CardTitle className=" leading-normal">{title}</CardTitle>
         </CardHeader>
-        <CardContent className="max-w-[820px]">
-          <div className="editor w-full" dangerouslySetInnerHTML={{ __html: content }} />
+        <CardContent className="max-w-[820px] break-words">
+          <div
+            className="editor w-full"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </CardContent>
         <Collapsible>
           <CardFooter className="py-0 pb-4 flex justify-between">
@@ -128,18 +184,29 @@ export default function ArticleDisplay({
               <ToggleGroup
                 type="single"
                 onValueChange={(value) => {
-                  const voteValue = value === 'up' ? 1 : value === 'down' ? -1 : 0
+                  const voteValue =
+                    value === 'up' ? 1 : value === 'down' ? -1 : 0
                   setVoteStatus(voteValue)
                   updateVote(id, user.id as string, voteValue)
                 }}
                 className=" bg-muted/50 rounded-lg"
               >
                 <ToggleGroupItem value="up" className="space-x-4" size="sm">
-                  {voteStatus === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
-                  <span className="mx-1">{formatNumber(baseCount + voteStatus)}</span>
+                  {voteStatus === 1 ? (
+                    <BiSolidUpvote size={16} />
+                  ) : (
+                    <BiUpvote size={16} />
+                  )}
+                  <span className="mx-1">
+                    {formatNumber(baseCount + voteStatus)}
+                  </span>
                 </ToggleGroupItem>
                 <ToggleGroupItem value="down" size="sm">
-                  {voteStatus === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
+                  {voteStatus === -1 ? (
+                    <BiSolidDownvote size={16} />
+                  ) : (
+                    <BiDownvote size={16} />
+                  )}
                 </ToggleGroupItem>
               </ToggleGroup>
               <CollapsibleTrigger asChild>
@@ -155,7 +222,11 @@ export default function ArticleDisplay({
                   updateBookmark(id, user.id as string, value)
                 }}
               >
-                {bookmarkStatus ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+                {bookmarkStatus ? (
+                  <BsBookmarkFill size={16} />
+                ) : (
+                  <BsBookmark size={16} />
+                )}
                 <span className="ml-2">Bookmark</span>
               </Toggle>
             </div>

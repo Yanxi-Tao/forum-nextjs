@@ -68,15 +68,15 @@ export const RegisterSchema = z
   })
 
 export const CreatePostSchema = z.object({
-  title: z.string().min(1, { message: 'required' }),
+  title: z.string().min(1).max(255),
   type: z.nativeEnum(PostType),
-  content: z.string().min(1, { message: 'required' }),
+  content: z.string().min(1, { message: 'Required' }),
   parentId: z.optional(z.string()),
   communitySlug: z.optional(z.string()),
 })
 
 export const CreateCommentSchema = z.object({
-  content: z.string().min(1, { message: 'required' }),
+  content: z.string().min(1, { message: 'Required' }),
   postId: z.optional(z.string()),
   parentId: z.optional(z.string()),
   repliesToId: z.optional(z.string()),

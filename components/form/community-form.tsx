@@ -5,8 +5,23 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CreateCommunitySchema } from '@/schemas'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -16,8 +31,10 @@ import { createCommunity } from '@/actions/community/create-community'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import PulseLoader from 'react-spinners/PulseLoader'
+import { useRouter } from 'next/navigation'
 
 export const CommunityForm = () => {
+  const router = useRouter()
   const [isPending, setIsPending] = useState(false)
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
@@ -36,10 +53,11 @@ export const CommunityForm = () => {
     setIsPending(true)
     const state = await createCommunity(data)
     setIsPending(false)
-    setAlert(state)
     if (state.type === 'success') {
       form.reset()
+      router.push(`/community/${state.message}`)
     }
+    setAlert(state)
   }
   return (
     <Card className="border-0 shadow-none">
@@ -48,7 +66,11 @@ export const CommunityForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" autoComplete="off">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-5"
+            autoComplete="off"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -86,7 +108,11 @@ export const CommunityForm = () => {
               )}
             /> */}
             <FormAlert alert={alert} />
-            <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full">
+            <Button
+              type="submit"
+              disabled={isPending || !form.formState.isValid}
+              className="w-full"
+            >
               {isPending ? <PulseLoader color="#8585ad" /> : 'Create Community'}
             </Button>
           </form>

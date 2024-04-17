@@ -17,7 +17,7 @@ export const sendPasswordResetTokenEmail = async (email: string, token: string) 
 
   await resend.emails.send({
     from: 'onboarding@resend.dev',
-    to: email,
+    to: 'yanxi_tao@fis.edu', // testing purposes
     subject: 'IBZN - Reset your password',
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password</p>`,
   })

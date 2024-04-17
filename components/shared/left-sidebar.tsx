@@ -19,9 +19,9 @@ export const LeftSidebar = () => {
             (pathname.startsWith(nav.route) && nav.route.length > 1) ||
             pathname === nav.route ||
             (pathname.endsWith(nav.route) && pathname.startsWith('/community'))
-          if (pathname.startsWith('/community') && nav.route === '/create') {
-            nav.route = `${pathname}/create`
-          }
+          // if (pathname.startsWith('/community') && nav.route === '/create') {
+          //   nav.route = `${pathname}/create`
+          // }
           return (
             <Button
               key={index}

@@ -1,6 +1,16 @@
 import { $isLinkNode } from '@lexical/link'
-import { $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND } from '@lexical/list'
-import { $createHeadingNode, $createQuoteNode, $isHeadingNode } from '@lexical/rich-text'
+import {
+  $isListNode,
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  ListNode,
+  REMOVE_LIST_COMMAND,
+} from '@lexical/list'
+import {
+  $createHeadingNode,
+  $createQuoteNode,
+  $isHeadingNode,
+} from '@lexical/rich-text'
 import { $setBlocksType } from '@lexical/selection'
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html'
@@ -22,14 +32,42 @@ import {
   UNDO_COMMAND,
 } from 'lexical'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { $createCodeNode, $isCodeNode, CODE_LANGUAGE_FRIENDLY_NAME_MAP, CODE_LANGUAGE_MAP, getLanguageFriendlyName } from '@lexical/code'
+import {
+  $createCodeNode,
+  $isCodeNode,
+  CODE_LANGUAGE_FRIENDLY_NAME_MAP,
+  CODE_LANGUAGE_MAP,
+  getLanguageFriendlyName,
+} from '@lexical/code'
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
-import { Bold, Code, GitCommitHorizontal, Italic, Redo2, Strikethrough, Underline, Undo2 } from 'lucide-react'
+import {
+  Bold,
+  Code,
+  GitCommitHorizontal,
+  Italic,
+  Redo2,
+  Strikethrough,
+  Underline,
+  Undo2,
+} from 'lucide-react'
 import { Toggle } from '@/components/ui/toggle'
 import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode'
 import { InsertEquationDialog } from './equation-plugin'
+import { Separator } from '@/components/ui/separator'
 
 export default function ToolbarPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
@@ -38,7 +76,9 @@ export default function ToolbarPlugin(): JSX.Element | null {
   const [canRedo, setCanRedo] = useState(false)
 
   const [blockType, setBlockType] = useState('paragraph')
-  const [selectedElementKey, setselectedElementKey] = useState<string | null>(null)
+  const [selectedElementKey, setselectedElementKey] = useState<string | null>(
+    null
+  )
   const [codeLanguage, setCodeLanguage] = useState('')
 
   const [isBold, setIsBold] = useState(false)
@@ -53,7 +93,10 @@ export default function ToolbarPlugin(): JSX.Element | null {
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode()
 
-      const topElement = anchorNode.getKey() === 'root' ? anchorNode : anchorNode.getTopLevelElementOrThrow()
+      const topElement =
+        anchorNode.getKey() === 'root'
+          ? anchorNode
+          : anchorNode.getTopLevelElementOrThrow()
 
       const elementKey = topElement.getKey()
       const elementDOM = editor.getElementByKey(elementKey)
@@ -75,10 +118,14 @@ export default function ToolbarPlugin(): JSX.Element | null {
         setselectedElementKey(elementKey)
         if ($isListNode(topElement)) {
           const parentList = $getNearestNodeOfType(anchorNode, ListNode)
-          const type = parentList ? parentList.getListType() : topElement.getListType
+          const type = parentList
+            ? parentList.getListType()
+            : topElement.getListType
           setBlockType(type)
         } else {
-          const type = $isHeadingNode(topElement) ? topElement.getTag() : topElement.getType()
+          const type = $isHeadingNode(topElement)
+            ? topElement.getTag()
+            : topElement.getType()
 
           if (type in blockTypeToBlockName) {
             setBlockType(type)
@@ -86,7 +133,9 @@ export default function ToolbarPlugin(): JSX.Element | null {
           if ($isCodeNode(topElement)) {
             const language = topElement.getLanguage()
 
-            setCodeLanguage(language ? CODE_LANGUAGE_MAP[language] || language : '')
+            setCodeLanguage(
+              language ? CODE_LANGUAGE_MAP[language] || language : ''
+            )
             return
           }
         }
@@ -143,7 +192,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
   )
 
   return (
-    <div className="sticky p-2 top-12 z-10 bg-background flex space-x-1">
+    <div className="sticky h-12 items-center p-2 top-12 z-10 bg-background flex space-x-1">
       <Button
         type="button"
         variant="ghost"
@@ -166,44 +215,16 @@ export default function ToolbarPlugin(): JSX.Element | null {
       >
         <Redo2 size={18} />
       </Button>
-      {/* <Button onClick={() => console.log(JSON.stringify(editor.getEditorState()))}>StoreJSON</Button> */}
-      {/* <Button
-        type="button"
-        onClick={() =>
-          editor.getEditorState().read(() => {
-            console.log($generateHtmlFromNodes(editor, null))
-          })
-        }
-      >
-        StoreHTML
-      </Button>
-      <Button
-        type="button"
-        onClick={() =>
-          editor.update(() => {
-            // In the browser you can use the native DOMParser API to parse the HTML string.
-            const parser = new DOMParser()
-            const dom = parser.parseFromString(
-              `<p class="editor-paragraph" dir="ltr"><span style="white-space: pre-wrap;">egregeertgefvbregb</span></p><h3 class="editor-heading-h3" dir="ltr"><span style="white-space: pre-wrap;">ebergbregbr</span></h3><p class="editor-paragraph" dir="ltr"><span style="white-space: pre-wrap;">erbregbergb</span><u><s><i><b><code spellcheck="false" style="white-space: pre-wrap;"><strong class="editor-textUnderlineStrikethrough editor-textBold editor-textCode editor-textItalic">ergbregbregbebergb</strong></code></b></i></s></u></p><hr><p class="editor-paragraph" dir="ltr"><span style="white-space: pre-wrap;">rgebregbregbreb</span></p><p class="editor-paragraph" dir="ltr"><span style="white-space: pre-wrap;">ergbergbergb</span></p><div data-lexical-equation="ZXJnYmVyZ2JyZWdiZWdi" data-lexical-inline="false"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.8889em; vertical-align: -0.1944em;"></span><span class="mord mathnormal" style="margin-right: 0.0278em;">er</span><span class="mord mathnormal" style="margin-right: 0.0359em;">g</span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right: 0.0278em;">er</span><span class="mord mathnormal" style="margin-right: 0.0359em;">g</span><span class="mord mathnormal">b</span><span class="mord mathnormal">re</span><span class="mord mathnormal" style="margin-right: 0.0359em;">g</span><span class="mord mathnormal">b</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right: 0.0359em;">g</span><span class="mord mathnormal">b</span></span></span></span></span></div><p class="editor-paragraph" dir="ltr"><span style="white-space: pre-wrap;">ergbegrbgbregb</span><span data-lexical-equation="d2VyZ2dlcndndw==" data-lexical-inline="true"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.1944em;"></span><span class="mord mathnormal" style="margin-right: 0.0269em;">w</span><span class="mord mathnormal" style="margin-right: 0.0278em;">er</span><span class="mord mathnormal" style="margin-right: 0.0359em;">gg</span><span class="mord mathnormal" style="margin-right: 0.0278em;">er</span><span class="mord mathnormal" style="margin-right: 0.0269em;">w</span><span class="mord mathnormal" style="margin-right: 0.0359em;">g</span><span class="mord mathnormal" style="margin-right: 0.0269em;">w</span></span></span></span></span><span style="white-space: pre-wrap;">ergbergbergbergbrgeb</span></p><blockquote class="editor-quote" dir="ltr"><span style="white-space: pre-wrap;">ergbergbreg</span></blockquote><pre class="editor-code" spellcheck="false" data-highlight-language="javascript"><span style="white-space: pre-wrap;">bergberbreb</span></pre><ul class="editor-list-ul"><li value="1" class="editor-listItem"><span style="white-space: pre-wrap;">bergbrebge</span></li><li value="2" class="editor-listItem editor-nested-listitem"><ul class="editor-list-ul"><li value="1" class="editor-listItem"><span style="white-space: pre-wrap;">efbebrgbrg</span></li></ul></li></ul><p class="editor-paragraph" dir="ltr"><span style="white-space: pre-wrap;">wegver</span></p>`,
-              'text/html'
-            )
-
-            // Once you have the DOM instance it's easy to generate LexicalNodes.
-            const nodes = $generateNodesFromDOM(editor, dom)
-
-            // Select the root
-            $getRoot().select()
-
-            // Insert them at a selection.
-            $insertNodes(nodes)
-          })
-        }
-      >
-        SetHTML
-      </Button> */}
-      {blockType in blockTypeToBlockName && <BlockFormatDropdown editor={editor} blockType={blockType} />}
+      {blockType in blockTypeToBlockName && (
+        <BlockFormatDropdown editor={editor} blockType={blockType} />
+      )}
+      <Separator orientation="vertical" />
       {blockType === 'code' ? (
-        <CodeLanguageDropdown onCodeLanguageSelect={onCodeLanguageSelect} codeLanguage={codeLanguage} editor={editor} />
+        <CodeLanguageDropdown
+          onCodeLanguageSelect={onCodeLanguageSelect}
+          codeLanguage={codeLanguage}
+          editor={editor}
+        />
       ) : (
         <>
           <TextFormatToggleGroup
@@ -216,6 +237,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
               isCode,
             }}
           />
+          <Separator orientation="vertical" />
           <InsertEquationDialog editor={editor} />
           <Button
             type="button"
@@ -248,7 +270,10 @@ const blockTypeToBlockName: { [key: string]: string } = {
   quote: 'Quote',
 }
 
-const BlockFormatDropdown: React.FC<{ editor: LexicalEditor; blockType: string }> = ({ editor, blockType }) => {
+const BlockFormatDropdown: React.FC<{
+  editor: LexicalEditor
+  blockType: string
+}> = ({ editor, blockType }) => {
   const formatFunctions: { [key: string]: () => void } = useMemo(() => {
     return {
       bullet: () => {
@@ -271,7 +296,8 @@ const BlockFormatDropdown: React.FC<{ editor: LexicalEditor; blockType: string }
                 const codeNode = $createCodeNode()
                 selection.insertNodes([codeNode])
                 selection = $getSelection()
-                if ($isRangeSelection(selection)) selection.insertRawText(textContent)
+                if ($isRangeSelection(selection))
+                  selection.insertRawText(textContent)
               }
             }
           })
@@ -353,30 +379,37 @@ const BlockFormatDropdown: React.FC<{ editor: LexicalEditor; blockType: string }
   }
 
   return (
-    <Select
-      value={blockType}
-      onValueChange={(value) => {
-        formatBlock(value)
-      }}
-    >
-      <SelectTrigger className="w-36 focus:ring-0 focus:ring-offset-0 border-none hover:bg-accent hover:text-accent-foreground">
-        <SelectValue>{blockTypeToBlockName[blockType]}</SelectValue>
-      </SelectTrigger>
-      <SelectContent
-        onCloseAutoFocus={() => {
-          editor.focus()
-        }}
-      >
-        <SelectItem value="paragraph">Normal</SelectItem>
-        <SelectItem value="h1">Heading 1</SelectItem>
-        <SelectItem value="h2">Heading 2</SelectItem>
-        <SelectItem value="h3">Heading 3</SelectItem>
-        <SelectItem value="bullet">Bulleted List</SelectItem>
-        <SelectItem value="number">Numbered List</SelectItem>
-        <SelectItem value="quote">Quote</SelectItem>
-        <SelectItem value="code">Code Block</SelectItem>
-      </SelectContent>
-    </Select>
+    <TooltipProvider delayDuration={500}>
+      <Tooltip>
+        <Select
+          value={blockType}
+          onValueChange={(value) => {
+            formatBlock(value)
+          }}
+        >
+          <TooltipTrigger asChild>
+            <SelectTrigger className="w-36 focus:ring-0 focus:ring-offset-0 border-none hover:bg-accent hover:text-accent-foreground">
+              <SelectValue>{blockTypeToBlockName[blockType]}</SelectValue>
+            </SelectTrigger>
+          </TooltipTrigger>
+          <SelectContent
+            onCloseAutoFocus={() => {
+              editor.focus()
+            }}
+          >
+            <SelectItem value="paragraph">Normal</SelectItem>
+            <SelectItem value="h1">Heading 1</SelectItem>
+            <SelectItem value="h2">Heading 2</SelectItem>
+            <SelectItem value="h3">Heading 3</SelectItem>
+            <SelectItem value="bullet">Bulleted List</SelectItem>
+            <SelectItem value="number">Numbered List</SelectItem>
+            <SelectItem value="quote">Quote</SelectItem>
+            <SelectItem value="code">Code Block</SelectItem>
+          </SelectContent>
+        </Select>
+        <TooltipContent>Block Format</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
 
@@ -389,54 +422,87 @@ type textFormatToggledType = {
   isCode: boolean
 }
 
-const TextFormatToggleGroup: React.FC<{ editor: LexicalEditor; textFormatToggled: textFormatToggledType }> = ({
-  editor,
-  textFormatToggled,
-}) => {
-  const { isBold, isItalic, isUnderline, isStrikethrough, isCode } = textFormatToggled
+const TextFormatToggleGroup: React.FC<{
+  editor: LexicalEditor
+  textFormatToggled: textFormatToggledType
+}> = ({ editor, textFormatToggled }) => {
+  const { isBold, isItalic, isUnderline, isStrikethrough, isCode } =
+    textFormatToggled
 
   return (
     <div className="flex flex-row space-x-1">
-      <Toggle
-        pressed={isBold}
-        onPressedChange={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
-        }}
-      >
-        <Bold size={18} />
-      </Toggle>
-      <Toggle
-        pressed={isItalic}
-        onPressedChange={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
-        }}
-      >
-        <Italic size={18} />
-      </Toggle>
-      <Toggle
-        pressed={isUnderline}
-        onPressedChange={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
-        }}
-      >
-        <Underline size={18} />
-      </Toggle>
-      <Toggle
-        pressed={isStrikethrough}
-        onPressedChange={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
-        }}
-      >
-        <Strikethrough size={18} />
-      </Toggle>
-      <Toggle
-        pressed={isCode}
-        onPressedChange={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
-        }}
-      >
-        <Code size={18} />
-      </Toggle>
+      <TooltipProvider delayDuration={500}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle
+              title="Bold"
+              pressed={isBold}
+              onPressedChange={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
+              }}
+            >
+              <Bold size={18} />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>Bold</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle
+              title="Italic"
+              pressed={isItalic}
+              onPressedChange={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
+              }}
+            >
+              <Italic size={18} />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>Italic</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle
+              title="Underline"
+              pressed={isUnderline}
+              onPressedChange={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
+              }}
+            >
+              <Underline size={18} />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>Underline</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle
+              title="Strikethrough"
+              pressed={isStrikethrough}
+              onPressedChange={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
+              }}
+            >
+              <Strikethrough size={18} />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>Strikethrough</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Toggle
+              title="Inline Code"
+              pressed={isCode}
+              onPressedChange={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
+              }}
+            >
+              <Code size={18} />
+            </Toggle>
+          </TooltipTrigger>
+          <TooltipContent>Inline Code</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   )
 }
@@ -444,7 +510,9 @@ const TextFormatToggleGroup: React.FC<{ editor: LexicalEditor; textFormatToggled
 function getCodeLanguageOptions(): [string, string][] {
   const options: [string, string][] = []
 
-  for (const [lang, friendlyName] of Object.entries(CODE_LANGUAGE_FRIENDLY_NAME_MAP)) {
+  for (const [lang, friendlyName] of Object.entries(
+    CODE_LANGUAGE_FRIENDLY_NAME_MAP
+  )) {
     options.push([lang, friendlyName])
   }
   return options
@@ -452,11 +520,11 @@ function getCodeLanguageOptions(): [string, string][] {
 
 const CODE_LANGUAGE_OPTIONS = getCodeLanguageOptions()
 
-const CodeLanguageDropdown: React.FC<{ editor: LexicalEditor; codeLanguage: string; onCodeLanguageSelect: (value: string) => void }> = ({
-  editor,
-  codeLanguage,
-  onCodeLanguageSelect,
-}) => {
+const CodeLanguageDropdown: React.FC<{
+  editor: LexicalEditor
+  codeLanguage: string
+  onCodeLanguageSelect: (value: string) => void
+}> = ({ editor, codeLanguage, onCodeLanguageSelect }) => {
   return (
     <Select value={codeLanguage} onValueChange={onCodeLanguageSelect}>
       <SelectTrigger className="w-[180px] focus:ring-0 focus:ring-offset-0 border-none hover:bg-accent hover:text-accent-foreground">

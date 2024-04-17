@@ -41,10 +41,10 @@ export const CommentForm = ({
 
   // form submit handler
   const onSubmit = (data: z.infer<typeof CreateCommentSchema>) => {
+    setIsFormOpen?.(false)
     mutate(data)
     form.reset()
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -59,7 +59,9 @@ export const CommentForm = ({
                   {...field}
                   className=" min-h-10"
                   placeholder="Enter your comment here..."
-                  onBlur={() => setIsFormOpen && setIsFormOpen(false)}
+                  onBlur={() => {
+                    !form.getValues('content') && setIsFormOpen?.(false)
+                  }}
                 />
               </FormControl>
             </FormItem>

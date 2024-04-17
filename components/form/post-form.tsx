@@ -14,11 +14,15 @@ import { FormAlertProps } from '@/lib/types'
 import { useRef, useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { $getRoot, EditorState, LexicalEditor } from 'lexical'
-import { Editor } from '../editor'
+import { Editor } from '@/components/editor'
 import { $generateHtmlFromNodes } from '@lexical/html'
-import { EditorSurfaceProps } from '../editor/editor-surface'
+import { useQueryClient } from '@tanstack/react-query'
+import { EXPLORE_POSTS_KEY } from '@/lib/constants'
+import { useRouter } from 'next/navigation'
 
-export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefined }) => {
+export const QuestionForm = ({ communitySlug, redirectTo }: { communitySlug: string | undefined; redirectTo: string }) => {
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
   const form = useForm<z.infer<typeof CreatePostSchema>>({
@@ -58,6 +62,10 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
       editorRef.current?.update(() => {
         $getRoot().clear()
       })
+      queryClient.invalidateQueries({
+        queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
+      })
+      router.push(redirectTo)
     }
   }
 
@@ -72,9 +80,11 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
               <FormItem>
                 <FormLabel className="text-foreground">Question</FormLabel>
                 <FormControl>
-                  <Textarea {...field} disabled={isPending} />
+                  <Textarea {...field} disabled={isPending} autoFocus />
                 </FormControl>
-                <FormDescription>Be specific</FormDescription>
+                <FormDescription className={form.formState.errors.title && 'text-destructive'}>
+                  {form.getValues('title').length < 1 ? 'Required' : 'Be specific'}: {form.getValues('title').length}/255
+                </FormDescription>
               </FormItem>
             )}
           />
@@ -88,6 +98,7 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
                   <Editor editorRef={editorRef} onChange={handleOnChange} />
                 </FormControl>
                 <FormDescription>Include all the information someone would need to answer your question</FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -101,7 +112,9 @@ export const QuestionForm = ({ communitySlug }: { communitySlug: string | undefi
   )
 }
 
-export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefined }) => {
+export const ArticleForm = ({ communitySlug, redirectTo }: { communitySlug: string | undefined; redirectTo: string }) => {
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
   const form = useForm<z.infer<typeof CreatePostSchema>>({
@@ -141,6 +154,10 @@ export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefin
       editorRef.current?.update(() => {
         $getRoot().clear()
       })
+      queryClient.invalidateQueries({
+        queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
+      })
+      router.push(redirectTo)
     }
   }
 
@@ -157,7 +174,9 @@ export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefin
                 <FormControl>
                   <Textarea {...field} disabled={isPending} />
                 </FormControl>
-                <FormDescription>Be specific</FormDescription>
+                <FormDescription className={form.formState.errors.title && 'text-destructive'}>
+                  {form.getValues('title').length < 1 ? 'Required' : 'Be specific'}: {form.getValues('title').length}/255
+                </FormDescription>
               </FormItem>
             )}
           />
@@ -170,6 +189,7 @@ export const ArticleForm = ({ communitySlug }: { communitySlug: string | undefin
                 <FormControl>
                   <Editor editorRef={editorRef} onChange={handleOnChange} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -241,6 +261,7 @@ export const AnswerForm = ({
                 <Editor editorRef={editorRef} onChange={handleOnChange} />
               </FormControl>
               <FormDescription>Your answer helps others learn about this topic</FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

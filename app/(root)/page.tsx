@@ -8,7 +8,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: { se
   const search = searchParams.search
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: [EXPLORE_POSTS_KEY],
+    queryKey: [EXPLORE_POSTS_KEY, { undefined }],
     queryFn: ({ pageParam }) => fetchPosts(pageParam),
     initialPageParam: {
       search,

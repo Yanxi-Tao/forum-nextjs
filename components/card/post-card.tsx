@@ -7,7 +7,7 @@ export const PostCard = (post: PostCardProps) => {
   const shouldCollapse = post.content.length > 500
   return (
     <PostCardWrapper {...post} shouldCollapse={shouldCollapse}>
-      <div className="editor max-w-[760px]" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <div className="editor" dangerouslySetInnerHTML={{ __html: post.content }} />
     </PostCardWrapper>
   )
 }

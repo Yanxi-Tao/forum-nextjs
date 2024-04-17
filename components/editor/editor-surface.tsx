@@ -18,6 +18,7 @@ import AutoLinkPlugin from './plugins/autolink-plugin'
 import EquationPlugin from './plugins/equation-plugin'
 import ListMaxIndentLevelPlugin from './plugins/list-max-indent-plugin'
 import { EditorState, LexicalEditor } from 'lexical'
+import { PostType } from '@prisma/client'
 
 export type EditorSurfaceProps = {
   editorRef: ((instance: LexicalEditor | null) => void) | React.MutableRefObject<LexicalEditor | null | undefined>
@@ -29,7 +30,6 @@ export const EditorSurface: React.FC<EditorSurfaceProps> = ({ editorRef, onChang
     <div className="border border-input rounded-md p-2 px-4 focus-within:ring-1 focus-within:ring-ring">
       <ToolbarPlugin />
       <div className="relative">
-        <AutoFocusPlugin />
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor outline-none max-w-[760px] min-h-40" />}
           ErrorBoundary={LexicalErrorBoundary}

@@ -1,6 +1,13 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +17,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { BiSolidDownvote, BiUpvote, BiSolidUpvote, BiDownvote } from 'react-icons/bi'
+import {
+  BiSolidDownvote,
+  BiUpvote,
+  BiSolidUpvote,
+  BiDownvote,
+} from 'react-icons/bi'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { HiFlag } from 'react-icons/hi2'
 import { FiEdit } from 'react-icons/fi'
@@ -20,7 +32,7 @@ import { formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { QuestionDisplayProps } from '@/lib/types'
 import { AnswerForm } from '@/components/form/post-form'
 import { ANSWERS_FETCH_SPAN } from '@/lib/constants'
@@ -55,14 +67,27 @@ export default function QuestionDisplay({
   const { ref, inView } = useInView()
 
   const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfiniteAnswers({
-    parentId: id,
-    offset: 0,
-    take: ANSWERS_FETCH_SPAN,
-  })
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
+    useInfiniteAnswers({
+      parentId: id,
+      offset: 0,
+      take: ANSWERS_FETCH_SPAN,
+    })
 
-  const userVoteStatus = upVotes.find((vote) => vote.id === user?.id) ? 1 : downVotes.find((vote) => vote.id === user?.id) ? -1 : 0
-  const userBookmarkStatus = bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false
+  const userVoteStatus = useMemo(
+    () =>
+      upVotes.find((vote) => vote.id === user?.id)
+        ? 1
+        : downVotes.find((vote) => vote.id === user?.id)
+        ? -1
+        : 0,
+    [upVotes, downVotes, user]
+  )
+  const userBookmarkStatus = useMemo(
+    () =>
+      bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false,
+    [bookmarks, user]
+  )
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
@@ -81,15 +106,22 @@ export default function QuestionDisplay({
   return (
     <div>
       <Card className="border-0 shadow-none">
-        <CardHeader>
+        <CardHeader className="max-w-[820px] truncate">
           <div className="flex flex-row justify-between items-center">
             <div className="flex items-center space-x-2 text-sm">
               {community && (
                 <>
                   <Link href={`/community/${community.slug}`}>
-                    <AvatarCard source={null} name={community.name} className="w-7 h-7 text-sm" />
+                    <AvatarCard
+                      source={null}
+                      name={community.name}
+                      className="w-7 h-7 text-sm"
+                    />
                   </Link>
-                  <Link href={`/community/${community.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href={`/community/${community.slug}`}
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     <span>{community.name}</span>
                   </Link>
                   <span>/</span>
@@ -98,21 +130,34 @@ export default function QuestionDisplay({
               {author ? (
                 <>
                   <Link href={`/profile/${author.slug}`}>
-                    <AvatarCard source={author.image} name={author.name} className="w-7 h-7 text-sm" />
+                    <AvatarCard
+                      source={author.image}
+                      name={author.name}
+                      className="w-7 h-7 text-sm"
+                    />
                   </Link>
-                  <Link href={`/profile/${author.slug}`} className="text-primary underline-offset-4 hover:underline">
+                  <Link
+                    href={`/profile/${author.slug}`}
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
                     <span>{author.name}</span>
                   </Link>
                 </>
               ) : (
                 <>
-                  <AvatarCard source={null} name="Deleted user" className="w-7 h-7 text-sm" />
+                  <AvatarCard
+                    source={null}
+                    name="Deleted user"
+                    className="w-7 h-7 text-sm"
+                  />
                   <span>Deleted user</span>
                 </>
               )}
             </div>
             <div className="flex items-center space-x-3">
-              <span className="text-xs">{new Date(updatedAt).toDateString()}</span>
+              <span className="text-xs">
+                {new Date(updatedAt).toDateString()}
+              </span>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <HiDotsHorizontal size={20} />
@@ -128,7 +173,9 @@ export default function QuestionDisplay({
                         <FiEdit size={16} className="mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => deletePost(id, 'question')}>
+                      <DropdownMenuItem
+                        onSelect={() => deletePost(id, 'question')}
+                      >
                         <MdDelete size={16} className="mr-2" />
                         Delete
                       </DropdownMenuItem>
@@ -138,10 +185,13 @@ export default function QuestionDisplay({
               </DropdownMenu>
             </div>
           </div>
-          <CardTitle className=" leading-normal">{title}</CardTitle>
+          <CardTitle className="leading-normal">{title}</CardTitle>
         </CardHeader>
-        <CardContent className="max-w-[820px]">
-          <div className="editor w-full" dangerouslySetInnerHTML={{ __html: content }} />
+        <CardContent className="max-w-[820px] break-words">
+          <div
+            className="editor w-full"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </CardContent>
         <CardFooter className="py-0 pb-4 flex justify-between">
           <div className="flex items-center space-x-4">
@@ -155,11 +205,21 @@ export default function QuestionDisplay({
               className=" bg-muted/50 rounded-lg"
             >
               <ToggleGroupItem value="up" className="space-x-4" size="sm">
-                {voteStatus === 1 ? <BiSolidUpvote size={16} /> : <BiUpvote size={16} />}
-                <span className="mx-1">{formatNumber(baseCount + voteStatus)}</span>
+                {voteStatus === 1 ? (
+                  <BiSolidUpvote size={16} />
+                ) : (
+                  <BiUpvote size={16} />
+                )}
+                <span className="mx-1">
+                  {formatNumber(baseCount + voteStatus)}
+                </span>
               </ToggleGroupItem>
               <ToggleGroupItem value="down" size="sm">
-                {voteStatus === -1 ? <BiSolidDownvote size={16} /> : <BiDownvote size={16} />}
+                {voteStatus === -1 ? (
+                  <BiSolidDownvote size={16} />
+                ) : (
+                  <BiDownvote size={16} />
+                )}
               </ToggleGroupItem>
             </ToggleGroup>
             <Button variant="ghost" size="sm">
@@ -173,20 +233,37 @@ export default function QuestionDisplay({
                 updateBookmark(id, user.id as string, value)
               }}
             >
-              {bookmarkStatus ? <BsBookmarkFill size={16} /> : <BsBookmark size={16} />}
+              {bookmarkStatus ? (
+                <BsBookmarkFill size={16} />
+              ) : (
+                <BsBookmark size={16} />
+              )}
               <span className="ml-2">Bookmark</span>
             </Toggle>
           </div>
-          <Button variant="secondary" onClick={() => setIsFormOpen(!isFormOpen)}>
+          <Button
+            variant="secondary"
+            onClick={() => setIsFormOpen(!isFormOpen)}
+          >
             {isFormOpen ? 'Close' : 'Answer'}
           </Button>
         </CardFooter>
       </Card>
       {isFormOpen && (
-        <AnswerForm title={title} parentId={id} communitySlug={community?.slug} mutate={mutate} setIsFormOpen={setIsFormOpen} />
+        <AnswerForm
+          title={title}
+          parentId={id}
+          communitySlug={community?.slug}
+          mutate={mutate}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
       <Separator className="my-6" />
-      {isPending && <PostCard {...optimisticAnswer(user, variables.title, variables.content)} />}
+      {isPending && (
+        <PostCard
+          {...optimisticAnswer(user, variables.title, variables.content)}
+        />
+      )}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {

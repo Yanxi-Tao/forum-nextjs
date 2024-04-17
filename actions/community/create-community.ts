@@ -8,7 +8,9 @@ import { db } from '@/db/client'
 import { getCommunityBySlug } from '@/data/community'
 import slugify from '@sindresorhus/slugify'
 
-export const createCommunity = async (data: z.infer<typeof CreateCommunitySchema>) => {
+export const createCommunity = async (
+  data: z.infer<typeof CreateCommunitySchema>
+) => {
   const user = await currentUser()
 
   if (!user || !user.id) {
@@ -44,7 +46,7 @@ export const createCommunity = async (data: z.infer<typeof CreateCommunitySchema
         ownerId: user.id,
       },
     })
-    return { type: 'success', message: 'Community created' }
+    return { type: 'success', message: slug }
   } catch {
     return { type: 'error', message: 'Error creating community' }
   }
