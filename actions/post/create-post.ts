@@ -18,7 +18,9 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
   }
 
   const { title, content, type, parentId, communitySlug } = validatedData.data
-  const communityId = communitySlug ? (await getCommunityBySlug(communitySlug))?.id : null
+  const communityId = communitySlug
+    ? (await getCommunityBySlug(communitySlug))?.id
+    : null
 
   try {
     await db.post.create({

@@ -99,6 +99,10 @@ export const PostCardWrapper = ({
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
   const [isCollapsed, setIsCollapsed] = useState(true)
 
+  const redirectTo = community
+    ? `/community/${community.slug}/${type}/${id}`
+    : `/${type}/${id}`
+
   const commentCount = useMemo(
     () =>
       comments.length > 0
@@ -168,10 +172,14 @@ export const PostCardWrapper = ({
               </DropdownMenuItem>
               {user?.id === author?.id && (
                 <>
-                  <DropdownMenuItem>
-                    <FiEdit size={16} className="mr-2" />
-                    Edit
-                  </DropdownMenuItem>
+                  {type === 'question' || type === 'article' ? (
+                    <DropdownMenuItem>
+                      <Link href={`${redirectTo}/edit`} className="flex">
+                        <FiEdit size={16} className="mr-2" />
+                        Edit
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : null}
                   <DropdownMenuItem onSelect={() => mutate({ id, type })}>
                     <MdDelete size={16} className="mr-2" />
                     Delete
@@ -182,25 +190,13 @@ export const PostCardWrapper = ({
           </DropdownMenu>
         </div>
         {(type === 'question' || type === 'article') && (
-          <Link
-            href={
-              community
-                ? `/community/${community.slug}/${type}/${id}`
-                : `/${type}/${id}`
-            }
-          >
+          <Link href={redirectTo}>
             <CardTitle className="text-base line-clamp-2">{title}</CardTitle>
           </Link>
         )}
       </CardHeader>
       {type === 'question' || type === 'article' ? (
-        <Link
-          href={
-            community
-              ? `/community/${community.slug}/${type}/${id}`
-              : `/${type}/${id}`
-          }
-        >
+        <Link href={redirectTo}>
           <CardContent className="py-1.5 max-h-[200px] break-words overflow-hidden line-clamp-3">
             {children}
           </CardContent>

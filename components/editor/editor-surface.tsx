@@ -19,21 +19,40 @@ import EquationPlugin from './plugins/equation-plugin'
 import ListMaxIndentLevelPlugin from './plugins/list-max-indent-plugin'
 import { EditorState, LexicalEditor } from 'lexical'
 import { PostType } from '@prisma/client'
+import LoadInitialContentPlugin from './plugins/load-initial-content-plugin'
 
 export type EditorSurfaceProps = {
-  editorRef: ((instance: LexicalEditor | null) => void) | React.MutableRefObject<LexicalEditor | null | undefined>
-  onChange: (editorState: EditorState, editor: LexicalEditor, tags?: Set<string>) => void
+  editorRef:
+    | ((instance: LexicalEditor | null) => void)
+    | React.MutableRefObject<LexicalEditor | null | undefined>
+  onChange: (
+    editorState: EditorState,
+    editor: LexicalEditor,
+    tags?: Set<string>
+  ) => void
+  initialContent?: string
 }
 
-export const EditorSurface: React.FC<EditorSurfaceProps> = ({ editorRef, onChange }): JSX.Element => {
+export const EditorSurface: React.FC<EditorSurfaceProps> = ({
+  editorRef,
+  onChange,
+  initialContent,
+}): JSX.Element => {
   return (
     <div className="border border-input rounded-md p-2 px-4 focus-within:ring-1 focus-within:ring-ring">
       <ToolbarPlugin />
       <div className="relative">
+        <LoadInitialContentPlugin initialContent={initialContent} />
         <RichTextPlugin
-          contentEditable={<ContentEditable className="editor outline-none max-w-[760px] min-h-40" />}
+          contentEditable={
+            <ContentEditable className="editor outline-none min-h-40" />
+          }
           ErrorBoundary={LexicalErrorBoundary}
-          placeholder={<div className="absolute top-0.5 text-muted-foreground">Start here...</div>}
+          placeholder={
+            <div className="absolute top-0.5 text-muted-foreground">
+              Start here...
+            </div>
+          }
         />
         <HistoryPlugin />
         <CodeHighlightPlugin />

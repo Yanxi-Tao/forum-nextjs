@@ -75,6 +75,13 @@ export const CreatePostSchema = z.object({
   communitySlug: z.optional(z.string()),
 })
 
+export const UpdatePostSchema = z.object({
+  postId: z.string().cuid(),
+  title: z.string().min(1).max(255),
+  content: z.string().min(1, { message: 'Required' }),
+  pathname: z.string(),
+})
+
 export const CreateCommentSchema = z.object({
   content: z.string().min(1, { message: 'Required' }),
   postId: z.optional(z.string()),

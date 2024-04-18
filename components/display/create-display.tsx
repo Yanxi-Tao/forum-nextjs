@@ -1,7 +1,23 @@
-import { ArticleForm, QuestionForm } from '@/components/form/post-form'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  ArticleCreateForm,
+  QuestionCreateForm,
+} from '@/components/form/post-create-form'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-export const CreatePostDisplay = ({ communitySlug, communityName }: { communitySlug?: string; communityName: string }) => {
+export const CreatePostDisplay = ({
+  communitySlug,
+  communityName,
+}: {
+  communitySlug?: string
+  communityName: string
+}) => {
   return (
     <Card className="border-0 shadow-none">
       <CardHeader>
@@ -22,10 +38,16 @@ export const CreatePostDisplay = ({ communitySlug, communityName }: { communityS
             </TabsTrigger>
           </TabsList>
           <TabsContent value="question" className="w-full">
-            <QuestionForm communitySlug={communitySlug} redirectTo={communitySlug ? `/community/${communitySlug}` : '/'} />
+            <QuestionCreateForm
+              communitySlug={communitySlug}
+              redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
+            />
           </TabsContent>
           <TabsContent value="article" className="w-full">
-            <ArticleForm communitySlug={communitySlug} redirectTo={communitySlug ? `/community/${communitySlug}` : '/'} />
+            <ArticleCreateForm
+              communitySlug={communitySlug}
+              redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
+            />
           </TabsContent>
           <TabsContent value="answer" className="w-full">
             answer

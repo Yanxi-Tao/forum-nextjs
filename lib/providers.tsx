@@ -30,12 +30,16 @@ function getQueryClient() {
   }
 }
 
-export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
+export const ReactQueryProvider = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
   const queryClient = getQueryClient()
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
       {children}
     </QueryClientProvider>
   )
@@ -45,10 +49,18 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }
 
-export function ProgressBarProvider({ children }: { children: React.ReactNode }) {
+export function ProgressBarProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <>
-      <ProgressBar height="2px" options={{ showSpinner: false }} shallowRouting />
+      <ProgressBar
+        height="2px"
+        options={{ showSpinner: false }}
+        shallowRouting
+      />
       {children}
     </>
   )

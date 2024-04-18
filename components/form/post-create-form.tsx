@@ -28,7 +28,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { useRouter } from 'next/navigation'
 
-export const QuestionForm = ({
+export const QuestionCreateForm = ({
   communitySlug,
   redirectTo,
 }: {
@@ -74,10 +74,6 @@ export const QuestionForm = ({
     setIsPending(false)
     setAlert(state)
     if (state?.type === 'success') {
-      form.reset()
-      editorRef.current?.update(() => {
-        $getRoot().clear()
-      })
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
@@ -140,7 +136,7 @@ export const QuestionForm = ({
   )
 }
 
-export const ArticleForm = ({
+export const ArticleCreateForm = ({
   communitySlug,
   redirectTo,
 }: {
@@ -186,10 +182,6 @@ export const ArticleForm = ({
     setIsPending(false)
     setAlert(state)
     if (state?.type === 'success') {
-      form.reset()
-      editorRef.current?.update(() => {
-        $getRoot().clear()
-      })
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
@@ -248,7 +240,7 @@ export const ArticleForm = ({
   )
 }
 
-export const AnswerForm = ({
+export const AnswerCreateForm = ({
   title,
   parentId,
   communitySlug,
