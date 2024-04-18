@@ -189,7 +189,7 @@ export const PostCardWrapper = ({
                 : `/${type}/${id}`
             }
           >
-            <CardTitle className="text-base">{title}</CardTitle>
+            <CardTitle className="text-base line-clamp-2">{title}</CardTitle>
           </Link>
         )}
       </CardHeader>
@@ -201,7 +201,7 @@ export const PostCardWrapper = ({
               : `/${type}/${id}`
           }
         >
-          <CardContent className="py-1.5 max-h-[200px] break-words overflow-hidden">
+          <CardContent className="py-1.5 max-h-[200px] break-words overflow-hidden line-clamp-3">
             {children}
           </CardContent>
         </Link>

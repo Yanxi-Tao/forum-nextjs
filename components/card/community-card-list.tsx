@@ -14,25 +14,26 @@ export const CommunityCardList = () => {
   const [search, setSearch] = useState<string | undefined>(undefined)
   const { ref, inView } = useInView()
   const queryClient = useQueryClient()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: [COMMUNITY_KEY, { search }],
-    queryFn: ({ pageParam }) => fetchCommunities(pageParam),
-    initialPageParam: {
-      search,
-      offset: 0,
-      take: COMMUNITY_FETCH_SPAN,
-    },
-    getNextPageParam: (lastPage) => {
-      if (!lastPage.nextOffset) return undefined
-      return {
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: [COMMUNITY_KEY, { search }],
+      queryFn: ({ pageParam }) => fetchCommunities(pageParam),
+      initialPageParam: {
         search,
-        offset: lastPage.nextOffset,
+        offset: 0,
         take: COMMUNITY_FETCH_SPAN,
-      }
-    },
-    gcTime: Infinity,
-    staleTime: Infinity,
-  })
+      },
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.nextOffset) return undefined
+        return {
+          search,
+          offset: lastPage.nextOffset,
+          take: COMMUNITY_FETCH_SPAN,
+        }
+      },
+      gcTime: Infinity,
+      staleTime: Infinity,
+    })
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -56,14 +57,21 @@ export const CommunityCardList = () => {
         autoComplete="off"
       >
         <SearchIcon size={20} />
-        <Input placeholder="Search" name="search" className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+        <Input
+          placeholder="Search communities"
+          name="search"
+          className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        />
       </form>
       <div className="h-11" />
       <div className="flex flex-col space-y-2 pt-2 overflow-auto h-[calc(100vh-270px)]">
         {isSuccess &&
           data.pages.map((page) =>
             page.communities.map((community) => {
-              if (page.communities.indexOf(community) === page.communities.length - 1) {
+              if (
+                page.communities.indexOf(community) ===
+                page.communities.length - 1
+              ) {
                 return (
                   <div key={community.id} ref={ref}>
                     <CommunityCard key={community.id} {...community} />

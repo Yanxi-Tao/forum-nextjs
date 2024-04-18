@@ -5,7 +5,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema } from '@/schemas'
@@ -20,7 +28,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { useRouter } from 'next/navigation'
 
-export const QuestionForm = ({ communitySlug, redirectTo }: { communitySlug: string | undefined; redirectTo: string }) => {
+export const QuestionForm = ({
+  communitySlug,
+  redirectTo,
+}: {
+  communitySlug: string | undefined
+  redirectTo: string
+}) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -39,7 +53,9 @@ export const QuestionForm = ({ communitySlug, redirectTo }: { communitySlug: str
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
     editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), { shouldValidate: true })
+      form.setValue('content', $getRoot().getTextContent(), {
+        shouldValidate: true,
+      })
     })
     return
   }
@@ -82,8 +98,13 @@ export const QuestionForm = ({ communitySlug, redirectTo }: { communitySlug: str
                 <FormControl>
                   <Textarea {...field} disabled={isPending} autoFocus />
                 </FormControl>
-                <FormDescription className={form.formState.errors.title && 'text-destructive'}>
-                  {form.getValues('title').length < 1 ? 'Required' : 'Be specific'}: {form.getValues('title').length}/255
+                <FormDescription
+                  className={form.formState.errors.title && 'text-destructive'}
+                >
+                  {form.getValues('title').length < 1
+                    ? 'Required'
+                    : 'Be specific'}
+                  : {form.getValues('title').length}/255
                 </FormDescription>
               </FormItem>
             )}
@@ -97,14 +118,21 @@ export const QuestionForm = ({ communitySlug, redirectTo }: { communitySlug: str
                 <FormControl>
                   <Editor editorRef={editorRef} onChange={handleOnChange} />
                 </FormControl>
-                <FormDescription>Include all the information someone would need to answer your question</FormDescription>
+                <FormDescription>
+                  Include all the information someone would need to answer your
+                  question
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
         <FormAlert alert={alert} />
-        <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full">
+        <Button
+          type="submit"
+          disabled={isPending || !form.formState.isValid}
+          className="w-full"
+        >
           {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
         </Button>
       </form>
@@ -112,7 +140,13 @@ export const QuestionForm = ({ communitySlug, redirectTo }: { communitySlug: str
   )
 }
 
-export const ArticleForm = ({ communitySlug, redirectTo }: { communitySlug: string | undefined; redirectTo: string }) => {
+export const ArticleForm = ({
+  communitySlug,
+  redirectTo,
+}: {
+  communitySlug: string | undefined
+  redirectTo: string
+}) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -131,7 +165,9 @@ export const ArticleForm = ({ communitySlug, redirectTo }: { communitySlug: stri
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
     editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), { shouldValidate: true })
+      form.setValue('content', $getRoot().getTextContent(), {
+        shouldValidate: true,
+      })
     })
     return
   }
@@ -172,10 +208,15 @@ export const ArticleForm = ({ communitySlug, redirectTo }: { communitySlug: stri
               <FormItem>
                 <FormLabel className="text-foreground">Article Title</FormLabel>
                 <FormControl>
-                  <Textarea {...field} disabled={isPending} />
+                  <Textarea {...field} disabled={isPending} autoFocus />
                 </FormControl>
-                <FormDescription className={form.formState.errors.title && 'text-destructive'}>
-                  {form.getValues('title').length < 1 ? 'Required' : 'Be specific'}: {form.getValues('title').length}/255
+                <FormDescription
+                  className={form.formState.errors.title && 'text-destructive'}
+                >
+                  {form.getValues('title').length < 1
+                    ? 'Required'
+                    : 'Be specific'}
+                  : {form.getValues('title').length}/255
                 </FormDescription>
               </FormItem>
             )}
@@ -195,7 +236,11 @@ export const ArticleForm = ({ communitySlug, redirectTo }: { communitySlug: stri
           />
         </div>
         <FormAlert alert={alert} />
-        <Button type="submit" disabled={isPending || !form.formState.isValid} className="w-full">
+        <Button
+          type="submit"
+          disabled={isPending || !form.formState.isValid}
+          className="w-full"
+        >
           {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
         </Button>
       </form>
@@ -231,7 +276,9 @@ export const AnswerForm = ({
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
     editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), { shouldValidate: true })
+      form.setValue('content', $getRoot().getTextContent(), {
+        shouldValidate: true,
+      })
     })
     return
   }
@@ -260,12 +307,18 @@ export const AnswerForm = ({
               <FormControl>
                 <Editor editorRef={editorRef} onChange={handleOnChange} />
               </FormControl>
-              <FormDescription>Your answer helps others learn about this topic</FormDescription>
+              <FormDescription>
+                Your answer helps others learn about this topic
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={!form.formState.isValid} className="w-full">
+        <Button
+          type="submit"
+          disabled={!form.formState.isValid}
+          className="w-full"
+        >
           Create Answer
         </Button>
       </form>
