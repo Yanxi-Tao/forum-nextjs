@@ -7,7 +7,11 @@ import { LeftSidebar } from '@/components/shared/left-sidebar'
 import { RightSidebar } from '@/components/shared/right-sidebar'
 import { TopBar } from '@/components/shared/top-bar'
 
-import { ProgressBarProvider, ReactQueryProvider, ThemeProvider } from '@/lib/providers'
+import {
+  ProgressBarProvider,
+  ReactQueryProvider,
+  ThemeProvider,
+} from '@/lib/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,7 +29,12 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} overscroll-y-contain`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SessionProvider session={session}>
             <ReactQueryProvider>
               <ProgressBarProvider>

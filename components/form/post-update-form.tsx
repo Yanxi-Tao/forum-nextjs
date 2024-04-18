@@ -17,16 +17,15 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema, UpdatePostSchema } from '@/schemas'
-import { createPost } from '@/actions/post/create-post'
 import { FormAlertProps } from '@/lib/types'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
-import { $getRoot, $insertNodes, EditorState, LexicalEditor } from 'lexical'
+import { $getRoot, EditorState, LexicalEditor } from 'lexical'
 import { Editor } from '@/components/editor'
 import { $generateHtmlFromNodes } from '@lexical/html'
 import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { updatePost } from '@/actions/post/update-post'
 
 export const QuestionUpdateForm = ({
@@ -104,8 +103,7 @@ export const QuestionUpdateForm = ({
                 >
                   {form.getValues('title').length < 1
                     ? 'Required'
-                    : 'Be specific'}
-                  : {form.getValues('title').length}/255
+                    : `Be specific: ${form.getValues('title').length}/255`}
                 </FormDescription>
               </FormItem>
             )}
@@ -238,8 +236,7 @@ export const ArticleUpdateForm = ({
                 >
                   {form.getValues('title').length < 1
                     ? 'Required'
-                    : 'Be specific'}
-                  : {form.getValues('title').length}/255
+                    : `Be specific: ${form.getValues('title').length}/255`}
                 </FormDescription>
               </FormItem>
             )}

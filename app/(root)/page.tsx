@@ -1,9 +1,17 @@
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
 import { ExploreDisplay } from '@/components/display/explore-display'
 import { fetchPosts } from '@/actions/post/fetch-post'
 import { EXPLORE_POSTS_KEY, POST_FETCH_SPAN } from '@/lib/constants'
 
-export default async function ExplorePage({ searchParams }: { searchParams: { search: string | undefined } }) {
+export default async function ExplorePage({
+  searchParams,
+}: {
+  searchParams: { search: string | undefined }
+}) {
   const queryClient = new QueryClient()
   const search = searchParams.search
 

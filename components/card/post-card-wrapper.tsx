@@ -50,7 +50,6 @@ import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { PostType } from '@prisma/client'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
-import { usePathname } from 'next/navigation'
 
 export const PostCardWrapper = ({
   id,

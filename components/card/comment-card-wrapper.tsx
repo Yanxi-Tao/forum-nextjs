@@ -122,18 +122,12 @@ export const CommentCardWrapper = ({
                   Report
                 </DropdownMenuItem>
                 {user?.id === comment.authorId && (
-                  <>
-                    <DropdownMenuItem>
-                      <FiEdit size={16} className="mr-2" />
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => deleteCurrentComment(comment.id)}
-                    >
-                      <MdDelete size={16} className="mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </>
+                  <DropdownMenuItem
+                    onSelect={() => deleteCurrentComment(comment.id)}
+                  >
+                    <MdDelete size={16} className="mr-2" />
+                    Delete
+                  </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -169,7 +163,7 @@ export const CommentCardWrapper = ({
         </div>
       </div>
       {isFormOpen && (
-        <div className="pl-9">
+        <div className="pl-9 pr-0.5">
           <CommentForm
             parentId={comment.id}
             postId={undefined}
@@ -271,18 +265,12 @@ export const NestedCommentCardWrapper = ({
                   Report
                 </DropdownMenuItem>
                 {user?.id === comment.authorId && (
-                  <>
-                    <DropdownMenuItem>
-                      <FiEdit size={16} className="mr-2" />
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => deleteCurrentComment(comment.id)}
-                    >
-                      <MdDelete size={16} className="mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </>
+                  <DropdownMenuItem
+                    onSelect={() => deleteCurrentComment(comment.id)}
+                  >
+                    <MdDelete size={16} className="mr-2" />
+                    Delete
+                  </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -316,7 +304,7 @@ export const NestedCommentCardWrapper = ({
         </div>
       </div>
       {isFormOpen && comment.author && (
-        <div className="pl-9">
+        <div className="pl-9 pr-0.5">
           <CommentForm
             parentId={parentId}
             postId={undefined}

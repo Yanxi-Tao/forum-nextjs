@@ -99,8 +99,7 @@ export const QuestionCreateForm = ({
                 >
                   {form.getValues('title').length < 1
                     ? 'Required'
-                    : 'Be specific'}
-                  : {form.getValues('title').length}/255
+                    : `Be specific: ${form.getValues('title').length}/255`}
                 </FormDescription>
               </FormItem>
             )}
@@ -207,8 +206,7 @@ export const ArticleCreateForm = ({
                 >
                   {form.getValues('title').length < 1
                     ? 'Required'
-                    : 'Be specific'}
-                  : {form.getValues('title').length}/255
+                    : `Be specific: ${form.getValues('title').length}/255`}
                 </FormDescription>
               </FormItem>
             )}

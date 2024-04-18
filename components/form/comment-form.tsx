@@ -4,7 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateCommentSchema } from '@/schemas'
 
@@ -59,15 +67,19 @@ export const CommentForm = ({
                   {...field}
                   className=" min-h-10"
                   placeholder="Enter your comment here..."
-                  onBlur={() => {
-                    !form.getValues('content') && setIsFormOpen?.(false)
-                  }}
+                  // onBlur={() => {
+                  //   !form.getValues('content') && setIsFormOpen?.(false)
+                  // }}
                 />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={!form.formState.isValid} className="w-full">
+        <Button
+          type="submit"
+          disabled={!form.formState.isValid}
+          className="w-full"
+        >
           Comment
         </Button>
       </form>

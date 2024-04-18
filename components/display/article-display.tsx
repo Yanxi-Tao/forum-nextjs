@@ -47,11 +47,20 @@ import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { CommentDisplay } from '@/components/display/comment-display'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
+import PulseLoader from 'react-spinners/PulseLoader'
 
-const ArticleUpdateForm = dynamic(() =>
-  import('@/components/form/post-update-form').then(
-    (mod) => mod.ArticleUpdateForm
-  )
+const ArticleUpdateForm = dynamic(
+  () =>
+    import('@/components/form/post-update-form').then(
+      (mod) => mod.ArticleUpdateForm
+    ),
+  {
+    loading: () => (
+      <div className="flex justify-center my-10">
+        <PulseLoader color="#8585ad" />
+      </div>
+    ),
+  }
 )
 
 export default function ArticleDisplay({

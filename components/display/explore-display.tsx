@@ -7,11 +7,16 @@ import { useInfinitePosts } from '@/hooks/post/useInfinitePosts'
 import { useSearchParams } from 'next/navigation'
 import { BeatLoader } from 'react-spinners'
 
-export const ExploreDisplay = ({ communitySlug }: { communitySlug?: string }) => {
+export const ExploreDisplay = ({
+  communitySlug,
+}: {
+  communitySlug?: string
+}) => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
   const { ref, inView } = useInView()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } = useInfinitePosts(search, communitySlug)
+  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
+    useInfinitePosts(search, communitySlug)
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -24,7 +29,12 @@ export const ExploreDisplay = ({ communitySlug }: { communitySlug?: string }) =>
       {isSuccess &&
         data.pages.map((page) =>
           page.posts.map((post) => {
-            if (page.posts.indexOf(post) === page.posts.length - 1) {
+            if (
+              page.posts.indexOf(post) ===
+              (page.posts.length < 2
+                ? page.posts.length - 1
+                : page.posts.length - 2)
+            ) {
               return (
                 <div key={post.id} ref={ref}>
                   <PostCard {...post} />

@@ -50,12 +50,20 @@ import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
-import { usePathname } from 'next/navigation'
+import PulseLoader from 'react-spinners/PulseLoader'
 
-const QuestionUpdateForm = dynamic(() =>
-  import('@/components/form/post-update-form').then(
-    (mod) => mod.QuestionUpdateForm
-  )
+const QuestionUpdateForm = dynamic(
+  () =>
+    import('@/components/form/post-update-form').then(
+      (mod) => mod.QuestionUpdateForm
+    ),
+  {
+    loading: () => (
+      <div className="flex justify-center my-10">
+        <PulseLoader color="#8585ad" />
+      </div>
+    ),
+  }
 )
 
 export default function QuestionDisplay({
@@ -290,7 +298,12 @@ export default function QuestionDisplay({
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
-            if (page.answers.indexOf(post) === page.answers.length - 1) {
+            if (
+              page.answers.indexOf(post) ===
+              (page.answers.length < 2
+                ? page.answers.length - 1
+                : page.answers.length - 2)
+            ) {
               return (
                 <div key={post.id} ref={ref}>
                   <PostCard {...post} />
