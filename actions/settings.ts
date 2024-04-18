@@ -43,8 +43,18 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
       return { type: 'error', message: 'Email already exists' }
     }
 
-    const verificationToken = await generateVerificationToken(data.email)
-    await sendVerificationEmail(verificationToken.email, verificationToken.token)
+    let verificationToken = await generateVerificationToken(data.email)
+    if (!verificationToken) {
+      return { type: 'error', message: 'An error occurred' }
+    }
+    const status = await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    )
+
+    if (!status) {
+      return { type: 'error', message: 'An error occurred' }
+    }
 
     return { type: 'success', message: 'Verification email sent' }
   }
@@ -52,7 +62,10 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
   // if password is updated, check if match database password
   // if match, hash the new password
   if (data.oldPassword && data.newPassword && dbUser.password) {
-    const passwordMatch = await bcrypt.compare(data.oldPassword, dbUser.password)
+    const passwordMatch = await bcrypt.compare(
+      data.oldPassword,
+      dbUser.password
+    )
 
     if (!passwordMatch) {
       return { type: 'error', message: 'Password Incorrect' }

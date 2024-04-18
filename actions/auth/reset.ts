@@ -23,10 +23,17 @@ export const reset = async (data: z.infer<typeof ResetSchema>) => {
 
   // Send email with reset token
   const passwordResetToken = await generatePasswordResetToken(email)
-  await sendPasswordResetTokenEmail(
+  if (!passwordResetToken) {
+    return { type: 'error', message: 'An error occurred' }
+  }
+  const status = await sendPasswordResetTokenEmail(
     passwordResetToken.email,
     passwordResetToken.token
   )
+
+  if (!status) {
+    return { type: 'error', message: 'An error occurred' }
+  }
 
   return { type: 'success', message: 'Reset password email sent' }
 }

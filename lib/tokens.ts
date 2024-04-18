@@ -3,9 +3,15 @@ import { nanoid } from 'nanoid'
 
 import { db } from '@/db/client'
 
-import { deleteVerificationTokenById, getVerificationTokenByEmail } from '@/data/verification-token'
+import {
+  deleteVerificationTokenById,
+  getVerificationTokenByEmail,
+} from '@/data/verification-token'
 import { getPasswordResetTokenByEmail } from '@/data/password-reset-token'
-import { deleteVerificationCodeById, getVerificationCodeByEmail } from '@/data/verification-code'
+import {
+  deleteVerificationCodeById,
+  getVerificationCodeByEmail,
+} from '@/data/verification-code'
 
 export const generatePasswordResetToken = async (email: string) => {
   const token = nanoid()
@@ -21,15 +27,19 @@ export const generatePasswordResetToken = async (email: string) => {
     })
   }
 
-  const passwordResetToken = await db.passwordResetToken.create({
-    data: {
-      email,
-      token,
-      expiresAt,
-    },
-  })
+  try {
+    const passwordResetToken = await db.passwordResetToken.create({
+      data: {
+        email,
+        token,
+        expiresAt,
+      },
+    })
 
-  return passwordResetToken
+    return passwordResetToken
+  } catch {
+    return null
+  }
 }
 
 export const generateVerificationToken = async (email: string) => {
@@ -42,15 +52,19 @@ export const generateVerificationToken = async (email: string) => {
     await deleteVerificationTokenById(existingToken.id)
   }
 
-  const verificationToken = await db.verificationToken.create({
-    data: {
-      email,
-      token,
-      expiresAt,
-    },
-  })
+  try {
+    const verificationToken = await db.verificationToken.create({
+      data: {
+        email,
+        token,
+        expiresAt,
+      },
+    })
 
-  return verificationToken
+    return verificationToken
+  } catch {
+    return null
+  }
 }
 
 export const generateVerificationCode = async (email: string) => {
@@ -63,13 +77,17 @@ export const generateVerificationCode = async (email: string) => {
     await deleteVerificationCodeById(existingCode.id)
   }
 
-  const verificationCode = await db.verificationCode.create({
-    data: {
-      email,
-      code,
-      expiresAt,
-    },
-  })
+  try {
+    const verificationCode = await db.verificationCode.create({
+      data: {
+        email,
+        code,
+        expiresAt,
+      },
+    })
 
-  return verificationCode
+    return verificationCode
+  } catch {
+    return null
+  }
 }
