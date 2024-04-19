@@ -167,10 +167,10 @@ export default function QuestionDisplay({
                   <>
                     <AvatarCard
                       source={null}
-                      name="Deleted user"
+                      name="[deleted]"
                       className="w-7 h-7 text-sm"
                     />
-                    <span>Deleted user</span>
+                    <span>{'[deleted]'}</span>
                   </>
                 )}
               </div>

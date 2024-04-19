@@ -135,7 +135,7 @@ export const PostCardWrapper = ({
             ) : (
               <AvatarCard
                 source={null}
-                name="Deleted user"
+                name="[deleted]"
                 className="w-7 h-7 text-sm"
               />
             )}
@@ -154,7 +154,7 @@ export const PostCardWrapper = ({
                 {`u/${author.name}`}
               </Link>
             ) : (
-              <span className="text-primary">Deleted user</span>
+              <span className="text-primary">{'[deleted]'}</span>
             )}
             <span className="text-muted-foreground">
               {new Date(updatedAt).toDateString()}

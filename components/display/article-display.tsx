@@ -154,8 +154,8 @@ export default function ArticleDisplay({
                   </>
                 ) : (
                   <>
-                    <AvatarCard source={null} name="Deleted user" />
-                    <span>Deleted user</span>
+                    <AvatarCard source={null} name="[deleted]" />
+                    <span>{'[deleted]'}</span>
                   </>
                 )}
               </div>

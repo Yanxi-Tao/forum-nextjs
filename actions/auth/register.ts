@@ -38,8 +38,8 @@ export const register = async (
   if (submitType === 'token') {
     let verificationCode = await generateVerificationCode(email)
 
-    if (!verificationCode || verificationCode?.code.length !== 6) {
-      return { type: 'error', message: 'An error occurred' }
+    while (!verificationCode || verificationCode?.code.length !== 6) {
+      verificationCode = await generateVerificationCode(email)
     }
 
     const status = await sendVerificationCodeEmail(
