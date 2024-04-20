@@ -1,16 +1,16 @@
 'use server'
 
-import { z } from 'zod'
-import { CreateCommunitySchema } from '@/schemas'
-import { currentUser } from '@/lib/auth'
+import { getCommunityBySlug } from '@/data/community'
 import { getUserByID } from '@/data/user'
 import { db } from '@/db/client'
-import { getCommunityBySlug } from '@/data/community'
+import { currentUser } from '@/lib/auth'
+import { UpdateCommunitySchema } from '@/schemas'
 import slugify from '@sindresorhus/slugify'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
-export const createCommunity = async (
-  data: z.infer<typeof CreateCommunitySchema>
+export const updateCommunity = async (
+  data: z.infer<typeof UpdateCommunitySchema>
 ) => {
   const user = await currentUser()
 
@@ -24,27 +24,30 @@ export const createCommunity = async (
     return { type: 'error', message: 'User not found' }
   }
 
-  const validatedData = CreateCommunitySchema.safeParse(data)
+  const validatedData = UpdateCommunitySchema.safeParse(data)
   if (!validatedData.success) {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { name, description, isPublic } = validatedData.data
+  const { id, name, description, isPublic } = validatedData.data
 
-  const slug = slugify(name)
-  const existingCommunity = await getCommunityBySlug(slug)
-  if (slug === 'create' || existingCommunity) {
-    return { type: 'error', message: 'Community already exists' }
+  let slug = undefined
+  if (name) {
+    slug = slugify(name)
+    const existingCommunity = await getCommunityBySlug(slug)
+    if (slug === 'create' || existingCommunity) {
+      return { type: 'error', message: 'Community already exists' }
+    }
   }
 
   try {
-    await db.community.create({
+    await db.community.update({
+      where: { id },
       data: {
         name,
         slug,
         description,
         isPublic,
-        ownerId: user.id,
       },
     })
     revalidatePath('/communities')

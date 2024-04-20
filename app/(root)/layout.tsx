@@ -6,6 +6,9 @@ import { SessionProvider } from 'next-auth/react'
 import { LeftSidebar } from '@/components/shared/left-sidebar'
 import { RightSidebar } from '@/components/shared/right-sidebar'
 import { TopBar } from '@/components/shared/top-bar'
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
+import { extractRouterConfig } from 'uploadthing/server'
+import { ourFileRouter } from '@/app/(auth)/api/uploadthing/core'
 
 import {
   ProgressBarProvider,
@@ -29,6 +32,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} overscroll-y-contain`}>
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

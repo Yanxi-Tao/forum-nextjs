@@ -97,7 +97,6 @@ export const getEditUserProfileById = async (id: string) => {
       },
       select: {
         profile: true,
-        image: true,
       },
     })
     return profile

@@ -10,15 +10,30 @@ import { SettingsSchema } from '@/schemas'
 import { settings } from '@/actions/settings'
 
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { FormAlert } from '@/components/form/form-alert'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { FormAlertProps } from '@/lib/types'
 import { signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { deleteUser } from '@/actions/user/delete-user'
 import RingLoader from 'react-spinners/RingLoader'
 
@@ -74,7 +89,10 @@ export const SettingsForm = () => {
             <>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-5"
+                  >
                     <div className="space-y-2">
                       <FormField
                         control={form.control}
@@ -83,7 +101,11 @@ export const SettingsForm = () => {
                           <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="IBZN" disabled={isPending} />
+                              <Input
+                                {...field}
+                                placeholder="IBZN"
+                                disabled={isPending}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -96,7 +118,11 @@ export const SettingsForm = () => {
                           <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="ibzn@example.com" disabled={user.isOAuth || isPending} />
+                              <Input
+                                {...field}
+                                placeholder="ibzn@example.com"
+                                disabled={user.isOAuth || isPending}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -111,7 +137,12 @@ export const SettingsForm = () => {
                               <FormItem>
                                 <FormLabel>Old Password</FormLabel>
                                 <FormControl>
-                                  <Input {...field} type="password" placeholder="123456" disabled={isPending} />
+                                  <Input
+                                    {...field}
+                                    type="password"
+                                    placeholder="123456"
+                                    disabled={isPending}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -124,7 +155,12 @@ export const SettingsForm = () => {
                               <FormItem>
                                 <FormLabel>New Password</FormLabel>
                                 <FormControl>
-                                  <Input {...field} type="password" placeholder="123456" disabled={isPending} />
+                                  <Input
+                                    {...field}
+                                    type="password"
+                                    placeholder="123456"
+                                    disabled={isPending}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -135,10 +171,19 @@ export const SettingsForm = () => {
                     </div>
                     <FormAlert alert={alert} />
                     <div className="flex gap-x-3">
-                      <Button type="reset" className="w-full" disabled={isPending} onClick={() => form.reset()}>
+                      <Button
+                        type="reset"
+                        className="w-full"
+                        disabled={isPending}
+                        onClick={() => form.reset()}
+                      >
                         Reset Settings
                       </Button>
-                      <Button type="submit" className="w-full" disabled={isPending}>
+                      <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={isPending}
+                      >
                         Update Settings
                       </Button>
                     </div>

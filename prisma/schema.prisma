@@ -140,7 +140,7 @@ model Comment {
 
 model Profile {
   id        String   @id @default(cuid())
-  bio       String?
+  bio       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

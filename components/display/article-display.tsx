@@ -48,6 +48,7 @@ import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { CommentDisplay } from '@/components/display/comment-display'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 import PulseLoader from 'react-spinners/PulseLoader'
+import { usePathname } from 'next/navigation'
 
 const ArticleUpdateForm = dynamic(
   () =>
@@ -74,8 +75,9 @@ export default function ArticleDisplay({
   upVotes,
   downVotes,
   comments,
-  mode: initialMode,
+  mode,
 }: QuestionDisplayProps & { mode: 'display' | 'edit' }) {
+  const pathname = usePathname()
   const user = useCurrentUser()
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()
@@ -105,8 +107,6 @@ export default function ArticleDisplay({
         : 0,
     [comments]
   )
-  const [mode, setMode] = useState(initialMode)
-
   if (!user || !user.name || !user.email || !user.id) {
     return null
   }
@@ -120,40 +120,38 @@ export default function ArticleDisplay({
               <div className="flex items-center space-x-2 text-sm">
                 {community && (
                   <>
-                    <Link href={`/community/${community.slug}`}>
+                    <Link
+                      href={`/community/${community.slug}`}
+                      className="flex items-center space-x-2"
+                    >
                       <AvatarCard
                         source={null}
                         name={community.name}
                         type="display"
                         className="w-7 h-7 text-sm"
                       />
-                    </Link>
-                    <Link
-                      href={`/community/${community.slug}`}
-                      className="text-primary underline-offset-4 hover:underline"
-                    >
-                      <span>{community.name}</span>
+                      <span className="text-primary underline-offset-4 hover:underline">
+                        {community.name}
+                      </span>
                     </Link>
                     <span>/</span>
                   </>
                 )}
                 {author ? (
-                  <>
-                    <Link href={`/profile/${author.slug}`}>
-                      <AvatarCard
-                        source={author.image}
-                        name={author.name}
-                        type="display"
-                        className="w-7 h-7 text-sm"
-                      />
-                    </Link>
-                    <Link
-                      href={`/profile/${author.slug}`}
-                      className="text-primary underline-offset-4 hover:underline"
-                    >
-                      <span>{author.name}</span>
-                    </Link>
-                  </>
+                  <Link
+                    href={`/profile/${author.slug}`}
+                    className="flex items-center space-x-2"
+                  >
+                    <AvatarCard
+                      source={author.image}
+                      name={author.name}
+                      type="display"
+                      className="w-7 h-7 text-sm"
+                    />
+                    <span className="text-primary underline-offset-4 hover:underline">
+                      {author.name}
+                    </span>
+                  </Link>
                 ) : (
                   <>
                     <AvatarCard source={null} name="[deleted]" type="deleted" />
@@ -176,9 +174,14 @@ export default function ArticleDisplay({
                     </DropdownMenuItem>
                     {user?.id === author?.id && (
                       <>
-                        <DropdownMenuItem onSelect={() => setMode('edit')}>
-                          <FiEdit size={16} className="mr-2" />
-                          Edit
+                        <DropdownMenuItem>
+                          <Link
+                            href={`${pathname}/edit`}
+                            className="flex items-center"
+                          >
+                            <FiEdit size={16} className="mr-2" />
+                            Edit
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onSelect={() => deletePost(id, 'article')}
@@ -265,7 +268,6 @@ export default function ArticleDisplay({
           postId={id}
           initialContent={content}
           initialTitle={title}
-          setMode={setMode}
         />
       )}
     </div>

@@ -22,7 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -30,14 +29,13 @@ import { FormAlertProps, UpdateProfileFormProps } from '@/lib/types'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import PulseLoader from 'react-spinners/PulseLoader'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { updateProfile } from '@/actions/profile/update-profile'
-import { UploadButton } from '@/lib/utils'
 
 export const ProfileForm = ({
-  editProfile,
+  profile,
 }: {
-  editProfile: UpdateProfileFormProps
+  profile: UpdateProfileFormProps
 }) => {
   const router = useRouter()
   const [isPending, setIsPending] = useState(false)
@@ -46,7 +44,7 @@ export const ProfileForm = ({
   const form = useForm<z.infer<typeof UpdateProfileSchema>>({
     resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
-      bio: editProfile.profile?.bio || undefined,
+      bio: profile.bio || undefined,
     },
     mode: 'all',
   })
@@ -82,27 +80,20 @@ export const ProfileForm = ({
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
+                  <FormDescription
+                    className={form.formState.errors.bio && 'text-destructive'}
+                  >
+                    {`${form.getValues('bio')?.length || 0}/100`}
+                  </FormDescription>
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="isPublic"
-              render={({ field }) => (
-                <FormItem className="flex items-center space-y-0 space-x-3">
-                  <FormLabel>Public</FormLabel>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            /> */}
             <FormAlert alert={alert} />
             <div className="flex gap-x-3">
               <Button
-                type="reset"
+                type="button"
                 variant="outline"
-                onClick={() => router.push('profile')}
+                onClick={() => router.push('/profile')}
                 className="w-full"
               >
                 Cancel

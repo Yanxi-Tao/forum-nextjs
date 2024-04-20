@@ -92,11 +92,18 @@ export const CreateCommentSchema = z.object({
 })
 
 export const CreateCommunitySchema = z.object({
-  name: z.string().min(1, { message: 'Name is required' }),
-  description: z.string().min(1, { message: 'Description is required' }),
+  name: z.string().min(1).max(100),
+  description: z.string().min(1).max(255),
   isPublic: z.boolean(),
 })
 
+export const UpdateCommunitySchema = z.object({
+  id: z.string().cuid(),
+  name: z.optional(z.string().min(1).max(100)),
+  description: z.optional(z.string().min(1).max(255)),
+  isPublic: z.optional(z.boolean()),
+})
+
 export const UpdateProfileSchema = z.object({
-  bio: z.optional(z.string().min(1, { message: 'Bio is required' })),
+  bio: z.optional(z.string().max(100)),
 })

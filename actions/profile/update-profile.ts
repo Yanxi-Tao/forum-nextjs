@@ -25,7 +25,6 @@ export const updateProfile = async (
   if (!validatedData.success) {
     return { type: 'error', message: 'Invalid data' }
   }
-
   try {
     // update user profile
     await db.profile.update({

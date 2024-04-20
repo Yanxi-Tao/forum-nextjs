@@ -51,6 +51,7 @@ import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 import PulseLoader from 'react-spinners/PulseLoader'
+import { usePathname } from 'next/navigation'
 
 const QuestionUpdateForm = dynamic(
   () =>
@@ -77,8 +78,9 @@ export default function QuestionDisplay({
   _count,
   upVotes,
   downVotes,
-  mode: initialMode,
+  mode,
 }: QuestionDisplayProps & { mode: 'display' | 'edit' }) {
+  const pathname = usePathname()
   const user = useCurrentUser()
   const updateBookmark = useUpdateBookmark()
   const updateVote = useUpdateVote('post')
@@ -110,7 +112,6 @@ export default function QuestionDisplay({
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [mode, setMode] = useState(initialMode)
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -131,40 +132,38 @@ export default function QuestionDisplay({
               <div className="flex items-center space-x-2 text-sm">
                 {community && (
                   <>
-                    <Link href={`/community/${community.slug}`}>
+                    <Link
+                      href={`/community/${community.slug}`}
+                      className="flex items-center space-x-2"
+                    >
                       <AvatarCard
                         source={null}
                         name={community.name}
                         type="display"
                         className="w-7 h-7 text-sm"
                       />
-                    </Link>
-                    <Link
-                      href={`/community/${community.slug}`}
-                      className="text-primary underline-offset-4 hover:underline"
-                    >
-                      <span>{community.name}</span>
+                      <span className="text-primary underline-offset-4 hover:underline">
+                        {community.name}
+                      </span>
                     </Link>
                     <span>/</span>
                   </>
                 )}
                 {author ? (
-                  <>
-                    <Link href={`/profile/${author.slug}`}>
-                      <AvatarCard
-                        source={author.image}
-                        name={author.name}
-                        type="display"
-                        className="w-7 h-7 text-sm"
-                      />
-                    </Link>
-                    <Link
-                      href={`/profile/${author.slug}`}
-                      className="text-primary underline-offset-4 hover:underline"
-                    >
-                      <span>{author.name}</span>
-                    </Link>
-                  </>
+                  <Link
+                    href={`/profile/${author.slug}`}
+                    className="flex items-center space-x-2"
+                  >
+                    <AvatarCard
+                      source={author.image}
+                      name={author.name}
+                      type="display"
+                      className="w-7 h-7 text-sm"
+                    />
+                    <span className="text-primary underline-offset-4 hover:underline">
+                      {author.name}
+                    </span>
+                  </Link>
                 ) : (
                   <>
                     <AvatarCard
@@ -192,9 +191,14 @@ export default function QuestionDisplay({
                     </DropdownMenuItem>
                     {user?.id === author?.id && (
                       <>
-                        <DropdownMenuItem onSelect={() => setMode('edit')}>
-                          <FiEdit size={16} className="mr-2" />
-                          Edit
+                        <DropdownMenuItem>
+                          <Link
+                            href={`${pathname}/edit`}
+                            className="flex items-center"
+                          >
+                            <FiEdit size={16} className="mr-2" />
+                            Edit
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onSelect={() => deletePost(id, 'question')}
@@ -280,7 +284,6 @@ export default function QuestionDisplay({
           postId={id}
           initialContent={content}
           initialTitle={title}
-          setMode={setMode}
         />
       )}
       {isFormOpen && (

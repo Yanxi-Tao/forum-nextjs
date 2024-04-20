@@ -27,20 +27,20 @@ import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { usePathname } from 'next/navigation'
 import { updatePost } from '@/actions/post/update-post'
+import { useRouter } from 'next-nprogress-bar'
 
 export const QuestionUpdateForm = ({
   communitySlug,
   postId,
   initialContent,
   initialTitle,
-  setMode,
 }: {
   communitySlug: string | undefined
   postId: string
   initialContent: string
   initialTitle: string
-  setMode: (value: 'display' | 'edit') => void
 }) => {
+  const router = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -78,12 +78,13 @@ export const QuestionUpdateForm = ({
     const state = await updatePost(data)
     setIsPending(false)
     if (state?.type === 'success') {
-      setMode('display')
+      router.push(pathname.substring(0, pathname.lastIndexOf('/')))
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
+    } else {
+      setAlert(state)
     }
-    setAlert(state)
   }
   return (
     <Form {...form}>
@@ -96,7 +97,12 @@ export const QuestionUpdateForm = ({
               <FormItem>
                 <FormLabel className="text-foreground">Question</FormLabel>
                 <FormControl>
-                  <Textarea {...field} disabled={isPending} autoFocus />
+                  <Textarea
+                    className="text-base"
+                    {...field}
+                    disabled={isPending}
+                    autoFocus
+                  />
                 </FormControl>
                 <FormDescription
                   className={form.formState.errors.title && 'text-destructive'}
@@ -131,30 +137,26 @@ export const QuestionUpdateForm = ({
           />
         </div>
         <FormAlert alert={alert} />
-        {isPending ? (
-          <div className="w-full flex justify-center items-center">
-            <PulseLoader color="#8585ad" />
-          </div>
-        ) : (
-          <div className="flex space-x-3">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              className="w-full"
-              onClick={() => setMode('display')}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={isPending || !form.formState.isValid}
-              className="w-full"
-            >
-              Update Question
-            </Button>
-          </div>
-        )}
+        <div className="flex space-x-3">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isPending}
+            className="w-full"
+            onClick={() =>
+              router.push(pathname.substring(0, pathname.lastIndexOf('/')))
+            }
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="w-full"
+          >
+            Update Question
+          </Button>
+        </div>
       </form>
     </Form>
   )
@@ -165,15 +167,14 @@ export const ArticleUpdateForm = ({
   postId,
   initialContent,
   initialTitle,
-  setMode,
 }: {
   communitySlug: string | undefined
   postId: string
   initialContent: string
   initialTitle: string
-  setMode: (value: 'display' | 'edit') => void
 }) => {
   const pathname = usePathname()
+  const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
@@ -210,12 +211,13 @@ export const ArticleUpdateForm = ({
     const state = await updatePost(data)
     setIsPending(false)
     if (state?.type === 'success') {
-      setMode('display')
+      router.push(pathname.substring(0, pathname.lastIndexOf('/')))
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
+    } else {
+      setAlert(state)
     }
-    setAlert(state)
   }
 
   return (
@@ -229,7 +231,12 @@ export const ArticleUpdateForm = ({
               <FormItem>
                 <FormLabel className="text-foreground">Article Title</FormLabel>
                 <FormControl>
-                  <Textarea {...field} disabled={isPending} autoFocus />
+                  <Textarea
+                    className="text-base"
+                    {...field}
+                    disabled={isPending}
+                    autoFocus
+                  />
                 </FormControl>
                 <FormDescription
                   className={form.formState.errors.title && 'text-destructive'}
@@ -260,30 +267,26 @@ export const ArticleUpdateForm = ({
           />
         </div>
         <FormAlert alert={alert} />
-        {isPending ? (
-          <div className="w-full flex justify-center items-center">
-            <PulseLoader color="#8585ad" />
-          </div>
-        ) : (
-          <div className="flex space-x-3">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending}
-              className="w-full"
-              onClick={() => setMode('display')}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              disabled={isPending || !form.formState.isValid}
-              className="w-full"
-            >
-              Update Article
-            </Button>
-          </div>
-        )}
+        <div className="flex space-x-3">
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isPending}
+            className="w-full"
+            onClick={() =>
+              router.push(pathname.substring(0, pathname.lastIndexOf('/')))
+            }
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="w-full"
+          >
+            Update Article
+          </Button>
+        </div>
       </form>
     </Form>
   )

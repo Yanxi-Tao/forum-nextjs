@@ -26,7 +26,7 @@ import { Editor } from '@/components/editor'
 import { $generateHtmlFromNodes } from '@lexical/html'
 import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 
 export const QuestionCreateForm = ({
   communitySlug,

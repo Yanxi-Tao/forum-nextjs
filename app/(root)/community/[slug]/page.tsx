@@ -3,7 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query'
-import { ExploreDisplay } from '@/components/display/explore-display'
+import { ExploreDisplay as CommunityExploreDisplay } from '@/components/display/explore-display'
 import { fetchPosts } from '@/actions/post/fetch-post'
 import { EXPLORE_POSTS_KEY, POST_FETCH_SPAN } from '@/lib/constants'
 
@@ -16,18 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { AvatarCard } from '@/components/card/avatar-card'
-import { HiDotsHorizontal } from 'react-icons/hi'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { CommunityDisplay } from '@/components/display/community-display'
 
 export default async function CommunityPage({
   params: { slug },
@@ -57,37 +46,10 @@ export default async function CommunityPage({
 
   return (
     <Card className="border-0 shadow-none space-y-3">
-      {!search && (
-        <CardHeader className="bg-muted rounded-xl">
-          <div className="relative flex justify-between">
-            <AvatarCard
-              source={community.image}
-              name={community.name}
-              type="display"
-              className="h-36 w-36 text-3xl"
-            />
-            <div className="absolute left-28 top-28">
-              <CardTitle className="bg-muted rounded-lg p-1 px-2">
-                {community.name}
-              </CardTitle>
-            </div>
-            <div className="flex flex-col justify-between items-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="h-fit">
-                  <HiDotsHorizontal size={20} />
-                </DropdownMenuTrigger>
-                {/* <DropdownMenuContent></DropdownMenuContent> */}
-              </DropdownMenu>
-              <Button variant="outline" size="sm">
-                <Link href={`/community/${slug}/create`}>Create Post</Link>
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-      )}
+      {!search && <CommunityDisplay community={community} />}
       <CardContent>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <ExploreDisplay communitySlug={slug} />
+          <CommunityExploreDisplay communitySlug={slug} />
         </HydrationBoundary>
       </CardContent>
     </Card>

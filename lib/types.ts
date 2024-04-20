@@ -1,8 +1,8 @@
 import { fetchPosts, fetchPostById } from '@/actions/post/fetch-post'
 import { fetchComments } from '@/actions/comment/fetch-comment'
 import { fetchCommunities } from '@/actions/community/fetch-community'
-import { off } from 'process'
 import { fetchEditProfile, fetchProfile } from '@/actions/profile/fetch-profile'
+import { getCommunityBySlug } from '@/data/community'
 
 // Display types
 export type QuestionDisplayProps = NonNullable<
@@ -11,6 +11,10 @@ export type QuestionDisplayProps = NonNullable<
 
 export type ProfileDisplayProps = NonNullable<
   Awaited<ReturnType<typeof fetchProfile>>
+>
+
+export type CommunityDisplayProps = NonNullable<
+  Awaited<ReturnType<typeof getCommunityBySlug>>
 >
 
 // Cards types
@@ -53,7 +57,7 @@ export type FetchCommunityQueryKey = {
 
 // Form types
 export type UpdateProfileFormProps = NonNullable<
-  Awaited<ReturnType<typeof fetchEditProfile>>
+  NonNullable<Awaited<ReturnType<typeof fetchEditProfile>>>['profile']
 >
 
 // Other Props

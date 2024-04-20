@@ -21,22 +21,20 @@ import {
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ProfileDisplayProps } from '@/lib/types'
-import { useRouter } from 'next/navigation'
-import { currentUser } from '@/lib/auth'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import Link from 'next/link'
 
 export const ProfileDisplay = ({
   profile,
 }: {
   profile: ProfileDisplayProps
 }) => {
-  const router = useRouter()
   const user = useCurrentUser()
   if (!user) return null
   return (
     <Card className="border-0 shadow-none flex flex-col space-y-3">
       <CardHeader className="bg-muted rounded-xl">
-        <div className="relative flex space-x-4">
+        <div className="flex space-x-4">
           <EditableAvatarCard
             source={user.image}
             name={profile.name}
@@ -46,15 +44,17 @@ export const ProfileDisplay = ({
             <CardTitle className="bg-muted rounded-lg">
               {profile.name}
             </CardTitle>
-            <CardDescription>{profile.profile?.bio}</CardDescription>
+            <CardDescription>
+              {profile.profile?.bio || 'user has no bio yet ~'}
+            </CardDescription>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger className="h-fit focus:outline-none">
               <HiDotsHorizontal size={20} />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onSelect={() => router.push('/profile/edit')}>
-                Edit Profile
+              <DropdownMenuItem>
+                <Link href={`/profile/edit`}>Edit Profile</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

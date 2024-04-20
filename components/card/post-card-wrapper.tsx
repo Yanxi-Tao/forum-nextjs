@@ -267,7 +267,11 @@ export const PostCardWrapper = ({
               >
                 <Button variant="ghost" size="sm">
                   <BsChatSquare size={16} />
-                  <span className="ml-2">{formatNumber(_count.children)}</span>
+                  <span className="ml-2">
+                    {formatNumber(
+                      type === 'question' ? _count.children : commentCount
+                    )}
+                  </span>
                 </Button>
               </Link>
             ) : (

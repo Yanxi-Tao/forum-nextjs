@@ -1,5 +1,5 @@
 import { fetchEditProfile } from '@/actions/profile/fetch-profile'
-import { ProfileForm } from '@/components/form/profile-form'
+import { ProfileForm } from '@/components/form/profile-update-form'
 import { currentUser } from '@/lib/auth'
 
 export default async function ProfileEditPage() {
@@ -7,13 +7,10 @@ export default async function ProfileEditPage() {
   if (!user) {
     return <div>Not logged in</div>
   }
-  const editProfile = await fetchEditProfile(user.id)
+  const profile = (await fetchEditProfile(user.id))?.profile
 
-  if (!editProfile || !editProfile.profile) {
+  if (!profile) {
     return <div>Profile not found</div>
   }
-
-  //   return <div>Profile Edit</div>
-
-  return <ProfileForm editProfile={editProfile} />
+  return <ProfileForm profile={profile} />
 }
