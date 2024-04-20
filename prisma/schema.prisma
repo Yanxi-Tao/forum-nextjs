@@ -40,6 +40,8 @@ model User {
   comments        Comment[] @relation("CommentToAuthor")
   commentsReplies Comment[] @relation("ReplyToComment")
   upVotedComments Comment[] @relation("CommentToUserUpVoted")
+
+  notifications Notification[]
 }
 
 // account model for provider login
@@ -90,6 +92,12 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
+enum PostType {
+  question
+  answer
+  article
+}
+
 model Post {
   id        String   @id @default(cuid())
   title     String
@@ -114,6 +122,8 @@ model Post {
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?
 
+  notifications Notification[]
+
   @@index([id])
   @@index([title, content])
 }
@@ -136,6 +146,8 @@ model Comment {
 
   repliesTo   User?   @relation("ReplyToComment", fields: [repliesToId], references: [id])
   repliesToId String?
+
+  notifications Notification[]
 }
 
 model Profile {
@@ -164,8 +176,17 @@ model Community {
   updatedAt DateTime @updatedAt
 }
 
-enum PostType {
-  question
-  answer
-  article
+model Notification {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String?
+
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?
 }

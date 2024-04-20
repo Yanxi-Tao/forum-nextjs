@@ -47,7 +47,8 @@ export const ourFileRouter = {
       // If you throw, the user will not be able to upload
       if (!user || !user.id) throw new UploadThingError('Unauthorized')
 
-      const community = await getCommunityBySlug(files[0].name.split('_')[2])
+      const community = await getCommunityBySlug(files[0].name.split('_')[3])
+
       if (!community || community.ownerId !== user.id)
         throw new UploadThingError('Unauthorized: not community owner')
 

@@ -128,6 +128,7 @@ export const EditableProfileAvatarCard = ({
               }}
               onUploadError={(error: Error) => {
                 // Do something with the error.
+                setUploading(false)
                 console.error('Error: ', error)
               }}
             />
@@ -213,6 +214,7 @@ export const EditableCommunityAvatarCard = ({
               }}
               onUploadError={(error: Error) => {
                 // Do something with the error.
+                setUploading(false)
                 console.error('Error: ', error)
               }}
             />
