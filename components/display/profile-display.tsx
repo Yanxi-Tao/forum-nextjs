@@ -1,6 +1,9 @@
 'use client'
 
-import { AvatarCard, EditableAvatarCard } from '@/components/card/avatar-card'
+import {
+  AvatarCard,
+  EditableProfileAvatarCard,
+} from '@/components/card/avatar-card'
 import { PostCard } from '@/components/card/post-card'
 import {
   Card,
@@ -35,11 +38,21 @@ export const ProfileDisplay = ({
     <Card className="border-0 shadow-none flex flex-col space-y-3">
       <CardHeader className="bg-muted rounded-xl">
         <div className="flex space-x-4">
-          <EditableAvatarCard
-            source={user.image}
-            name={profile.name}
-            className="h-36 w-36 text-3xl"
-          />
+          {user.id === profile.id ? (
+            <EditableProfileAvatarCard
+              source={user.image}
+              name={profile.name}
+              slug={user.slug}
+              className="h-36 w-36 text-3xl"
+            />
+          ) : (
+            <AvatarCard
+              source={profile.image}
+              name={profile.name}
+              type="display"
+              className="h-36 w-36 text-3xl"
+            />
+          )}
           <div className="w-full mt-4 flex flex-col space-y-2">
             <CardTitle className="bg-muted rounded-lg">
               {profile.name}
@@ -48,16 +61,18 @@ export const ProfileDisplay = ({
               {profile.profile?.bio || 'user has no bio yet ~'}
             </CardDescription>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="h-fit focus:outline-none">
-              <HiDotsHorizontal size={20} />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <Link href={`/profile/edit`}>Edit Profile</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user.id === profile.id && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="h-fit focus:outline-none">
+                <HiDotsHorizontal size={20} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link href={`/profile/edit`}>Edit Profile</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </CardHeader>
       <CardContent className="w-full px-0">

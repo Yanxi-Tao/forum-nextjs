@@ -8,7 +8,7 @@ export default async function ProfilePage() {
     return <div>Not logged in</div>
   }
 
-  const profile = await fetchProfile(user.id)
+  const profile = await fetchProfile(user.slug)
   if (!profile) {
     return <div>Profile not found</div>
   }

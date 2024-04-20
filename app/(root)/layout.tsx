@@ -8,7 +8,7 @@ import { RightSidebar } from '@/components/shared/right-sidebar'
 import { TopBar } from '@/components/shared/top-bar'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { extractRouterConfig } from 'uploadthing/server'
-import { ourFileRouter } from '@/app/(auth)/api/uploadthing/core'
+import { ourFileRouter } from '@/app/(root)/api/uploadthing/core'
 
 import {
   ProgressBarProvider,

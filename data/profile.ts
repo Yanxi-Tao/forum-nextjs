@@ -1,10 +1,10 @@
 import { db } from '@/db/client'
 
-export const getUserProfileById = async (id: string) => {
+export const getUserProfileBySlug = async (slug: string) => {
   try {
     const profile = await db.user.findUnique({
       where: {
-        id,
+        slug,
       },
       include: {
         posts: {

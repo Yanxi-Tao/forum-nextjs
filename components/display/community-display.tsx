@@ -16,7 +16,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { AvatarCard } from '@/components/card/avatar-card'
+import {
+  AvatarCard,
+  EditableCommunityAvatarCard,
+} from '@/components/card/avatar-card'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -32,12 +35,21 @@ export const CommunityDisplay = ({
   return (
     <CardHeader className="bg-muted rounded-xl">
       <div className="flex space-x-4">
-        <AvatarCard
-          source={community.image}
-          name={community.name}
-          type="display"
-          className="h-36 w-36 text-3xl"
-        />
+        {user?.id === community.ownerId ? (
+          <EditableCommunityAvatarCard
+            source={community.image}
+            name={community.name}
+            slug={community.slug}
+            className="h-36 w-36 text-3xl"
+          />
+        ) : (
+          <AvatarCard
+            source={community.image}
+            name={community.name}
+            type="display"
+            className="h-36 w-36 text-3xl"
+          />
+        )}
         <div className="w-full mt-4 flex flex-col space-y-2">
           <CardTitle className="bg-muted rounded-lg">
             {community.name}
@@ -45,18 +57,22 @@ export const CommunityDisplay = ({
           <CardDescription>{community.description}</CardDescription>
         </div>
         <div className="flex flex-col justify-between items-end">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="h-fit focus:outline-none">
-              {user?.id === community.ownerId && <HiDotsHorizontal size={20} />}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <Link href={`/community/${community.slug}/edit`}>
-                  Edit Community
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user?.id === community.ownerId ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="h-fit focus:outline-none">
+                <HiDotsHorizontal size={20} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link href={`/community/${community.slug}/edit`}>
+                    Edit Community
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div />
+          )}
           <Button variant="outline" size="sm">
             <Link href={`/community/${community.slug}/create`}>
               Create Post

@@ -6,7 +6,7 @@ import {
   generateUploadDropzone,
 } from '@uploadthing/react'
 
-import type { OurFileRouter } from '@/app/(auth)/api/uploadthing/core'
+import type { OurFileRouter } from '@/app/(root)/api/uploadthing/core'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
