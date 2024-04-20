@@ -1,5 +1,6 @@
-import { fetchProfile } from '@/actions/profile/fetch-profile'
-import { AvatarCard } from '@/components/card/avatar-card'
+'use client'
+
+import { AvatarCard, EditableAvatarCard } from '@/components/card/avatar-card'
 import { PostCard } from '@/components/card/post-card'
 import {
   Card,
@@ -19,42 +20,52 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ProfileDisplayProps } from '@/lib/types'
+import { useRouter } from 'next/navigation'
+import { currentUser } from '@/lib/auth'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 
-export default async function ProfilePage({
-  params: { slug },
+export const ProfileDisplay = ({
+  profile,
 }: {
-  params: { slug: string }
-}) {
-  const profile = await fetchProfile(slug)
-  if (!profile) {
-    return <div>Profile not found</div>
-  }
+  profile: ProfileDisplayProps
+}) => {
+  const router = useRouter()
+  const user = useCurrentUser()
+  if (!user) return null
   return (
     <Card className="border-0 shadow-none flex flex-col space-y-3">
       <CardHeader className="bg-muted rounded-xl">
-        <div className="relative flex justify-between">
-          <AvatarCard
-            source={profile.image}
+        <div className="relative flex space-x-4">
+          <EditableAvatarCard
+            source={user.image}
             name={profile.name}
-            type="display"
             className="h-36 w-36 text-3xl"
           />
-          <div className="absolute left-28 top-28">
-            <CardTitle className="bg-muted rounded-lg p-1 px-2">
+          <div className="w-full mt-4 flex flex-col space-y-2">
+            <CardTitle className="bg-muted rounded-lg">
               {profile.name}
             </CardTitle>
+            <CardDescription>{profile.profile?.bio}</CardDescription>
           </div>
           <DropdownMenu>
-            <DropdownMenuTrigger className="h-fit">
+            <DropdownMenuTrigger className="h-fit focus:outline-none">
               <HiDotsHorizontal size={20} />
             </DropdownMenuTrigger>
-            {/* <DropdownMenuContent></DropdownMenuContent> */}
+            <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => router.push('/profile/edit')}>
+                Edit Profile
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </CardHeader>
       <CardContent className="w-full px-0">
-        <Tabs className="w-full" defaultValue="questions">
+        <Tabs className="w-full" defaultValue="activities">
           <TabsList className="w-full">
+            <TabsTrigger value="activities" className="w-full">
+              Activities
+            </TabsTrigger>
             <TabsTrigger value="questions" className="w-full">
               Questions
             </TabsTrigger>
@@ -68,6 +79,11 @@ export default async function ProfilePage({
               Bookmarks
             </TabsTrigger>
           </TabsList>
+          <TabsContent value="activities" className="w-full">
+            {profile.upVotedPosts.map((post) => (
+              <PostCard key={post.id} {...post} />
+            ))}
+          </TabsContent>
           <TabsContent value="questions" className="w-full">
             {profile.posts.map(
               (post) =>

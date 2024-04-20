@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CreateCommunitySchema } from '@/schemas'
+import { UpdateProfileSchema } from '@/schemas'
 
 import {
   Card,
@@ -26,43 +26,45 @@ import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { FormAlertProps } from '@/lib/types'
-import { createCommunity } from '@/actions/community/create-community'
+import { FormAlertProps, UpdateProfileFormProps } from '@/lib/types'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { useRouter } from 'next/navigation'
+import { updateProfile } from '@/actions/profile/update-profile'
+import { UploadButton } from '@/lib/utils'
 
-export const CommunityForm = () => {
+export const ProfileForm = ({
+  editProfile,
+}: {
+  editProfile: UpdateProfileFormProps
+}) => {
   const router = useRouter()
   const [isPending, setIsPending] = useState(false)
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
-  const form = useForm<z.infer<typeof CreateCommunitySchema>>({
-    resolver: zodResolver(CreateCommunitySchema),
+  const form = useForm<z.infer<typeof UpdateProfileSchema>>({
+    resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      isPublic: true,
+      bio: editProfile.profile?.bio || undefined,
     },
     mode: 'all',
   })
 
-  const onSubmit = async (data: z.infer<typeof CreateCommunitySchema>) => {
+  const onSubmit = async (data: z.infer<typeof UpdateProfileSchema>) => {
     setAlert(null)
     setIsPending(true)
-    const state = await createCommunity(data)
+    const state = await updateProfile(data)
     setIsPending(false)
     if (state.type === 'success') {
-      state.message = 'Community created successfully!'
-      router.push(`/community/${state.message}`)
+      router.push('/profile')
     }
     setAlert(state)
   }
   return (
     <Card className="border-0 shadow-none">
       <CardHeader>
-        <CardTitle>Create Community</CardTitle>
+        <CardTitle>Profile</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -73,22 +75,10 @@ export const CommunityForm = () => {
           >
             <FormField
               control={form.control}
-              name="name"
+              name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Community Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Community Description</FormLabel>
+                  <FormLabel>Bio</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -108,13 +98,23 @@ export const CommunityForm = () => {
               )}
             /> */}
             <FormAlert alert={alert} />
-            <Button
-              type="submit"
-              disabled={isPending || !form.formState.isValid}
-              className="w-full"
-            >
-              {isPending ? <PulseLoader color="#8585ad" /> : 'Create Community'}
-            </Button>
+            <div className="flex gap-x-3">
+              <Button
+                type="reset"
+                variant="outline"
+                onClick={() => router.push('profile')}
+                className="w-full"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isPending || !form.formState.isValid}
+                className="w-full"
+              >
+                {isPending ? <PulseLoader color="#8585ad" /> : 'Update Profile'}
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>

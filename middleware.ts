@@ -1,6 +1,13 @@
 import { auth } from '@/auth'
 
-import { PUBLIC_ROUTES, PRIVATE_ROUTES, AUTH_ROUTES, AUTH_API_ROUTE, DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import {
+  PUBLIC_ROUTES,
+  PRIVATE_ROUTES,
+  AUTH_ROUTES,
+  AUTH_API_ROUTE,
+  DEFAULT_LOGIN_REDIRECT,
+  UPLOADTHING_API_ROUTE,
+} from '@/routes'
 
 export default auth((req) => {
   const { nextUrl } = req
@@ -9,9 +16,12 @@ export default auth((req) => {
   const isApiAuthRoute = nextUrl.pathname.startsWith(AUTH_API_ROUTE)
   const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname)
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname)
+  const isApiUploadthingRoute = nextUrl.pathname.startsWith(
+    UPLOADTHING_API_ROUTE
+  )
 
   // if the route is auth api route then allow access
-  if (isApiAuthRoute) {
+  if (isApiAuthRoute || isApiUploadthingRoute) {
     return
   }
 
@@ -31,7 +41,9 @@ export default auth((req) => {
       callBackUrl += nextUrl.search
     }
     const encodedCallBackUrl = encodeURIComponent(callBackUrl)
-    return Response.redirect(new URL(`/auth/login?callBackUrl=${encodedCallBackUrl}`, nextUrl))
+    return Response.redirect(
+      new URL(`/auth/login?callBackUrl=${encodedCallBackUrl}`, nextUrl)
+    )
   }
 
   return

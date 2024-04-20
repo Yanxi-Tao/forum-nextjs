@@ -96,3 +96,7 @@ export const CreateCommunitySchema = z.object({
   description: z.string().min(1, { message: 'Description is required' }),
   isPublic: z.boolean(),
 })
+
+export const UpdateProfileSchema = z.object({
+  bio: z.optional(z.string().min(1, { message: 'Bio is required' })),
+})

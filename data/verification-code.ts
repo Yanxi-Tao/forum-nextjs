@@ -20,7 +20,8 @@ export const deleteVerificationCodeById = async (id: string) => {
         id,
       },
     })
+    return true
   } catch {
-    return null
+    return false
   }
 }

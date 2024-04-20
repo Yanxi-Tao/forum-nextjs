@@ -1,9 +1,14 @@
 'use server'
 
-import { getUserProfileBySlug } from '@/data/profile'
+import { getUserProfileById, getEditUserProfileById } from '@/data/profile'
 import { unstable_noStore } from 'next/cache'
 
-export const fetchProfile = async (slug: string) => {
+export const fetchProfile = async (id: string) => {
   unstable_noStore()
-  return await getUserProfileBySlug(slug)
+  return await getUserProfileById(id)
+}
+
+export const fetchEditProfile = async (id: string) => {
+  unstable_noStore()
+  return await getEditUserProfileById(id)
 }

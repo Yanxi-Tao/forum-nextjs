@@ -77,6 +77,7 @@ export const CommentCardWrapper = ({
             <AvatarCard
               source={comment.author.image}
               name={comment.author.name}
+              type="display"
               className="w-7 h-7 text-sm"
             />
           </Link>
@@ -84,6 +85,7 @@ export const CommentCardWrapper = ({
           <AvatarCard
             source={null}
             name="[deleted]"
+            type="deleted"
             className="w-7 h-7 text-sm"
           />
         )}
@@ -220,6 +222,7 @@ export const NestedCommentCardWrapper = ({
             <AvatarCard
               source={comment.author.image}
               name={comment.author.name}
+              type="display"
               className="w-7 h-7 text-sm"
             />
           </Link>
@@ -227,6 +230,7 @@ export const NestedCommentCardWrapper = ({
           <AvatarCard
             source={null}
             name="[deleted]"
+            type="deleted"
             className="w-7 h-7 text-sm"
           />
         )}

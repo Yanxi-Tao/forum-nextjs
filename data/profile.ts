@@ -1,10 +1,10 @@
 import { db } from '@/db/client'
 
-export const getUserProfileBySlug = async (slug: string) => {
+export const getUserProfileById = async (id: string) => {
   try {
     const profile = await db.user.findUnique({
       where: {
-        slug,
+        id,
       },
       include: {
         posts: {
@@ -80,6 +80,24 @@ export const getUserProfileBySlug = async (slug: string) => {
         comments: true,
         subscribedCommunities: true,
         ownedCommunities: true,
+        profile: true,
+      },
+    })
+    return profile
+  } catch {
+    return null
+  }
+}
+
+export const getEditUserProfileById = async (id: string) => {
+  try {
+    const profile = await db.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        profile: true,
+        image: true,
       },
     })
     return profile

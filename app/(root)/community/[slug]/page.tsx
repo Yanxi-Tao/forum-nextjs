@@ -63,6 +63,7 @@ export default async function CommunityPage({
             <AvatarCard
               source={community.image}
               name={community.name}
+              type="display"
               className="h-36 w-36 text-3xl"
             />
             <div className="absolute left-28 top-28">

@@ -11,13 +11,14 @@ import { getAccountByUserId } from '@/data/account'
 import { slugify } from '@/lib/slug'
 import { LoginSchema } from '@/schemas'
 
-export type ExtendedUser = {
+export type ExtendedUser = DefaultSession['user'] & {
   isOAuth: boolean
   slug: string
   id: string
   name: string
   email: string
-} & DefaultSession['user']
+  image: string | null
+}
 
 declare module 'next-auth' {
   interface Session {
@@ -87,6 +88,7 @@ export const {
         session.user.name = token.name as string
         session.user.email = token.email as string
         session.user.slug = token.slug as string
+        session.user.image = token.image as string | null
       }
 
       return session
@@ -104,6 +106,7 @@ export const {
       token.name = existingUser.name
       token.email = existingUser.email
       token.slug = existingUser.slug
+      token.image = existingUser.image
 
       return token
     },

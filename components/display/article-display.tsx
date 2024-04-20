@@ -124,6 +124,7 @@ export default function ArticleDisplay({
                       <AvatarCard
                         source={null}
                         name={community.name}
+                        type="display"
                         className="w-7 h-7 text-sm"
                       />
                     </Link>
@@ -142,6 +143,7 @@ export default function ArticleDisplay({
                       <AvatarCard
                         source={author.image}
                         name={author.name}
+                        type="display"
                         className="w-7 h-7 text-sm"
                       />
                     </Link>
@@ -154,7 +156,7 @@ export default function ArticleDisplay({
                   </>
                 ) : (
                   <>
-                    <AvatarCard source={null} name="[deleted]" />
+                    <AvatarCard source={null} name="[deleted]" type="deleted" />
                     <span>{'[deleted]'}</span>
                   </>
                 )}

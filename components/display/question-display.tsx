@@ -135,6 +135,7 @@ export default function QuestionDisplay({
                       <AvatarCard
                         source={null}
                         name={community.name}
+                        type="display"
                         className="w-7 h-7 text-sm"
                       />
                     </Link>
@@ -153,6 +154,7 @@ export default function QuestionDisplay({
                       <AvatarCard
                         source={author.image}
                         name={author.name}
+                        type="display"
                         className="w-7 h-7 text-sm"
                       />
                     </Link>
@@ -168,6 +170,7 @@ export default function QuestionDisplay({
                     <AvatarCard
                       source={null}
                       name="[deleted]"
+                      type="deleted"
                       className="w-7 h-7 text-sm"
                     />
                     <span>{'[deleted]'}</span>

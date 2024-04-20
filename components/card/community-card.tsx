@@ -1,14 +1,31 @@
 import { CommunityCardProps } from '@/lib/types'
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import Link from 'next/link'
 import { AvatarCard } from '@/components/card/avatar-card'
 
-export const CommunityCard = ({ name, description, image, slug }: CommunityCardProps) => {
+export const CommunityCard = ({
+  name,
+  description,
+  image,
+  slug,
+}: CommunityCardProps) => {
   return (
     <Card className="flex justify-between shadow-none border-0 p-2 hover:bg-muted">
       <Link href={`/communities/${slug}`}>
-        <AvatarCard source={image} name={name} className=" h-14 w-14 text-xl" />
+        <AvatarCard
+          source={image}
+          name={name}
+          type="display"
+          className="h-14 w-14 text-xl"
+        />
       </Link>
       <div className="w-full">
         <Link href={`/community/${slug}`}>
