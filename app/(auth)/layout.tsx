@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../globals.css'
 import { Suspense } from 'react'
+import { ProgressBarProvider } from '@/lib/providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,9 +18,11 @@ export default function AuthLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} auth`}>
         <div className="h-screen flex justify-center items-center">
-          <Suspense fallback={null}>{children}</Suspense>
+          <Suspense fallback={null}>
+            <ProgressBarProvider>{children}</ProgressBarProvider>
+          </Suspense>
         </div>
       </body>
     </html>

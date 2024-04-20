@@ -72,8 +72,12 @@
   }
 }
 
-#nprogress .bar {
+.root #nprogress .bar {
   @apply !bg-foreground !top-12;
+}
+
+.auth #nprogress .bar {
+  @apply !bg-foreground !top-0;
 }
 
 #nprogress .peg {

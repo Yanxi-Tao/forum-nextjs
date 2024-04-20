@@ -30,9 +30,11 @@ export const AvatarCard = ({
               <AvatarImage
                 src={source}
                 alt="profile pic"
-                className="rounded-full border"
+                className="rounded-full border aspect-auto object-cover"
               />
-              <AvatarFallback className="border">{initial}</AvatarFallback>
+              <AvatarFallback delayMs={500} className="border">
+                {initial}
+              </AvatarFallback>
             </>
           ) : (
             <AvatarFallback className="border border-background">
@@ -80,9 +82,11 @@ export const EditableProfileAvatarCard = ({
                 <AvatarImage
                   src={source}
                   alt="profile pic"
-                  className="rounded-full border"
+                  className="rounded-full border aspect-auto object-cover"
                 />
-                <AvatarFallback className="border">{initial}</AvatarFallback>
+                <AvatarFallback delayMs={500} className="border">
+                  {initial}
+                </AvatarFallback>
               </>
             ) : (
               <AvatarFallback className="border border-background">
@@ -113,10 +117,13 @@ export const EditableProfileAvatarCard = ({
               }}
               onClientUploadComplete={(res) => {
                 update().then(() => {
-                  queryClient.invalidateQueries({
-                    queryKey: [EXPLORE_POSTS_KEY, { undefined }],
-                  })
-                  setUploading(false)
+                  queryClient
+                    .invalidateQueries({
+                      queryKey: [EXPLORE_POSTS_KEY, { undefined }],
+                    })
+                    .then(() => {
+                      setUploading(false)
+                    })
                 })
               }}
               onUploadError={(error: Error) => {
@@ -161,9 +168,11 @@ export const EditableCommunityAvatarCard = ({
                 <AvatarImage
                   src={source}
                   alt="profile pic"
-                  className="rounded-full border"
+                  className="rounded-full border aspect-auto object-cover"
                 />
-                <AvatarFallback className="border">{initial}</AvatarFallback>
+                <AvatarFallback delayMs={500} className="border">
+                  {initial}
+                </AvatarFallback>
               </>
             ) : (
               <AvatarFallback className="border border-background">
@@ -193,11 +202,14 @@ export const EditableCommunityAvatarCard = ({
                 return files
               }}
               onClientUploadComplete={(res) => {
-                queryClient.invalidateQueries({
-                  queryKey: [EXPLORE_POSTS_KEY, { communitySlug: slug }],
-                })
                 router.refresh()
-                setUploading(false)
+                queryClient
+                  .invalidateQueries({
+                    queryKey: [EXPLORE_POSTS_KEY, { communitySlug: slug }],
+                  })
+                  .then(() => {
+                    setUploading(false)
+                  })
               }}
               onUploadError={(error: Error) => {
                 // Do something with the error.

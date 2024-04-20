@@ -85,7 +85,7 @@ export const register = async (
     await signIn('credentials', {
       email,
       password,
-      redirectTo: '/profile',
+      redirectTo: '/profile/edit',
     })
   } catch (error) {
     if (error instanceof AuthError) {

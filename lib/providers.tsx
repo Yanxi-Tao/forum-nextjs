@@ -58,7 +58,9 @@ export function ProgressBarProvider({
     <>
       <ProgressBar
         height="2px"
-        options={{ showSpinner: false }}
+        options={{
+          showSpinner: false,
+        }}
         shallowRouting
       />
       {children}

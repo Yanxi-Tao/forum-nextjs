@@ -31,7 +31,7 @@ export default async function RootLayout({
   const session = await auth()
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} overscroll-y-contain`}>
+      <body className={`${inter.className} overscroll-y-contain root`}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <ThemeProvider
           attribute="class"
