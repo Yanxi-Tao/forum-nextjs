@@ -1,39 +1,21 @@
 'use client'
 
 import { SearchIcon } from 'lucide-react'
-import { Input } from '../ui/input'
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
-import { COMMUNITY_FETCH_SPAN, COMMUNITY_KEY } from '@/lib/constants'
-import { fetchCommunities } from '@/actions/community/fetch-community'
+import { Input } from '@/components/ui/input'
+import { useQueryClient } from '@tanstack/react-query'
+import { COMMUNITY_KEY } from '@/lib/constants'
 import { useEffect, useState } from 'react'
 import { CommunityCard } from './community-card'
 import { useInView } from 'react-intersection-observer'
 import BeatLoader from 'react-spinners/BeatLoader'
+import { useInfiniteCommunities } from '@/hooks/community'
 
 export const CommunityCardList = () => {
   const [search, setSearch] = useState<string | undefined>(undefined)
   const { ref, inView } = useInView()
   const queryClient = useQueryClient()
   const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useInfiniteQuery({
-      queryKey: [COMMUNITY_KEY, { search }],
-      queryFn: ({ pageParam }) => fetchCommunities(pageParam),
-      initialPageParam: {
-        search,
-        offset: 0,
-        take: COMMUNITY_FETCH_SPAN,
-      },
-      getNextPageParam: (lastPage) => {
-        if (!lastPage.nextOffset) return undefined
-        return {
-          search,
-          offset: lastPage.nextOffset,
-          take: COMMUNITY_FETCH_SPAN,
-        }
-      },
-      gcTime: Infinity,
-      staleTime: Infinity,
-    })
+    useInfiniteCommunities(search)
 
   useEffect(() => {
     if (inView && hasNextPage) {

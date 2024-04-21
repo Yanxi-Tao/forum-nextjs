@@ -44,9 +44,8 @@ import { QuestionDisplayProps as ArticleDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
-import { useUpdateVote } from '@/hooks/useUpdateVote'
+import { useUpdateBookmark, useUpdateVote } from '@/hooks/post'
 import { CommentDisplay } from '@/components/display/comment-display'
-import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname } from 'next/navigation'
 import { DELETED_USER } from '@/lib/constants'
@@ -76,7 +75,7 @@ export default function ArticleDisplay({
   bookmarks,
   upVotes,
   downVotes,
-  comments,
+  _count,
   mode,
 }: ArticleDisplayProps & { mode: 'display' | 'edit' }) {
   const router = useRouter()
@@ -102,14 +101,6 @@ export default function ArticleDisplay({
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
 
-  const commentCount = useMemo(
-    () =>
-      comments.length > 0
-        ? comments.reduce((acc, comment) => acc + comment._count.children, 0) +
-          comments.length
-        : 0,
-    [comments]
-  )
   if (!user || !user.name || !user.email || !user.id) {
     return null
   }
@@ -242,7 +233,9 @@ export default function ArticleDisplay({
                 <CollapsibleTrigger asChild>
                   <Button variant="ghost" size="sm">
                     <BsChatSquare size={16} />
-                    <span className="ml-2">{formatNumber(commentCount)}</span>
+                    <span className="ml-2">
+                      {formatNumber(_count.comments)}
+                    </span>
                   </Button>
                 </CollapsibleTrigger>
                 <Toggle

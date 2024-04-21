@@ -1,6 +1,5 @@
 'use client'
 
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -18,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
-import { FormAlertProps } from '@/lib/types'
+import { CreatePostSchemaTypes, FormAlertProps } from '@/lib/types'
 import { useRef, useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { $getRoot, EditorState, LexicalEditor } from 'lexical'
@@ -39,7 +38,7 @@ export const QuestionCreateForm = ({
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<z.infer<typeof CreatePostSchema>>({
+  const form = useForm<CreatePostSchemaTypes>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
       title: '',
@@ -62,7 +61,7 @@ export const QuestionCreateForm = ({
 
   const editorRef = useRef<LexicalEditor | null>(null)
 
-  const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
+  const onSubmit = async (data: CreatePostSchemaTypes) => {
     if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
@@ -146,7 +145,7 @@ export const ArticleCreateForm = ({
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<z.infer<typeof CreatePostSchema>>({
+  const form = useForm<CreatePostSchemaTypes>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
       title: '',
@@ -169,7 +168,7 @@ export const ArticleCreateForm = ({
 
   const editorRef = useRef<LexicalEditor | null>(null)
 
-  const onSubmit = async (data: z.infer<typeof CreatePostSchema>) => {
+  const onSubmit = async (data: CreatePostSchemaTypes) => {
     if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
@@ -250,11 +249,11 @@ export const AnswerCreateForm = ({
   parentId: string
   parentUserId: string | undefined
   communitySlug: string | undefined
-  mutate: (data: z.infer<typeof CreatePostSchema>) => void
+  mutate: (data: CreatePostSchemaTypes) => void
   setIsFormOpen: (value: boolean) => void
 }) => {
   // schema
-  const form = useForm<z.infer<typeof CreatePostSchema>>({
+  const form = useForm<CreatePostSchemaTypes>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
       title,
@@ -279,7 +278,7 @@ export const AnswerCreateForm = ({
   const editorRef = useRef<LexicalEditor | null>(null)
 
   // form submit handler
-  const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
+  const onSubmit = (data: CreatePostSchemaTypes) => {
     if (!editorRef.current) return
     editorRef.current?.getEditorState().read(() => {
       if (!editorRef.current) return

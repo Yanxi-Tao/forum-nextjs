@@ -1,6 +1,5 @@
 'use client'
 
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -17,7 +16,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema, UpdatePostSchema } from '@/schemas'
-import { FormAlertProps } from '@/lib/types'
+import { FormAlertProps, UpdatePostSchemaTypes } from '@/lib/types'
 import { useRef, useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { $getRoot, EditorState, LexicalEditor } from 'lexical'
@@ -45,7 +44,7 @@ export const QuestionUpdateForm = ({
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<z.infer<typeof UpdatePostSchema>>({
+  const form = useForm<UpdatePostSchemaTypes>({
     resolver: zodResolver(UpdatePostSchema),
     defaultValues: {
       postId,
@@ -67,7 +66,7 @@ export const QuestionUpdateForm = ({
 
   const editorRef = useRef<LexicalEditor | null>(null)
 
-  const onSubmit = async (data: z.infer<typeof UpdatePostSchema>) => {
+  const onSubmit = async (data: UpdatePostSchemaTypes) => {
     if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
@@ -178,7 +177,7 @@ export const ArticleUpdateForm = ({
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<z.infer<typeof UpdatePostSchema>>({
+  const form = useForm<UpdatePostSchemaTypes>({
     resolver: zodResolver(UpdatePostSchema),
     defaultValues: {
       postId,
@@ -200,7 +199,7 @@ export const ArticleUpdateForm = ({
 
   const editorRef = useRef<LexicalEditor | null>(null)
 
-  const onSubmit = async (data: z.infer<typeof UpdatePostSchema>) => {
+  const onSubmit = async (data: UpdatePostSchemaTypes) => {
     if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
@@ -292,80 +291,79 @@ export const ArticleUpdateForm = ({
   )
 }
 
-export const AnswerUpdateForm = ({
-  title,
-  parentId,
-  communitySlug,
-  mutate,
-  setIsFormOpen,
-}: {
-  title: string
-  parentId: string
-  communitySlug: string | undefined
-  mutate: (data: z.infer<typeof CreatePostSchema>) => void
-  setIsFormOpen: (value: boolean) => void
-}) => {
-  // schema
-  const form = useForm<z.infer<typeof CreatePostSchema>>({
-    resolver: zodResolver(CreatePostSchema),
-    defaultValues: {
-      title,
-      content: '',
-      type: 'answer',
-      parentId,
-      communitySlug,
-    },
-    mode: 'onChange',
-  })
+// export const AnswerUpdateForm = ({
+//   title,
+//   parentId,
+//   communitySlug,
+//   mutate,
+//   setIsFormOpen,
+// }: {
+//   title: string
+//   parentId: string
+//   communitySlug: string | undefined
+//   mutate: (data: UpdatePostSchemaTypes) => void
+//   setIsFormOpen: (value: boolean) => void
+// }) => {
+//   // schema
+//   const form = useForm<UpdatePostSchemaTypes>({
+//     resolver: zodResolver(CreatePostSchema),
+//     defaultValues: {
+//       title,
+//       content: '',
+//       parentId,
+//       communitySlug,
+//     },
+//     mode: 'onChange',
+//   })
 
-  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
-    editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), {
-        shouldValidate: true,
-      })
-    })
-    return
-  }
+//   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
+//     editorState.read(() => {
+//       form.setValue('content', $getRoot().getTextContent(), {
+//         shouldValidate: true,
+//       })
+//     })
+//     return
+//   }
 
-  const editorRef = useRef<LexicalEditor | null>(null)
+//   const editorRef = useRef<LexicalEditor | null>(null)
 
-  // form submit handler
-  const onSubmit = (data: z.infer<typeof CreatePostSchema>) => {
-    if (!editorRef.current) return
-    editorRef.current?.getEditorState().read(() => {
-      if (!editorRef.current) return
-      data.content = $generateHtmlFromNodes(editorRef.current, null)
-    })
-    mutate(data)
-    setIsFormOpen(false)
-  }
+//   // form submit handler
+//   const onSubmit = (data: UpdatePostSchemaTypes) => {
+//     if (!editorRef.current) return
+//     editorRef.current?.getEditorState().read(() => {
+//       if (!editorRef.current) return
+//       data.content = $generateHtmlFromNodes(editorRef.current, null)
+//     })
+//     mutate(data)
+//     setIsFormOpen(false)
+//   }
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-6">
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Editor editorRef={editorRef} onChange={handleOnChange} />
-              </FormControl>
-              <FormDescription>
-                Your answer helps others learn about this topic
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button
-          type="submit"
-          disabled={!form.formState.isValid}
-          className="w-full"
-        >
-          Create Answer
-        </Button>
-      </form>
-    </Form>
-  )
-}
+//   return (
+//     <Form {...form}>
+//       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-6">
+//         <FormField
+//           control={form.control}
+//           name="content"
+//           render={({ field }) => (
+//             <FormItem>
+//               <FormControl>
+//                 <Editor editorRef={editorRef} onChange={handleOnChange} />
+//               </FormControl>
+//               <FormDescription>
+//                 Your answer helps others learn about this topic
+//               </FormDescription>
+//               <FormMessage />
+//             </FormItem>
+//           )}
+//         />
+//         <Button
+//           type="submit"
+//           disabled={!form.formState.isValid}
+//           className="w-full"
+//         >
+//           Create Answer
+//         </Button>
+//       </form>
+//     </Form>
+//   )
+// }

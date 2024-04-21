@@ -1,12 +1,12 @@
 'use server'
 
-import { z } from 'zod'
 import { CreatePostSchema } from '@/schemas'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
 import { getCommunityBySlug } from '@/data/community'
+import { CreatePostSchemaTypes } from '@/lib/types'
 
-export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
+export const createPost = async (data: CreatePostSchemaTypes) => {
   const user = await currentUser()
   if (!user || !user.id) {
     return { type: 'error', message: 'User not found' }

@@ -2,9 +2,9 @@
 
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
+import { UpdatePostSchemaTypes } from '@/lib/types'
 import { UpdatePostSchema } from '@/schemas'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 
 export const updatePostVoteById = async (
   postId: string,
@@ -80,7 +80,7 @@ export const updatePostBookmarkById = async (
   }
 }
 
-export const updatePost = async (data: z.infer<typeof UpdatePostSchema>) => {
+export const updatePost = async (data: UpdatePostSchemaTypes) => {
   const user = await currentUser()
   if (!user || !user.id) {
     return { type: 'error', message: 'User not found' }

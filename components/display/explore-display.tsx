@@ -3,7 +3,7 @@
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from '@/components/card/post-card'
 import { useEffect } from 'react'
-import { useInfinitePosts } from '@/hooks/post/useInfinitePosts'
+import { useInfinitePosts } from '@/hooks/post'
 import { useSearchParams } from 'next/navigation'
 import { BeatLoader } from 'react-spinners'
 

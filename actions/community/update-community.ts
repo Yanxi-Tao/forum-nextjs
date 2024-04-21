@@ -1,17 +1,15 @@
 'use server'
 
-import { getCommunityBySlug } from '@/data/community'
+import { getCommunityById, getCommunityBySlug } from '@/data/community'
 import { getUserByID } from '@/data/user'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
+import { UpdateCommunitySchemaTypes } from '@/lib/types'
 import { UpdateCommunitySchema } from '@/schemas'
 import slugify from '@sindresorhus/slugify'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 
-export const updateCommunity = async (
-  data: z.infer<typeof UpdateCommunitySchema>
-) => {
+export const updateCommunity = async (data: UpdateCommunitySchemaTypes) => {
   const user = await currentUser()
 
   if (!user || !user.id) {
@@ -29,13 +27,16 @@ export const updateCommunity = async (
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { id, name, description, isPublic } = validatedData.data
+  const { id, name, description, isPublic, slug } = validatedData.data
 
-  let slug = undefined
-  if (name) {
-    slug = slugify(name)
-    const existingCommunity = await getCommunityBySlug(slug)
-    if (slug === 'create' || existingCommunity) {
+  let newSlug = undefined
+  if (name !== (await getCommunityById(id))?.name) {
+    newSlug = slugify(name)
+    if (newSlug === slug) {
+      return { type: 'error', message: 'Invalid name' } // in case when the sligified name is the same
+    }
+    const existingCommunity = await getCommunityBySlug(newSlug)
+    if (newSlug === 'create' || existingCommunity) {
       return { type: 'error', message: 'Community already exists' }
     }
   }
@@ -45,13 +46,13 @@ export const updateCommunity = async (
       where: { id },
       data: {
         name,
-        slug,
+        slug: newSlug,
         description,
         isPublic,
       },
     })
     revalidatePath('/communities')
-    return { type: 'success', message: slug }
+    return { type: 'success', message: newSlug ?? slug }
   } catch {
     return { type: 'error', message: 'Error creating community' }
   }

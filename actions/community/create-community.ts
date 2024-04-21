@@ -1,6 +1,5 @@
 'use server'
 
-import { z } from 'zod'
 import { CreateCommunitySchema } from '@/schemas'
 import { currentUser } from '@/lib/auth'
 import { getUserByID } from '@/data/user'
@@ -8,10 +7,9 @@ import { db } from '@/db/client'
 import { getCommunityBySlug } from '@/data/community'
 import slugify from '@sindresorhus/slugify'
 import { revalidatePath } from 'next/cache'
+import { CreateCommunitySchemaTypes } from '@/lib/types'
 
-export const createCommunity = async (
-  data: z.infer<typeof CreateCommunitySchema>
-) => {
+export const createCommunity = async (data: CreateCommunitySchemaTypes) => {
   const user = await currentUser()
 
   if (!user || !user.id) {

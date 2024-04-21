@@ -1,17 +1,17 @@
 'use server'
 
-import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 
-import { SettingsSchema } from '@/schemas'
+import { UpdateSettingsSchema } from '@/schemas'
 import { getUserByEmail, getUserByID, getUserBySlug } from '@/data/user'
 import { currentUser } from '@/lib/auth'
 import { db } from '@/db/client'
 import { generateVerificationToken } from '@/lib/tokens'
 import { sendVerificationEmail } from '@/lib/mail'
 import { slugify } from '@/lib/slug'
+import { UpdateSettingsSchemaTypes } from '@/lib/types'
 
-export const settings = async (data: z.infer<typeof SettingsSchema>) => {
+export const settings = async (data: UpdateSettingsSchemaTypes) => {
   const user = await currentUser()
 
   if (!user || !user.id) {
@@ -24,7 +24,7 @@ export const settings = async (data: z.infer<typeof SettingsSchema>) => {
     return { type: 'error', message: 'User not found' }
   }
 
-  const validatedData = SettingsSchema.safeParse(data)
+  const validatedData = UpdateSettingsSchema.safeParse(data)
   if (!validatedData.success) {
     return { type: 'error', message: 'Invalid data' }
   }

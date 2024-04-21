@@ -132,6 +132,7 @@ export const getPostById = async (id: string) => {
         _count: {
           select: {
             children: true,
+            comments: true,
           },
         },
         bookmarks: true,
@@ -139,15 +140,6 @@ export const getPostById = async (id: string) => {
         downVotes: true,
         author: true,
         community: true,
-        comments: {
-          select: {
-            _count: {
-              select: {
-                children: true,
-              },
-            },
-          },
-        },
       },
     })
     return post

@@ -1,7 +1,7 @@
 import { PostType } from '@prisma/client'
 import { z } from 'zod'
 
-export const SettingsSchema = z
+export const UpdateSettingsSchema = z
   .object({
     name: z.optional(
       z
@@ -101,16 +101,17 @@ export const CreateCommentSchema = z.object({
 })
 
 export const CreateCommunitySchema = z.object({
-  name: z.string().min(1).max(100),
+  name: z.string().min(1).max(10),
   description: z.string().min(1).max(255),
   isPublic: z.boolean(),
 })
 
 export const UpdateCommunitySchema = z.object({
   id: z.string().cuid(),
-  name: z.optional(z.string().min(1).max(100)),
-  description: z.optional(z.string().min(1).max(255)),
-  isPublic: z.optional(z.boolean()),
+  name: z.string().min(1).max(10),
+  slug: z.string(),
+  description: z.string().min(1).max(255),
+  isPublic: z.boolean(),
 })
 
 export const UpdateProfileSchema = z.object({

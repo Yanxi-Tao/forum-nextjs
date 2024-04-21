@@ -12,6 +12,7 @@ export const getUserProfileBySlug = async (slug: string) => {
             _count: {
               select: {
                 children: true,
+                comments: true,
               },
             },
             bookmarks: true,
@@ -19,15 +20,6 @@ export const getUserProfileBySlug = async (slug: string) => {
             downVotes: true,
             author: true,
             community: true,
-            comments: {
-              select: {
-                _count: {
-                  select: {
-                    children: true,
-                  },
-                },
-              },
-            },
           },
         },
         upVotedPosts: {
@@ -35,6 +27,7 @@ export const getUserProfileBySlug = async (slug: string) => {
             _count: {
               select: {
                 children: true,
+                comments: true,
               },
             },
             bookmarks: true,
@@ -42,15 +35,6 @@ export const getUserProfileBySlug = async (slug: string) => {
             downVotes: true,
             author: true,
             community: true,
-            comments: {
-              select: {
-                _count: {
-                  select: {
-                    children: true,
-                  },
-                },
-              },
-            },
           },
         },
         bookmarkedPosts: {
@@ -58,6 +42,7 @@ export const getUserProfileBySlug = async (slug: string) => {
             _count: {
               select: {
                 children: true,
+                comments: true,
               },
             },
             bookmarks: true,
@@ -65,15 +50,6 @@ export const getUserProfileBySlug = async (slug: string) => {
             downVotes: true,
             author: true,
             community: true,
-            comments: {
-              select: {
-                _count: {
-                  select: {
-                    children: true,
-                  },
-                },
-              },
-            },
           },
         },
         upVotedComments: true,

@@ -31,7 +31,7 @@ import { CommentForm } from '@/components/form/comment-form'
 import { AvatarCard } from '@/components/card/avatar-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { DELETED_CONTENT, DELETED_USER } from '@/lib/constants'
-import { useUpdateVote } from '@/hooks/useUpdateVote'
+import { useUpdateVote } from '@/hooks/post'
 import { useDeleteComment } from '@/hooks/comment'
 import { ExtendedUser } from '@/auth'
 

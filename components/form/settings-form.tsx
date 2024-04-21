@@ -1,12 +1,10 @@
 'use client'
 
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState, useTransition } from 'react'
 import { useSession } from 'next-auth/react'
 
-import { SettingsSchema } from '@/schemas'
 import { settings } from '@/actions/settings'
 
 import { Button } from '@/components/ui/button'
@@ -31,11 +29,12 @@ import {
 } from '@/components/ui/card'
 import { FormAlert } from '@/components/form/form-alert'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { FormAlertProps } from '@/lib/types'
+import { FormAlertProps, UpdateSettingsSchemaTypes } from '@/lib/types'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next-nprogress-bar'
 import { deleteUser } from '@/actions/user/delete-user'
 import RingLoader from 'react-spinners/RingLoader'
+import { UpdateSettingsSchema } from '@/schemas'
 
 export const SettingsForm = () => {
   const user = useCurrentUser()
@@ -46,8 +45,8 @@ export const SettingsForm = () => {
   const [isDeleting, startDeleting] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
-  const form = useForm<z.infer<typeof SettingsSchema>>({
-    resolver: zodResolver(SettingsSchema),
+  const form = useForm<UpdateSettingsSchemaTypes>({
+    resolver: zodResolver(UpdateSettingsSchema),
     defaultValues: {
       name: user?.name || undefined,
       email: user?.email || undefined,
@@ -57,7 +56,7 @@ export const SettingsForm = () => {
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: z.infer<typeof SettingsSchema>) => {
+  const onSubmit = async (data: UpdateSettingsSchemaTypes) => {
     setAlert(null)
     setIsPending(true)
     const state = await settings(data)

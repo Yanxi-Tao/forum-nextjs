@@ -5,7 +5,15 @@ import { fetchEditProfile, fetchProfile } from '@/actions/profile/fetch-profile'
 import { getCommunityBySlug } from '@/data/community'
 import { fetchNofiications } from '@/actions/notification/fetch-notification'
 import { z } from 'zod'
-import { CreateCommentSchema } from '@/schemas'
+import {
+  CreateCommentSchema,
+  CreateCommunitySchema,
+  CreatePostSchema,
+  UpdateCommunitySchema,
+  UpdatePostSchema,
+  UpdateProfileSchema,
+  UpdateSettingsSchema,
+} from '@/schemas'
 
 // Display types
 export type QuestionDisplayProps = NonNullable<
@@ -64,6 +72,18 @@ export type UpdateProfileFormProps = NonNullable<
 
 // zod schemas types
 export type CreateCommentSchemaTypes = z.infer<typeof CreateCommentSchema>
+
+export type CreatePostSchemaTypes = z.infer<typeof CreatePostSchema>
+
+export type UpdatePostSchemaTypes = z.infer<typeof UpdatePostSchema>
+
+export type CreateCommunitySchemaTypes = z.infer<typeof CreateCommunitySchema>
+
+export type UpdateCommunitySchemaTypes = z.infer<typeof UpdateCommunitySchema>
+
+export type UpdateProfileSchemaTypes = z.infer<typeof UpdateProfileSchema>
+
+export type UpdateSettingsSchemaTypes = z.infer<typeof UpdateSettingsSchema>
 
 // Other Props
 export type FormAlertProps = {

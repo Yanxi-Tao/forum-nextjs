@@ -1,6 +1,5 @@
 'use client'
 
-import { set, z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CreateCommunitySchema, UpdateCommunitySchema } from '@/schemas'
@@ -25,7 +24,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { CommunityDisplayProps, FormAlertProps } from '@/lib/types'
+import {
+  CommunityDisplayProps,
+  CreateCommunitySchemaTypes,
+  FormAlertProps,
+  UpdateCommunitySchemaTypes,
+} from '@/lib/types'
 import { createCommunity } from '@/actions/community/create-community'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
@@ -38,7 +42,7 @@ export const CommunityCreateForm = () => {
   const [isPending, setIsPending] = useState(false)
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
-  const form = useForm<z.infer<typeof CreateCommunitySchema>>({
+  const form = useForm<CreateCommunitySchemaTypes>({
     resolver: zodResolver(CreateCommunitySchema),
     defaultValues: {
       name: '',
@@ -48,7 +52,7 @@ export const CommunityCreateForm = () => {
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: z.infer<typeof CreateCommunitySchema>) => {
+  const onSubmit = async (data: CreateCommunitySchemaTypes) => {
     setAlert(null)
     setIsPending(true)
     const state = await createCommunity(data)
@@ -85,7 +89,7 @@ export const CommunityCreateForm = () => {
                   >
                     {form.getValues('name').length < 1
                       ? 'Required'
-                      : `${form.getValues('name').length}/100`}
+                      : `${form.getValues('name').length}/10`}
                   </FormDescription>
                 </FormItem>
               )}
@@ -149,18 +153,19 @@ export const CommunityUpdateForm = ({
   const [isPending, setIsPending] = useState(false)
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
-  const form = useForm<z.infer<typeof UpdateCommunitySchema>>({
+  const form = useForm<UpdateCommunitySchemaTypes>({
     resolver: zodResolver(UpdateCommunitySchema),
     defaultValues: {
       id: community.id,
-      name: community.name || undefined,
-      description: community.description || undefined,
-      isPublic: true || undefined,
+      name: community.name,
+      slug: community.slug,
+      description: community.description,
+      isPublic: true,
     },
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: z.infer<typeof UpdateCommunitySchema>) => {
+  const onSubmit = async (data: UpdateCommunitySchemaTypes) => {
     setAlert(null)
     setIsPending(true)
     const state = await updateCommunity(data)
@@ -197,7 +202,7 @@ export const CommunityUpdateForm = ({
                   >
                     {(form.getValues('name')?.length || 0) < 1
                       ? 'Required'
-                      : `${form.getValues('name')?.length || 0}/100`}
+                      : `${form.getValues('name')?.length || 0}/10`}
                   </FormDescription>
                 </FormItem>
               )}

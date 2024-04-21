@@ -1,6 +1,5 @@
 'use client'
 
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateProfileSchema } from '@/schemas'
@@ -25,7 +24,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { FormAlertProps, UpdateProfileFormProps } from '@/lib/types'
+import {
+  FormAlertProps,
+  UpdateProfileFormProps,
+  UpdateProfileSchemaTypes,
+} from '@/lib/types'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import PulseLoader from 'react-spinners/PulseLoader'
@@ -41,7 +44,7 @@ export const ProfileForm = ({
   const [isPending, setIsPending] = useState(false)
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
-  const form = useForm<z.infer<typeof UpdateProfileSchema>>({
+  const form = useForm<UpdateProfileSchemaTypes>({
     resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
       bio: profile.bio || undefined,
@@ -49,7 +52,7 @@ export const ProfileForm = ({
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: z.infer<typeof UpdateProfileSchema>) => {
+  const onSubmit = async (data: UpdateProfileSchemaTypes) => {
     setAlert(null)
     setIsPending(true)
     const state = await updateProfile(data)

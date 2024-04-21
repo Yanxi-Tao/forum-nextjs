@@ -1,6 +1,12 @@
 import { db } from '@/db/client'
 
-export const getDefaultCommunities = async ({ offset, take }: { offset: number; take: number }) => {
+export const getDefaultCommunities = async ({
+  offset,
+  take,
+}: {
+  offset: number
+  take: number
+}) => {
   try {
     const communities = await db.community.findMany({
       where: {
@@ -15,7 +21,15 @@ export const getDefaultCommunities = async ({ offset, take }: { offset: number; 
   }
 }
 
-export const getSearchedCommunities = async ({ search, offset, take }: { search: string; offset: number; take: number }) => {
+export const getSearchedCommunities = async ({
+  search,
+  offset,
+  take,
+}: {
+  search: string
+  offset: number
+  take: number
+}) => {
   try {
     const communities = await db.community.findMany({
       where: {
@@ -100,5 +114,18 @@ export const getCommunitiesByUser = async (userId: string) => {
     return communities
   } catch {
     return []
+  }
+}
+
+export const getCommunityById = async (id: string) => {
+  try {
+    const community = await db.community.findUnique({
+      where: {
+        id,
+      },
+    })
+    return community
+  } catch {
+    return null
   }
 }

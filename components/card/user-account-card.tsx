@@ -12,11 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LogIn, LogOut, Settings } from 'lucide-react'
 import Link from 'next/link'
-import { AvatarCard } from './avatar-card'
+import { AvatarCard } from '@/components/card/avatar-card'
 
 export const UserAccountCard = () => {
   const user = useCurrentUser()

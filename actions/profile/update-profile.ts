@@ -3,13 +3,11 @@
 import { getUserByID } from '@/data/user'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
+import { UpdateProfileSchemaTypes } from '@/lib/types'
 import { UpdateProfileSchema } from '@/schemas'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 
-export const updateProfile = async (
-  data: z.infer<typeof UpdateProfileSchema>
-) => {
+export const updateProfile = async (data: UpdateProfileSchemaTypes) => {
   const user = await currentUser()
   if (!user || !user.id) {
     return { type: 'error', message: 'Unauthorized' }
