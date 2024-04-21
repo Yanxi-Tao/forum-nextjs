@@ -1,4 +1,4 @@
-import { fetchCommunitiesByUser } from '@/actions/community/fetch-community'
+import { deleteImage } from '@/actions/image/delete-image'
 import { getCommunityBySlug } from '@/data/community'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
@@ -22,18 +22,17 @@ export const ourFileRouter = {
       if (!user || !user.id) throw new UploadThingError('Unauthorized')
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id }
+      return { userId: user.id, previousImageKey: user.image?.split('/').pop() }
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log('Upload complete for userId:', metadata.userId)
-
-      console.log('file url', file.url)
       await db.user.update({
         where: { id: metadata.userId },
         data: { image: file.url },
       })
-
+      if (metadata.previousImageKey) {
+        await deleteImage(metadata.previousImageKey)
+      }
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url }
     }),
@@ -57,21 +56,19 @@ export const ourFileRouter = {
         userId: user.id,
         communityId: community.id,
         communitySlug: community.slug,
+        previousImageKey: community.image?.split('/').pop(),
       }
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log('Upload complete for community:', metadata.communityId)
-
-      console.log('file url', file.url)
       await db.community.update({
         where: { id: metadata.communityId },
         data: { image: file.url },
       })
-      console.log(`/community/${metadata.communitySlug}`)
-
+      if (metadata.previousImageKey) {
+        await deleteImage(metadata.previousImageKey)
+      }
       revalidatePath(`/community/${metadata.communitySlug}`)
-
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url }
     }),

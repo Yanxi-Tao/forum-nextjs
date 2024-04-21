@@ -3,7 +3,12 @@ import { z } from 'zod'
 
 export const SettingsSchema = z
   .object({
-    name: z.optional(z.string().min(1, { message: 'Name is required' })),
+    name: z.optional(
+      z
+        .string()
+        .min(1, { message: 'Name is required' })
+        .max(15, { message: 'Name is too long' })
+    ),
     email: z.optional(z.string().email({ message: 'Email is required' })),
     oldPassword: z.optional(z.string()),
     newPassword: z.optional(z.string()),
@@ -59,7 +64,10 @@ export const RegisterSchema = z
     email: z.string().email({ message: 'Email is required' }),
     password: z.string().min(3, { message: 'Password is required' }),
     confirmPassword: z.string().min(3, { message: 'Password is required' }),
-    name: z.string().min(1, { message: 'Name is required' }),
+    name: z
+      .string()
+      .min(1, { message: 'Name is required' })
+      .max(15, { message: 'Name is too long' }),
     code: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

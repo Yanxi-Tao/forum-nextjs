@@ -2,7 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { BiSolidUser } from 'react-icons/bi'
 import { UploadButton } from '@/lib/utils'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Cliploader from 'react-spinners/ClipLoader'
 import { useSession } from 'next-auth/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -67,6 +67,7 @@ export const EditableProfileAvatarCard = ({
   const [uploading, setUploading] = useState(false)
   const queryClient = useQueryClient()
   const { update } = useSession()
+  const form = useRef<HTMLFormElement>(null)
 
   return (
     <Avatar className={className}>
@@ -107,7 +108,9 @@ export const EditableProfileAvatarCard = ({
                 files = [
                   new File(
                     [files[0]],
-                    `user_profile_image_${slug}_${files[0].name}`,
+                    `user_profile_image_${slug}.${files[0].name
+                      .split('.')
+                      .pop()}`,
                     {
                       type: files[0].type,
                     }
@@ -194,7 +197,9 @@ export const EditableCommunityAvatarCard = ({
                 files = [
                   new File(
                     [files[0]],
-                    `community_profile_image_${slug}_${files[0].name}`,
+                    `community_profile_image_${slug}_.${files[0].name
+                      .split('.')
+                      .pop()}`,
                     {
                       type: files[0].type,
                     }
