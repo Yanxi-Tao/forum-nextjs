@@ -16,10 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  AvatarCard,
-  EditableCommunityAvatarCard,
-} from '@/components/card/avatar-card'
+import { AvatarCard, EditableAvatarCard } from '@/components/card/avatar-card'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -36,17 +33,17 @@ export const CommunityDisplay = ({
     <CardHeader className="bg-muted rounded-xl">
       <div className="flex space-x-4">
         {user?.id === community.ownerId ? (
-          <EditableCommunityAvatarCard
+          <EditableAvatarCard
             source={community.image}
             name={community.name}
             slug={community.slug}
+            type="community"
             className="h-36 w-36 text-3xl"
           />
         ) : (
           <AvatarCard
             source={community.image}
             name={community.name}
-            type="display"
             className="h-36 w-36 text-3xl"
           />
         )}

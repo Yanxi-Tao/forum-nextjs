@@ -1,9 +1,6 @@
 'use client'
 
-import {
-  AvatarCard,
-  EditableProfileAvatarCard,
-} from '@/components/card/avatar-card'
+import { AvatarCard, EditableAvatarCard } from '@/components/card/avatar-card'
 import { PostCard } from '@/components/card/post-card'
 import {
   Card,
@@ -39,17 +36,17 @@ export const ProfileDisplay = ({
       <CardHeader className="bg-muted rounded-xl">
         <div className="flex space-x-4">
           {user.id === profile.id ? (
-            <EditableProfileAvatarCard
+            <EditableAvatarCard
               source={user.image}
               name={profile.name}
               slug={user.slug}
+              type="user"
               className="h-36 w-36 text-3xl"
             />
           ) : (
             <AvatarCard
               source={profile.image}
               name={profile.name}
-              type="display"
               className="h-36 w-36 text-3xl"
             />
           )}

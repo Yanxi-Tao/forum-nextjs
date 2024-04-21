@@ -1,11 +1,11 @@
 'use server'
 
-import { z } from 'zod'
 import { CreateCommentSchema } from '@/schemas'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
+import { CreateCommentSchemaTypes } from '@/lib/types'
 
-export const createComment = async (data: z.infer<typeof CreateCommentSchema>) => {
+export const createComment = async (data: CreateCommentSchemaTypes) => {
   const user = await currentUser()
   if (!user || !user.id) {
     return { type: 'error', message: 'User not found' }

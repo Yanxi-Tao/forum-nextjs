@@ -1,5 +1,4 @@
 'use client'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -15,6 +14,7 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { CreateCommentSchema } from '@/schemas'
+import { CreateCommentSchemaTypes } from '@/lib/types'
 
 export const CommentForm = ({
   postId,
@@ -30,11 +30,11 @@ export const CommentForm = ({
   repliesToId: string | undefined
   repliesToName: string | undefined
   repliesToSlug: string | undefined
-  mutate: (data: z.infer<typeof CreateCommentSchema>) => void
+  mutate: (data: CreateCommentSchemaTypes) => void
   setIsFormOpen?: (value: boolean) => void
 }) => {
   // schema
-  const form = useForm<z.infer<typeof CreateCommentSchema>>({
+  const form = useForm<CreateCommentSchemaTypes>({
     resolver: zodResolver(CreateCommentSchema),
     defaultValues: {
       content: '',
@@ -48,7 +48,7 @@ export const CommentForm = ({
   })
 
   // form submit handler
-  const onSubmit = (data: z.infer<typeof CreateCommentSchema>) => {
+  const onSubmit = (data: CreateCommentSchemaTypes) => {
     setIsFormOpen?.(false)
     mutate(data)
     form.reset()

@@ -30,6 +30,7 @@ export const getDefaultQuestionsOrArticles = async ({
         _count: {
           select: {
             children: true,
+            comments: true,
           },
         },
         bookmarks: true,
@@ -37,15 +38,6 @@ export const getDefaultQuestionsOrArticles = async ({
         downVotes: true,
         author: true,
         community: true,
-        comments: {
-          select: {
-            _count: {
-              select: {
-                children: true,
-              },
-            },
-          },
-        },
       },
     })
     return posts
@@ -114,6 +106,7 @@ export const getSearchedQuestionsOrArticles = async ({
         _count: {
           select: {
             children: true,
+            comments: true,
           },
         },
         bookmarks: true,
@@ -121,15 +114,6 @@ export const getSearchedQuestionsOrArticles = async ({
         downVotes: true,
         author: true,
         community: true,
-        comments: {
-          select: {
-            _count: {
-              select: {
-                children: true,
-              },
-            },
-          },
-        },
       },
     })
     return posts
@@ -198,17 +182,9 @@ export const getAnsewrs = async ({
         downVotes: true,
         community: true,
         author: true,
-        comments: {
-          select: {
-            _count: {
-              select: {
-                children: true,
-              },
-            },
-          },
-        },
         _count: {
           select: {
+            comments: true,
             children: true,
           },
         },

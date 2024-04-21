@@ -93,7 +93,7 @@ export const UpdatePostSchema = z.object({
 
 export const CreateCommentSchema = z.object({
   content: z.string().min(1, { message: 'Required' }),
-  postId: z.optional(z.string()),
+  postId: z.string(),
   parentId: z.optional(z.string()),
   repliesToId: z.optional(z.string()),
   repliesToName: z.optional(z.string()),

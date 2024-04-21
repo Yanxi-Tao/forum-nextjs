@@ -32,7 +32,6 @@ export const NotificationCard = ({
           <AvatarCard
             source={notification.generatedBy.image}
             name={notification.generatedBy.name}
-            type="display"
             className="h-14 w-14 text-xl"
           />
         </Link>

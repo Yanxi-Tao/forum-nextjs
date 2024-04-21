@@ -40,7 +40,7 @@ import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
-import { QuestionDisplayProps } from '@/lib/types'
+import { QuestionDisplayProps as ArticleDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
@@ -49,7 +49,8 @@ import { CommentDisplay } from '@/components/display/comment-display'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname } from 'next/navigation'
-import { DELETED_CONTENT, DELETED_USER } from '@/lib/constants'
+import { DELETED_USER } from '@/lib/constants'
+import { useRouter } from 'next-nprogress-bar'
 
 const ArticleUpdateForm = dynamic(
   () =>
@@ -77,7 +78,8 @@ export default function ArticleDisplay({
   downVotes,
   comments,
   mode,
-}: QuestionDisplayProps & { mode: 'display' | 'edit' }) {
+}: ArticleDisplayProps & { mode: 'display' | 'edit' }) {
+  const router = useRouter()
   const pathname = usePathname()
   const user = useCurrentUser()
   const updateVote = useUpdateVote('post')
@@ -128,7 +130,6 @@ export default function ArticleDisplay({
                       <AvatarCard
                         source={null}
                         name={community.name}
-                        type="display"
                         className="w-7 h-7 text-sm"
                       />
                       <span className="text-primary underline-offset-4 hover:underline">
@@ -146,7 +147,6 @@ export default function ArticleDisplay({
                     <AvatarCard
                       source={author.image}
                       name={author.name}
-                      type="display"
                       className="w-7 h-7 text-sm"
                     />
                     <span className="text-primary underline-offset-4 hover:underline">
@@ -155,11 +155,7 @@ export default function ArticleDisplay({
                   </Link>
                 ) : (
                   <>
-                    <AvatarCard
-                      source={null}
-                      name={DELETED_USER}
-                      type="deleted"
-                    />
+                    <AvatarCard source={null} name={DELETED_USER} isDeleted />
                     <span>{DELETED_USER}</span>
                   </>
                 )}
@@ -189,7 +185,11 @@ export default function ArticleDisplay({
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onSelect={() => deletePost(id, 'article')}
+                          onSelect={() =>
+                            deletePost(id, 'article').then(() =>
+                              router.push('/')
+                            )
+                          }
                         >
                           <MdDelete size={16} className="mr-2" />
                           Delete

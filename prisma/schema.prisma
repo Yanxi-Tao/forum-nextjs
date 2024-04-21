@@ -138,8 +138,8 @@ model Comment {
   updatedAt DateTime @updatedAt
   upVotes   User[]   @relation("CommentToUserUpVoted")
 
-  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId String?
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
 
   children Comment[] @relation("CommentToComment")
   parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])

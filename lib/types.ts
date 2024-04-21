@@ -4,6 +4,8 @@ import { fetchCommunities } from '@/actions/community/fetch-community'
 import { fetchEditProfile, fetchProfile } from '@/actions/profile/fetch-profile'
 import { getCommunityBySlug } from '@/data/community'
 import { fetchNofiications } from '@/actions/notification/fetch-notification'
+import { z } from 'zod'
+import { CreateCommentSchema } from '@/schemas'
 
 // Display types
 export type QuestionDisplayProps = NonNullable<
@@ -27,11 +29,6 @@ export type CommentCardProps = Omit<
   Awaited<ReturnType<typeof fetchComments>>[number],
   'children'
 >
-
-export type NestedCommentCardProps = Pick<
-  Awaited<ReturnType<typeof fetchComments>>[number],
-  'children'
->['children'][number]
 
 export type CommunityCardProps = Awaited<
   ReturnType<typeof fetchCommunities>
@@ -64,6 +61,9 @@ export type FetchCommunityQueryKey = {
 export type UpdateProfileFormProps = NonNullable<
   NonNullable<Awaited<ReturnType<typeof fetchEditProfile>>>['profile']
 >
+
+// zod schemas types
+export type CreateCommentSchemaTypes = z.infer<typeof CreateCommentSchema>
 
 // Other Props
 export type FormAlertProps = {

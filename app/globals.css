@@ -83,3 +83,7 @@
 #nprogress .peg {
   @apply !hidden;
 }
+
+.link {
+  @apply text-primary underline-offset-4 hover:underline;
+}

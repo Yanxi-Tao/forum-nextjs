@@ -3,7 +3,7 @@
 import { createPost } from '@/actions/post/create-post'
 import { QUESTION_ANSWERS_KEY } from '@/lib/constants'
 import { CreatePostSchema } from '@/schemas'
-import { QueryClient, useMutation } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
 /**
@@ -14,7 +14,9 @@ import { z } from 'zod'
  * used for creating new answer to a question with optimistic update
  * and invalidating the cache
  */
-export const useMutateAnswer = (queryClient: QueryClient) => {
+
+export const useMutateAnswer = () => {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (data: z.infer<typeof CreatePostSchema>) => createPost(data),
     onSettled: async () => {

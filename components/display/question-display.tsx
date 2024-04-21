@@ -90,7 +90,7 @@ export default function QuestionDisplay({
   const updateVote = useUpdateVote('post')
   const { ref, inView } = useInView()
 
-  const { isPending, variables, mutate } = useMutateAnswer(useQueryClient())
+  const { isPending, variables, mutate } = useMutateAnswer()
   const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
     useInfiniteAnswers({
       parentId: id,
@@ -143,7 +143,6 @@ export default function QuestionDisplay({
                       <AvatarCard
                         source={null}
                         name={community.name}
-                        type="display"
                         className="w-7 h-7 text-sm"
                       />
                       <span className="text-primary underline-offset-4 hover:underline">
@@ -161,7 +160,6 @@ export default function QuestionDisplay({
                     <AvatarCard
                       source={author.image}
                       name={author.name}
-                      type="display"
                       className="w-7 h-7 text-sm"
                     />
                     <span className="text-primary underline-offset-4 hover:underline">
@@ -173,7 +171,7 @@ export default function QuestionDisplay({
                     <AvatarCard
                       source={null}
                       name={DELETED_USER}
-                      type="deleted"
+                      isDeleted
                       className="w-7 h-7 text-sm"
                     />
                     <span>{DELETED_USER}</span>

@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LogIn, LogOut, Settings } from 'lucide-react'
 import Link from 'next/link'
+import { AvatarCard } from './avatar-card'
 
 export const UserAccountCard = () => {
   const user = useCurrentUser()
@@ -32,17 +33,7 @@ export const UserAccountCard = () => {
               variant="ghost"
               className="py-8 gap-x-3 focus-visible:ring-0 focus-visible:ring-offset-0"
             >
-              {user.image ? (
-                <Avatar>
-                  <AvatarImage src={user.image} alt="profile pic" />
-                  <AvatarFallback className="border">{initial}</AvatarFallback>
-                </Avatar>
-              ) : (
-                <Avatar>
-                  <AvatarFallback className="border">{initial}</AvatarFallback>
-                </Avatar>
-              )}
-
+              <AvatarCard source={user.image} name={user.name} />
               <div>{user.name}</div>
             </Button>
           </DropdownMenuTrigger>

@@ -68,7 +68,6 @@ export const PostCardWrapper = ({
   downVotes,
   bookmarks,
   _count,
-  comments,
   shouldCollapse,
 }: PostCardProps & { children: React.ReactNode; shouldCollapse: boolean }) => {
   const updateVote = useUpdateVote('post')
@@ -107,15 +106,6 @@ export const PostCardWrapper = ({
     ? `/community/${community.slug}/${type}/${id}`
     : `/${type}/${id}`
 
-  const commentCount = useMemo(
-    () =>
-      comments.length > 0
-        ? comments.reduce((acc, comment) => acc + comment._count.children, 0) +
-          comments.length
-        : 0,
-    [comments]
-  )
-
   return (
     <Card className="relative shadow-none border-0 space-y-1 py-1 pt-2 max-w-[820px] break-words">
       <CardHeader className="py-0 space-y-0.5">
@@ -126,7 +116,6 @@ export const PostCardWrapper = ({
                 <AvatarCard
                   source={community.image}
                   name={community.name}
-                  type="display"
                   className="w-7 h-7 text-sm"
                 />
               </Link>
@@ -135,7 +124,6 @@ export const PostCardWrapper = ({
                 <AvatarCard
                   source={author.image}
                   name={author.name}
-                  type="display"
                   className="w-7 h-7 text-sm"
                 />
               </Link>
@@ -143,7 +131,7 @@ export const PostCardWrapper = ({
               <AvatarCard
                 source={null}
                 name={DELETED_USER}
-                type="deleted"
+                isDeleted
                 className="w-7 h-7 text-sm"
               />
             )}
@@ -274,7 +262,7 @@ export const PostCardWrapper = ({
                   <BsChatSquare size={16} />
                   <span className="ml-2">
                     {formatNumber(
-                      type === 'question' ? _count.children : commentCount
+                      type === 'question' ? _count.children : _count.comments
                     )}
                   </span>
                 </Button>
@@ -283,7 +271,7 @@ export const PostCardWrapper = ({
               <CollapsibleTrigger asChild>
                 <Button variant="ghost">
                   <BsChatSquare size={16} />
-                  <span className="ml-2">{formatNumber(commentCount)}</span>
+                  <span className="ml-2">{formatNumber(_count.comments)}</span>
                 </Button>
               </CollapsibleTrigger>
             )}

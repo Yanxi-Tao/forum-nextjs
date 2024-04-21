@@ -20,12 +20,7 @@ export const CommunityCard = ({
   return (
     <Card className="flex justify-between shadow-none border-0 p-2 hover:bg-muted">
       <Link href={`/communities/${slug}`}>
-        <AvatarCard
-          source={image}
-          name={name}
-          type="display"
-          className="h-14 w-14 text-xl"
-        />
+        <AvatarCard source={image} name={name} className="h-14 w-14 text-xl" />
       </Link>
       <div className="w-full">
         <Link href={`/community/${slug}`}>

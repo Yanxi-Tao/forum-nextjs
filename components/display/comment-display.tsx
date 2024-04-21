@@ -1,40 +1,15 @@
 'use client'
 
-import { fetchComments } from '@/actions/comment/fetch-comment'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CommentForm } from '@/components/form/comment-form'
-import { createComment } from '@/actions/comment/create-comment'
-import { CreateCommentSchema } from '@/schemas'
-import { z } from 'zod'
-import {
-  CommentCard,
-  NestedCommentCard,
-  optimisticComment,
-  optimisticNestedComment,
-} from '@/components/card/comment-card'
+import { CommentCard, optimisticComment } from '@/components/card/comment-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { BeatLoader } from 'react-spinners'
-import { COMMENT_KEY } from '@/lib/constants'
+import { useComments, useCreateComment } from '@/hooks/comment'
 
 export const CommentDisplay = ({ postId }: { postId: string }) => {
   const user = useCurrentUser()
-  const queryClient = useQueryClient()
-  const { data, fetchStatus, isSuccess } = useQuery({
-    queryKey: [COMMENT_KEY, postId],
-    queryFn: () => fetchComments(postId),
-    gcTime: Infinity,
-    staleTime: Infinity,
-  })
-
-  const { isPending, mutate, variables } = useMutation({
-    mutationFn: (data: z.infer<typeof CreateCommentSchema>) =>
-      createComment(data),
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({
-        queryKey: [COMMENT_KEY, postId],
-      })
-    },
-  })
+  const { data, fetchStatus, isSuccess } = useComments(postId)
+  const { isPending, mutate, variables } = useCreateComment(postId)
 
   if (!user) return null
   return (
@@ -48,7 +23,7 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
         mutate={mutate}
       />
       <div className="max-h-[400px] overflow-y-auto">
-        {variables?.postId && isPending && (
+        {!variables?.parentId && isPending && (
           <CommentCard
             comment={optimisticComment(variables, user)}
             mutate={mutate}
@@ -60,20 +35,16 @@ export const CommentDisplay = ({ postId }: { postId: string }) => {
               <CommentCard comment={comment} mutate={mutate} />
               <div className=" pl-12 w-full">
                 {variables?.parentId === comment.id && isPending && (
-                  <NestedCommentCard
-                    parentId={comment.id}
-                    comment={optimisticNestedComment(variables, user)}
+                  <CommentCard
+                    comment={optimisticComment(variables, user)}
                     mutate={mutate}
-                    postId={postId}
                   />
                 )}
                 {comment.children.map((nestedComment) => (
-                  <NestedCommentCard
-                    parentId={comment.id}
+                  <CommentCard
                     key={nestedComment.id}
                     comment={nestedComment}
                     mutate={mutate}
-                    postId={postId}
                   />
                 ))}
               </div>

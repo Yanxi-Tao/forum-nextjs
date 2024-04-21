@@ -4,7 +4,7 @@ import { DELETED_CONTENT } from '@/lib/constants'
 export const getAllComments = async (postId: string) => {
   try {
     const comments = await db.comment.findMany({
-      where: { postId },
+      where: { postId, parentId: null },
       include: {
         upVotes: true,
         author: true,
@@ -17,7 +17,6 @@ export const getAllComments = async (postId: string) => {
           },
           orderBy: { createdAt: 'asc' },
         },
-        _count: { select: { children: true } },
       },
       orderBy: { createdAt: 'asc' },
     })
