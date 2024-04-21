@@ -34,14 +34,15 @@ model User {
 
   bookmarkedPosts Post[] @relation("PostToUserBookmarked")
 
-  subscribedCommunities Community[] @relation("UserToCommunity")
+  subscribedCommunities Community[] @relation("MemberToCommunity")
   ownedCommunities      Community[] @relation("OwnerToCommunity")
 
   comments        Comment[] @relation("CommentToAuthor")
   commentsReplies Comment[] @relation("ReplyToComment")
   upVotedComments Comment[] @relation("CommentToUserUpVoted")
 
-  notifications Notification[]
+  notifiedNotifications  Notification[] @relation("NotificationToUser")
+  generatedNotifications Notification[] @relation("GeneratedByToUser")
 }
 
 // account model for provider login
@@ -170,23 +171,34 @@ model Community {
   description String
   isPublic    Boolean
   posts       Post[]
-  members     User[]  @relation("UserToCommunity")
+  members     User[]  @relation("MemberToCommunity")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Notification {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String           @id @default(cuid())
+  message   String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  type      NotificationType
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  notifiedUser   User   @relation("NotificationToUser", fields: [notifiedUserId], references: [id], onDelete: Cascade)
+  notifiedUserId String
+
+  generatedBy   User   @relation("GeneratedByToUser", fields: [generatedById], references: [id], onDelete: Cascade)
+  generatedById String
 
   post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String?
 
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?
+}
+
+enum NotificationType {
+  answer
+  commentPost
+  commentReply
 }

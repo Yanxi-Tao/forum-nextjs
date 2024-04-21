@@ -45,7 +45,7 @@ export const CommunityCreateForm = () => {
       description: '',
       isPublic: true,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: z.infer<typeof CreateCommunitySchema>) => {
@@ -157,7 +157,7 @@ export const CommunityUpdateForm = ({
       description: community.description || undefined,
       isPublic: true || undefined,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: z.infer<typeof UpdateCommunitySchema>) => {

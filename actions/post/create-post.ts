@@ -17,22 +17,49 @@ export const createPost = async (data: z.infer<typeof CreatePostSchema>) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { title, content, type, parentId, communitySlug } = validatedData.data
+  const { title, content, type, parentId, communitySlug, parentUserId } =
+    validatedData.data
   const communityId = communitySlug
     ? (await getCommunityBySlug(communitySlug))?.id
     : null
 
   try {
-    await db.post.create({
-      data: {
-        title,
-        content,
-        type,
-        parentId,
-        communityId,
-        authorId: user.id,
-      },
-    })
+    if (type === 'answer' && parentUserId && parentUserId !== user.id) {
+      console.log('creating answer')
+      console.log(validatedData.data)
+
+      await db.post.create({
+        data: {
+          title,
+          content,
+          type,
+          parentId,
+          communityId,
+          authorId: user.id,
+          notifications: {
+            create: [
+              {
+                notifiedUserId: parentUserId,
+                generatedById: user.id,
+                message: 'answered your question',
+                type: 'answer',
+              },
+            ],
+          },
+        },
+      })
+    } else {
+      await db.post.create({
+        data: {
+          title,
+          content,
+          type,
+          parentId,
+          communityId,
+          authorId: user.id,
+        },
+      })
+    }
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

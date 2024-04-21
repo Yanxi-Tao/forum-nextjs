@@ -54,7 +54,7 @@ export const SettingsForm = () => {
       oldPassword: undefined,
       newPassword: undefined,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: z.infer<typeof SettingsSchema>) => {

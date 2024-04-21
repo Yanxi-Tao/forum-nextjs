@@ -48,7 +48,7 @@ export const QuestionCreateForm = ({
       parentId: undefined,
       communitySlug,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
@@ -155,7 +155,7 @@ export const ArticleCreateForm = ({
       parentId: undefined,
       communitySlug,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
@@ -241,12 +241,14 @@ export const ArticleCreateForm = ({
 export const AnswerCreateForm = ({
   title,
   parentId,
+  parentUserId,
   communitySlug,
   mutate,
   setIsFormOpen,
 }: {
   title: string
   parentId: string
+  parentUserId: string | undefined
   communitySlug: string | undefined
   mutate: (data: z.infer<typeof CreatePostSchema>) => void
   setIsFormOpen: (value: boolean) => void
@@ -259,9 +261,10 @@ export const AnswerCreateForm = ({
       content: '',
       type: 'answer',
       parentId,
+      parentUserId,
       communitySlug,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {

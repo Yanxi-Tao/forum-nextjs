@@ -46,7 +46,12 @@ import { MdDelete } from 'react-icons/md'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { deletePost } from '@/actions/post/delete-post'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { EXPLORE_POSTS_KEY, QUESTION_ANSWERS_KEY } from '@/lib/constants'
+import {
+  DELETED_CONTENT,
+  DELETED_USER,
+  EXPLORE_POSTS_KEY,
+  QUESTION_ANSWERS_KEY,
+} from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 import { PostType } from '@prisma/client'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
@@ -137,7 +142,7 @@ export const PostCardWrapper = ({
             ) : (
               <AvatarCard
                 source={null}
-                name="[deleted]"
+                name={DELETED_USER}
                 type="deleted"
                 className="w-7 h-7 text-sm"
               />
@@ -157,7 +162,7 @@ export const PostCardWrapper = ({
                 {`u/${author.name}`}
               </Link>
             ) : (
-              <span className="text-primary">{'[deleted]'}</span>
+              <span className="text-primary">{DELETED_USER}</span>
             )}
             <span className="text-muted-foreground">
               {new Date(updatedAt).toDateString()}

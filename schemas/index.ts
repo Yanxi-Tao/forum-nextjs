@@ -79,8 +79,9 @@ export const CreatePostSchema = z.object({
   title: z.string().min(1).max(255),
   type: z.nativeEnum(PostType),
   content: z.string().min(1, { message: 'Required' }),
-  parentId: z.optional(z.string()),
+  parentId: z.optional(z.string().cuid()),
   communitySlug: z.optional(z.string()),
+  parentUserId: z.optional(z.string().cuid()),
 })
 
 export const UpdatePostSchema = z.object({

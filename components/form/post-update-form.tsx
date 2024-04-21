@@ -53,7 +53,7 @@ export const QuestionUpdateForm = ({
       content: '',
       pathname,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
@@ -186,7 +186,7 @@ export const ArticleUpdateForm = ({
       content: '',
       pathname,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
@@ -315,7 +315,7 @@ export const AnswerUpdateForm = ({
       parentId,
       communitySlug,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {

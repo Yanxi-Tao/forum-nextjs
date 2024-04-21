@@ -49,6 +49,7 @@ import { CommentDisplay } from '@/components/display/comment-display'
 import { useUpdateBookmark } from '@/hooks/useUpdateBookmark'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname } from 'next/navigation'
+import { DELETED_CONTENT, DELETED_USER } from '@/lib/constants'
 
 const ArticleUpdateForm = dynamic(
   () =>
@@ -154,8 +155,12 @@ export default function ArticleDisplay({
                   </Link>
                 ) : (
                   <>
-                    <AvatarCard source={null} name="[deleted]" type="deleted" />
-                    <span>{'[deleted]'}</span>
+                    <AvatarCard
+                      source={null}
+                      name={DELETED_USER}
+                      type="deleted"
+                    />
+                    <span>{DELETED_USER}</span>
                   </>
                 )}
               </div>

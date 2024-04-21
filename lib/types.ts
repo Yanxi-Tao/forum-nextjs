@@ -3,6 +3,7 @@ import { fetchComments } from '@/actions/comment/fetch-comment'
 import { fetchCommunities } from '@/actions/community/fetch-community'
 import { fetchEditProfile, fetchProfile } from '@/actions/profile/fetch-profile'
 import { getCommunityBySlug } from '@/data/community'
+import { fetchNofiications } from '@/actions/notification/fetch-notification'
 
 // Display types
 export type QuestionDisplayProps = NonNullable<
@@ -35,6 +36,10 @@ export type NestedCommentCardProps = Pick<
 export type CommunityCardProps = Awaited<
   ReturnType<typeof fetchCommunities>
 >['communities'][number]
+
+export type NotificationCardProps = NonNullable<
+  Awaited<ReturnType<typeof fetchNofiications>>
+>[number]
 
 // Tanstack query keys types
 export type FetchPostQueryKey = {

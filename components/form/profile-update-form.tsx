@@ -46,7 +46,7 @@ export const ProfileForm = ({
     defaultValues: {
       bio: profile.bio || undefined,
     },
-    mode: 'all',
+    mode: 'onChange',
   })
 
   const onSubmit = async (data: z.infer<typeof UpdateProfileSchema>) => {

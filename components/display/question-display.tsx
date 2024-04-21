@@ -37,7 +37,11 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { QuestionDisplayProps } from '@/lib/types'
 import { AnswerCreateForm } from '@/components/form/post-create-form'
-import { ANSWERS_FETCH_SPAN } from '@/lib/constants'
+import {
+  ANSWERS_FETCH_SPAN,
+  DELETED_CONTENT,
+  DELETED_USER,
+} from '@/lib/constants'
 import { useQueryClient } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { PostCard, optimisticAnswer } from '@/components/card/post-card'
@@ -168,11 +172,11 @@ export default function QuestionDisplay({
                   <>
                     <AvatarCard
                       source={null}
-                      name="[deleted]"
+                      name={DELETED_USER}
                       type="deleted"
                       className="w-7 h-7 text-sm"
                     />
-                    <span>{'[deleted]'}</span>
+                    <span>{DELETED_USER}</span>
                   </>
                 )}
               </div>
@@ -290,6 +294,7 @@ export default function QuestionDisplay({
         <AnswerCreateForm
           title={title}
           parentId={id}
+          parentUserId={author?.id}
           communitySlug={community?.slug}
           mutate={mutate}
           setIsFormOpen={setIsFormOpen}

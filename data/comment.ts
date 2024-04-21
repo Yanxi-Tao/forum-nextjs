@@ -1,4 +1,5 @@
 import { db } from '@/db/client'
+import { DELETED_CONTENT } from '@/lib/constants'
 
 export const getAllComments = async (postId: string) => {
   try {
@@ -31,7 +32,7 @@ export const deleteCommentById = async (id: string) => {
     await db.comment.update({
       where: { id },
       data: {
-        content: '[deleted]',
+        content: DELETED_CONTENT,
       },
     })
     return true

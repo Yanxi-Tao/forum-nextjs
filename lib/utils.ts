@@ -1,10 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { customAlphabet } from 'nanoid'
-import {
-  generateUploadButton,
-  generateUploadDropzone,
-} from '@uploadthing/react'
+import { generateUploadButton } from '@uploadthing/react'
 
 import type { OurFileRouter } from '@/app/(root)/api/uploadthing/core'
 
@@ -19,4 +16,3 @@ export function formatNumber(number: number) {
 export const postNanoid = customAlphabet('1234567890', 10)
 
 export const UploadButton = generateUploadButton<OurFileRouter>()
-export const UploadDropzone = generateUploadDropzone<OurFileRouter>()

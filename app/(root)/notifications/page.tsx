@@ -1,7 +1,16 @@
-export default function NotificationsPage() {
+import { fetchNofiications } from '@/actions/notification/fetch-notification'
+import { NotificationCard } from '@/components/card/notification-card'
+
+export default async function NotificationsPage() {
+  const notifications = await fetchNofiications()
+  if (!notifications) return null
   return (
     <div>
-      <h1>Not yet implemented...</h1>
+      {notifications.map((notification) => {
+        return (
+          <NotificationCard key={notification.id} notification={notification} />
+        )
+      })}
     </div>
   )
 }

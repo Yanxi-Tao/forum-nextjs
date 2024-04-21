@@ -35,7 +35,7 @@ import { AvatarCard } from '@/components/card/avatar-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { deleteComment } from '@/actions/comment/delete-comment'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { COMMENT_KEY } from '@/lib/constants'
+import { COMMENT_KEY, DELETED_CONTENT, DELETED_USER } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/useUpdateVote'
 
 export const CommentCardWrapper = ({
@@ -66,9 +66,6 @@ export const CommentCardWrapper = ({
   const baseCount = comment.upVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
 
-  if (!user || !user.name || !user.email || !user.id) {
-    return null
-  }
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex break-words">
@@ -84,7 +81,7 @@ export const CommentCardWrapper = ({
         ) : (
           <AvatarCard
             source={null}
-            name="[deleted]"
+            name={DELETED_USER}
             type="deleted"
             className="w-7 h-7 text-sm"
           />
@@ -100,7 +97,7 @@ export const CommentCardWrapper = ({
                   {comment.author.name}
                 </Link>
               ) : (
-                <span>{'[deleted]'}</span>
+                <span>{DELETED_USER}</span>
               )}
               {comment.repliesTo && (
                 <>
@@ -123,14 +120,15 @@ export const CommentCardWrapper = ({
                   <HiFlag size={16} className="mr-2" />
                   Report
                 </DropdownMenuItem>
-                {user?.id === comment.authorId && (
-                  <DropdownMenuItem
-                    onSelect={() => deleteCurrentComment(comment.id)}
-                  >
-                    <MdDelete size={16} className="mr-2" />
-                    Delete
-                  </DropdownMenuItem>
-                )}
+                {user?.id === comment.authorId &&
+                  comment.content !== DELETED_CONTENT && (
+                    <DropdownMenuItem
+                      onSelect={() => deleteCurrentComment(comment.id)}
+                    >
+                      <MdDelete size={16} className="mr-2" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
               </DropdownMenuContent>
             </DropdownMenu>
           </CardHeader>
@@ -141,25 +139,33 @@ export const CommentCardWrapper = ({
             <span className="text-xs">
               {new Date(comment.createdAt).toDateString()}
             </span>
-            <div className="flex items-center align-baseline">
-              <Toggle
-                className="h-7 p-2 space-x-2"
-                onPressedChange={() => setIsFormOpen(!isFormOpen)}
-              >
-                <BsChatSquare size={14} />
-                <span>Reply</span>
-              </Toggle>
-              <Toggle
-                className="h-7 p-2 space-x-2"
-                onPressedChange={(value) => {
-                  const voteValue = value ? 1 : 0
-                  setVoteStatus(voteValue)
-                  updateVote(comment.id, user.id as string, voteValue)
-                }}
-              >
-                {voteStatus ? <BsHeartFill size={14} /> : <BsHeart size={14} />}
-                <span>{formatNumber(baseCount + voteStatus)}</span>
-              </Toggle>
+            <div className="flex items-center align-baseline min-h-7">
+              {user?.id && comment.content !== DELETED_CONTENT && (
+                <>
+                  <Toggle
+                    className="h-7 p-2 space-x-2"
+                    onPressedChange={() => setIsFormOpen(!isFormOpen)}
+                  >
+                    <BsChatSquare size={14} />
+                    <span>Reply</span>
+                  </Toggle>
+                  <Toggle
+                    className="h-7 p-2 space-x-2"
+                    onPressedChange={(value) => {
+                      const voteValue = value ? 1 : 0
+                      setVoteStatus(voteValue)
+                      updateVote(comment.id, user.id, voteValue)
+                    }}
+                  >
+                    {voteStatus ? (
+                      <BsHeartFill size={14} />
+                    ) : (
+                      <BsHeart size={14} />
+                    )}
+                    <span>{formatNumber(baseCount + voteStatus)}</span>
+                  </Toggle>
+                </>
+              )}
             </div>
           </CardFooter>
         </div>
@@ -211,9 +217,6 @@ export const NestedCommentCardWrapper = ({
   const baseCount = comment.upVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
 
-  if (!user || !user.name || !user.email || !user.id) {
-    return null
-  }
   return (
     <Card className="flex flex-col space-y-1 shadow-none border-0 py-1">
       <div className="flex">
@@ -229,7 +232,7 @@ export const NestedCommentCardWrapper = ({
         ) : (
           <AvatarCard
             source={null}
-            name="[deleted]"
+            name={DELETED_CONTENT}
             type="deleted"
             className="w-7 h-7 text-sm"
           />
@@ -245,7 +248,7 @@ export const NestedCommentCardWrapper = ({
                   {comment.author.name}
                 </Link>
               ) : (
-                <span>{'[deleted]'}</span>
+                <span>{DELETED_USER}</span>
               )}
               {comment.repliesTo && (
                 <>
@@ -268,14 +271,15 @@ export const NestedCommentCardWrapper = ({
                   <HiFlag size={16} className="mr-2" />
                   Report
                 </DropdownMenuItem>
-                {user?.id === comment.authorId && (
-                  <DropdownMenuItem
-                    onSelect={() => deleteCurrentComment(comment.id)}
-                  >
-                    <MdDelete size={16} className="mr-2" />
-                    Delete
-                  </DropdownMenuItem>
-                )}
+                {user?.id === comment.authorId &&
+                  comment.content !== DELETED_CONTENT && (
+                    <DropdownMenuItem
+                      onSelect={() => deleteCurrentComment(comment.id)}
+                    >
+                      <MdDelete size={16} className="mr-2" />
+                      Delete
+                    </DropdownMenuItem>
+                  )}
               </DropdownMenuContent>
             </DropdownMenu>
           </CardHeader>
@@ -284,25 +288,33 @@ export const NestedCommentCardWrapper = ({
             <span className="text-xs">
               {new Date(comment.createdAt).toDateString()}
             </span>
-            <div className="flex items-center align-baseline">
-              <Toggle
-                className="h-7 p-2 space-x-2"
-                onPressedChange={() => setIsFormOpen(!isFormOpen)}
-              >
-                <BsChatSquare size={14} />
-                <span>Reply</span>
-              </Toggle>
-              <Toggle
-                className="h-7 p-2 space-x-2"
-                onPressedChange={(value) => {
-                  const voteValue = value ? 1 : 0
-                  setVoteStatus(voteValue)
-                  updateVote(comment.id, user.id as string, voteValue)
-                }}
-              >
-                {voteStatus ? <BsHeartFill size={14} /> : <BsHeart size={14} />}
-                <span>{formatNumber(baseCount + voteStatus)}</span>
-              </Toggle>
+            <div className="flex items-center align-baseline min-h-7">
+              {user?.id && comment.content !== DELETED_CONTENT && (
+                <>
+                  <Toggle
+                    className="h-7 p-2 space-x-2"
+                    onPressedChange={() => setIsFormOpen(!isFormOpen)}
+                  >
+                    <BsChatSquare size={14} />
+                    <span>Reply</span>
+                  </Toggle>
+                  <Toggle
+                    className="h-7 p-2 space-x-2"
+                    onPressedChange={(value) => {
+                      const voteValue = value ? 1 : 0
+                      setVoteStatus(voteValue)
+                      updateVote(comment.id, user.id, voteValue)
+                    }}
+                  >
+                    {voteStatus ? (
+                      <BsHeartFill size={14} />
+                    ) : (
+                      <BsHeart size={14} />
+                    )}
+                    <span>{formatNumber(baseCount + voteStatus)}</span>
+                  </Toggle>
+                </>
+              )}
             </div>
           </CardFooter>
         </div>

@@ -67,7 +67,6 @@ export const EditableProfileAvatarCard = ({
   const [uploading, setUploading] = useState(false)
   const queryClient = useQueryClient()
   const { update } = useSession()
-  const form = useRef<HTMLFormElement>(null)
 
   return (
     <Avatar className={className}>

@@ -43,6 +43,7 @@ export const {
     GitHub,
     Credentials({
       authorize: async (credentials) => {
+        'use server'
         const validatedCredentials = LoginSchema.safeParse(credentials)
         if (validatedCredentials.success) {
           const { email, password } = validatedCredentials.data
@@ -57,6 +58,7 @@ export const {
   ],
   events: {
     linkAccount: async ({ user }) => {
+      'use server'
       if (!user || !user.id || !user.name) return
       let slug = slugify(user.name)
       while (await getUserBySlug(slug)) {
@@ -74,6 +76,7 @@ export const {
   },
   callbacks: {
     signIn: async ({ user, account }) => {
+      'use server'
       if (account?.provider !== 'credentials') return true
 
       if (!user || !user.id || !user.email || !user.name) return false
@@ -98,6 +101,7 @@ export const {
       return session
     },
     jwt: async ({ token }) => {
+      'use server'
       if (!token.sub) return token
 
       const existingUser = await getUserByID(token.sub)
