@@ -9,6 +9,7 @@ import {
   CreateCommentSchema,
   CreateCommunitySchema,
   CreatePostSchema,
+  PostSchema,
   UpdateCommunitySchema,
   UpdatePostSchema,
   UpdateProfileSchema,
@@ -72,6 +73,8 @@ export type UpdateProfileFormProps = NonNullable<
 
 // zod schemas types
 export type CreateCommentSchemaTypes = z.infer<typeof CreateCommentSchema>
+
+export type PostSchemaTypes = z.infer<typeof PostSchema>
 
 export type CreatePostSchemaTypes = z.infer<typeof CreatePostSchema>
 

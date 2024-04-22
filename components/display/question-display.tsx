@@ -36,7 +36,7 @@ import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { QuestionDisplayProps } from '@/lib/types'
-import { AnswerCreateForm } from '@/components/form/post-create-form'
+import { AnswerCreateForm } from '@/components/form/post-form'
 import {
   ANSWERS_FETCH_SPAN,
   DELETED_CONTENT,
@@ -55,11 +55,8 @@ import { useUpdateVote, useUpdateBookmark } from '@/hooks/post'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname } from 'next/navigation'
 
-const QuestionUpdateForm = dynamic(
-  () =>
-    import('@/components/form/post-update-form').then(
-      (mod) => mod.QuestionUpdateForm
-    ),
+const QuestionForm = dynamic(
+  () => import('@/components/form/post-form').then((mod) => mod.QuestionForm),
   {
     loading: () => (
       <div className="flex justify-center my-10">
@@ -279,11 +276,13 @@ export default function QuestionDisplay({
         </Card>
       )}
       {mode === 'edit' && (
-        <QuestionUpdateForm
+        <QuestionForm
           communitySlug={community?.slug}
           postId={id}
           initialContent={content}
           initialTitle={title}
+          action="update"
+          redirectTo={pathname.substring(0, pathname.lastIndexOf('/'))}
         />
       )}
       {isFormOpen && (

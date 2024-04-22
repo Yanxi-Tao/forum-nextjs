@@ -56,20 +56,19 @@ export const RegisterSchema = z.object({
   code: z.string(),
 })
 
-export const CreatePostSchema = z.object({
+export const PostSchema = z.object({
   title: z.string().min(1).max(255),
-  type: z.nativeEnum(PostType),
-  content: z.string().min(1, { message: 'Required' }),
-  parentId: z.optional(z.string().cuid()),
-  communitySlug: z.optional(z.string()),
-  parentUserId: z.optional(z.string().cuid()),
+  content: z.string().min(1),
 })
 
-export const UpdatePostSchema = z.object({
+export const CreatePostSchema = PostSchema.extend({
+  type: z.nativeEnum(PostType),
+  parentId: z.optional(z.string().cuid()),
+  communitySlug: z.optional(z.string()),
+})
+
+export const UpdatePostSchema = PostSchema.extend({
   postId: z.string().cuid(),
-  title: z.string().min(1).max(255),
-  content: z.string().min(1, { message: 'Required' }),
-  pathname: z.string(),
 })
 
 export const CreateCommentSchema = z.object({

@@ -16,41 +16,52 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
-import { CreatePostSchema } from '@/schemas'
+import { CreatePostSchema, PostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
-import { CreatePostSchemaTypes, FormAlertProps } from '@/lib/types'
+import {
+  CreatePostSchemaTypes,
+  FormAlertProps,
+  PostSchemaTypes,
+  UpdatePostSchemaTypes,
+} from '@/lib/types'
 import { useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
+import { updatePost } from '@/actions/post/update-post'
 
 const Editor = dynamic(() =>
   import('@/components/editor').then((mod) => mod.Editor)
 )
 
-export const QuestionCreateForm = ({
+export const QuestionForm = ({
   communitySlug,
-  redirectTo,
+  postId,
+  initialContent,
+  initialTitle,
+  redirectTo = '/',
+  action,
 }: {
-  communitySlug: string | undefined
-  redirectTo: string
+  communitySlug?: string
+  postId?: string
+  initialContent?: string
+  initialTitle?: string
+  redirectTo?: string
+  action: 'create' | 'update'
 }) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [editorHtml, setEditorHtml] = useState<string>('')
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<CreatePostSchemaTypes>({
-    resolver: zodResolver(CreatePostSchema),
+
+  const form = useForm<PostSchemaTypes>({
+    resolver: zodResolver(PostSchema),
     defaultValues: {
-      title: '',
-      content: '',
-      type: 'question',
-      parentId: undefined,
-      communitySlug,
+      title: initialTitle || '',
+      content: initialContent || '',
     },
-    mode: 'onChange',
   })
 
   const handleOnChange = (plainText: string, html: string) => {
@@ -58,18 +69,33 @@ export const QuestionCreateForm = ({
     setEditorHtml(html)
   }
 
-  const onSubmit = async (data: CreatePostSchemaTypes) => {
+  const onSubmit = async (rawData: PostSchemaTypes) => {
     setAlert(null)
     setIsPending(true)
-    data.content = editorHtml
-    const state = await createPost(data)
+    rawData.content = editorHtml
+
+    let state: FormAlertProps = null
+
+    if (action === 'create') {
+      const date: CreatePostSchemaTypes = {
+        ...rawData,
+        type: 'question',
+        communitySlug,
+      }
+      state = await createPost(date)
+    } else if (action === 'update' && postId) {
+      const date: UpdatePostSchemaTypes = { ...rawData, postId }
+      state = await updatePost(date)
+    }
+
     setIsPending(false)
-    setAlert(state)
     if (state?.type === 'success') {
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
       router.push(redirectTo)
+    } else {
+      setAlert(state)
     }
   }
 
@@ -103,7 +129,10 @@ export const QuestionCreateForm = ({
               <FormItem>
                 <FormLabel className="text-foreground">Description</FormLabel>
                 <FormControl>
-                  <Editor onChange={handleOnChange} />
+                  <Editor
+                    onChange={handleOnChange}
+                    initialContent={initialContent}
+                  />
                 </FormControl>
                 <FormDescription>
                   [Required] Include all the information someone would need to
@@ -126,28 +155,33 @@ export const QuestionCreateForm = ({
   )
 }
 
-export const ArticleCreateForm = ({
+export const ArticleForm = ({
   communitySlug,
-  redirectTo,
+  postId,
+  initialContent,
+  initialTitle,
+  redirectTo = '/',
+  action,
 }: {
-  communitySlug: string | undefined
-  redirectTo: string
+  communitySlug?: string
+  postId?: string
+  initialContent?: string
+  initialTitle?: string
+  redirectTo?: string
+  action: 'create' | 'update'
 }) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [editorHtml, setEditorHtml] = useState<string>('')
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<CreatePostSchemaTypes>({
-    resolver: zodResolver(CreatePostSchema),
+
+  const form = useForm<PostSchemaTypes>({
+    resolver: zodResolver(PostSchema),
     defaultValues: {
-      title: '',
-      content: '',
-      type: 'article',
-      parentId: undefined,
-      communitySlug,
+      title: initialTitle || '',
+      content: initialContent || '',
     },
-    mode: 'onChange',
   })
 
   const handleOnChange = (plainText: string, html: string) => {
@@ -155,18 +189,33 @@ export const ArticleCreateForm = ({
     setEditorHtml(html)
   }
 
-  const onSubmit = async (data: CreatePostSchemaTypes) => {
+  const onSubmit = async (rawData: PostSchemaTypes) => {
     setAlert(null)
     setIsPending(true)
-    data.content = editorHtml
-    const state = await createPost(data)
+    rawData.content = editorHtml
+
+    let state: FormAlertProps = null
+
+    if (action === 'create') {
+      const date: CreatePostSchemaTypes = {
+        ...rawData,
+        type: 'article',
+        communitySlug,
+      }
+      state = await createPost(date)
+    } else if (action === 'update' && postId) {
+      const date: UpdatePostSchemaTypes = { ...rawData, postId }
+      state = await updatePost(date)
+    }
+
     setIsPending(false)
-    setAlert(state)
     if (state?.type === 'success') {
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
       router.push(redirectTo)
+    } else {
+      setAlert(state)
     }
   }
 
@@ -200,9 +249,12 @@ export const ArticleCreateForm = ({
               <FormItem>
                 <FormLabel className="text-foreground">Content</FormLabel>
                 <FormControl>
-                  <Editor onChange={handleOnChange} />
+                  <Editor
+                    onChange={handleOnChange}
+                    initialContent={initialContent}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormDescription>[Required]</FormDescription>
               </FormItem>
             )}
           />
@@ -213,7 +265,7 @@ export const ArticleCreateForm = ({
           disabled={isPending || !form.formState.isValid}
           className="w-full"
         >
-          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
+          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Article'}
         </Button>
       </form>
     </Form>
@@ -274,9 +326,8 @@ export const AnswerCreateForm = ({
                 <Editor onChange={handleOnChange} />
               </FormControl>
               <FormDescription>
-                Your answer helps others learn about this topic
+                [Required] Your answer helps others learn about this topic
               </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />

@@ -1,7 +1,4 @@
-import {
-  // ArticleCreateForm,
-  QuestionCreateForm,
-} from '@/components/form/post-create-form'
+import { ArticleForm, QuestionForm } from '@/components/form/post-form'
 import {
   Card,
   CardContent,
@@ -38,16 +35,18 @@ export const CreatePostDisplay = ({
             </TabsTrigger>
           </TabsList>
           <TabsContent value="question" className="w-full">
-            <QuestionCreateForm
+            <QuestionForm
               communitySlug={communitySlug}
               redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
+              action="create"
             />
           </TabsContent>
           <TabsContent value="article" className="w-full">
-            {/* <ArticleCreateForm
+            <ArticleForm
               communitySlug={communitySlug}
               redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
-            /> */}
+              action="create"
+            />
           </TabsContent>
           <TabsContent value="answer" className="w-full">
             answer

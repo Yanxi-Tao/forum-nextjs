@@ -91,7 +91,7 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { title, content, postId, pathname } = validatedData.data
+  const { title, content, postId } = validatedData.data
 
   try {
     await db.post.update({
@@ -103,7 +103,7 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
         content,
       },
     })
-    revalidatePath(pathname)
+    // revalidatePath(pathname)
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

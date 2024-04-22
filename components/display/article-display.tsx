@@ -51,11 +51,8 @@ import { usePathname } from 'next/navigation'
 import { DELETED_USER } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
 
-const ArticleUpdateForm = dynamic(
-  () =>
-    import('@/components/form/post-update-form').then(
-      (mod) => mod.ArticleUpdateForm
-    ),
+const ArticleForm = dynamic(
+  () => import('@/components/form/post-form').then((mod) => mod.ArticleForm),
   {
     loading: () => (
       <div className="flex justify-center my-10">
@@ -261,11 +258,13 @@ export default function ArticleDisplay({
         </Card>
       )}
       {mode === 'edit' && (
-        <ArticleUpdateForm
+        <ArticleForm
           communitySlug={community?.slug}
           postId={id}
           initialContent={content}
           initialTitle={title}
+          redirectTo={pathname.substring(0, pathname.lastIndexOf('/'))}
+          action="update"
         />
       )}
     </div>
