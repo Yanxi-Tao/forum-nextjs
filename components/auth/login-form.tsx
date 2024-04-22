@@ -49,7 +49,7 @@ export const LoginForm = () => {
   })
 
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-    setAlert({ type: '', message: '' })
+    setAlert(null)
     startTransition(() => {
       login(data, callBackUrl).then((data) => {
         setAlert(data || { type: 'error', message: 'An error occurred' })

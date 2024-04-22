@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import {
   CommunityDisplayProps,
   CreateCommunitySchemaTypes,
@@ -39,7 +39,7 @@ import { updateCommunity } from '@/actions/community/update-community'
 
 export const CommunityCreateForm = () => {
   const router = useRouter()
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<CreateCommunitySchemaTypes>({
@@ -52,16 +52,17 @@ export const CommunityCreateForm = () => {
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: CreateCommunitySchemaTypes) => {
+  const onSubmit = (data: CreateCommunitySchemaTypes) => {
     setAlert(null)
-    setIsPending(true)
-    const state = await createCommunity(data)
-    setIsPending(false)
-    if (state.type === 'success') {
-      router.push(`/community/${state.message}`)
-      state.message = 'Community created successfully!'
-    }
-    setAlert(state)
+    startTransition(() => {
+      createCommunity(data).then((data) => {
+        if (data.type === 'success') {
+          router.push(`/community/${data.message}`)
+          data.message = 'Community created successfully!'
+        }
+        setAlert(data)
+      })
+    })
   }
   return (
     <Card className="border-0 shadow-none">
@@ -130,11 +131,7 @@ export const CommunityCreateForm = () => {
                 disabled={isPending || !form.formState.isValid}
                 className="w-full"
               >
-                {isPending ? (
-                  <PulseLoader color="#8585ad" />
-                ) : (
-                  'Create Community'
-                )}
+                Create Community
               </Button>
             </div>
           </form>
@@ -150,7 +147,7 @@ export const CommunityUpdateForm = ({
   community: CommunityDisplayProps
 }) => {
   const router = useRouter()
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<UpdateCommunitySchemaTypes>({
@@ -165,16 +162,17 @@ export const CommunityUpdateForm = ({
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: UpdateCommunitySchemaTypes) => {
+  const onSubmit = (data: UpdateCommunitySchemaTypes) => {
     setAlert(null)
-    setIsPending(true)
-    const state = await updateCommunity(data)
-    setIsPending(false)
-    if (state.type === 'success') {
-      router.push(`/community/${state.message}`)
-      state.message = 'Community updated!'
-    }
-    setAlert({ ...state, message: state.message || 'Error updating community' })
+    startTransition(() => {
+      updateCommunity(data).then((data) => {
+        if (data.type === 'success') {
+          router.push(`/community/${data.message}`)
+          data.message = 'Community updated successfully!'
+        }
+        setAlert(data)
+      })
+    })
   }
   return (
     <Card className="border-0 shadow-none">
@@ -240,14 +238,14 @@ export const CommunityUpdateForm = ({
               </Button>
               <Button
                 type="submit"
-                disabled={isPending || !form.formState.isValid}
+                disabled={
+                  isPending ||
+                  !form.formState.isValid ||
+                  !form.formState.isDirty
+                }
                 className="w-full"
               >
-                {isPending ? (
-                  <PulseLoader color="#8585ad" />
-                ) : (
-                  'Update Community'
-                )}
+                Update Community
               </Button>
             </div>
           </form>

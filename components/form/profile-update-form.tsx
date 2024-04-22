@@ -103,7 +103,11 @@ export const ProfileForm = ({
               </Button>
               <Button
                 type="submit"
-                disabled={isPending || !form.formState.isValid}
+                disabled={
+                  isPending ||
+                  !form.formState.isValid ||
+                  !form.formState.isDirty
+                }
                 className="w-full"
               >
                 {isPending ? <PulseLoader color="#8585ad" /> : 'Update Profile'}

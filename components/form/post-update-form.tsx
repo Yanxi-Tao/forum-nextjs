@@ -141,7 +141,9 @@ export const QuestionUpdateForm = ({
           </Button>
           <Button
             type="submit"
-            disabled={isPending || !form.formState.isValid}
+            disabled={
+              isPending || !form.formState.isValid || !form.formState.isDirty
+            }
             className="w-full"
           >
             Update Question
@@ -261,7 +263,9 @@ export const ArticleUpdateForm = ({
           </Button>
           <Button
             type="submit"
-            disabled={isPending || !form.formState.isValid}
+            disabled={
+              isPending || !form.formState.isValid || !form.formState.isDirty
+            }
             className="w-full"
           >
             Update Article

@@ -8,7 +8,15 @@ import { ResetSchema } from '@/schemas'
 import { reset } from '@/actions/auth/reset'
 
 import { RingLoader } from 'react-spinners'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
@@ -28,7 +36,7 @@ export const ResetForm = () => {
   })
 
   const onSubmit = (data: z.infer<typeof ResetSchema>) => {
-    setAlert({ type: '', message: '' })
+    setAlert(null)
     startTransition(() => {
       reset(data).then((data) => {
         setAlert(data)
@@ -37,7 +45,12 @@ export const ResetForm = () => {
   }
 
   return (
-    <AuthCardWrapper headerLabel="Forgot your password?" redirectLabel="Back to login" redirecrPath="/auth/login" showProvider={false}>
+    <AuthCardWrapper
+      headerLabel="Forgot your password?"
+      redirectLabel="Back to login"
+      redirecrPath="/auth/login"
+      showProvider={false}
+    >
       {isPending ? (
         <div className="flex justify-center">
           <RingLoader />

@@ -15,19 +15,6 @@ export const UpdateSettingsSchema = z
   })
   .refine(
     (data) => {
-      if (data.oldPassword && !data.newPassword) {
-        return false
-      }
-
-      return true
-    },
-    {
-      message: 'New password is required!',
-      path: ['newPassword'],
-    }
-  )
-  .refine(
-    (data) => {
       if (data.newPassword && !data.oldPassword) {
         return false
       }
@@ -36,7 +23,7 @@ export const UpdateSettingsSchema = z
     },
     {
       message: 'Password is required!',
-      path: ['password'],
+      path: ['oldPassword'],
     }
   )
 
@@ -59,21 +46,15 @@ export const LoginSchema = z.object({
   password: z.string().min(3, { message: 'Password is required' }),
 })
 
-export const RegisterSchema = z
-  .object({
-    email: z.string().email({ message: 'Email is required' }),
-    password: z.string().min(3, { message: 'Password is required' }),
-    confirmPassword: z.string().min(3, { message: 'Password is required' }),
-    name: z
-      .string()
-      .min(1, { message: 'Name is required' })
-      .max(15, { message: 'Name is too long' }),
-    code: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  })
+export const RegisterSchema = z.object({
+  email: z.string().email({ message: 'Email is required' }),
+  password: z.string().min(3, { message: 'Password is required' }),
+  name: z
+    .string()
+    .min(1, { message: 'Name is required' })
+    .max(15, { message: 'Name is too long' }),
+  code: z.string(),
+})
 
 export const CreatePostSchema = z.object({
   title: z.string().min(1).max(255),

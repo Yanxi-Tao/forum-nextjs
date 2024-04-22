@@ -36,22 +36,24 @@ import { deleteUser } from '@/actions/user/delete-user'
 import RingLoader from 'react-spinners/RingLoader'
 import { UpdateSettingsSchema } from '@/schemas'
 
+import { Eye, EyeOff } from 'lucide-react'
+
 export const SettingsForm = () => {
   const user = useCurrentUser()
   const router = useRouter()
-
   const { update } = useSession()
   const [isPending, setIsPending] = useState(false)
   const [isDeleting, startDeleting] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<UpdateSettingsSchemaTypes>({
     resolver: zodResolver(UpdateSettingsSchema),
     defaultValues: {
       name: user?.name || undefined,
       email: user?.email || undefined,
-      oldPassword: undefined,
-      newPassword: undefined,
+      oldPassword: '',
+      newPassword: '',
     },
     mode: 'onChange',
   })
@@ -76,6 +78,10 @@ export const SettingsForm = () => {
         }
       })
     })
+  }
+
+  if (!user) {
+    return <p>Settings Unavailable</p>
   }
   return (
     <Card className="border-0 shadow-none h-full">
@@ -153,14 +159,25 @@ export const SettingsForm = () => {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>New Password</FormLabel>
-                                <FormControl>
-                                  <Input
-                                    {...field}
-                                    type="password"
-                                    placeholder="123456"
-                                    disabled={isPending}
-                                  />
-                                </FormControl>
+                                <div className="flex space-x-3">
+                                  <FormControl className="">
+                                    <Input
+                                      {...field}
+                                      type={showPassword ? 'text' : 'password'}
+                                      placeholder="123456"
+                                      disabled={isPending}
+                                    />
+                                  </FormControl>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    onClick={() =>
+                                      setShowPassword(!showPassword)
+                                    }
+                                  >
+                                    {showPassword ? <Eye /> : <EyeOff />}
+                                  </Button>
+                                </div>
                                 <FormMessage />
                               </FormItem>
                             )}
@@ -181,7 +198,11 @@ export const SettingsForm = () => {
                       <Button
                         type="submit"
                         className="w-full"
-                        disabled={isPending}
+                        disabled={
+                          isPending ||
+                          !form.formState.isValid ||
+                          !form.formState.isDirty
+                        }
                       >
                         Update Settings
                       </Button>

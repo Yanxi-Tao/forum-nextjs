@@ -8,6 +8,7 @@ import { RegisterSchema } from '@/schemas'
 import { register } from '@/actions/auth/register'
 
 import { RingLoader, PuffLoader } from 'react-spinners'
+import { Eye, EyeOff } from 'lucide-react'
 import {
   Form,
   FormControl,
@@ -33,20 +34,20 @@ export const RegisterForm = () => {
   const [submitType, setSubmitType] = useState<'register' | 'token'>('token')
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: '',
       password: '',
-      confirmPassword: '',
       name: '',
       code: '',
     },
   })
 
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
-    setAlert({ type: '', message: '' })
+    setAlert(null)
     startTransition(() => {
       register(data, submitType).then((data) => {
         setAlert(data || { type: 'error', message: 'An error occurred' })
@@ -111,32 +112,23 @@ export const RegisterForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="password"
-                        placeholder="123456"
-                        disabled={isPending}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="password"
-                        placeholder="123456"
-                        disabled={isPending}
-                      />
-                    </FormControl>
+                    <div className="flex space-x-3">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type={showPassword ? 'text' : 'password'}
+                          placeholder="123456"
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <Eye /> : <EyeOff />}
+                      </Button>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

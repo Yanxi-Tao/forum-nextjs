@@ -51,7 +51,6 @@ export const CommentForm = ({
   const onSubmit = (data: CreateCommentSchemaTypes) => {
     setIsFormOpen?.(false)
     mutate(data)
-    form.reset()
   }
   return (
     <Form {...form}>
