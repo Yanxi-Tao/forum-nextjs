@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -21,11 +22,14 @@ import { CreatePostSchemaTypes, FormAlertProps } from '@/lib/types'
 import { useRef, useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { $getRoot, EditorState, LexicalEditor } from 'lexical'
-import { Editor } from '@/components/editor'
 import { $generateHtmlFromNodes } from '@lexical/html'
 import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
+
+const Editor = dynamic(() =>
+  import('@/components/editor').then((mod) => mod.Editor)
+)
 
 export const QuestionCreateForm = ({
   communitySlug,

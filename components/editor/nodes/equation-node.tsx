@@ -11,8 +11,14 @@ import {
   SerializedLexicalNode,
   Spread,
 } from 'lexical'
+import dynamic from 'next/dynamic'
 import katex from 'katex'
-import { EquationComponent } from '../components/equation-component'
+
+const EquationComponent = dynamic(() =>
+  import('@/components/editor/components/equation-component').then(
+    (mod) => mod.EquationComponent
+  )
+)
 
 export type EquationPayload = {
   equation: string
@@ -45,7 +51,10 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     return new EquationNode(node.__equation, node.__inline, node.__key)
   }
 
-  createDOM(_config: EditorConfig, _editor: LexicalEditor): HTMLElement | HTMLSpanElement {
+  createDOM(
+    _config: EditorConfig,
+    _editor: LexicalEditor
+  ): HTMLElement | HTMLSpanElement {
     const element = document.createElement(this.__inline ? 'span' : 'div')
     element.className = 'editor-equation'
     return element
@@ -56,7 +65,10 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     const euqation = btoa(this.__equation)
     element.className = 'editor-equation'
     element.setAttribute('data-lexical-equation', euqation)
-    element.setAttribute('data-lexical-inline', this.__inline ? 'true' : 'false')
+    element.setAttribute(
+      'data-lexical-inline',
+      this.__inline ? 'true' : 'false'
+    )
     katex.render(this.__equation, element, {
       displayMode: !this.__inline,
       errorColor: '#cc0000',
@@ -91,7 +103,11 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
     }
   }
 
-  updateDOM(_prevNode: EquationNode, _dom: HTMLElement, _config: EditorConfig): boolean {
+  updateDOM(
+    _prevNode: EquationNode,
+    _dom: HTMLElement,
+    _config: EditorConfig
+  ): boolean {
     return this.__inline !== _prevNode.__inline
   }
 
@@ -105,7 +121,10 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
   }
 
   static importJSON(serializedNode: SerializedEquationNode): EquationNode {
-    const node = $createEquationNode(serializedNode.equation, serializedNode.inline)
+    const node = $createEquationNode(
+      serializedNode.equation,
+      serializedNode.inline
+    )
     return node
   }
 
@@ -132,7 +151,13 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
   }
 
   decorate(editor: LexicalEditor, config: EditorConfig): JSX.Element {
-    return <EquationComponent equation={this.__equation} inline={this.__inline} nodeKey={this.__key} />
+    return (
+      <EquationComponent
+        equation={this.__equation}
+        inline={this.__inline}
+        nodeKey={this.__key}
+      />
+    )
   }
 }
 
@@ -146,11 +171,16 @@ const convertEquationNode: DOMConversionFn = (domNode) => {
   return { node }
 }
 
-export const $createEquationNode = (equation = '', inline = true): EquationNode => {
+export const $createEquationNode = (
+  equation = '',
+  inline = true
+): EquationNode => {
   const node = new EquationNode(equation, inline)
   return $applyNodeReplacement(node)
 }
 
-export const $isEquationNode = (node: LexicalNode | null | undefined): node is EquationNode => {
+export const $isEquationNode = (
+  node: LexicalNode | null | undefined
+): node is EquationNode => {
   return node instanceof EquationNode
 }
