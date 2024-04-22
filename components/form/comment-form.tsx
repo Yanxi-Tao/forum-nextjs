@@ -15,24 +15,21 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { CreateCommentSchema } from '@/schemas'
 import { CreateCommentSchemaTypes } from '@/lib/types'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { AddedComment, CreateCommentMutate } from '../display/comment-display'
 
 export const CommentForm = ({
   postId,
   parentId,
-  repliesToId,
-  repliesToName,
-  repliesToSlug,
+  repliesToUserId,
+  repliesToCommentId,
   mutate,
-  setIsFormOpen,
-}: {
-  parentId: string | undefined
-  postId: string | undefined
-  repliesToId: string | undefined
-  repliesToName: string | undefined
-  repliesToSlug: string | undefined
-  mutate: (data: CreateCommentSchemaTypes) => void
-  setIsFormOpen?: (value: boolean) => void
+  setAddedComments,
+}: Omit<CreateCommentSchemaTypes, 'content'> & {
+  mutate: CreateCommentMutate
+  setAddedComments: Dispatch<SetStateAction<[] | AddedComment[]>>
 }) => {
+  const [isPending, setIsPending] = useState(false)
   // schema
   const form = useForm<CreateCommentSchemaTypes>({
     resolver: zodResolver(CreateCommentSchema),
@@ -40,17 +37,29 @@ export const CommentForm = ({
       content: '',
       postId,
       parentId,
-      repliesToId,
-      repliesToName,
-      repliesToSlug,
+      repliesToUserId,
+      repliesToCommentId,
     },
     mode: 'onChange',
   })
 
   // form submit handler
   const onSubmit = (data: CreateCommentSchemaTypes) => {
-    setIsFormOpen?.(false)
-    mutate(data)
+    setIsPending(true)
+    mutate(data, {
+      onSuccess: (data) => {
+        if (!data) return
+        setAddedComments((prev) => [
+          {
+            newComment: data.newComment,
+            replyId: data.replyId,
+          },
+          ...prev,
+        ])
+        form.reset()
+      },
+      onSettled: () => setIsPending(false),
+    })
   }
   return (
     <Form {...form}>
@@ -76,7 +85,7 @@ export const CommentForm = ({
         />
         <Button
           type="submit"
-          disabled={!form.formState.isValid}
+          disabled={isPending || !form.formState.isValid}
           className="w-full"
         >
           Comment

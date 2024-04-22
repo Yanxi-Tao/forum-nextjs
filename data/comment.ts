@@ -26,6 +26,30 @@ export const getAllComments = async (postId: string) => {
   }
 }
 
+export const getCommentById = async (id: string) => {
+  try {
+    const comment = await db.comment.findUnique({
+      where: { id },
+      include: {
+        upVotes: true,
+        author: true,
+        repliesTo: true,
+        children: {
+          include: {
+            upVotes: true,
+            author: true,
+            repliesTo: true,
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    })
+    return comment
+  } catch {
+    return null
+  }
+}
+
 export const deleteCommentById = async (id: string) => {
   try {
     await db.comment.update({

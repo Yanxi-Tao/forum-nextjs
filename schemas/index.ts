@@ -76,9 +76,8 @@ export const CreateCommentSchema = z.object({
   content: z.string().min(1, { message: 'Required' }),
   postId: z.string(),
   parentId: z.optional(z.string()),
-  repliesToId: z.optional(z.string()),
-  repliesToName: z.optional(z.string()),
-  repliesToSlug: z.optional(z.string()),
+  repliesToUserId: z.optional(z.string()),
+  repliesToCommentId: z.optional(z.string()),
 })
 
 export const CreateCommunitySchema = z.object({

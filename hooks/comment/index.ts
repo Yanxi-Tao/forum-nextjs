@@ -27,19 +27,13 @@ export const useComments = (postId: string) => {
   return useQuery({
     queryKey: [COMMENT_KEY, postId],
     queryFn: () => fetchComments(postId),
-    gcTime: Infinity,
-    staleTime: Infinity,
+    enabled: false,
+    gcTime: 0,
   })
 }
 
-export const useCreateComment = (postId: string) => {
-  const queryClient = useQueryClient()
+export const useCreateComment = () => {
   return useMutation({
     mutationFn: (data: CreateCommentSchemaTypes) => createComment(data),
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({
-        queryKey: [COMMENT_KEY, postId],
-      })
-    },
   })
 }

@@ -4,32 +4,36 @@ import { CreateCommentSchema } from '@/schemas'
 import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
 import { CreateCommentSchemaTypes } from '@/lib/types'
+import { getCommentById } from '@/data/comment'
 
 export const createComment = async (data: CreateCommentSchemaTypes) => {
   const user = await currentUser()
   if (!user || !user.id) {
-    return { type: 'error', message: 'User not found' }
+    return null
   }
 
   const validatedData = CreateCommentSchema.safeParse(data)
   if (!validatedData.success) {
-    return { type: 'error', message: 'Invalid data' }
+    return null
   }
 
-  const { content, postId, parentId, repliesToId } = validatedData.data
+  const { content, postId, parentId, repliesToUserId, repliesToCommentId } =
+    validatedData.data
 
   try {
-    await db.comment.create({
+    const comment = await db.comment.create({
       data: {
         content,
         postId,
         parentId,
         authorId: user.id,
-        repliesToId,
+        repliesToId: repliesToUserId,
       },
     })
-    return { type: 'success', message: 'Comment created' }
+    const newComment = await getCommentById(comment.id)
+    if (!newComment) return null
+    return { newComment, replyId: repliesToCommentId ?? '' }
   } catch {
-    return { type: 'error', message: 'Failed to create comment' }
+    return null
   }
 }
