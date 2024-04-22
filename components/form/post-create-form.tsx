@@ -19,10 +19,8 @@ import { FormAlert } from '@/components/form/form-alert'
 import { CreatePostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
 import { CreatePostSchemaTypes, FormAlertProps } from '@/lib/types'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
-import { $getRoot, EditorState, LexicalEditor } from 'lexical'
-import { $generateHtmlFromNodes } from '@lexical/html'
 import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
@@ -41,6 +39,7 @@ export const QuestionCreateForm = ({
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
+  const [editorHtml, setEditorHtml] = useState<string>('')
   const [isPending, setIsPending] = useState(false)
   const form = useForm<CreatePostSchemaTypes>({
     resolver: zodResolver(CreatePostSchema),
@@ -54,25 +53,15 @@ export const QuestionCreateForm = ({
     mode: 'onChange',
   })
 
-  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
-    editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), {
-        shouldValidate: true,
-      })
-    })
-    return
+  const handleOnChange = (plainText: string, html: string) => {
+    form.setValue('content', plainText, { shouldValidate: true })
+    setEditorHtml(html)
   }
 
-  const editorRef = useRef<LexicalEditor | null>(null)
-
   const onSubmit = async (data: CreatePostSchemaTypes) => {
-    if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
-    editorRef.current?.getEditorState().read(() => {
-      if (!editorRef.current) return
-      data.content = $generateHtmlFromNodes(editorRef.current, null)
-    })
+    data.content = editorHtml
     const state = await createPost(data)
     setIsPending(false)
     setAlert(state)
@@ -114,13 +103,12 @@ export const QuestionCreateForm = ({
               <FormItem>
                 <FormLabel className="text-foreground">Description</FormLabel>
                 <FormControl>
-                  <Editor editorRef={editorRef} onChange={handleOnChange} />
+                  <Editor onChange={handleOnChange} />
                 </FormControl>
                 <FormDescription>
-                  Include all the information someone would need to answer your
-                  question
+                  [Required] Include all the information someone would need to
+                  answer your question
                 </FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
@@ -148,6 +136,7 @@ export const ArticleCreateForm = ({
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
+  const [editorHtml, setEditorHtml] = useState<string>('')
   const [isPending, setIsPending] = useState(false)
   const form = useForm<CreatePostSchemaTypes>({
     resolver: zodResolver(CreatePostSchema),
@@ -161,25 +150,15 @@ export const ArticleCreateForm = ({
     mode: 'onChange',
   })
 
-  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
-    editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), {
-        shouldValidate: true,
-      })
-    })
-    return
+  const handleOnChange = (plainText: string, html: string) => {
+    form.setValue('content', plainText, { shouldValidate: true })
+    setEditorHtml(html)
   }
 
-  const editorRef = useRef<LexicalEditor | null>(null)
-
   const onSubmit = async (data: CreatePostSchemaTypes) => {
-    if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
-    editorRef.current?.getEditorState().read(() => {
-      if (!editorRef.current) return
-      data.content = $generateHtmlFromNodes(editorRef.current, null)
-    })
+    data.content = editorHtml
     const state = await createPost(data)
     setIsPending(false)
     setAlert(state)
@@ -221,7 +200,7 @@ export const ArticleCreateForm = ({
               <FormItem>
                 <FormLabel className="text-foreground">Content</FormLabel>
                 <FormControl>
-                  <Editor editorRef={editorRef} onChange={handleOnChange} />
+                  <Editor onChange={handleOnChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -257,6 +236,7 @@ export const AnswerCreateForm = ({
   setIsFormOpen: (value: boolean) => void
 }) => {
   // schema
+  const [editorHtml, setEditorHtml] = useState<string>('')
   const form = useForm<CreatePostSchemaTypes>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
@@ -270,24 +250,14 @@ export const AnswerCreateForm = ({
     mode: 'onChange',
   })
 
-  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
-    editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), {
-        shouldValidate: true,
-      })
-    })
-    return
+  const handleOnChange = (plainText: string, html: string) => {
+    form.setValue('content', plainText, { shouldValidate: true })
+    setEditorHtml(html)
   }
-
-  const editorRef = useRef<LexicalEditor | null>(null)
 
   // form submit handler
   const onSubmit = (data: CreatePostSchemaTypes) => {
-    if (!editorRef.current) return
-    editorRef.current?.getEditorState().read(() => {
-      if (!editorRef.current) return
-      data.content = $generateHtmlFromNodes(editorRef.current, null)
-    })
+    data.content = editorHtml
     mutate(data)
     setIsFormOpen(false)
   }
@@ -301,7 +271,7 @@ export const AnswerCreateForm = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Editor editorRef={editorRef} onChange={handleOnChange} />
+                <Editor onChange={handleOnChange} />
               </FormControl>
               <FormDescription>
                 Your answer helps others learn about this topic

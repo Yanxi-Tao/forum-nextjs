@@ -18,9 +18,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
 import { UpdatePostSchema } from '@/schemas'
 import { FormAlertProps, UpdatePostSchemaTypes } from '@/lib/types'
-import { useRef, useState } from 'react'
-import { $getRoot, EditorState, LexicalEditor } from 'lexical'
-import { $generateHtmlFromNodes } from '@lexical/html'
+import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { EXPLORE_POSTS_KEY } from '@/lib/constants'
 import { usePathname } from 'next/navigation'
@@ -46,6 +44,7 @@ export const QuestionUpdateForm = ({
   const pathname = usePathname()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
+  const [editorHtml, setEditorHtml] = useState<string>('')
   const [isPending, setIsPending] = useState(false)
   const form = useForm<UpdatePostSchemaTypes>({
     resolver: zodResolver(UpdatePostSchema),
@@ -58,25 +57,15 @@ export const QuestionUpdateForm = ({
     mode: 'onChange',
   })
 
-  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
-    editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), {
-        shouldValidate: true,
-      })
-    })
-    return
+  const handleOnChange = (plainText: string, html: string) => {
+    form.setValue('content', plainText, { shouldValidate: true })
+    setEditorHtml(html)
   }
 
-  const editorRef = useRef<LexicalEditor | null>(null)
-
   const onSubmit = async (data: UpdatePostSchemaTypes) => {
-    if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
-    editorRef.current?.getEditorState().read(() => {
-      if (!editorRef.current) return
-      data.content = $generateHtmlFromNodes(editorRef.current, null)
-    })
+    data.content = editorHtml
     const state = await updatePost(data)
     setIsPending(false)
     if (state?.type === 'success') {
@@ -124,7 +113,6 @@ export const QuestionUpdateForm = ({
                 <FormLabel className="text-foreground">Description</FormLabel>
                 <FormControl>
                   <Editor
-                    editorRef={editorRef}
                     onChange={handleOnChange}
                     initialContent={initialContent}
                   />
@@ -180,6 +168,7 @@ export const ArticleUpdateForm = ({
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
   const [isPending, setIsPending] = useState(false)
+  const [editorHtml, setEditorHtml] = useState<string>('')
   const form = useForm<UpdatePostSchemaTypes>({
     resolver: zodResolver(UpdatePostSchema),
     defaultValues: {
@@ -191,25 +180,15 @@ export const ArticleUpdateForm = ({
     mode: 'onChange',
   })
 
-  const handleOnChange = (editorState: EditorState, editor: LexicalEditor) => {
-    editorState.read(() => {
-      form.setValue('content', $getRoot().getTextContent(), {
-        shouldValidate: true,
-      })
-    })
-    return
+  const handleOnChange = (plainText: string, html: string) => {
+    form.setValue('content', plainText, { shouldValidate: true })
+    setEditorHtml(html)
   }
 
-  const editorRef = useRef<LexicalEditor | null>(null)
-
   const onSubmit = async (data: UpdatePostSchemaTypes) => {
-    if (!editorRef.current) return
     setAlert(null)
     setIsPending(true)
-    editorRef.current?.getEditorState().read(() => {
-      if (!editorRef.current) return
-      data.content = $generateHtmlFromNodes(editorRef.current, null)
-    })
+    data.content = editorHtml
     const state = await updatePost(data)
     setIsPending(false)
     if (state?.type === 'success') {
@@ -258,7 +237,6 @@ export const ArticleUpdateForm = ({
                 <FormLabel className="text-foreground">Content</FormLabel>
                 <FormControl>
                   <Editor
-                    editorRef={editorRef}
                     onChange={handleOnChange}
                     initialContent={initialContent}
                   />

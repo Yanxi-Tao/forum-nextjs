@@ -1,5 +1,5 @@
 import {
-  ArticleCreateForm,
+  // ArticleCreateForm,
   QuestionCreateForm,
 } from '@/components/form/post-create-form'
 import {
@@ -44,10 +44,10 @@ export const CreatePostDisplay = ({
             />
           </TabsContent>
           <TabsContent value="article" className="w-full">
-            <ArticleCreateForm
+            {/* <ArticleCreateForm
               communitySlug={communitySlug}
               redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
-            />
+            /> */}
           </TabsContent>
           <TabsContent value="answer" className="w-full">
             answer

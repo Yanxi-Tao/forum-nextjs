@@ -19,17 +19,12 @@ const editorConfig = {
 }
 
 export const Editor: React.FC<EditorSurfaceProps> = ({
-  editorRef,
   onChange,
   initialContent,
 }): JSX.Element => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <EditorSurface
-        editorRef={editorRef}
-        onChange={onChange}
-        initialContent={initialContent}
-      />
+      <EditorSurface onChange={onChange} initialContent={initialContent} />
     </LexicalComposer>
   )
 }
