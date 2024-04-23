@@ -1,4 +1,3 @@
-import { ArticleForm, QuestionForm } from '@/components/form/post-form'
 import {
   Card,
   CardContent,
@@ -8,6 +7,31 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import dynamic from 'next/dynamic'
+import PulseLoader from 'react-spinners/PulseLoader'
+
+const QuestionForm = dynamic(
+  () => import('@/components/form/post-form').then((mod) => mod.QuestionForm),
+  {
+    loading: () => (
+      <div className="flex justify-center my-10">
+        <PulseLoader color="#8585ad" />
+      </div>
+    ),
+  }
+)
+
+const ArticleForm = dynamic(
+  () => import('@/components/form/post-form').then((mod) => mod.ArticleForm),
+  {
+    loading: () => (
+      <div className="flex justify-center my-10">
+        <PulseLoader color="#8585ad" />
+      </div>
+    ),
+  }
+)
+
 export const CreatePostDisplay = ({
   communitySlug,
   communityName,

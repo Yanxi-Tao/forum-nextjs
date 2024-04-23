@@ -86,12 +86,18 @@ export default function QuestionDisplay({
   const { ref, inView } = useInView()
 
   const { isPending, variables, mutate } = useMutateAnswer()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useInfiniteAnswers({
-      parentId: id,
-      offset: 0,
-      take: ANSWERS_FETCH_SPAN,
-    })
+  const {
+    data,
+    isSuccess,
+    isFetching,
+    fetchStatus,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteAnswers({
+    parentId: id,
+    offset: 0,
+    take: ANSWERS_FETCH_SPAN,
+  })
 
   const userVoteStatus = useMemo(
     () =>
@@ -113,10 +119,10 @@ export default function QuestionDisplay({
   const [isFormOpen, setIsFormOpen] = useState(false)
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (!isFetching && inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, fetchNextPage, hasNextPage])
+  }, [inView, fetchNextPage, hasNextPage, isFetching])
 
   if (!user || !user.name || !user.email || !user.id) {
     return null

@@ -127,7 +127,9 @@ export const QuestionForm = ({
             name="content"
             render={() => (
               <FormItem>
-                <FormLabel className="text-foreground">Description</FormLabel>
+                <FormLabel className="text-foreground" htmlFor={undefined}>
+                  Description
+                </FormLabel>
                 <FormControl>
                   <Editor
                     onChange={handleOnChange}
@@ -247,7 +249,9 @@ export const ArticleForm = ({
             name="content"
             render={() => (
               <FormItem>
-                <FormLabel className="text-foreground">Content</FormLabel>
+                <FormLabel className="text-foreground" htmlFor={undefined}>
+                  Content
+                </FormLabel>
                 <FormControl>
                   <Editor
                     onChange={handleOnChange}
@@ -296,7 +300,6 @@ export const AnswerCreateForm = ({
       content: '',
       type: 'answer',
       parentId,
-      parentUserId,
       communitySlug,
     },
     mode: 'onChange',

@@ -15,14 +15,20 @@ export const ExploreDisplay = ({
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
   const { ref, inView } = useInView()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useInfinitePosts(search, communitySlug)
+  const {
+    data,
+    isSuccess,
+    isFetching,
+    fetchStatus,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfinitePosts(search, communitySlug)
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (!isFetching && inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, fetchNextPage, hasNextPage])
+  }, [inView, fetchNextPage, hasNextPage, isFetching])
 
   return (
     <div className="flex flex-col space-y-3">

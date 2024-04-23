@@ -14,14 +14,20 @@ export const CommunityCardList = () => {
   const [search, setSearch] = useState<string | undefined>(undefined)
   const { ref, inView } = useInView()
   const queryClient = useQueryClient()
-  const { data, isSuccess, fetchStatus, hasNextPage, fetchNextPage } =
-    useInfiniteCommunities(search)
+  const {
+    data,
+    isSuccess,
+    isFetching,
+    fetchStatus,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteCommunities(search)
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (!isFetching && inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, fetchNextPage, hasNextPage])
+  }, [inView, fetchNextPage, hasNextPage, isFetching])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
