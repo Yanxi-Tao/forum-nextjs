@@ -23,11 +23,7 @@ import Link from 'next/link'
 import { CommunityDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 
-export const CommunityDisplay = ({
-  community,
-}: {
-  community: CommunityDisplayProps
-}) => {
+export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
   const user = useCurrentUser()
   return (
     <CardHeader className="bg-muted rounded-xl">

@@ -223,3 +223,34 @@ export const deletePostById = async (id: string, type: PostType) => {
     return false
   }
 }
+
+export const getMyAnswerByQuestionId = async (
+  userID: string,
+  questionId: string
+) => {
+  try {
+    const answer = await db.post.findFirst({
+      where: {
+        authorId: userID,
+        parentId: questionId,
+        type: 'answer',
+      },
+      include: {
+        bookmarks: true,
+        upVotes: true,
+        downVotes: true,
+        community: true,
+        author: true,
+        _count: {
+          select: {
+            comments: true,
+            children: true,
+          },
+        },
+      },
+    })
+    return answer
+  } catch {
+    return null
+  }
+}

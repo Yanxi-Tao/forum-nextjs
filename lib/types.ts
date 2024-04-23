@@ -1,4 +1,8 @@
-import { fetchPosts, fetchPostById } from '@/actions/post/fetch-post'
+import {
+  fetchPosts,
+  fetchPostById,
+  fetchAnswer,
+} from '@/actions/post/fetch-post'
 import { fetchComments } from '@/actions/comment/fetch-comment'
 import { fetchCommunities } from '@/actions/community/fetch-community'
 import { fetchEditProfile, fetchProfile } from '@/actions/profile/fetch-profile'
@@ -17,17 +21,18 @@ import {
 } from '@/schemas'
 
 // Display types
-export type QuestionDisplayProps = NonNullable<
-  Awaited<ReturnType<typeof fetchPostById>>
->
+export type PostDisplayProps = {
+  post: NonNullable<Awaited<ReturnType<typeof fetchPostById>>>
+  myAnswer?: Awaited<ReturnType<typeof fetchAnswer>>
+}
 
-export type ProfileDisplayProps = NonNullable<
-  Awaited<ReturnType<typeof fetchProfile>>
->
+export type ProfileDisplayProps = {
+  profile: NonNullable<Awaited<ReturnType<typeof fetchProfile>>>
+}
 
-export type CommunityDisplayProps = NonNullable<
-  Awaited<ReturnType<typeof getCommunityBySlug>>
->
+export type CommunityDisplayProps = {
+  community: NonNullable<Awaited<ReturnType<typeof getCommunityBySlug>>>
+}
 
 // Cards types
 export type PostCardProps = Awaited<
@@ -70,6 +75,17 @@ export type FetchCommunityQueryKey = {
 export type UpdateProfileFormProps = NonNullable<
   NonNullable<Awaited<ReturnType<typeof fetchEditProfile>>>['profile']
 >
+
+export type PostFormProps = {
+  communitySlug?: string
+  postId?: string
+  initialContent?: string
+  initialTitle?: string
+  parentId?: string
+  action: 'create' | 'update'
+  setIsFormOpen?: (value: boolean) => void
+  pathname?: string
+}
 
 // zod schemas types
 export type CreateCommentSchemaTypes = z.infer<typeof CreateCommentSchema>

@@ -10,5 +10,5 @@ export default async function ArticleDisplayPage({
   if (!post) return null
   const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
 
-  return <ArticleDisplay {...post} mode={mode} />
+  return <ArticleDisplay post={post} mode={mode} />
 }

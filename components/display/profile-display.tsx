@@ -24,11 +24,7 @@ import { ProfileDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import Link from 'next/link'
 
-export const ProfileDisplay = ({
-  profile,
-}: {
-  profile: ProfileDisplayProps
-}) => {
+export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
   const user = useCurrentUser()
   if (!user) return null
   return (

@@ -5,15 +5,21 @@ import { createPost } from '@/actions/post/create-post'
 import { deletePost } from '@/actions/post/delete-post'
 import { fetchAnswers, fetchPosts } from '@/actions/post/fetch-post'
 import {
+  updatePost,
   updatePostBookmarkById,
   updatePostVoteById,
 } from '@/actions/post/update-post'
 import {
   EXPLORE_POSTS_KEY,
+  MY_ANSWER_KEY,
   POST_FETCH_SPAN,
   QUESTION_ANSWERS_KEY,
 } from '@/lib/constants'
-import { CreatePostSchemaTypes, FetchAnswerQueryKey } from '@/lib/types'
+import {
+  CreatePostSchemaTypes,
+  FetchAnswerQueryKey,
+  UpdatePostSchemaTypes,
+} from '@/lib/types'
 import { PostType } from '@prisma/client'
 import {
   useInfiniteQuery,
@@ -27,10 +33,15 @@ export const useDeletePost = (postId: string, postType: PostType) => {
     postType === 'question' ? EXPLORE_POSTS_KEY : QUESTION_ANSWERS_KEY
   const queryClient = useQueryClient()
   const mutate = useMutation({
-    mutationFn: ({ id, type }: { id: string; type: PostType }) =>
-      deletePost(id, type),
-    onSettled: async () =>
-      await queryClient.invalidateQueries({ queryKey: [queryKey] }),
+    mutationFn: () => deletePost(postId, postType),
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [queryKey],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: [MY_ANSWER_KEY],
+      })
+    },
   })
   return mutate.mutate
 }
@@ -110,15 +121,9 @@ export const useInfiniteAnswers = ({
  * and invalidating the cache
  */
 
-export const useMutateAnswer = () => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (data: CreatePostSchemaTypes) => createPost(data),
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: [QUESTION_ANSWERS_KEY] })
-    },
-  })
-}
+// export const useMutateAnswer = () => {
+//   return useMutation()
+// }
 
 export const useUpdateBookmark = () => {
   return debounce({ delay: 1000 }, updatePostBookmarkById)

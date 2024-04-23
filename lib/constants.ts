@@ -50,6 +50,8 @@ export const EXPLORE_POSTS_KEY = 'explore-posts'
 export const COMMENT_KEY = 'comments'
 export const COMMUNITY_KEY = 'communities-browse'
 export const COMMUNITY_DISPLAY_KEY = 'community-display'
+export const MY_ANSWER_KEY = 'my-answer'
+export const CURRENT_POST_KEY = 'current-post'
 
 export const DELETED_CONTENT = '[deleted-content]'
 export const DELETED_USER = '[deleted-user]'

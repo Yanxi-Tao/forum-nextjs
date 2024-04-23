@@ -9,5 +9,5 @@ export default async function ArticleCommunityDisplayPage({
   const post = await fetchPostById(params.id[0])
   if (!post) return null
   const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
-  return <ArticleDisplay {...post} mode={mode} />
+  return <ArticleDisplay post={post} mode={mode} />
 }

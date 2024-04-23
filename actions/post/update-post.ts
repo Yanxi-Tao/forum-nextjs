@@ -4,7 +4,7 @@ import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
 import { UpdatePostSchemaTypes } from '@/lib/types'
 import { UpdatePostSchema } from '@/schemas'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const updatePostVoteById = async (
   postId: string,
@@ -91,7 +91,7 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { title, content, postId } = validatedData.data
+  const { title, content, postId, pathname } = validatedData.data
 
   try {
     await db.post.update({
@@ -103,7 +103,8 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
         content,
       },
     })
-    // revalidatePath(pathname)
+
+    if (pathname) revalidatePath(pathname)
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

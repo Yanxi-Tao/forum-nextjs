@@ -40,7 +40,7 @@ import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
-import { QuestionDisplayProps as ArticleDisplayProps } from '@/lib/types'
+import { PostDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
@@ -63,18 +63,20 @@ const ArticleForm = dynamic(
 )
 
 export default function ArticleDisplay({
-  id,
-  title,
-  content,
-  author,
-  community,
-  updatedAt,
-  bookmarks,
-  upVotes,
-  downVotes,
-  _count,
+  post: {
+    id,
+    title,
+    content,
+    author,
+    community,
+    updatedAt,
+    bookmarks,
+    upVotes,
+    downVotes,
+    _count,
+  },
   mode,
-}: ArticleDisplayProps & { mode: 'display' | 'edit' }) {
+}: PostDisplayProps & { mode: 'display' | 'edit' }) {
   const router = useRouter()
   const pathname = usePathname()
   const user = useCurrentUser()
@@ -263,8 +265,8 @@ export default function ArticleDisplay({
           postId={id}
           initialContent={content}
           initialTitle={title}
-          redirectTo={pathname.substring(0, pathname.lastIndexOf('/'))}
           action="update"
+          pathname={pathname.substring(0, pathname.lastIndexOf('/'))}
         />
       )}
     </div>

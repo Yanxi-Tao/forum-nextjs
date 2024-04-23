@@ -69,6 +69,7 @@ export const CreatePostSchema = PostSchema.extend({
 
 export const UpdatePostSchema = PostSchema.extend({
   postId: z.string().cuid(),
+  pathname: z.optional(z.string()),
 })
 
 export const CreateCommentSchema = z.object({

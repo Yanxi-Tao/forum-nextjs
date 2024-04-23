@@ -23,7 +23,7 @@ export const createPost = async (data: CreatePostSchemaTypes) => {
     : null
 
   try {
-    await db.post.create({
+    const post = await db.post.create({
       data: {
         title,
         content,
@@ -33,7 +33,6 @@ export const createPost = async (data: CreatePostSchemaTypes) => {
         authorId: user.id,
       },
     })
-
     return { type: 'success', message: 'Post created' }
   } catch {
     return { type: 'error', message: 'Failed to create post' }

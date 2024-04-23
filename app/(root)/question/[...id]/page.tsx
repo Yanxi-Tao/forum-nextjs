@@ -1,8 +1,17 @@
-import { fetchAnswers, fetchPostById } from '@/actions/post/fetch-post'
+import {
+  fetchAnswer,
+  fetchAnswers,
+  fetchPostById,
+} from '@/actions/post/fetch-post'
 
 import QuestionDisplay from '@/components/display/question-display'
 import { currentUser } from '@/lib/auth'
-import { ANSWERS_FETCH_SPAN, QUESTION_ANSWERS_KEY } from '@/lib/constants'
+import {
+  ANSWERS_FETCH_SPAN,
+  CURRENT_POST_KEY,
+  MY_ANSWER_KEY,
+  QUESTION_ANSWERS_KEY,
+} from '@/lib/constants'
 import {
   HydrationBoundary,
   QueryClient,
@@ -17,7 +26,8 @@ export default async function QuestionDisplayPage({
 }) {
   const post = await fetchPostById(params.id[0])
   const user = await currentUser()
-  if (!post) return null
+  if (!post || !user) return null
+  const myAnswer = await fetchAnswer(user.id, params.id[0])
 
   const queryClient = new QueryClient()
   await queryClient.prefetchInfiniteQuery({
@@ -31,13 +41,20 @@ export default async function QuestionDisplayPage({
     gcTime: Infinity,
     staleTime: Infinity,
   })
+  await queryClient.prefetchQuery({
+    queryKey: [MY_ANSWER_KEY],
+    queryFn: () => fetchAnswer(user.id, params.id[0]),
+    gcTime: Infinity,
+    staleTime: Infinity,
+  })
+
   const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
-  if (mode === 'edit' && user?.id !== post.author?.id)
+  if (mode === 'edit' && user.id !== post.author?.id)
     return redirect(`/question/${params.id[0]}`)
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <QuestionDisplay {...post} mode={mode} />
+      <QuestionDisplay post={post} myAnswer={myAnswer} mode={mode} />
     </HydrationBoundary>
   )
 }

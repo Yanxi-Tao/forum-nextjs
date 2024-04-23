@@ -61,14 +61,18 @@ export const CreatePostDisplay = ({
           <TabsContent value="question" className="w-full">
             <QuestionForm
               communitySlug={communitySlug}
-              redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
+              pathname={
+                communitySlug ? `/community/${communitySlug}` : undefined
+              }
               action="create"
             />
           </TabsContent>
           <TabsContent value="article" className="w-full">
             <ArticleForm
               communitySlug={communitySlug}
-              redirectTo={communitySlug ? `/community/${communitySlug}` : '/'}
+              pathname={
+                communitySlug ? `/community/${communitySlug}` : undefined
+              }
               action="create"
             />
           </TabsContent>

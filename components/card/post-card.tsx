@@ -162,7 +162,7 @@ export const PostCard = ({
                       </Link>
                     </DropdownMenuItem>
                   ) : null}
-                  <DropdownMenuItem onSelect={() => mutate({ id, type })}>
+                  <DropdownMenuItem onSelect={() => mutate()}>
                     <MdDelete size={16} className="mr-2" />
                     Delete
                   </DropdownMenuItem>
@@ -301,37 +301,4 @@ export const PostCard = ({
       </Collapsible>
     </Card>
   )
-}
-
-export const optimisticAnswer = (
-  user: ExtendedUser,
-  title: string,
-  content: string
-): PostCardProps => {
-  return {
-    community: null,
-    author: {
-      id: user.id as string,
-      name: user.name as string,
-      slug: user.slug,
-      email: user.email as string,
-      emailVerified: null,
-      image: null,
-      password: null,
-    },
-    id: 'temp-id',
-    title,
-    content,
-    type: PostType.answer,
-    authorId: user.id as string,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    upVotes: [],
-    downVotes: [],
-    views: 0,
-    bookmarks: [],
-    parentId: null,
-    communityId: null,
-    _count: { children: 0, comments: 0 },
-  }
 }

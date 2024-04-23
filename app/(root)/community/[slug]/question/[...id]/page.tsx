@@ -1,4 +1,8 @@
-import { fetchAnswers, fetchPostById } from '@/actions/post/fetch-post'
+import {
+  fetchAnswer,
+  fetchAnswers,
+  fetchPostById,
+} from '@/actions/post/fetch-post'
 
 import QuestionDisplay from '@/components/display/question-display'
 import { currentUser } from '@/lib/auth'
@@ -18,7 +22,7 @@ export default async function QuestionCommunityDisplayPage({
   const post = await fetchPostById(params.id[0])
   const user = await currentUser()
 
-  if (!post) return null
+  if (!post || !user) return null
 
   const queryClient = new QueryClient()
   await queryClient.prefetchInfiniteQuery({
@@ -30,12 +34,13 @@ export default async function QuestionCommunityDisplayPage({
       take: ANSWERS_FETCH_SPAN,
     },
   })
+  const myAnswer = await fetchAnswer(user.id, params.id[0])
   const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
   if (mode === 'edit' && user?.id !== post.author?.id)
     return redirect(`/community/${params.slug}/question/${params.id[0]}`)
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <QuestionDisplay {...post} mode={mode} />
+      <QuestionDisplay post={post} mode={mode} myAnswer={myAnswer} />
     </HydrationBoundary>
   )
 }

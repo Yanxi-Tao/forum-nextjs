@@ -35,18 +35,16 @@ import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { QuestionDisplayProps } from '@/lib/types'
-import { AnswerCreateForm } from '@/components/form/post-form'
+import { PostDisplayProps } from '@/lib/types'
 import {
   ANSWERS_FETCH_SPAN,
-  DELETED_CONTENT,
   DELETED_USER,
+  MY_ANSWER_KEY,
 } from '@/lib/constants'
-import { useQueryClient } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
-import { PostCard, optimisticAnswer } from '@/components/card/post-card'
+import { PostCard } from '@/components/card/post-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { useMutateAnswer, useInfiniteAnswers } from '@/hooks/post'
+import { useInfiniteAnswers } from '@/hooks/post'
 import { BeatLoader } from 'react-spinners'
 import { Separator } from '@/components/ui/separator'
 import { AvatarCard } from '@/components/card/avatar-card'
@@ -54,6 +52,8 @@ import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote, useUpdateBookmark } from '@/hooks/post'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAnswer } from '@/actions/post/fetch-post'
 
 const QuestionForm = dynamic(
   () => import('@/components/form/post-form').then((mod) => mod.QuestionForm),
@@ -66,26 +66,37 @@ const QuestionForm = dynamic(
   }
 )
 
+const AnswerForm = dynamic(
+  () => import('@/components/form/post-form').then((mod) => mod.AnswerForm),
+  {
+    loading: () => (
+      <div className="flex justify-center my-10">
+        <PulseLoader color="#8585ad" />
+      </div>
+    ),
+  }
+)
+
 export default function QuestionDisplay({
-  id,
-  title,
-  content,
-  author,
-  community,
-  bookmarks,
-  updatedAt,
-  _count,
-  upVotes,
-  downVotes,
+  post: {
+    id,
+    title,
+    content,
+    author,
+    community,
+    bookmarks,
+    updatedAt,
+    _count,
+    upVotes,
+    downVotes,
+  },
   mode,
-}: QuestionDisplayProps & { mode: 'display' | 'edit' }) {
+}: PostDisplayProps & { mode: 'display' | 'edit' }) {
   const pathname = usePathname()
   const user = useCurrentUser()
   const updateBookmark = useUpdateBookmark()
   const updateVote = useUpdateVote('post')
   const { ref, inView } = useInView()
-
-  const { isPending, variables, mutate } = useMutateAnswer()
   const {
     data,
     isSuccess,
@@ -99,6 +110,12 @@ export default function QuestionDisplay({
     take: ANSWERS_FETCH_SPAN,
   })
 
+  const { data: myAnswer } = useQuery({
+    queryKey: [MY_ANSWER_KEY],
+    queryFn: () => fetchAnswer(user?.id, id),
+    gcTime: Infinity,
+    staleTime: Infinity,
+  })
   const userVoteStatus = useMemo(
     () =>
       upVotes.find((vote) => vote.id === user?.id)
@@ -184,7 +201,7 @@ export default function QuestionDisplay({
                   {new Date(updatedAt).toDateString()}
                 </span>
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
+                  <DropdownMenuTrigger className="focus:outline-none">
                     <HiDotsHorizontal size={20} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
@@ -272,12 +289,14 @@ export default function QuestionDisplay({
                 <span className="ml-2">Bookmark</span>
               </Toggle>
             </div>
-            <Button
-              variant="secondary"
-              onClick={() => setIsFormOpen(!isFormOpen)}
-            >
-              {isFormOpen ? 'Close' : 'Answer'}
-            </Button>
+            {!isFormOpen && (
+              <Button
+                variant="secondary"
+                onClick={() => setIsFormOpen(!isFormOpen)}
+              >
+                {`${myAnswer ? 'Edit Answer' : 'Answer'}`}
+              </Button>
+            )}
           </CardFooter>
         </Card>
       )}
@@ -288,28 +307,34 @@ export default function QuestionDisplay({
           initialContent={content}
           initialTitle={title}
           action="update"
-          redirectTo={pathname.substring(0, pathname.lastIndexOf('/'))}
+          pathname={pathname.substring(0, pathname.lastIndexOf('/'))}
         />
       )}
       {isFormOpen && (
-        <AnswerCreateForm
-          title={title}
+        <AnswerForm
+          postId={myAnswer?.id}
+          initialTitle={title}
+          initialContent={myAnswer?.content}
           parentId={id}
-          parentUserId={author?.id}
           communitySlug={community?.slug}
-          mutate={mutate}
           setIsFormOpen={setIsFormOpen}
+          action={myAnswer ? 'update' : 'create'}
+          pathname={pathname}
         />
       )}
       <Separator className="my-6" />
-      {isPending && (
-        <PostCard
-          {...optimisticAnswer(user, variables.title, variables.content)}
-        />
+      {myAnswer && !isFormOpen && (
+        <div className="space-y-3">
+          <span className="mx-6 p-2 rounded-md bg-muted">My Answer</span>
+          <PostCard {...myAnswer} />
+        </div>
       )}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
+            if (post.id === myAnswer?.id) {
+              return null
+            }
             if (
               page.answers.indexOf(post) ===
               (page.answers.length < 2

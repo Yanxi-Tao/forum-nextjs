@@ -16,18 +16,19 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
-import { CreatePostSchema, PostSchema } from '@/schemas'
+import { PostSchema } from '@/schemas'
 import { createPost } from '@/actions/post/create-post'
 import {
   CreatePostSchemaTypes,
   FormAlertProps,
+  PostFormProps,
   PostSchemaTypes,
   UpdatePostSchemaTypes,
 } from '@/lib/types'
 import { useState } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { useQueryClient } from '@tanstack/react-query'
-import { EXPLORE_POSTS_KEY } from '@/lib/constants'
+import { EXPLORE_POSTS_KEY, MY_ANSWER_KEY } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
 import { updatePost } from '@/actions/post/update-post'
 
@@ -40,16 +41,9 @@ export const QuestionForm = ({
   postId,
   initialContent,
   initialTitle,
-  redirectTo = '/',
   action,
-}: {
-  communitySlug?: string
-  postId?: string
-  initialContent?: string
-  initialTitle?: string
-  redirectTo?: string
-  action: 'create' | 'update'
-}) => {
+  pathname,
+}: PostFormProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -84,7 +78,11 @@ export const QuestionForm = ({
       }
       state = await createPost(date)
     } else if (action === 'update' && postId) {
-      const date: UpdatePostSchemaTypes = { ...rawData, postId }
+      const date: UpdatePostSchemaTypes = {
+        ...rawData,
+        postId,
+        pathname,
+      }
       state = await updatePost(date)
     }
 
@@ -93,7 +91,7 @@ export const QuestionForm = ({
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
-      router.push(redirectTo)
+      router.push(pathname ?? '/')
     } else {
       setAlert(state)
     }
@@ -112,9 +110,7 @@ export const QuestionForm = ({
                 <FormControl>
                   <Textarea {...field} disabled={isPending} autoFocus />
                 </FormControl>
-                <FormDescription
-                  className={form.formState.errors.title && 'text-destructive'}
-                >
+                <FormDescription>
                   {form.getValues('title').length < 1
                     ? 'Required'
                     : `Be specific: ${form.getValues('title').length}/255`}
@@ -137,21 +133,37 @@ export const QuestionForm = ({
                   />
                 </FormControl>
                 <FormDescription>
-                  [Required] Include all the information someone would need to
-                  answer your question
+                  {form.getValues('content').length < 1
+                    ? 'Required'
+                    : 'Include all the information someone would need to answer your question'}
                 </FormDescription>
               </FormItem>
             )}
           />
         </div>
         <FormAlert alert={alert} />
-        <Button
-          type="submit"
-          disabled={isPending || !form.formState.isValid}
-          className="w-full"
-        >
-          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Question'}
-        </Button>
+        <div className="flex gap-x-3">
+          {action === 'update' && (
+            <Button
+              type="button"
+              onClick={() => router.push(pathname ?? '/')}
+              className="w-full"
+            >
+              Cancel
+            </Button>
+          )}
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="w-full"
+          >
+            {isPending ? (
+              <PulseLoader color="#8585ad" />
+            ) : (
+              `${action === 'create' ? 'Create' : 'Update'} Question`
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   )
@@ -162,16 +174,9 @@ export const ArticleForm = ({
   postId,
   initialContent,
   initialTitle,
-  redirectTo = '/',
   action,
-}: {
-  communitySlug?: string
-  postId?: string
-  initialContent?: string
-  initialTitle?: string
-  redirectTo?: string
-  action: 'create' | 'update'
-}) => {
+  pathname,
+}: PostFormProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -206,16 +211,19 @@ export const ArticleForm = ({
       }
       state = await createPost(date)
     } else if (action === 'update' && postId) {
-      const date: UpdatePostSchemaTypes = { ...rawData, postId }
+      const date: UpdatePostSchemaTypes = {
+        ...rawData,
+        postId,
+        pathname,
+      }
       state = await updatePost(date)
     }
-
     setIsPending(false)
     if (state?.type === 'success') {
       queryClient.invalidateQueries({
         queryKey: [EXPLORE_POSTS_KEY, { communitySlug }],
       })
-      router.push(redirectTo)
+      router.push(pathname ?? '/')
     } else {
       setAlert(state)
     }
@@ -234,9 +242,7 @@ export const ArticleForm = ({
                 <FormControl>
                   <Textarea {...field} disabled={isPending} autoFocus />
                 </FormControl>
-                <FormDescription
-                  className={form.formState.errors.title && 'text-destructive'}
-                >
+                <FormDescription>
                   {form.getValues('title').length < 1
                     ? 'Required'
                     : `Be specific: ${form.getValues('title').length}/255`}
@@ -258,63 +264,97 @@ export const ArticleForm = ({
                     initialContent={initialContent}
                   />
                 </FormControl>
-                <FormDescription>[Required]</FormDescription>
+                <FormDescription>
+                  {form.getValues('content').length < 1
+                    ? 'Required'
+                    : 'Share your knowledge with the community'}
+                </FormDescription>
               </FormItem>
             )}
           />
         </div>
         <FormAlert alert={alert} />
-        <Button
-          type="submit"
-          disabled={isPending || !form.formState.isValid}
-          className="w-full"
-        >
-          {isPending ? <PulseLoader color="#8585ad" /> : 'Create Article'}
-        </Button>
+        <div className="flex gap-x-3">
+          {action === 'update' && (
+            <Button
+              type="button"
+              onClick={() => router.push(pathname ?? '/')}
+              className="w-full"
+            >
+              Cancel
+            </Button>
+          )}
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="w-full"
+          >
+            {isPending ? (
+              <PulseLoader color="#8585ad" />
+            ) : (
+              `${action === 'create' ? 'Create' : 'Update'} Article`
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   )
 }
 
-export const AnswerCreateForm = ({
-  title,
-  parentId,
-  parentUserId,
+export const AnswerForm = ({
   communitySlug,
-  mutate,
+  postId,
+  initialContent,
+  initialTitle,
+  parentId,
+  action,
   setIsFormOpen,
-}: {
-  title: string
-  parentId: string
-  parentUserId: string | undefined
-  communitySlug: string | undefined
-  mutate: (data: CreatePostSchemaTypes) => void
-  setIsFormOpen: (value: boolean) => void
-}) => {
-  // schema
+}: PostFormProps) => {
+  const queryClient = useQueryClient()
+  const [alert, setAlert] = useState<FormAlertProps>(null)
   const [editorHtml, setEditorHtml] = useState<string>('')
-  const form = useForm<CreatePostSchemaTypes>({
-    resolver: zodResolver(CreatePostSchema),
-    defaultValues: {
-      title,
-      content: '',
-      type: 'answer',
-      parentId,
-      communitySlug,
-    },
-    mode: 'onChange',
-  })
+  const [isPending, setIsPending] = useState(false)
 
   const handleOnChange = (plainText: string, html: string) => {
     form.setValue('content', plainText, { shouldValidate: true })
     setEditorHtml(html)
   }
 
-  // form submit handler
-  const onSubmit = (data: CreatePostSchemaTypes) => {
-    data.content = editorHtml
-    mutate(data)
-    setIsFormOpen(false)
+  const form = useForm<PostSchemaTypes>({
+    resolver: zodResolver(PostSchema),
+    defaultValues: {
+      title: initialTitle || '',
+      content: initialContent || '',
+    },
+  })
+
+  const onSubmit = async (rawData: PostSchemaTypes) => {
+    setAlert(null)
+    setIsPending(true)
+    rawData.content = editorHtml
+    let state: FormAlertProps = null
+    if (action === 'create') {
+      const date: CreatePostSchemaTypes = {
+        ...rawData,
+        type: 'answer',
+        communitySlug,
+        parentId,
+      }
+      state = await createPost(date)
+    } else if (action === 'update' && postId) {
+      const date: UpdatePostSchemaTypes = { ...rawData, postId }
+      state = await updatePost(date)
+    }
+    if (state?.type === 'success') {
+      queryClient
+        .invalidateQueries({
+          queryKey: [MY_ANSWER_KEY],
+        })
+        .then(() => setIsFormOpen?.(false))
+    } else {
+      setIsPending(false)
+      setAlert(state)
+    }
   }
 
   return (
@@ -323,24 +363,42 @@ export const AnswerCreateForm = ({
         <FormField
           control={form.control}
           name="content"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
+              <FormLabel className="text-foreground" htmlFor={undefined}>
+                Your Answer
+              </FormLabel>
               <FormControl>
-                <Editor onChange={handleOnChange} />
+                <Editor
+                  onChange={handleOnChange}
+                  initialContent={initialContent}
+                />
               </FormControl>
               <FormDescription>
-                [Required] Your answer helps others learn about this topic
+                {form.getValues('content').length < 1
+                  ? 'Required'
+                  : 'Answer the question with your knowledge and expertise'}
               </FormDescription>
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={!form.formState.isValid}
-          className="w-full"
-        >
-          Create Answer
-        </Button>
+        <FormAlert alert={alert} />
+        <div className="flex gap-x-3">
+          <Button
+            type="button"
+            onClick={() => setIsFormOpen?.(false)}
+            className="w-full"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            disabled={isPending || !form.formState.isValid}
+            className="w-full"
+          >
+            {`${action === 'create' ? 'Create' : 'Update'} Answer`}
+          </Button>
+        </div>
       </form>
     </Form>
   )
