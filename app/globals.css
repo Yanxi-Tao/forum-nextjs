@@ -1,9 +1,9 @@
+@import url(katex/dist/katex.min.css);
+@import url(@/components/editor/editor-theme.css);
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url(katex/dist/katex.min.css);
-@import url(@/components/editor/editor-theme.css);
 
 @layer base {
   :root {
