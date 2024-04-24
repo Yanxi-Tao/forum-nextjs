@@ -1,0 +1,23 @@
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { BiMessageAltError } from 'react-icons/bi'
+
+export default function NotFound() {
+  return (
+    <div className="flex h-full justify-center items-center">
+      <div className="max-w-md text-center space-y-4">
+        <BiMessageAltError className="mx-auto text-6xl" />
+        <h1 className="text-4xl font-bold tracking-tight">Page not found</h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          We&apos;re sorry, but the page you were trying to access is not found.
+          Please try again later or go back to the homepage.
+        </p>
+        <div className="flex space-x-4 justify-center">
+          <Button>
+            <Link href="/auth/login">Go back to login</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
