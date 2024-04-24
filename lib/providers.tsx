@@ -11,8 +11,8 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000,
-        refetchInterval: 60 * 1000,
+        staleTime: 30 * 1000,
+        refetchInterval: 30 * 1000,
         gcTime: Infinity,
       },
     },
@@ -39,7 +39,7 @@ export const ReactQueryProvider = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
       {children}
     </QueryClientProvider>
   )

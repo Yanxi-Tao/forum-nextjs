@@ -190,8 +190,8 @@ model Notification {
   generatedBy   User   @relation("GeneratedByToUser", fields: [generatedById], references: [id], onDelete: Cascade)
   generatedById String
 
-  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId String?
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
 
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?

@@ -85,7 +85,6 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
   if (!user || !user.id) {
     return { type: 'error', message: 'User not found' }
   }
-
   const validatedData = UpdatePostSchema.safeParse(data)
   if (!validatedData.success) {
     return { type: 'error', message: 'Invalid data' }
@@ -112,7 +111,7 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
                   {
                     notifiedUserId: parentUserId,
                     generatedById: user.id,
-                    message: '13e',
+                    message: 'answered your question',
                     redirectTo: pathname,
                   },
                 ],

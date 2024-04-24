@@ -52,7 +52,7 @@ export type NotificationCardProps = {
   notification: NonNullable<
     Awaited<ReturnType<typeof fetchNotifications>>
   >['notifications'][number]
-  mutate: (id: string) => void
+  deleteNotification: (id: string) => void
 }
 
 // Tanstack query keys types

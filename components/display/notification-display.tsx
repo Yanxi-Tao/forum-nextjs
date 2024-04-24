@@ -1,56 +1,28 @@
 'use client'
 
-import { fetchNotifications } from '@/actions/notification/fetch-notification'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import {
-  NOTIFICATION_COUNT_KEY,
-  NOTIFICATION_FETCH_SPAN,
-  NOTIFICATION_KEY,
-} from '@/lib/constants'
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query'
-import { NotificationCard } from '../card/notification-card'
+import { NotificationCard } from '@/components/card/notification-card'
 import { useInView } from 'react-intersection-observer'
 import { useEffect } from 'react'
-import { deleteNotification } from '@/actions/notification/delete-notification'
+import BeatLoader from 'react-spinners/BeatLoader'
+import {
+  useDeleteNotification,
+  useInfiniteNotifications,
+} from '@/hooks/notification'
 
 export const NotificationDisplay = () => {
   const user = useCurrentUser()
-  const queryClient = useQueryClient()
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, hasNextPage, isFetching, isSuccess } =
-    useInfiniteQuery({
-      queryKey: [NOTIFICATION_KEY],
-      queryFn: ({ pageParam }) => fetchNotifications(pageParam),
-      initialPageParam: {
-        userId: user?.id,
-        offset: 0,
-        take: NOTIFICATION_FETCH_SPAN,
-      },
-      getNextPageParam: (lastPage) => {
-        if (!lastPage.nextOffset) return undefined
-        return {
-          userId: user?.id,
-          offset: lastPage.nextOffset,
-          take: NOTIFICATION_FETCH_SPAN,
-        }
-      },
-    })
+  const {
+    data,
+    fetchNextPage,
+    fetchStatus,
+    hasNextPage,
+    isFetching,
+    isSuccess,
+  } = useInfiniteNotifications(user?.id)
 
-  const { mutate } = useMutation({
-    mutationFn: (id: string) => deleteNotification(id),
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [NOTIFICATION_KEY],
-      })
-      queryClient.invalidateQueries({
-        queryKey: [NOTIFICATION_COUNT_KEY],
-      })
-    },
-  })
+  const deleteNotification = useDeleteNotification()
 
   useEffect(() => {
     if (!isFetching && inView && hasNextPage) {
@@ -75,7 +47,7 @@ export const NotificationDisplay = () => {
                 <div key={notification.id} ref={ref}>
                   <NotificationCard
                     notification={notification}
-                    mutate={mutate}
+                    deleteNotification={deleteNotification}
                   />
                 </div>
               )
@@ -84,12 +56,22 @@ export const NotificationDisplay = () => {
                 <NotificationCard
                   key={notification.id}
                   notification={notification}
-                  mutate={mutate}
+                  deleteNotification={deleteNotification}
                 />
               )
             }
           })
         )}
+      {fetchStatus === 'fetching' && (
+        <div className="flex justify-center h-10 my-4">
+          <BeatLoader className="h-10" />
+        </div>
+      )}
+      {!hasNextPage && fetchStatus !== 'fetching' && (
+        <div className="flex items-center h-10 my-4 px-20">
+          <div className="w-full border-b-2" />
+        </div>
+      )}
     </div>
   )
 }
