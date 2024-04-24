@@ -11,48 +11,40 @@ import {
 import { NotificationCardProps } from '@/lib/types'
 import Link from 'next/link'
 import { AvatarCard } from './avatar-card'
+import { useRouter } from 'next-nprogress-bar'
 
 export const NotificationCard = ({
-  notification,
-}: {
-  notification: NotificationCardProps
-}) => {
-  const messageSuffix =
-    notification.type === 'answer'
-      ? notification.post?.title
-      : notification.type === 'commentPost'
-      ? notification.comment?.post?.title
-      : notification.type === 'commentReply'
-      ? notification.comment?.parent?.post?.title
-      : ''
+  notification: { id, generatedBy, message, post, comment, redirectTo },
+  mutate,
+}: NotificationCardProps) => {
+  const router = useRouter()
+  const redirect = post ? `${redirectTo}/answer/${post.id}` : ''
   return (
-    <Card className="shadow-none border-0 p-1 hover:bg-muted">
-      <Link href={''} className="flex items-center">
-        <Link href={`/profile/${notification.generatedBy.slug}`}>
-          <AvatarCard
-            source={notification.generatedBy.image}
-            name={notification.generatedBy.name}
-            className="h-14 w-14 text-xl"
-          />
-        </Link>
-        <div className="w-full">
-          <CardContent className="py-0  px-3">
-            <Link
-              href={`/profile/${notification.generatedBy.slug}`}
-              className="text-sky-700 underline-offset-4 hover:underline"
-            >
-              {notification.generatedBy.name}
-            </Link>
-            <span>{` ${notification.message} `}</span>
-            <Link
-              href={''}
-              className="text-sky-700 underline-offset-4 hover:underline"
-            >
-              {messageSuffix}{' '}
-            </Link>
-          </CardContent>
-        </div>
+    <Card
+      className="flex cursor-pointer items-center shadow-none border-0 p-3 hover:bg-muted"
+      onClick={() => {
+        router.push(redirect)
+        mutate(id)
+      }}
+    >
+      <Link href={`/profile/${generatedBy.slug}`}>
+        <AvatarCard
+          source={generatedBy.image}
+          name={generatedBy.name}
+          className="h-10 w-10 text-xl"
+        />
       </Link>
+      <div className="w-full">
+        <CardContent className="py-0  px-3">
+          <Link
+            href={`/profile/${generatedBy.slug}`}
+            className="text-sky-700 underline-offset-4 hover:underline"
+          >
+            {generatedBy.name}
+          </Link>
+          <span>{` ${message} ${post?.title}`}</span>
+        </CardContent>
+      </div>
     </Card>
   )
 }

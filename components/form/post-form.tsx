@@ -82,6 +82,7 @@ export const QuestionForm = ({
         ...rawData,
         postId,
         pathname,
+        type: 'question',
       }
       state = await updatePost(date)
     }
@@ -96,7 +97,6 @@ export const QuestionForm = ({
       setAlert(state)
     }
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -215,6 +215,7 @@ export const ArticleForm = ({
         ...rawData,
         postId,
         pathname,
+        type: 'article',
       }
       state = await updatePost(date)
     }
@@ -303,12 +304,14 @@ export const ArticleForm = ({
 
 export const AnswerForm = ({
   communitySlug,
+  pathname,
   postId,
   initialContent,
   initialTitle,
   parentId,
   action,
   setIsFormOpen,
+  parentUserId,
 }: PostFormProps) => {
   const queryClient = useQueryClient()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -339,10 +342,18 @@ export const AnswerForm = ({
         type: 'answer',
         communitySlug,
         parentId,
+        parentUserId,
+        pathname,
       }
       state = await createPost(date)
     } else if (action === 'update' && postId) {
-      const date: UpdatePostSchemaTypes = { ...rawData, postId }
+      const date: UpdatePostSchemaTypes = {
+        ...rawData,
+        postId,
+        parentUserId,
+        pathname,
+        type: 'answer',
+      }
       state = await updatePost(date)
     }
     if (state?.type === 'success') {

@@ -17,13 +17,21 @@ export const createPost = async (data: CreatePostSchemaTypes) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { title, content, type, parentId, communitySlug } = validatedData.data
+  const {
+    title,
+    content,
+    type,
+    parentId,
+    communitySlug,
+    parentUserId,
+    pathname,
+  } = validatedData.data
   const communityId = communitySlug
     ? (await getCommunityBySlug(communitySlug))?.id
     : null
 
   try {
-    const post = await db.post.create({
+    await db.post.create({
       data: {
         title,
         content,
@@ -31,6 +39,22 @@ export const createPost = async (data: CreatePostSchemaTypes) => {
         parentId,
         communityId,
         authorId: user.id,
+        notifications:
+          type === 'answer' &&
+          parentUserId &&
+          parentUserId !== user.id &&
+          pathname
+            ? {
+                create: [
+                  {
+                    notifiedUserId: parentUserId,
+                    generatedById: user.id,
+                    message: '13e',
+                    redirectTo: pathname,
+                  },
+                ],
+              }
+            : undefined,
       },
     })
     return { type: 'success', message: 'Post created' }
@@ -38,24 +62,3 @@ export const createPost = async (data: CreatePostSchemaTypes) => {
     return { type: 'error', message: 'Failed to create post' }
   }
 }
-
-// await db.post.create({
-//   data: {
-//     title,
-//     content,
-//     type,
-//     parentId,
-//     communityId,
-//     authorId: user.id,
-//     notifications: {
-//       create: [
-//         {
-//           notifiedUserId: parentUserId,
-//           generatedById: user.id,
-//           message: 'answered your question',
-//           type: 'answer',
-//         },
-//       ],
-//     },
-//   },
-// })

@@ -91,7 +91,8 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { title, content, postId, pathname } = validatedData.data
+  const { title, content, postId, pathname, parentUserId, type } =
+    validatedData.data
 
   try {
     await db.post.update({
@@ -101,6 +102,22 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
       data: {
         title,
         content,
+        notifications:
+          type === 'answer' &&
+          parentUserId !== user.id &&
+          pathname &&
+          parentUserId
+            ? {
+                create: [
+                  {
+                    notifiedUserId: parentUserId,
+                    generatedById: user.id,
+                    message: '13e',
+                    redirectTo: pathname,
+                  },
+                ],
+              }
+            : undefined,
       },
     })
 

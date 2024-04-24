@@ -7,7 +7,7 @@ import { fetchComments } from '@/actions/comment/fetch-comment'
 import { fetchCommunities } from '@/actions/community/fetch-community'
 import { fetchEditProfile, fetchProfile } from '@/actions/profile/fetch-profile'
 import { getCommunityBySlug } from '@/data/community'
-import { fetchNofiications } from '@/actions/notification/fetch-notification'
+import { fetchNotifications } from '@/actions/notification/fetch-notification'
 import { z } from 'zod'
 import {
   CreateCommentSchema,
@@ -23,7 +23,7 @@ import {
 // Display types
 export type PostDisplayProps = {
   post: NonNullable<Awaited<ReturnType<typeof fetchPostById>>>
-  myAnswer?: Awaited<ReturnType<typeof fetchAnswer>>
+  redirectAnswerId?: string
 }
 
 export type ProfileDisplayProps = {
@@ -48,9 +48,12 @@ export type CommunityCardProps = Awaited<
   ReturnType<typeof fetchCommunities>
 >['communities'][number]
 
-export type NotificationCardProps = NonNullable<
-  Awaited<ReturnType<typeof fetchNofiications>>
->[number]
+export type NotificationCardProps = {
+  notification: NonNullable<
+    Awaited<ReturnType<typeof fetchNotifications>>
+  >['notifications'][number]
+  mutate: (id: string) => void
+}
 
 // Tanstack query keys types
 export type FetchPostQueryKey = {
@@ -85,6 +88,7 @@ export type PostFormProps = {
   action: 'create' | 'update'
   setIsFormOpen?: (value: boolean) => void
   pathname?: string
+  parentUserId?: string
 }
 
 // zod schemas types

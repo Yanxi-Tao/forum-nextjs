@@ -2,11 +2,11 @@ import { CommunityUpdateForm } from '@/components/form/community-form'
 import { getCommunityBySlug } from '@/data/community'
 
 export default async function CommunityEditPage({
-  params: { slug },
+  params: { cslug },
 }: {
-  params: { slug: string }
+  params: { cslug: string }
 }) {
-  const community = await getCommunityBySlug(slug)
+  const community = await getCommunityBySlug(cslug)
   if (!community) return null
   return <CommunityUpdateForm community={community} />
 }

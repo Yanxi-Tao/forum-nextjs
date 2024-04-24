@@ -1,16 +1,35 @@
-import { fetchNofiications } from '@/actions/notification/fetch-notification'
-import { NotificationCard } from '@/components/card/notification-card'
+import { fetchNotifications } from '@/actions/notification/fetch-notification'
+import { NotificationDisplay } from '@/components/display/notification-display'
+import { currentUser } from '@/lib/auth'
+import { NOTIFICATION_FETCH_SPAN, NOTIFICATION_KEY } from '@/lib/constants'
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from '@tanstack/react-query'
 
 export default async function NotificationsPage() {
-  const notifications = await fetchNofiications()
-  if (!notifications) return null
+  const queryClient = new QueryClient()
+  const user = await currentUser()
+
+  if (!user) {
+    return <div>Not logged in</div>
+  }
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: [NOTIFICATION_KEY],
+    queryFn: ({ pageParam }) => fetchNotifications(pageParam),
+    initialPageParam: {
+      userId: user?.id,
+      offset: 0,
+      take: NOTIFICATION_FETCH_SPAN,
+    },
+    gcTime: Infinity,
+    staleTime: Infinity,
+  })
   return (
-    <div>
-      {notifications.map((notification) => {
-        return (
-          <NotificationCard key={notification.id} notification={notification} />
-        )
-      })}
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotificationDisplay />
+    </HydrationBoundary>
   )
 }

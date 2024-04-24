@@ -23,24 +23,24 @@ import {
 import { CommunityDisplay } from '@/components/display/community-display'
 
 export default async function CommunityPage({
-  params: { slug },
+  params: { cslug },
   searchParams,
 }: {
-  params: { slug: string }
+  params: { cslug: string }
   searchParams: { search: string | undefined }
 }) {
-  const community = await getCommunityBySlug(slug)
+  const community = await getCommunityBySlug(cslug)
   if (!community) return null
 
   const queryClient = new QueryClient()
   const search = searchParams.search
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: [EXPLORE_POSTS_KEY, { communitySlug: slug }],
+    queryKey: [EXPLORE_POSTS_KEY, { communitySlug: cslug }],
     queryFn: ({ pageParam }) => fetchPosts(pageParam),
     initialPageParam: {
       search,
-      communitySlug: slug,
+      communitySlug: cslug,
       offset: 0,
       take: POST_FETCH_SPAN,
     },
@@ -53,7 +53,7 @@ export default async function CommunityPage({
       {!search && <CommunityDisplay community={community} />}
       <CardContent>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <CommunityExploreDisplay communitySlug={slug} />
+          <CommunityExploreDisplay communitySlug={cslug} />
         </HydrationBoundary>
       </CardContent>
     </Card>

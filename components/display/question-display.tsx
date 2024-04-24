@@ -40,6 +40,7 @@ import {
   ANSWERS_FETCH_SPAN,
   DELETED_USER,
   MY_ANSWER_KEY,
+  REDIRECT_ANSWER_KEY,
 } from '@/lib/constants'
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from '@/components/card/post-card'
@@ -51,9 +52,10 @@ import { AvatarCard } from '@/components/card/avatar-card'
 import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote, useUpdateBookmark } from '@/hooks/post'
 import PulseLoader from 'react-spinners/PulseLoader'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { fetchAnswer } from '@/actions/post/fetch-post'
+import { fetchAnswer, fetchPostById } from '@/actions/post/fetch-post'
+import { useRouter } from 'next-nprogress-bar'
 
 const QuestionForm = dynamic(
   () => import('@/components/form/post-form').then((mod) => mod.QuestionForm),
@@ -90,9 +92,11 @@ export default function QuestionDisplay({
     upVotes,
     downVotes,
   },
-  mode,
-}: PostDisplayProps & { mode: 'display' | 'edit' }) {
+  redirectAnswerId,
+}: PostDisplayProps) {
   const pathname = usePathname()
+  const isEdit = useSearchParams().get('edit') === 'true' ? true : false
+  const router = useRouter()
   const user = useCurrentUser()
   const updateBookmark = useUpdateBookmark()
   const updateVote = useUpdateVote('post')
@@ -108,6 +112,14 @@ export default function QuestionDisplay({
     parentId: id,
     offset: 0,
     take: ANSWERS_FETCH_SPAN,
+  })
+
+  const { data: redirectAnswer } = useQuery({
+    queryKey: [REDIRECT_ANSWER_KEY],
+    queryFn: () => fetchPostById(redirectAnswerId),
+    gcTime: Infinity,
+    staleTime: Infinity,
+    enabled: !!redirectAnswerId,
   })
 
   const { data: myAnswer } = useQuery({
@@ -141,13 +153,13 @@ export default function QuestionDisplay({
     }
   }, [inView, fetchNextPage, hasNextPage, isFetching])
 
-  if (!user || !user.name || !user.email || !user.id) {
+  if (!user) {
     return null
   }
 
   return (
     <div>
-      {mode === 'display' && (
+      {!isEdit ? (
         <Card className="border-0 shadow-none">
           <CardHeader className="max-w-[820px] break-words">
             <div className="flex flex-row justify-between items-center">
@@ -211,14 +223,11 @@ export default function QuestionDisplay({
                     </DropdownMenuItem>
                     {user?.id === author?.id && (
                       <>
-                        <DropdownMenuItem>
-                          <Link
-                            href={`${pathname}/edit`}
-                            className="flex items-center"
-                          >
-                            <FiEdit size={16} className="mr-2" />
-                            Edit
-                          </Link>
+                        <DropdownMenuItem
+                          onSelect={() => router.push(`${pathname}?edit=true`)}
+                        >
+                          <FiEdit size={16} className="mr-2" />
+                          Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onSelect={() => deletePost(id, 'question')}
@@ -299,15 +308,14 @@ export default function QuestionDisplay({
             )}
           </CardFooter>
         </Card>
-      )}
-      {mode === 'edit' && (
+      ) : (
         <QuestionForm
           communitySlug={community?.slug}
           postId={id}
           initialContent={content}
           initialTitle={title}
           action="update"
-          pathname={pathname.substring(0, pathname.lastIndexOf('/'))}
+          pathname={pathname}
         />
       )}
       {isFormOpen && (
@@ -320,19 +328,16 @@ export default function QuestionDisplay({
           setIsFormOpen={setIsFormOpen}
           action={myAnswer ? 'update' : 'create'}
           pathname={pathname}
+          parentUserId={author?.id}
         />
       )}
       <Separator className="my-6" />
-      {myAnswer && !isFormOpen && (
-        <div className="space-y-3">
-          <span className="mx-6 p-2 rounded-md bg-muted">My Answer</span>
-          <PostCard {...myAnswer} />
-        </div>
-      )}
+      {redirectAnswer && !isFormOpen && <PostCard {...redirectAnswer} />}
+      {myAnswer && !isFormOpen && <PostCard {...myAnswer} />}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
-            if (post.id === myAnswer?.id) {
+            if (post.id === myAnswer?.id || post.id === redirectAnswerId) {
               return null
             }
             if (

@@ -122,7 +122,7 @@ export const getSearchedQuestionsOrArticles = async ({
   }
 }
 
-export const getPostById = async (id: string) => {
+export const getPostById = async (id: string | undefined) => {
   try {
     const post = await db.post.findUnique({
       where: {

@@ -47,7 +47,7 @@ import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateBookmark, useUpdateVote } from '@/hooks/post'
 import { CommentDisplay } from '@/components/display/comment-display'
 import PulseLoader from 'react-spinners/PulseLoader'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { DELETED_USER } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
 
@@ -75,9 +75,9 @@ export default function ArticleDisplay({
     downVotes,
     _count,
   },
-  mode,
-}: PostDisplayProps & { mode: 'display' | 'edit' }) {
+}: PostDisplayProps) {
   const router = useRouter()
+  const isEdit = useSearchParams().get('edit') === 'true' ? true : false
   const pathname = usePathname()
   const user = useCurrentUser()
   const updateVote = useUpdateVote('post')
@@ -100,13 +100,13 @@ export default function ArticleDisplay({
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
 
-  if (!user || !user.name || !user.email || !user.id) {
+  if (!user) {
     return null
   }
 
   return (
     <div>
-      {mode === 'display' && (
+      {!isEdit ? (
         <Card className="border-0 shadow-none">
           <CardHeader className="max-w-[820px] break-words">
             <div className="flex flex-row justify-between items-center">
@@ -258,8 +258,7 @@ export default function ArticleDisplay({
             </CollapsibleContent>
           </Collapsible>
         </Card>
-      )}
-      {mode === 'edit' && (
+      ) : (
         <ArticleForm
           communitySlug={community?.slug}
           postId={id}

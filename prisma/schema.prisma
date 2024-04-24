@@ -178,11 +178,11 @@ model Community {
 }
 
 model Notification {
-  id        String           @id @default(cuid())
-  message   String
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  type      NotificationType
+  id         String   @id @default(cuid())
+  message    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  redirectTo String
 
   notifiedUser   User   @relation("NotificationToUser", fields: [notifiedUserId], references: [id], onDelete: Cascade)
   notifiedUserId String

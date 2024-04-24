@@ -156,7 +156,7 @@ export const PostCard = ({
                 <>
                   {type === 'question' || type === 'article' ? (
                     <DropdownMenuItem>
-                      <Link href={`${redirectTo}/edit`} className="flex">
+                      <Link href={`${redirectTo}/?edit=true`} className="flex">
                         <FiEdit size={16} className="mr-2" />
                         Edit
                       </Link>

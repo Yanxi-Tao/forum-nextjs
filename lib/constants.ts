@@ -43,6 +43,7 @@ export const createFeedTypes = [
 export const ANSWERS_FETCH_SPAN = 5
 export const POST_FETCH_SPAN = 5
 export const COMMUNITY_FETCH_SPAN = 5
+export const NOTIFICATION_FETCH_SPAN = 5
 
 // tanstack queryKeys
 export const QUESTION_ANSWERS_KEY = 'question-answers'
@@ -51,7 +52,9 @@ export const COMMENT_KEY = 'comments'
 export const COMMUNITY_KEY = 'communities-browse'
 export const COMMUNITY_DISPLAY_KEY = 'community-display'
 export const MY_ANSWER_KEY = 'my-answer'
-export const CURRENT_POST_KEY = 'current-post'
+export const REDIRECT_ANSWER_KEY = 'redirect-answer'
+export const NOTIFICATION_COUNT_KEY = 'notification-count'
+export const NOTIFICATION_KEY = 'notifications'
 
 export const DELETED_CONTENT = '[deleted-content]'
 export const DELETED_USER = '[deleted-user]'

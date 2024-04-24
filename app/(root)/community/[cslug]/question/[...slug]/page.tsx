@@ -6,22 +6,26 @@ import {
 
 import QuestionDisplay from '@/components/display/question-display'
 import { currentUser } from '@/lib/auth'
-import { ANSWERS_FETCH_SPAN, QUESTION_ANSWERS_KEY } from '@/lib/constants'
+import {
+  ANSWERS_FETCH_SPAN,
+  MY_ANSWER_KEY,
+  QUESTION_ANSWERS_KEY,
+  REDIRECT_ANSWER_KEY,
+} from '@/lib/constants'
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query'
-import { redirect } from 'next/navigation'
 
 export default async function QuestionCommunityDisplayPage({
   params,
 }: {
-  params: { slug: string; id: string[] }
+  params: { slug: string[] }
 }) {
-  const post = await fetchPostById(params.id[0])
+  const [questionId, _, answerId] = params.slug
+  const post = await fetchPostById(questionId)
   const user = await currentUser()
-
   if (!post || !user) return null
 
   const queryClient = new QueryClient()
@@ -29,18 +33,28 @@ export default async function QuestionCommunityDisplayPage({
     queryKey: [QUESTION_ANSWERS_KEY],
     queryFn: ({ pageParam }) => fetchAnswers(pageParam),
     initialPageParam: {
-      parentId: params.id[0],
+      parentId: questionId,
       offset: 0,
       take: ANSWERS_FETCH_SPAN,
     },
   })
-  const myAnswer = await fetchAnswer(user.id, params.id[0])
-  const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
-  if (mode === 'edit' && user?.id !== post.author?.id)
-    return redirect(`/community/${params.slug}/question/${params.id[0]}`)
+  await queryClient.prefetchQuery({
+    queryKey: [MY_ANSWER_KEY],
+    queryFn: () => fetchAnswer(user.id, questionId),
+    gcTime: Infinity,
+    staleTime: Infinity,
+  })
+  if (answerId) {
+    await queryClient.prefetchQuery({
+      queryKey: [REDIRECT_ANSWER_KEY],
+      queryFn: () => fetchPostById(answerId),
+      gcTime: Infinity,
+      staleTime: Infinity,
+    })
+  }
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <QuestionDisplay post={post} mode={mode} myAnswer={myAnswer} />
+      <QuestionDisplay post={post} redirectAnswerId={answerId} />
     </HydrationBoundary>
   )
 }

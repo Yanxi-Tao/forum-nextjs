@@ -27,32 +27,18 @@ export const updateCommunity = async (data: UpdateCommunitySchemaTypes) => {
     return { type: 'error', message: 'Invalid data' }
   }
 
-  const { id, name, description, isPublic, slug } = validatedData.data
-
-  let newSlug = undefined
-  if (name !== (await getCommunityById(id))?.name) {
-    newSlug = slugify(name)
-    if (newSlug === slug) {
-      return { type: 'error', message: 'Invalid name' } // in case when the sligified name is the same
-    }
-    const existingCommunity = await getCommunityBySlug(newSlug)
-    if (newSlug === 'create' || existingCommunity) {
-      return { type: 'error', message: 'Community already exists' }
-    }
-  }
+  const { id, description, isPublic } = validatedData.data
 
   try {
     await db.community.update({
       where: { id },
       data: {
-        name,
-        slug: newSlug,
         description,
         isPublic,
       },
     })
     revalidatePath('/communities')
-    return { type: 'success', message: newSlug ?? slug }
+    return { type: 'success', message: 'Community created successfully' }
   } catch {
     return { type: 'error', message: 'Error creating community' }
   }

@@ -41,7 +41,7 @@ export const fetchPosts = async ({
   }
 }
 
-export const fetchPostById = async (id: string) => {
+export const fetchPostById = async (id: string | undefined) => {
   unstable_noStore()
   return await getPostById(id)
 }

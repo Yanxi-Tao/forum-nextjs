@@ -4,11 +4,10 @@ import ArticleDisplay from '@/components/display/article-display'
 export default async function ArticleDisplayPage({
   params,
 }: {
-  params: { id: string[] }
+  params: { slug: string[] }
 }) {
-  const post = await fetchPostById(params.id[0])
+  const post = await fetchPostById(params.slug[0])
   if (!post) return null
-  const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
 
-  return <ArticleDisplay post={post} mode={mode} />
+  return <ArticleDisplay post={post} />
 }

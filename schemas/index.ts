@@ -65,11 +65,15 @@ export const CreatePostSchema = PostSchema.extend({
   type: z.nativeEnum(PostType),
   parentId: z.optional(z.string().cuid()),
   communitySlug: z.optional(z.string()),
+  parentUserId: z.optional(z.string()),
+  pathname: z.optional(z.string()),
 })
 
 export const UpdatePostSchema = PostSchema.extend({
+  type: z.nativeEnum(PostType),
   postId: z.string().cuid(),
   pathname: z.optional(z.string()),
+  parentUserId: z.optional(z.string()),
 })
 
 export const CreateCommentSchema = z.object({
@@ -88,8 +92,6 @@ export const CreateCommunitySchema = z.object({
 
 export const UpdateCommunitySchema = z.object({
   id: z.string().cuid(),
-  name: z.string().min(1).max(10),
-  slug: z.string(),
   description: z.string().min(1).max(255),
   isPublic: z.boolean(),
 })

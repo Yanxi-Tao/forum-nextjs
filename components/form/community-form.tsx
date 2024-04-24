@@ -141,11 +141,7 @@ export const CommunityCreateForm = () => {
   )
 }
 
-export const CommunityUpdateForm = ({
-  community,
-}: {
-  community: CommunityDisplayProps
-}) => {
+export const CommunityUpdateForm = ({ community }: CommunityDisplayProps) => {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
@@ -154,8 +150,6 @@ export const CommunityUpdateForm = ({
     resolver: zodResolver(UpdateCommunitySchema),
     defaultValues: {
       id: community.id,
-      name: community.name,
-      slug: community.slug,
       description: community.description,
       isPublic: true,
     },
@@ -167,7 +161,7 @@ export const CommunityUpdateForm = ({
     startTransition(() => {
       updateCommunity(data).then((data) => {
         if (data.type === 'success') {
-          router.push(`/community/${data.message}`)
+          router.push(`/community/${community.slug}`)
           data.message = 'Community updated successfully!'
         }
         setAlert(data)
@@ -186,25 +180,6 @@ export const CommunityUpdateForm = ({
             className="space-y-5"
             autoComplete="off"
           >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Community Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormDescription
-                    className={form.formState.errors.name && 'text-destructive'}
-                  >
-                    {(form.getValues('name')?.length || 0) < 1
-                      ? 'Required'
-                      : `${form.getValues('name')?.length || 0}/10`}
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="description"

@@ -8,33 +8,32 @@ import QuestionDisplay from '@/components/display/question-display'
 import { currentUser } from '@/lib/auth'
 import {
   ANSWERS_FETCH_SPAN,
-  CURRENT_POST_KEY,
   MY_ANSWER_KEY,
   QUESTION_ANSWERS_KEY,
+  REDIRECT_ANSWER_KEY,
 } from '@/lib/constants'
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query'
-import { redirect } from 'next/navigation'
 
 export default async function QuestionDisplayPage({
   params,
 }: {
-  params: { id: string[] }
+  params: { slug: string[] }
 }) {
-  const post = await fetchPostById(params.id[0])
+  const [questionId, _, answerId] = params.slug
+  const post = await fetchPostById(questionId)
   const user = await currentUser()
   if (!post || !user) return null
-  const myAnswer = await fetchAnswer(user.id, params.id[0])
 
   const queryClient = new QueryClient()
   await queryClient.prefetchInfiniteQuery({
     queryKey: [QUESTION_ANSWERS_KEY],
     queryFn: ({ pageParam }) => fetchAnswers(pageParam),
     initialPageParam: {
-      parentId: params.id[0],
+      parentId: questionId,
       offset: 0,
       take: ANSWERS_FETCH_SPAN,
     },
@@ -43,18 +42,22 @@ export default async function QuestionDisplayPage({
   })
   await queryClient.prefetchQuery({
     queryKey: [MY_ANSWER_KEY],
-    queryFn: () => fetchAnswer(user.id, params.id[0]),
+    queryFn: () => fetchAnswer(user.id, questionId),
     gcTime: Infinity,
     staleTime: Infinity,
   })
-
-  const mode = params.id?.[1] === 'edit' ? 'edit' : 'display'
-  if (mode === 'edit' && user.id !== post.author?.id)
-    return redirect(`/question/${params.id[0]}`)
+  if (answerId) {
+    await queryClient.prefetchQuery({
+      queryKey: [REDIRECT_ANSWER_KEY],
+      queryFn: () => fetchPostById(answerId),
+      gcTime: Infinity,
+      staleTime: Infinity,
+    })
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <QuestionDisplay post={post} myAnswer={myAnswer} mode={mode} />
+      <QuestionDisplay post={post} redirectAnswerId={answerId} />
     </HydrationBoundary>
   )
 }
