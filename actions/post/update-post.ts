@@ -4,7 +4,7 @@ import { db } from '@/db/client'
 import { currentUser } from '@/lib/auth'
 import { UpdatePostSchemaTypes } from '@/lib/types'
 import { UpdatePostSchema } from '@/schemas'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 export const updatePostVoteById = async (
   postId: string,
@@ -107,14 +107,24 @@ export const updatePost = async (data: UpdatePostSchemaTypes) => {
           pathname &&
           parentUserId
             ? {
-                create: [
-                  {
+                upsert: {
+                  where: {
+                    notifiedUserId_postId_generatedById: {
+                      postId,
+                      generatedById: user.id,
+                      notifiedUserId: parentUserId,
+                    },
+                  },
+                  create: {
                     notifiedUserId: parentUserId,
                     generatedById: user.id,
-                    message: 'answered your question',
+                    message: 'responded to your question',
                     redirectTo: pathname,
                   },
-                ],
+                  update: {
+                    message: 'responded to your question',
+                  },
+                },
               }
             : undefined,
       },

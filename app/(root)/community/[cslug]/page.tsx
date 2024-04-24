@@ -44,7 +44,6 @@ export default async function CommunityPage({
       offset: 0,
       take: POST_FETCH_SPAN,
     },
-    gcTime: Infinity,
     staleTime: Infinity,
   })
 

@@ -7,8 +7,6 @@ export default async function ProfilePage({
   params: { slug: string }
 }) {
   const profile = await fetchProfile(slug)
-  if (!profile) {
-    return <div>Profile not found</div>
-  }
+  if (!profile) return <div>Profile not found</div>
   return <ProfileDisplay profile={profile} />
 }

@@ -24,7 +24,6 @@ export default async function ExplorePage({
       offset: 0,
       take: POST_FETCH_SPAN,
     },
-    gcTime: Infinity,
     staleTime: Infinity,
   })
   return (

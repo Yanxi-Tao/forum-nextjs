@@ -62,11 +62,13 @@ export const CommunityCardList = () => {
               ) {
                 return (
                   <div key={community.id} ref={ref}>
-                    <CommunityCard key={community.id} {...community} />
+                    <CommunityCard key={community.id} community={community} />
                   </div>
                 )
               } else {
-                return <CommunityCard key={community.id} {...community} />
+                return (
+                  <CommunityCard key={community.id} community={community} />
+                )
               }
             })
           )}

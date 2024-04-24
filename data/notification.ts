@@ -75,7 +75,7 @@ export const getNotifications = async ({
           },
         },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { updatedAt: 'desc' },
       skip: offset,
       take,
     })

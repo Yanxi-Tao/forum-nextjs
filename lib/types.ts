@@ -35,18 +35,18 @@ export type CommunityDisplayProps = {
 }
 
 // Cards types
-export type PostCardProps = Awaited<
-  ReturnType<typeof fetchPosts>
->['posts'][number]
+export type PostCardProps = {
+  post: Awaited<ReturnType<typeof fetchPosts>>['posts'][number]
+}
 
-export type CommentCardProps = Omit<
-  Awaited<ReturnType<typeof fetchComments>>[number],
-  'children'
->
+export type CommentCardProps = {
+  comment: Omit<Awaited<ReturnType<typeof fetchComments>>[number], 'children'>
+  mutate: (data: CreateCommentSchemaTypes) => void
+}
 
-export type CommunityCardProps = Awaited<
-  ReturnType<typeof fetchCommunities>
->['communities'][number]
+export type CommunityCardProps = {
+  community: Awaited<ReturnType<typeof fetchCommunities>>['communities'][number]
+}
 
 export type NotificationCardProps = {
   notification: NonNullable<

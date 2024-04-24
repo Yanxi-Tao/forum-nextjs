@@ -12,10 +12,7 @@ import Link from 'next/link'
 import { AvatarCard } from '@/components/card/avatar-card'
 
 export const CommunityCard = ({
-  name,
-  description,
-  image,
-  slug,
+  community: { name, description, image, slug },
 }: CommunityCardProps) => {
   return (
     <Card className="flex justify-between shadow-none border-0 p-2 hover:bg-muted">

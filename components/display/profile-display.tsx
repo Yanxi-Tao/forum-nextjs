@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
@@ -14,8 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { HiDotsHorizontal } from 'react-icons/hi'
@@ -89,30 +86,34 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
           </TabsList>
           <TabsContent value="activities" className="w-full">
             {profile.upVotedPosts.map((post) => (
-              <PostCard key={post.id} {...post} />
+              <PostCard key={post.id} post={post} />
             ))}
           </TabsContent>
           <TabsContent value="questions" className="w-full">
             {profile.posts.map(
               (post) =>
-                post.type === 'question' && <PostCard key={post.id} {...post} />
+                post.type === 'question' && (
+                  <PostCard key={post.id} post={post} />
+                )
             )}
           </TabsContent>
           <TabsContent value="answers" className="w-full">
             {profile.posts.map(
               (post) =>
-                post.type === 'answer' && <PostCard key={post.id} {...post} />
+                post.type === 'answer' && <PostCard key={post.id} post={post} />
             )}
           </TabsContent>
           <TabsContent value="articles" className="w-full">
             {profile.posts.map(
               (post) =>
-                post.type === 'article' && <PostCard key={post.id} {...post} />
+                post.type === 'article' && (
+                  <PostCard key={post.id} post={post} />
+                )
             )}
           </TabsContent>
           <TabsContent value="bookmarks" className="w-full">
             {profile.bookmarkedPosts.map((post) => (
-              <PostCard key={post.id} {...post} />
+              <PostCard key={post.id} post={post} />
             ))}
           </TabsContent>
         </Tabs>

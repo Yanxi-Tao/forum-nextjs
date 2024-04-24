@@ -9,7 +9,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { CommentCardProps } from '@/lib/types'
 
 export type AddedComment = {
-  newComment: CommentCardProps
+  newComment: CommentCardProps['comment']
   replyId: string
 }
 

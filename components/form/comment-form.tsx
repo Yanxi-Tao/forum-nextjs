@@ -30,7 +30,6 @@ export const CommentForm = ({
   setAddedComments: Dispatch<SetStateAction<[] | AddedComment[]>>
 }) => {
   const [isPending, setIsPending] = useState(false)
-  // schema
   const form = useForm<CreateCommentSchemaTypes>({
     resolver: zodResolver(CreateCommentSchema),
     defaultValues: {
@@ -43,7 +42,6 @@ export const CommentForm = ({
     mode: 'onChange',
   })
 
-  // form submit handler
   const onSubmit = (data: CreateCommentSchemaTypes) => {
     setIsPending(true)
     mutate(data, {

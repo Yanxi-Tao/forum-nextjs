@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -14,8 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
@@ -35,7 +32,7 @@ import { HiFlag } from 'react-icons/hi2'
 import { FiEdit } from 'react-icons/fi'
 import { MdDelete } from 'react-icons/md'
 import { BsChatSquare, BsBookmark, BsBookmarkFill } from 'react-icons/bs'
-import { formatNumber } from '@/lib/utils'
+import { calcVoteStatus, formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
@@ -83,17 +80,11 @@ export default function ArticleDisplay({
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()
   const userVoteStatus = useMemo(
-    () =>
-      upVotes.find((vote) => vote.id === user?.id)
-        ? 1
-        : downVotes.find((vote) => vote.id === user?.id)
-        ? -1
-        : 0,
+    () => calcVoteStatus({ upVotes, downVotes, userId: user?.id }),
     [upVotes, downVotes, user]
   )
   const userBookmarkStatus = useMemo(
-    () =>
-      bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false,
+    () => bookmarks.some((bookmark) => bookmark.id === user?.id),
     [bookmarks, user]
   )
   const baseCount = upVotes.length - downVotes.length - userVoteStatus

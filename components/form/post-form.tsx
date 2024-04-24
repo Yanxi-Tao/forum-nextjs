@@ -12,7 +12,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormAlert } from '@/components/form/form-alert'
@@ -146,6 +145,7 @@ export const QuestionForm = ({
           {action === 'update' && (
             <Button
               type="button"
+              variant="outline"
               onClick={() => router.push(pathname ?? '/')}
               className="w-full"
             >
@@ -279,6 +279,7 @@ export const ArticleForm = ({
           {action === 'update' && (
             <Button
               type="button"
+              variant="outline"
               onClick={() => router.push(pathname ?? '/')}
               className="w-full"
             >
@@ -397,6 +398,7 @@ export const AnswerForm = ({
         <div className="flex gap-x-3">
           <Button
             type="button"
+            variant="outline"
             onClick={() => setIsFormOpen?.(false)}
             className="w-full"
           >

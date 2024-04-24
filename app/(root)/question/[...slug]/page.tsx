@@ -37,20 +37,17 @@ export default async function QuestionDisplayPage({
       offset: 0,
       take: ANSWERS_FETCH_SPAN,
     },
-    gcTime: Infinity,
     staleTime: Infinity,
   })
   await queryClient.prefetchQuery({
     queryKey: [MY_ANSWER_KEY],
     queryFn: () => fetchAnswer(user.id, questionId),
-    gcTime: Infinity,
     staleTime: Infinity,
   })
   if (answerId) {
     await queryClient.prefetchQuery({
       queryKey: [REDIRECT_ANSWER_KEY],
       queryFn: () => fetchPostById(answerId),
-      gcTime: Infinity,
       staleTime: Infinity,
     })
   }

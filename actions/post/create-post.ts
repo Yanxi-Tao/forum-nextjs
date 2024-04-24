@@ -49,7 +49,7 @@ export const createPost = async (data: CreatePostSchemaTypes) => {
                   {
                     notifiedUserId: parentUserId,
                     generatedById: user.id,
-                    message: 'answered your question',
+                    message: 'responded to your question',
                     redirectTo: pathname,
                   },
                 ],

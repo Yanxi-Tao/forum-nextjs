@@ -81,7 +81,7 @@ export const SettingsForm = () => {
   }
 
   if (!user) {
-    return <p>Settings Unavailable</p>
+    return <div>Settings Unavailable</div>
   }
   return (
     <Card className="border-0 shadow-none h-full">
@@ -190,6 +190,7 @@ export const SettingsForm = () => {
                       <Button
                         type="reset"
                         className="w-full"
+                        variant="outline"
                         disabled={isPending}
                         onClick={() => form.reset()}
                       >

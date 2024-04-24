@@ -52,17 +52,19 @@ import { PostType } from '@prisma/client'
 import { ExtendedUser } from '@/auth'
 
 export const PostCard = ({
-  id,
-  title,
-  content,
-  type,
-  author,
-  community,
-  updatedAt,
-  upVotes,
-  downVotes,
-  bookmarks,
-  _count,
+  post: {
+    id,
+    title,
+    content,
+    type,
+    author,
+    community,
+    updatedAt,
+    upVotes,
+    downVotes,
+    bookmarks,
+    _count,
+  },
 }: PostCardProps) => {
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()

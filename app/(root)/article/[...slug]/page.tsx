@@ -7,7 +7,7 @@ export default async function ArticleDisplayPage({
   params: { slug: string[] }
 }) {
   const post = await fetchPostById(params.slug[0])
-  if (!post) return null
+  if (!post) return <div>Not logged in</div>
 
   return <ArticleDisplay post={post} />
 }

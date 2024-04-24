@@ -43,11 +43,11 @@ export const ExploreDisplay = ({
             ) {
               return (
                 <div key={post.id} ref={ref}>
-                  <PostCard {...post} />
+                  <PostCard post={post} />
                 </div>
               )
             } else {
-              return <PostCard key={post.id} {...post} />
+              return <PostCard key={post.id} post={post} />
             }
           })
         )}

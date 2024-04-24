@@ -1,29 +1,30 @@
 'use client'
 
 import { updateCommentVoteById } from '@/actions/comment/update-comment'
-import { createPost } from '@/actions/post/create-post'
 import { deletePost } from '@/actions/post/delete-post'
-import { fetchAnswers, fetchPosts } from '@/actions/post/fetch-post'
 import {
-  updatePost,
+  fetchAnswer,
+  fetchAnswers,
+  fetchPostById,
+  fetchPosts,
+} from '@/actions/post/fetch-post'
+import {
   updatePostBookmarkById,
   updatePostVoteById,
 } from '@/actions/post/update-post'
 import {
+  ANSWERS_FETCH_SPAN,
   EXPLORE_POSTS_KEY,
   MY_ANSWER_KEY,
   POST_FETCH_SPAN,
   QUESTION_ANSWERS_KEY,
+  REDIRECT_ANSWER_KEY,
 } from '@/lib/constants'
-import {
-  CreatePostSchemaTypes,
-  FetchAnswerQueryKey,
-  UpdatePostSchemaTypes,
-} from '@/lib/types'
 import { PostType } from '@prisma/client'
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
 import { debounce } from 'radash'
@@ -76,7 +77,6 @@ export const useInfinitePosts = (
         take: POST_FETCH_SPAN,
       }
     },
-    gcTime: Infinity,
     staleTime: Infinity,
   })
 }
@@ -90,40 +90,39 @@ export const useInfinitePosts = (
  *
  * used for fetching answers to a question with infinite scroll
  */
-export const useInfiniteAnswers = ({
-  parentId,
-  offset,
-  take,
-}: FetchAnswerQueryKey) => {
+export const useInfiniteAnswers = (parentId: string) => {
   return useInfiniteQuery({
     queryKey: [QUESTION_ANSWERS_KEY],
     queryFn: ({ pageParam }) => fetchAnswers(pageParam),
-    initialPageParam: { parentId, offset, take },
+    initialPageParam: { parentId, offset: 0, take: ANSWERS_FETCH_SPAN },
     getNextPageParam: (lastPage) => {
       if (!lastPage.nextOffset) return undefined
       return {
         parentId,
         offset: lastPage.nextOffset,
-        take,
+        take: ANSWERS_FETCH_SPAN,
       }
     },
-    gcTime: Infinity,
     staleTime: Infinity,
   })
 }
 
-/**
- *
- * @param queryClient
- * @returns UseMutationResult
- *
- * used for creating new answer to a question with optimistic update
- * and invalidating the cache
- */
+export const useRedirectAnswer = (answerId: string | undefined) => {
+  return useQuery({
+    queryKey: [REDIRECT_ANSWER_KEY],
+    queryFn: () => fetchPostById(answerId),
+    staleTime: Infinity,
+    enabled: !!answerId,
+  })
+}
 
-// export const useMutateAnswer = () => {
-//   return useMutation()
-// }
+export const useMyAnswer = (userId: string | undefined, postId: string) => {
+  return useQuery({
+    queryKey: [MY_ANSWER_KEY],
+    queryFn: () => fetchAnswer(userId, postId),
+    staleTime: Infinity,
+  })
+}
 
 export const useUpdateBookmark = () => {
   return debounce({ delay: 1000 }, updatePostBookmarkById)

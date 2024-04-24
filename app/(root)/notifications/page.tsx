@@ -12,9 +12,7 @@ export default async function NotificationsPage() {
   const queryClient = new QueryClient()
   const user = await currentUser()
 
-  if (!user) {
-    return <div>Not logged in</div>
-  }
+  if (!user) return <div>Not logged in</div>
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: [NOTIFICATION_KEY],
@@ -24,7 +22,6 @@ export default async function NotificationsPage() {
       offset: 0,
       take: NOTIFICATION_FETCH_SPAN,
     },
-    gcTime: Infinity,
     staleTime: Infinity,
   })
   return (

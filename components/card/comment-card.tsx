@@ -35,13 +35,7 @@ import { useUpdateVote } from '@/hooks/post'
 import { useDeleteComment } from '@/hooks/comment'
 import { AddedComment } from '../display/comment-display'
 
-export const CommentCard = ({
-  comment,
-  mutate,
-}: {
-  comment: CommentCardProps
-  mutate: (data: CreateCommentSchemaTypes) => void
-}) => {
+export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
   const {
     id,
     postId,

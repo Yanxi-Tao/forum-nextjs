@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { UserAccountCard } from '@/components/card/user-account-card'
 import { Badge } from '@/components/ui/badge'
 import { useNotificationCount } from '@/hooks/notification'
+import { formatNumber } from '@/lib/utils'
 
 export const LeftSidebar = () => {
   const pathname = usePathname()
@@ -26,7 +27,7 @@ export const LeftSidebar = () => {
             <Button
               key={index}
               variant="ghost"
-              className={`flex w-[220px] justify-start p-6 ${
+              className={`flex min-w-[200px] max-w-[210px] justify-start p-6 ${
                 isActive &&
                 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground'
               }`}
@@ -34,12 +35,14 @@ export const LeftSidebar = () => {
             >
               <Link
                 href={nav.route}
-                className="relative flex items-center justify-start gap-x-4"
+                className="relative flex items-center justify-start gap-x-2"
               >
                 {<nav.icon size={24} />}
                 <p>{nav.label}</p>
                 {nav.route === '/notifications' && isSuccess && data > 0 && (
-                  <Badge variant="destructive">{data}</Badge>
+                  <Badge className="px-2" variant="destructive">
+                    {formatNumber(data)}
+                  </Badge>
                 )}
               </Link>
             </Button>

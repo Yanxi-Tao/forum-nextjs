@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -14,8 +13,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
@@ -30,22 +27,21 @@ import { HiFlag } from 'react-icons/hi2'
 import { FiEdit } from 'react-icons/fi'
 import { MdDelete } from 'react-icons/md'
 import { BsChatSquare, BsBookmark, BsBookmarkFill } from 'react-icons/bs'
-import { formatNumber } from '@/lib/utils'
+import { calcVoteStatus, formatNumber } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { PostDisplayProps } from '@/lib/types'
-import {
-  ANSWERS_FETCH_SPAN,
-  DELETED_USER,
-  MY_ANSWER_KEY,
-  REDIRECT_ANSWER_KEY,
-} from '@/lib/constants'
+import { DELETED_USER } from '@/lib/constants'
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from '@/components/card/post-card'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { useInfiniteAnswers } from '@/hooks/post'
+import {
+  useInfiniteAnswers,
+  useMyAnswer,
+  useRedirectAnswer,
+} from '@/hooks/post'
 import { BeatLoader } from 'react-spinners'
 import { Separator } from '@/components/ui/separator'
 import { AvatarCard } from '@/components/card/avatar-card'
@@ -53,8 +49,6 @@ import { deletePost } from '@/actions/post/delete-post'
 import { useUpdateVote, useUpdateBookmark } from '@/hooks/post'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAnswer, fetchPostById } from '@/actions/post/fetch-post'
 import { useRouter } from 'next-nprogress-bar'
 
 const QuestionForm = dynamic(
@@ -108,39 +102,16 @@ export default function QuestionDisplay({
     fetchStatus,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteAnswers({
-    parentId: id,
-    offset: 0,
-    take: ANSWERS_FETCH_SPAN,
-  })
-
-  const { data: redirectAnswer } = useQuery({
-    queryKey: [REDIRECT_ANSWER_KEY],
-    queryFn: () => fetchPostById(redirectAnswerId),
-    gcTime: Infinity,
-    staleTime: Infinity,
-    enabled: !!redirectAnswerId,
-  })
-
-  const { data: myAnswer } = useQuery({
-    queryKey: [MY_ANSWER_KEY],
-    queryFn: () => fetchAnswer(user?.id, id),
-    gcTime: Infinity,
-    staleTime: Infinity,
-  })
-  const userVoteStatus = useMemo(
-    () =>
-      upVotes.find((vote) => vote.id === user?.id)
-        ? 1
-        : downVotes.find((vote) => vote.id === user?.id)
-        ? -1
-        : 0,
-    [upVotes, downVotes, user]
-  )
+  } = useInfiniteAnswers(id)
+  const { data: redirectAnswer } = useRedirectAnswer(redirectAnswerId)
+  const { data: myAnswer } = useMyAnswer(user?.id, id)
   const userBookmarkStatus = useMemo(
-    () =>
-      bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false,
+    () => bookmarks.some((bookmark) => bookmark.id === user?.id),
     [bookmarks, user]
+  )
+  const userVoteStatus = useMemo(
+    () => calcVoteStatus({ upVotes, downVotes, userId: user?.id }),
+    [upVotes, downVotes, user]
   )
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
@@ -151,11 +122,13 @@ export default function QuestionDisplay({
     if (!isFetching && inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, fetchNextPage, hasNextPage, isFetching])
+  }, [inView, fetchNextPage, isFetching, hasNextPage])
 
   if (!user) {
-    return null
+    return <div></div>
   }
+
+  console.log(fetchStatus !== 'fetching')
 
   return (
     <div>
@@ -332,8 +305,8 @@ export default function QuestionDisplay({
         />
       )}
       <Separator className="my-6" />
-      {redirectAnswer && !isFormOpen && <PostCard {...redirectAnswer} />}
-      {myAnswer && !isFormOpen && <PostCard {...myAnswer} />}
+      {redirectAnswer && !isFormOpen && <PostCard post={redirectAnswer} />}
+      {myAnswer && !isFormOpen && <PostCard post={myAnswer} />}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
@@ -348,11 +321,11 @@ export default function QuestionDisplay({
             ) {
               return (
                 <div key={post.id} ref={ref}>
-                  <PostCard {...post} />
+                  <PostCard post={post} />
                 </div>
               )
             } else {
-              return <PostCard key={post.id} {...post} />
+              return <PostCard key={post.id} post={post} />
             }
           })
         )}
