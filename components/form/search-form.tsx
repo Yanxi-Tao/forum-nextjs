@@ -1,16 +1,16 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { SearchIcon } from 'lucide-react'
-import { useSearchParams, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { IoCloseCircleOutline } from 'react-icons/io5'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter } from 'next-nprogress-bar'
 
 export const Search = () => {
-  const searchParams = useSearchParams()
+  const router = useRouter()
   const pathname = usePathname()
-  const search = searchParams.get('search') || ''
   const updatedCommunitySlug = useMemo(
     () =>
       pathname.split('/')[1] === 'community'
@@ -23,11 +23,20 @@ export const Search = () => {
     setCommunitySlug(updatedCommunitySlug)
   }, [updatedCommunitySlug])
   const actionRedirect = communitySlug ? `/community/${communitySlug}` : '/'
+  const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <form
       className="flex items-center rounded-full border my-1 bg-background"
-      action={actionRedirect}
+      // action={actionRedirect}
+      onSubmit={(e) => {
+        e.preventDefault()
+        const formData = new FormData(e.target as HTMLFormElement)
+        const search = formData.get('search') as string
+        inputRef.current?.blur()
+        router.push(`${actionRedirect}?search=${search}`)
+        router.refresh()
+      }}
     >
       {communitySlug && (
         <>
@@ -45,8 +54,8 @@ export const Search = () => {
         </>
       )}
       <Input
+        ref={inputRef}
         placeholder="Search"
-        defaultValue={search}
         className={`w-96 focus-visible:ring-0 focus-visible:ring-offset-0 h-10 rounded-none rounded-l-full border-0 ${
           communitySlug && 'rounded-none'
         }`}

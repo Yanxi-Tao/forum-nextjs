@@ -53,9 +53,9 @@ export const CreatePostDisplay = ({
             <TabsTrigger value="article" className="w-full">
               Article
             </TabsTrigger>
-            <TabsTrigger value="answer" className="w-full">
+            {/* <TabsTrigger value="answer" className="w-full">
               Answer
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
           <TabsContent value="question" className="w-full">
             <QuestionForm
@@ -75,9 +75,9 @@ export const CreatePostDisplay = ({
               action="create"
             />
           </TabsContent>
-          <TabsContent value="answer" className="w-full">
+          {/* <TabsContent value="answer" className="w-full">
             answer
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </CardContent>
     </Card>

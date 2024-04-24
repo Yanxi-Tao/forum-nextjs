@@ -38,7 +38,7 @@ export const EditorSurface: React.FC<EditorSurfaceProps> = ({
           }
           ErrorBoundary={LexicalErrorBoundary}
           placeholder={
-            <div className="absolute top-0.5 text-muted-foreground">
+            <div className="absolute top-0.5 text-muted-foreground select-none pointer-events-none">
               Start here...
             </div>
           }

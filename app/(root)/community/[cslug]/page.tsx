@@ -5,21 +5,10 @@ import {
 } from '@tanstack/react-query'
 import { ExploreDisplay as CommunityExploreDisplay } from '@/components/display/explore-display'
 import { fetchPosts } from '@/actions/post/fetch-post'
-import {
-  COMMUNITY_DISPLAY_KEY,
-  EXPLORE_POSTS_KEY,
-  POST_FETCH_SPAN,
-} from '@/lib/constants'
+import { EXPLORE_POSTS_KEY, POST_FETCH_SPAN } from '@/lib/constants'
 
 import { getCommunityBySlug } from '@/data/community'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { CommunityDisplay } from '@/components/display/community-display'
 
 export default async function CommunityPage({
@@ -49,7 +38,7 @@ export default async function CommunityPage({
 
   return (
     <Card className="border-0 shadow-none space-y-3">
-      {!search && <CommunityDisplay community={community} />}
+      <CommunityDisplay community={community} />
       <CardContent>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <CommunityExploreDisplay communitySlug={cslug} />

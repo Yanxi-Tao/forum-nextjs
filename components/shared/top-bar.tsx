@@ -1,4 +1,4 @@
-import { Search } from '@/components/form/search'
+import { Search } from '@/components/form/search-form'
 
 export const TopBar = () => {
   // await createTestUsers()
