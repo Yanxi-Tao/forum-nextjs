@@ -13,14 +13,11 @@ import {
 } from '@lexical/rich-text'
 import { $setBlocksType } from '@lexical/selection'
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils'
-import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import {
   $createParagraphNode,
   $getNodeByKey,
-  $getRoot,
   $getSelection,
-  $insertNodes,
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
@@ -428,7 +425,6 @@ const TextFormatToggleGroup: React.FC<{
 }> = ({ editor, textFormatToggled }) => {
   const { isBold, isItalic, isUnderline, isStrikethrough, isCode } =
     textFormatToggled
-
   return (
     <div className="flex flex-row space-x-1">
       <TooltipProvider delayDuration={500}>
@@ -440,6 +436,7 @@ const TextFormatToggleGroup: React.FC<{
               onPressedChange={() => {
                 editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')
               }}
+              className={isBold ? 'bg-accent' : ''}
             >
               <Bold size={18} />
             </Toggle>
@@ -454,6 +451,7 @@ const TextFormatToggleGroup: React.FC<{
               onPressedChange={() => {
                 editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')
               }}
+              className={isItalic ? 'bg-accent' : ''}
             >
               <Italic size={18} />
             </Toggle>
@@ -468,6 +466,7 @@ const TextFormatToggleGroup: React.FC<{
               onPressedChange={() => {
                 editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')
               }}
+              className={isUnderline ? 'bg-accent' : ''}
             >
               <Underline size={18} />
             </Toggle>
@@ -482,6 +481,7 @@ const TextFormatToggleGroup: React.FC<{
               onPressedChange={() => {
                 editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
               }}
+              className={isStrikethrough ? 'bg-accent' : ''}
             >
               <Strikethrough size={18} />
             </Toggle>
@@ -496,6 +496,7 @@ const TextFormatToggleGroup: React.FC<{
               onPressedChange={() => {
                 editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')
               }}
+              className={isCode ? 'bg-accent' : ''}
             >
               <Code size={18} />
             </Toggle>

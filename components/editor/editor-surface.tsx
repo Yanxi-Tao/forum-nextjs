@@ -34,7 +34,7 @@ export const EditorSurface: React.FC<EditorSurfaceProps> = ({
         <LoadInitialContentPlugin initialContent={initialContent} />
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="editor outline-none min-h-40" />
+            <ContentEditable className="editor outline-none min-h-40 break-words" />
           }
           ErrorBoundary={LexicalErrorBoundary}
           placeholder={

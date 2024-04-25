@@ -31,8 +31,15 @@ import { EXPLORE_POSTS_KEY, MY_ANSWER_KEY } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
 import { updatePost } from '@/actions/post/update-post'
 
-const Editor = dynamic(() =>
-  import('@/components/editor').then((mod) => mod.Editor)
+const Editor = dynamic(
+  () => import('@/components/editor').then((mod) => mod.Editor),
+  {
+    loading: () => (
+      <div className="flex justify-center my-10">
+        <PulseLoader color="#8585ad" />
+      </div>
+    ),
+  }
 )
 
 export const QuestionForm = ({
@@ -98,7 +105,10 @@ export const QuestionForm = ({
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-[800px] mx-auto"
+      >
         <div className="flex flex-col space-y-2">
           <FormField
             control={form.control}
@@ -232,7 +242,10 @@ export const ArticleForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 max-w-[800px] mx-auto"
+      >
         <div className="flex flex-col space-y-2">
           <FormField
             control={form.control}
@@ -371,7 +384,10 @@ export const AnswerForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 px-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-5 px-6 max-w-[800px] mx-auto"
+      >
         <FormField
           control={form.control}
           name="content"

@@ -96,7 +96,7 @@ export const PostCard = ({
     : `/${type}/${id}`
 
   return (
-    <Card className="relative shadow-none border-0 space-y-1 py-1 pt-2 max-w-[820px] break-words">
+    <Card className="relative shadow-none border-0 space-y-1 py-1 pt-2 max-w-[800px] break-words">
       <CardHeader className="py-0 space-y-0.5">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-2">

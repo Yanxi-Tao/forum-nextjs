@@ -99,7 +99,7 @@ export default function ArticleDisplay({
     <div>
       {!isEdit ? (
         <Card className="border-0 shadow-none">
-          <CardHeader className="max-w-[820px] break-words">
+          <CardHeader className="max-w-[800px] break-words">
             <div className="flex flex-row justify-between items-center">
               <div className="flex items-center space-x-2 text-sm">
                 {community && (
@@ -183,7 +183,7 @@ export default function ArticleDisplay({
             </div>
             <CardTitle className="leading-normal">{title}</CardTitle>
           </CardHeader>
-          <CardContent className="max-w-[820px] break-words">
+          <CardContent className="max-w-[800px] break-words">
             <div
               className="editor w-full"
               dangerouslySetInnerHTML={{ __html: content }}

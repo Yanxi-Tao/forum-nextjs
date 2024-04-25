@@ -44,7 +44,7 @@
 }
 
 .editor-equation {
-  @apply inline-flex max-w-full h-fit mx-1;
+  @apply inline-flex max-w-full h-fit mx-1 overflow-x-auto overflow-y-hidden;
 }
 
 .editor-embedBlock,

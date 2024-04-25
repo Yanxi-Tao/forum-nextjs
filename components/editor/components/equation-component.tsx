@@ -28,7 +28,11 @@ export type EquationEditorProps = Omit<EquationComponentProps, 'nodeKey'> & {
   onConfirm: (updatedEquation: string, updatedInline: boolean) => void
 }
 
-export const EquationComponent: React.FC<EquationComponentProps> = ({ equation, inline, nodeKey }) => {
+export const EquationComponent: React.FC<EquationComponentProps> = ({
+  equation,
+  inline,
+  nodeKey,
+}) => {
   const [editor] = useLexicalComposerContext()
 
   const onConfirm = useCallback(
@@ -51,12 +55,20 @@ export const EquationComponent: React.FC<EquationComponentProps> = ({ equation, 
           <KatexRenderer equation={equation} inline={inline} />
         </Button>
       </DialogTrigger>
-      <EquationEditor equation={equation} inline={inline} onConfirm={onConfirm} />
+      <EquationEditor
+        equation={equation}
+        inline={inline}
+        onConfirm={onConfirm}
+      />
     </Dialog>
   )
 }
 
-export const EquationEditor: React.FC<EquationEditorProps> = ({ equation, inline, onConfirm }) => {
+export const EquationEditor: React.FC<EquationEditorProps> = ({
+  equation,
+  inline,
+  onConfirm,
+}) => {
   const [editor] = useLexicalComposerContext()
   const [editorEquation, setEditorEquation] = useState(equation)
   const [editorInline, setEditorInline] = useState(inline)
@@ -65,6 +77,8 @@ export const EquationEditor: React.FC<EquationEditorProps> = ({ equation, inline
     <DialogContent
       onCloseAutoFocus={() => {
         editor.focus()
+        setEditorEquation('')
+        setEditorInline(false)
       }}
       className="flex flex-col items-center space-y-3"
     >
@@ -77,12 +91,21 @@ export const EquationEditor: React.FC<EquationEditorProps> = ({ equation, inline
           value={editorEquation}
           onChange={(event) => setEditorEquation(event.target.value)}
           onFocus={(e) => {
-            e.target.setSelectionRange(editorEquation.length + 1, editorEquation.length + 1)
+            e.target.setSelectionRange(
+              editorEquation.length + 1,
+              editorEquation.length + 1
+            )
           }}
         />
         <KatexRenderer equation={editorEquation} inline={editorInline} />
         <div className="flex items-center space-x-2">
-          <Checkbox id="inline" checked={editorInline} onCheckedChange={(checked) => setEditorInline(checked ? true : false)} />
+          <Checkbox
+            id="inline"
+            checked={editorInline}
+            onCheckedChange={(checked) =>
+              setEditorInline(checked ? true : false)
+            }
+          />
           <label htmlFor="inline">Inline</label>
         </div>
       </div>
@@ -103,7 +126,10 @@ export const EquationEditor: React.FC<EquationEditorProps> = ({ equation, inline
   )
 }
 
-export const KatexRenderer: React.FC<{ equation: string; inline: boolean }> = ({ equation, inline }) => {
+export const KatexRenderer: React.FC<{ equation: string; inline: boolean }> = ({
+  equation,
+  inline,
+}) => {
   const katexRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
