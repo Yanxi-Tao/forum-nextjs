@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 
-export const runtime = 'experimental-edge'
+// export const runtime = 'experimental-edge'
 
 import {
   PUBLIC_ROUTES,
