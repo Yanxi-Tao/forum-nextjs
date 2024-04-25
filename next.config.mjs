@@ -6,6 +6,9 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  experimental: {
+    optimizePackageImports: ['katex'],
+  },
 }
 
 export default process.env.ANALYZE === 'true'
