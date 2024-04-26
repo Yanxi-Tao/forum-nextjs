@@ -145,64 +145,73 @@ import bcrypt from 'bcryptjs'
 //   },
 // ]
 
+// const testUsers = [
+//   {
+//     name: 'landon_chan',
+//     email: 'landon_chan@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'henry_hartings',
+//     email: 'henry_hartings@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'stuti_joshi',
+//     email: 'stuti_joshi@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'yeowon_ju@',
+//     email: 'yeowon_ju@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'taewan_kang',
+//     email: 'taewan_kang@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'mohammad_khan',
+//     email: 'mohammad_khan@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'minjin_kim',
+//     email: 'minjin_kim@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'taryn_kim',
+//     email: 'taryn_kim@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'yanzhensophia_tao',
+//     email: 'yanzhensophia_tao@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+//   {
+//     name: 'Jerry Niu',
+//     email: 'yu_niu@fis.edu',
+//     password: 'test',
+//     emailVerified: new Date(),
+//   },
+// ]
+
 const testUsers = [
   {
-    name: 'landon_chan',
-    email: 'landon_chan@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'henry_hartings',
-    email: 'henry_hartings@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'stuti_joshi',
-    email: 'stuti_joshi@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'yeowon_ju@',
-    email: 'yeowon_ju@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'taewan_kang',
-    email: 'taewan_kang@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'mohammad_khan',
-    email: 'mohammad_khan@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'minjin_kim',
-    email: 'minjin_kim@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'taryn_kim',
-    email: 'taryn_kim@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'yanzhensophia_tao',
-    email: 'yanzhensophia_tao@fis.edu',
-    password: 'test',
-    emailVerified: new Date(),
-  },
-  {
-    name: 'Jerry Niu',
-    email: 'yu_niu@fis.edu',
+    name: 'beniamin_freitag',
+    email: 'beniamin_freitag@fis.edu',
     password: 'test',
     emailVerified: new Date(),
   },

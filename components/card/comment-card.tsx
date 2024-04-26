@@ -163,6 +163,7 @@ export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
               repliesToCommentId={parentId ? id : undefined}
               setAddedComments={setAddedComments}
               mutate={mutate}
+              setIsFormOpen={setIsFormOpen}
             />
           </div>
         )}

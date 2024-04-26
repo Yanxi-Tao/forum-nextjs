@@ -14,7 +14,7 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import {
   FormAlertProps,
   UpdateProfileFormProps,
@@ -25,6 +25,7 @@ import { FormAlert } from '@/components/form/form-alert'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { useRouter } from 'next-nprogress-bar'
 import { updateProfile } from '@/actions/profile/update-profile'
+import { Switch } from '../ui/switch'
 
 export const ProfileForm = ({
   profile,
@@ -32,26 +33,28 @@ export const ProfileForm = ({
   profile: UpdateProfileFormProps
 }) => {
   const router = useRouter()
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const [alert, setAlert] = useState<FormAlertProps>(null)
 
   const form = useForm<UpdateProfileSchemaTypes>({
     resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
       bio: profile.bio || undefined,
+      isPublic: profile.isPublic,
     },
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: UpdateProfileSchemaTypes) => {
+  const onSubmit = (data: UpdateProfileSchemaTypes) => {
     setAlert(null)
-    setIsPending(true)
-    const state = await updateProfile(data)
-    setIsPending(false)
-    if (state.type === 'success') {
-      router.push('/profile')
-    }
-    setAlert(state)
+    startTransition(() => {
+      updateProfile(data).then((state) => {
+        if (state.type === 'success') {
+          router.push('/profile')
+        }
+        setAlert(state)
+      })
+    })
   }
   return (
     <Card className="border-0 shadow-none">
@@ -79,6 +82,26 @@ export const ProfileForm = ({
                   >
                     {`${form.getValues('bio')?.length || 0}/100`}
                   </FormDescription>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div>
+                    <FormLabel>isPublic</FormLabel>
+                    <FormDescription>
+                      Your questions, answers, etc will be public to everyone
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />

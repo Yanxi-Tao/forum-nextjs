@@ -9,8 +9,10 @@ import { BeatLoader } from 'react-spinners'
 
 export const ExploreDisplay = ({
   communitySlug,
+  showCommunity = true,
 }: {
   communitySlug?: string
+  showCommunity?: boolean
 }) => {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || undefined
@@ -43,11 +45,17 @@ export const ExploreDisplay = ({
             ) {
               return (
                 <div key={post.id} ref={ref}>
-                  <PostCard post={post} />
+                  <PostCard post={post} showCommunity={showCommunity} />
                 </div>
               )
             } else {
-              return <PostCard key={post.id} post={post} />
+              return (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  showCommunity={showCommunity}
+                />
+              )
             }
           })
         )}

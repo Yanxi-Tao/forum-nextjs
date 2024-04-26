@@ -37,6 +37,7 @@ export type CommunityDisplayProps = {
 // Cards types
 export type PostCardProps = {
   post: Awaited<ReturnType<typeof fetchPosts>>['posts'][number]
+  showCommunity: boolean
 }
 
 export type CommentCardProps = {

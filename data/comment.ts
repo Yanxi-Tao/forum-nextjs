@@ -18,7 +18,11 @@ export const getAllComments = async (postId: string) => {
           orderBy: { createdAt: 'asc' },
         },
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: {
+        upVotes: {
+          _count: 'desc',
+        },
+      },
     })
     return comments
   } catch {

@@ -56,6 +56,7 @@ export const createUser = async (
         profile: {
           create: {
             bio: '',
+            isPublic: true,
           },
         },
         slug,

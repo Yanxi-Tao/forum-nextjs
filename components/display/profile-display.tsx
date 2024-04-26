@@ -84,38 +84,48 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
               Bookmarks
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="activities" className="w-full">
-            {profile.upVotedPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </TabsContent>
-          <TabsContent value="questions" className="w-full">
-            {profile.posts.map(
-              (post) =>
-                post.type === 'question' && (
-                  <PostCard key={post.id} post={post} />
-                )
-            )}
-          </TabsContent>
-          <TabsContent value="answers" className="w-full">
-            {profile.posts.map(
-              (post) =>
-                post.type === 'answer' && <PostCard key={post.id} post={post} />
-            )}
-          </TabsContent>
-          <TabsContent value="articles" className="w-full">
-            {profile.posts.map(
-              (post) =>
-                post.type === 'article' && (
-                  <PostCard key={post.id} post={post} />
-                )
-            )}
-          </TabsContent>
-          <TabsContent value="bookmarks" className="w-full">
-            {profile.bookmarkedPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </TabsContent>
+          {profile.profile?.isPublic ? (
+            <>
+              <TabsContent value="activities" className="w-full">
+                {profile.upVotedPosts.map((post) => (
+                  <PostCard key={post.id} post={post} showCommunity />
+                ))}
+              </TabsContent>
+              <TabsContent value="questions" className="w-full">
+                {profile.posts.map(
+                  (post) =>
+                    post.type === 'question' && (
+                      <PostCard key={post.id} post={post} showCommunity />
+                    )
+                )}
+              </TabsContent>
+              <TabsContent value="answers" className="w-full">
+                {profile.posts.map(
+                  (post) =>
+                    post.type === 'answer' && (
+                      <PostCard key={post.id} post={post} showCommunity />
+                    )
+                )}
+              </TabsContent>
+              <TabsContent value="articles" className="w-full">
+                {profile.posts.map(
+                  (post) =>
+                    post.type === 'article' && (
+                      <PostCard key={post.id} post={post} showCommunity />
+                    )
+                )}
+              </TabsContent>
+              <TabsContent value="bookmarks" className="w-full">
+                {profile.bookmarkedPosts.map((post) => (
+                  <PostCard key={post.id} post={post} showCommunity />
+                ))}
+              </TabsContent>
+            </>
+          ) : (
+            <div className="flex justify-center items-center h-20">
+              Profile is private
+            </div>
+          )}
         </Tabs>
       </CardContent>
     </Card>

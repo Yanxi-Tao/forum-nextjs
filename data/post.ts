@@ -165,9 +165,18 @@ export const getAnsewrs = async ({
       },
       take,
       skip: offset,
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        {
+          upVotes: {
+            _count: 'desc',
+          },
+        },
+        {
+          downVotes: {
+            _count: 'asc',
+          },
+        },
+      ],
       include: {
         bookmarks: true,
         upVotes: true,

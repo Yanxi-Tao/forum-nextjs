@@ -23,12 +23,14 @@ export const updateProfile = async (data: UpdateProfileSchemaTypes) => {
   if (!validatedData.success) {
     return { type: 'error', message: 'Invalid data' }
   }
+  const { bio, isPublic } = validatedData.data
   try {
     // update user profile
     await db.profile.update({
       where: { userId: user.id },
       data: {
-        bio: data.bio,
+        bio,
+        isPublic,
       },
     })
     revalidatePath('/profile')

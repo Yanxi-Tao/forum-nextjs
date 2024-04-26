@@ -98,4 +98,5 @@ export const UpdateCommunitySchema = z.object({
 
 export const UpdateProfileSchema = z.object({
   bio: z.optional(z.string().max(100)),
+  isPublic: z.optional(z.boolean()),
 })

@@ -20,9 +20,11 @@ export const CommentForm = ({
   repliesToCommentId,
   mutate,
   setAddedComments,
+  setIsFormOpen,
 }: Omit<CreateCommentSchemaTypes, 'content'> & {
   mutate: CreateCommentMutate
   setAddedComments: Dispatch<SetStateAction<[] | AddedComment[]>>
+  setIsFormOpen?: Dispatch<SetStateAction<boolean>>
 }) => {
   const [isPending, setIsPending] = useState(false)
   const form = useForm<CreateCommentSchemaTypes>({
@@ -51,7 +53,10 @@ export const CommentForm = ({
         ])
         form.reset()
       },
-      onSettled: () => setIsPending(false),
+      onSettled: () => {
+        setIsPending(false)
+        setIsFormOpen?.(false)
+      },
     })
   }
   return (

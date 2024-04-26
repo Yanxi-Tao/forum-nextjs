@@ -41,7 +41,10 @@ export default async function CommunityPage({
       <CommunityDisplay community={community} />
       <CardContent>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <CommunityExploreDisplay communitySlug={cslug} />
+          <CommunityExploreDisplay
+            communitySlug={cslug}
+            showCommunity={false}
+          />
         </HydrationBoundary>
       </CardContent>
     </Card>

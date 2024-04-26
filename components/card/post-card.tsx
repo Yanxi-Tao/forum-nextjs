@@ -60,6 +60,7 @@ export const PostCard = ({
     bookmarks,
     _count,
   },
+  showCommunity,
 }: PostCardProps) => {
   const updateVote = useUpdateVote('post')
   const updateBookmark = useUpdateBookmark()
@@ -88,79 +89,82 @@ export const PostCard = ({
     <Card className="relative shadow-none border-0 space-y-1 py-1 pt-2 max-w-[800px] break-words">
       <CardHeader className="py-0 space-y-0.5">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center space-x-2">
-            {(type === 'question' || type === 'article') && community ? (
-              <Link href={`/community/${community.slug}`}>
+          <div className="flex items-center space-x-2 text-sm">
+            {community && showCommunity ? (
+              <Link
+                href={`/community/${community.slug}`}
+                className="flex items-center space-x-2"
+              >
                 <AvatarCard
-                  source={community.image}
+                  source={null}
                   name={community.name}
                   className="w-7 h-7 text-sm"
                 />
+                <span className="text-primary underline-offset-4 hover:underline">
+                  {`c/${community.name}`}
+                </span>
               </Link>
             ) : author ? (
-              <Link href={`/profile/${author.slug}`}>
+              <Link
+                href={`/profile/${author.slug}`}
+                className="flex items-center space-x-2"
+              >
                 <AvatarCard
                   source={author.image}
                   name={author.name}
                   className="w-7 h-7 text-sm"
                 />
+                <span className="text-primary underline-offset-4 hover:underline">
+                  {`u/${author.name}`}
+                </span>
               </Link>
             ) : (
-              <AvatarCard
-                source={null}
-                name={DELETED_USER}
-                isDeleted
-                className="w-7 h-7 text-sm"
-              />
+              <>
+                <AvatarCard
+                  source={null}
+                  name={DELETED_USER}
+                  isDeleted
+                  className="w-7 h-7 text-sm"
+                />
+                <span>{DELETED_USER}</span>
+              </>
             )}
-            {(type === 'question' || type === 'article') && community ? (
-              <Link
-                href={`/community/${community.slug}`}
-                className="text-primary underline-offset-4 hover:underline"
-              >
-                {`c/${community.name}`}
-              </Link>
-            ) : author ? (
-              <Link
-                href={`/profile/${author.slug}`}
-                className="text-primary underline-offset-4 hover:underline"
-              >
-                {`u/${author.name}`}
-              </Link>
-            ) : (
-              <span className="text-primary">{DELETED_USER}</span>
-            )}
+          </div>
+          <div className="flex items-center space-x-3">
             <span className="text-muted-foreground">
               {new Date(updatedAt).toDateString()}
             </span>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="focus:outline-none">
-              <HiDotsHorizontal size={20} />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <HiFlag size={16} className="mr-2" />
-                Report
-              </DropdownMenuItem>
-              {user?.id === author?.id && (
-                <>
-                  {type === 'question' || type === 'article' ? (
-                    <DropdownMenuItem>
-                      <Link href={`${redirectTo}/?edit=true`} className="flex">
-                        <FiEdit size={16} className="mr-2" />
-                        Edit
-                      </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <HiDotsHorizontal size={20} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <HiFlag size={16} className="mr-2" />
+                  Report
+                </DropdownMenuItem>
+                {user?.id === author?.id && (
+                  <>
+                    {type === 'question' || type === 'article' ? (
+                      <DropdownMenuItem>
+                        <Link
+                          href={`${redirectTo}/?edit=true`}
+                          className="flex"
+                        >
+                          <FiEdit size={16} className="mr-2" />
+                          Edit
+                        </Link>
+                      </DropdownMenuItem>
+                    ) : null}
+                    <DropdownMenuItem onSelect={() => mutate()}>
+                      <MdDelete size={16} className="mr-2" />
+                      Delete
                     </DropdownMenuItem>
-                  ) : null}
-                  <DropdownMenuItem onSelect={() => mutate()}>
-                    <MdDelete size={16} className="mr-2" />
-                    Delete
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         {(type === 'question' || type === 'article') && (
           <Link href={redirectTo}>

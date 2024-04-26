@@ -149,7 +149,7 @@ export default function QuestionDisplay({
                         className="w-7 h-7 text-sm"
                       />
                       <span className="text-primary underline-offset-4 hover:underline">
-                        {community.name}
+                        {`c/${community.name}`}
                       </span>
                     </Link>
                     <span>/</span>
@@ -166,7 +166,7 @@ export default function QuestionDisplay({
                       className="w-7 h-7 text-sm"
                     />
                     <span className="text-primary underline-offset-4 hover:underline">
-                      {author.name}
+                      {`u/${author.name}`}
                     </span>
                   </Link>
                 ) : (
@@ -305,8 +305,12 @@ export default function QuestionDisplay({
         />
       )}
       <Separator className="my-6" />
-      {redirectAnswer && !isFormOpen && <PostCard post={redirectAnswer} />}
-      {myAnswer && !isFormOpen && <PostCard post={myAnswer} />}
+      {redirectAnswer && !isFormOpen && (
+        <PostCard post={redirectAnswer} showCommunity={false} />
+      )}
+      {myAnswer && !isFormOpen && (
+        <PostCard post={myAnswer} showCommunity={false} />
+      )}
       {isSuccess &&
         data.pages.map((page) =>
           page.answers.map((post) => {
@@ -321,11 +325,13 @@ export default function QuestionDisplay({
             ) {
               return (
                 <div key={post.id} ref={ref}>
-                  <PostCard post={post} />
+                  <PostCard post={post} showCommunity={false} />
                 </div>
               )
             } else {
-              return <PostCard key={post.id} post={post} />
+              return (
+                <PostCard key={post.id} post={post} showCommunity={false} />
+              )
             }
           })
         )}

@@ -1,5 +1,5 @@
 import { fetchEditProfile } from '@/actions/profile/fetch-profile'
-import { ProfileForm } from '@/components/form/profile-update-form'
+import { ProfileForm } from '@/components/form/profile-form'
 import { currentUser } from '@/lib/auth'
 
 export default async function ProfileEditPage() {
