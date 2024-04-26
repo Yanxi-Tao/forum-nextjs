@@ -1,14 +1,12 @@
 'use client'
 
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import { signOut } from 'next-auth/react'
-import { useRouter } from 'next-nprogress-bar'
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
@@ -19,9 +17,6 @@ import { AvatarCard } from '@/components/card/avatar-card'
 
 export const UserAccountCard = () => {
   const user = useCurrentUser()
-  const router = useRouter()
-
-  const initial = user?.name?.[0].toLocaleUpperCase()
 
   return (
     <>
@@ -58,10 +53,12 @@ export const UserAccountCard = () => {
           <Button
             variant="ghost"
             className="relative flex justify-start gap-x-4 p-6 w-full"
-            onClick={() => router.push('/auth/login')}
+            asChild
           >
-            <LogIn size={20} />
-            <p>Login</p>
+            <Link href="/auth/login">
+              <LogIn size={20} />
+              <p>Login</p>
+            </Link>
           </Button>
         </div>
       )}

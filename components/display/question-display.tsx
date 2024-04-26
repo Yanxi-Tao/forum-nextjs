@@ -36,7 +36,7 @@ import { PostDisplayProps } from '@/lib/types'
 import { DELETED_USER } from '@/lib/constants'
 import { useInView } from 'react-intersection-observer'
 import { PostCard } from '@/components/card/post-card'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import {
   useInfiniteAnswers,
   useMyAnswer,

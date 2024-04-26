@@ -12,7 +12,7 @@ import { HiDotsHorizontal } from 'react-icons/hi'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { CommunityDisplayProps } from '@/lib/types'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 
 export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
   const user = useCurrentUser()

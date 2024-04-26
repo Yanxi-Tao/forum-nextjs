@@ -18,7 +18,7 @@ import {
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ProfileDisplayProps } from '@/lib/types'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import Link from 'next/link'
 
 export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {

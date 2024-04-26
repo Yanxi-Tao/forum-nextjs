@@ -3,12 +3,11 @@
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { PostCardProps } from '@/lib/types'
-import { formatNumber } from '@/lib/utils'
+import { calcVoteStatus, formatNumber } from '@/lib/utils'
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -23,8 +22,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
@@ -43,13 +40,11 @@ import { HiDotsHorizontal } from 'react-icons/hi'
 import { HiFlag } from 'react-icons/hi2'
 import { FiEdit } from 'react-icons/fi'
 import { MdDelete } from 'react-icons/md'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import { DELETED_USER } from '@/lib/constants'
 import { useDeletePost } from '@/hooks/post'
 import { useUpdateBookmark } from '@/hooks/post'
 import { useUpdateVote } from '@/hooks/post'
-import { PostType } from '@prisma/client'
-import { ExtendedUser } from '@/auth'
 
 export const PostCard = ({
   post: {
@@ -72,23 +67,17 @@ export const PostCard = ({
 
   const user = useCurrentUser()
   const userVoteStatus = useMemo(
-    () =>
-      upVotes.find((vote) => vote.id === user?.id)
-        ? 1
-        : downVotes.find((vote) => vote.id === user?.id)
-        ? -1
-        : 0,
-    [upVotes, downVotes, user?.id]
+    () => calcVoteStatus({ upVotes, downVotes, userId: user?.id }),
+    [upVotes, downVotes, user]
   )
   const userBookmarkStatus = useMemo(
-    () =>
-      bookmarks.find((bookmark) => bookmark.id === user?.id) ? true : false,
+    () => bookmarks.some((bookmark) => bookmark.id === user?.id),
     [bookmarks, user?.id]
   )
   const baseCount = upVotes.length - downVotes.length - userVoteStatus
   const [voteStatus, setVoteStatus] = useState(userVoteStatus)
   const [bookmarkStatus, setBookmarkStatus] = useState(userBookmarkStatus)
-  const shouldCollapse = content.length > 500
+  const shouldCollapse = useMemo(() => content.length > 500, [content])
   const [isCollapsed, setIsCollapsed] = useState(true)
 
   const redirectTo = community

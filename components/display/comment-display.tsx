@@ -2,7 +2,7 @@
 
 import { CommentForm } from '@/components/form/comment-form'
 import { CommentCard } from '@/components/card/comment-card'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import { BeatLoader } from 'react-spinners'
 import { useComments, useCreateComment } from '@/hooks/comment'
 import { Fragment, useEffect, useState } from 'react'

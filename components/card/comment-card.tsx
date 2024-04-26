@@ -1,5 +1,5 @@
 'use client'
-import { CommentCardProps, CreateCommentSchemaTypes } from '@/lib/types'
+import { CommentCardProps } from '@/lib/types'
 
 import {
   Card,
@@ -7,14 +7,11 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { HiFlag } from 'react-icons/hi2'
@@ -29,11 +26,11 @@ import { HiDotsHorizontal } from 'react-icons/hi'
 import { useState } from 'react'
 import { CommentForm } from '@/components/form/comment-form'
 import { AvatarCard } from '@/components/card/avatar-card'
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import { DELETED_CONTENT, DELETED_USER } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/post'
 import { useDeleteComment } from '@/hooks/comment'
-import { AddedComment } from '../display/comment-display'
+import { AddedComment } from '@/components/display/comment-display'
 
 export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
   const {
@@ -115,7 +112,6 @@ export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </CardHeader>
-            {/* todo: max width for nested comment */}
             <CardContent
               className={`py-0 px-3 break-words ${
                 parentId ? 'max-w-[690px]' : 'max-w-[740px]'

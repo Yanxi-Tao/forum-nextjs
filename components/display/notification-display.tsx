@@ -1,6 +1,6 @@
 'use client'
 
-import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useCurrentUser } from '@/hooks/user'
 import { NotificationCard } from '@/components/card/notification-card'
 import { useInView } from 'react-intersection-observer'
 import { useEffect } from 'react'
