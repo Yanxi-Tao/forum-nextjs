@@ -17,6 +17,8 @@ import {
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query'
+import { Suspense } from 'react'
+import PulseLoader from 'react-spinners/PulseLoader'
 
 export default async function QuestionCommunityDisplayPage({
   params,
@@ -52,8 +54,16 @@ export default async function QuestionCommunityDisplayPage({
     })
   }
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <QuestionDisplay post={post} redirectAnswerId={answerId} />
-    </HydrationBoundary>
+    <Suspense
+      fallback={
+        <div className="flex justify-center my-10">
+          <PulseLoader color="#8585ad" />
+        </div>
+      }
+    >
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <QuestionDisplay post={post} redirectAnswerId={answerId} />
+      </HydrationBoundary>
+    </Suspense>
   )
 }

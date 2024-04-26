@@ -6,6 +6,8 @@ import {
 import { ExploreDisplay } from '@/components/display/explore-display'
 import { fetchPosts } from '@/actions/post/fetch-post'
 import { EXPLORE_POSTS_KEY, POST_FETCH_SPAN } from '@/lib/constants'
+import PulseLoader from 'react-spinners/PulseLoader'
+import { Suspense } from 'react'
 
 export default async function ExplorePage({
   searchParams,
@@ -27,8 +29,16 @@ export default async function ExplorePage({
     staleTime: Infinity,
   })
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ExploreDisplay />
-    </HydrationBoundary>
+    <Suspense
+      fallback={
+        <div className="flex justify-center my-10">
+          <PulseLoader color="#8585ad" />
+        </div>
+      }
+    >
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ExploreDisplay />
+      </HydrationBoundary>
+    </Suspense>
   )
 }
