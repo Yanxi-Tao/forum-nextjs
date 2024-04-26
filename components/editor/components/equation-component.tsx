@@ -77,8 +77,6 @@ export const EquationEditor: React.FC<EquationEditorProps> = ({
     <DialogContent
       onCloseAutoFocus={() => {
         editor.focus()
-        setEditorEquation('')
-        setEditorInline(false)
       }}
       className="flex flex-col items-center space-y-3"
     >
