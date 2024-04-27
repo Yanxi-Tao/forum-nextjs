@@ -9,15 +9,12 @@ import { TopBar } from '@/components/shared/top-bar'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from '@/app/(root)/api/uploadthing/core'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import {
   ProgressBarProvider,
   ReactQueryProvider,
   ThemeProvider,
 } from '@/lib/providers'
-import { Suspense } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,12 +45,8 @@ export default async function RootLayout({
                 <TopBar />
                 <main>
                   <div className="relative w-screen flex">
-                    <Suspense>
-                      <LeftSidebar />
-                    </Suspense>
-                    <Suspense>
-                      <div className="w-full px-20 pt-4">{children}</div>
-                    </Suspense>
+                    <LeftSidebar />
+                    <div className="w-full px-20 pt-4">{children}</div>
                     <RightSidebar />
                   </div>
                 </main>
@@ -61,8 +54,6 @@ export default async function RootLayout({
             </ReactQueryProvider>
           </SessionProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   )
