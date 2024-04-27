@@ -69,7 +69,7 @@ export const {
         data: {
           emailVerified: new Date(),
           slug,
-          profile: { create: { bio: '' } },
+          profile: { create: { bio: '', isPublic: true } },
         },
       })
     },

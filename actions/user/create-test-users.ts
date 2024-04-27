@@ -226,6 +226,7 @@ export const createTestUsers = async () => {
         profile: {
           create: {
             bio: '',
+            isPublic: true,
           },
         },
         slug: slugify(user.name),
