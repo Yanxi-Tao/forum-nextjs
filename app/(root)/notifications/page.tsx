@@ -7,6 +7,8 @@ import {
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query'
+import { Suspense } from 'react'
+import PulseLoader from 'react-spinners/PulseLoader'
 
 export default async function NotificationsPage() {
   const queryClient = new QueryClient()
@@ -25,8 +27,16 @@ export default async function NotificationsPage() {
     staleTime: Infinity,
   })
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotificationDisplay />
-    </HydrationBoundary>
+    <Suspense
+      fallback={
+        <div className="flex justify-center my-10">
+          <PulseLoader color="#8585ad" />
+        </div>
+      }
+    >
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NotificationDisplay />
+      </HydrationBoundary>
+    </Suspense>
   )
 }
