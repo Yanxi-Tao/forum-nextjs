@@ -17,6 +17,7 @@ import EquationPlugin from './plugins/equation-plugin'
 import ListMaxIndentLevelPlugin from './plugins/list-max-indent-plugin'
 import LoadInitialContentPlugin from './plugins/load-initial-content-plugin'
 import OnChangePlugin from './plugins/onchange-plugin'
+import ImagePlugin from './plugins/image-plugin'
 
 export type EditorSurfaceProps = {
   onChange: (plainText: string, html: string) => void
@@ -52,6 +53,7 @@ export const EditorSurface: React.FC<EditorSurfaceProps> = ({
         <LinkPlugin />
         <AutoLinkPlugin />
         <EquationPlugin />
+        <ImagePlugin />
         <OnChangePlugin onChange={onChange} />
       </div>
     </div>

@@ -47,9 +47,16 @@
   @apply inline-flex max-w-full h-fit mx-1 overflow-x-auto overflow-y-hidden;
 }
 
-.editor-embedBlock,
+div.editor-equation {
+  @apply flex justify-center text-sm;
+}
+
 .editor-image {
   @apply flex justify-center items-center my-3;
+}
+
+.editor-image.selected {
+  @apply outline outline-[2px] select-none rounded-sm;
 }
 
 .editor-inner .editor-embedBlock {
@@ -136,10 +143,6 @@
 
 .editor-tokenPunctuation {
   @apply text-[#abb2bf];
-}
-
-div.editor-equation {
-  @apply flex justify-center text-sm;
 }
 
 .editor hr {

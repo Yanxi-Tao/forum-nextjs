@@ -9,6 +9,16 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['katex'],
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'utfs.io',
+        port: '',
+        pathname: '/f/**',
+      },
+    ],
+  },
 }
 
 export default process.env.ANALYZE === 'true'

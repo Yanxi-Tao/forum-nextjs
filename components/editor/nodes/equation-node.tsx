@@ -129,11 +129,13 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
   }
 
   getTextContent(): string {
-    return this.__equation
+    const self = this.getLatest()
+    return self.__equation
   }
 
   getEquation(): string {
-    return this.__equation
+    const self = this.getLatest()
+    return self.__equation
   }
 
   setEquation(equation: string): void {
@@ -142,7 +144,8 @@ export class EquationNode extends DecoratorNode<JSX.Element> {
   }
 
   isInline(): boolean {
-    return this.__inline
+    const self = this.getLatest()
+    return self.__inline
   }
 
   setInline(inline: boolean): void {
@@ -181,6 +184,4 @@ export const $createEquationNode = (
 
 export const $isEquationNode = (
   node: LexicalNode | null | undefined
-): node is EquationNode => {
-  return node instanceof EquationNode
-}
+): node is EquationNode => node instanceof EquationNode

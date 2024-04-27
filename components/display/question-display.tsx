@@ -127,9 +127,6 @@ export default function QuestionDisplay({
   if (!user) {
     return <div></div>
   }
-
-  console.log(fetchStatus !== 'fetching')
-
   return (
     <div>
       {!isEdit ? (

@@ -65,6 +65,7 @@ import { Toggle } from '@/components/ui/toggle'
 import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/react/LexicalHorizontalRuleNode'
 import { InsertEquationDialog } from './equation-plugin'
 import { Separator } from '@/components/ui/separator'
+import { InsertImageDialog } from './image-plugin'
 
 export default function ToolbarPlugin(): JSX.Element | null {
   const [editor] = useLexicalComposerContext()
@@ -236,6 +237,7 @@ export default function ToolbarPlugin(): JSX.Element | null {
           />
           <Separator orientation="vertical" />
           <InsertEquationDialog editor={editor} />
+          <InsertImageDialog editor={editor} />
           <Button
             type="button"
             variant="ghost"

@@ -72,6 +72,25 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId, fileUrl: file.url }
     }),
+  postImageUploader: f({ image: { maxFileSize: '1MB' } })
+    // Set permissions and file types for this FileRoute
+    .middleware(async ({ files }) => {
+      // This code runs on your server before upload
+      if (files.length > 1) throw new UploadThingError('Only one file allowed')
+      const user = await currentUser()
+
+      // If you throw, the user will not be able to upload
+      if (!user || !user.id) throw new UploadThingError('Unauthorized')
+
+      // Whatever is returned here is accessible in onUploadComplete as `metadata`
+      return {}
+    })
+    .onUploadComplete(async ({ file }) => {
+      // This code RUNS ON YOUR SERVER after upload
+
+      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
+      return { fileUrl: file.url }
+    }),
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter

@@ -6,6 +6,7 @@ import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode'
 import { Klass, LexicalNode } from 'lexical'
 
 import { EquationNode } from './equation-node'
+import { ImageNode } from './image-node'
 
 const EditorNodes: Array<Klass<LexicalNode>> = [
   HeadingNode,
@@ -18,6 +19,7 @@ const EditorNodes: Array<Klass<LexicalNode>> = [
   AutoLinkNode,
   HorizontalRuleNode,
   EquationNode,
+  ImageNode,
 ]
 
 export default EditorNodes
