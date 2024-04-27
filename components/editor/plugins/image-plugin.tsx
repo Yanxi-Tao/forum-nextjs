@@ -24,9 +24,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { UploadDropzone } from '@/lib/utils'
-import Cliploader from 'react-spinners/ClipLoader'
 import { Button } from '@/components/ui/button'
 import { CircleCheckBig, ImageIcon } from 'lucide-react'
+import { Progress } from '@/components/ui/progress'
 
 export const INSERT_IMAGE_COMMAND: LexicalCommand<ImagePayload> = createCommand(
   'INSERT_IMAGE_COMMAND'
@@ -37,6 +37,7 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
 }) => {
   const [uploading, setUploading] = useState(false)
   const [src, setSrc] = useState<string>('')
+  const [progress, setProgress] = useState<number>(0)
 
   return (
     <Dialog>
@@ -54,9 +55,10 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
           <DialogTitle>Upload image</DialogTitle>
         </DialogHeader>
         {uploading ? (
-          <span className="flex min-h-40 w-full items-center justify-center rounded-full">
-            <Cliploader color="#8585ad" />
-          </span>
+          <div className="flex flex-col min-h-40 w-full items-center justify-center rounded-full space-y-2">
+            <Progress value={progress} className="h-2 bg-muted w-5/6" />
+            <span>{`${progress}%`}</span>
+          </div>
         ) : src ? (
           <div className="flex justify-center items-center my-10 space-x-4">
             <CircleCheckBig size={40} />
@@ -81,11 +83,19 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
               setUploading(false)
               console.error('Error: ', error)
             }}
+            skipPolling={true}
+            onUploadProgress={(progress) => setProgress(progress)}
           />
         )}
         <DialogFooter>
           <DialogClose asChild>
-            <Button onClick={() => setSrc('')} variant="outline">
+            <Button
+              onClick={() => {
+                setSrc('')
+                setProgress(0)
+              }}
+              variant="outline"
+            >
               Cancel
             </Button>
           </DialogClose>
@@ -95,6 +105,7 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
               onClick={() => {
                 editor.dispatchCommand(INSERT_IMAGE_COMMAND, { src })
                 setSrc('')
+                setProgress(0)
               }}
             >
               Insert

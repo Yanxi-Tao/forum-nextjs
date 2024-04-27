@@ -85,12 +85,7 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return {}
     })
-    .onUploadComplete(async ({ file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { fileUrl: file.url }
-    }),
+    .onUploadComplete(() => {}),
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter
