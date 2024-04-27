@@ -108,7 +108,9 @@ export const EquationEditor: React.FC<EquationEditorProps> = ({
         </div>
       </div>
       <DialogFooter>
-        <DialogClose>Cancel</DialogClose>
+        <DialogClose asChild>
+          <Button variant="outline">Cancel</Button>
+        </DialogClose>
         <DialogClose asChild>
           <Button
             disabled={editorEquation.length === 0}

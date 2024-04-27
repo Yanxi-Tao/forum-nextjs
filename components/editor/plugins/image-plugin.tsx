@@ -1,16 +1,17 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { useEffect, useState } from 'react'
-import { $createImageNode, ImageNode, ImagePayload } from '../nodes/image-node'
 import {
-  $createParagraphNode,
-  $insertNodes,
-  $isRootOrShadowRoot,
+  $createImageNode,
+  ImageNode,
+  ImagePayload,
+} from '@/components/editor/nodes/image-node'
+import {
   COMMAND_PRIORITY_EDITOR,
   LexicalCommand,
   LexicalEditor,
   createCommand,
 } from 'lexical'
-import { $insertNodeToNearestRoot, $wrapNodeInElement } from '@lexical/utils'
+import { $insertNodeToNearestRoot } from '@lexical/utils'
 
 import {
   Dialog,
@@ -26,7 +27,6 @@ import { UploadDropzone } from '@/lib/utils'
 import Cliploader from 'react-spinners/ClipLoader'
 import { Button } from '@/components/ui/button'
 import { CircleCheckBig, ImageIcon } from 'lucide-react'
-import { set } from 'zod'
 
 export const INSERT_IMAGE_COMMAND: LexicalCommand<ImagePayload> = createCommand(
   'INSERT_IMAGE_COMMAND'
@@ -54,7 +54,7 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
           <DialogTitle>Upload image</DialogTitle>
         </DialogHeader>
         {uploading ? (
-          <span className="flex h-full w-full items-center justify-center rounded-full bg-muted">
+          <span className="flex min-h-40 w-full items-center justify-center rounded-full">
             <Cliploader color="#8585ad" />
           </span>
         ) : src ? (
@@ -64,6 +64,10 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
           </div>
         ) : (
           <UploadDropzone
+            className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground py-2"
+            appearance={{
+              button: 'bg-primary text-primary-foreground hover:bg-primary/90',
+            }}
             endpoint="postImageUploader"
             onBeforeUploadBegin={(files) => {
               setUploading(true)
@@ -80,7 +84,11 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
           />
         )}
         <DialogFooter>
-          <DialogClose onClick={() => setSrc('')}>Cancel</DialogClose>
+          <DialogClose asChild>
+            <Button onClick={() => setSrc('')} variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
           <DialogClose asChild>
             <Button
               disabled={uploading || !src}

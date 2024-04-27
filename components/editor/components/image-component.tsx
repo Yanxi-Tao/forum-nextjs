@@ -11,7 +11,7 @@ import {
   NodeKey,
 } from 'lexical'
 import { useCallback, useEffect } from 'react'
-import { $isImageNode } from '../nodes/image-node'
+import { $isImageNode } from '@/components/editor/nodes/image-node'
 import { mergeRegister } from '@lexical/utils'
 
 export type ImageComponentProps = {
