@@ -17,6 +17,7 @@ import {
   ReactQueryProvider,
   ThemeProvider,
 } from '@/lib/providers'
+import { Suspense } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -47,8 +48,12 @@ export default async function RootLayout({
                 <TopBar />
                 <main>
                   <div className="relative w-screen flex">
-                    <LeftSidebar />
-                    <div className="w-full px-20 pt-4">{children}</div>
+                    <Suspense>
+                      <LeftSidebar />
+                    </Suspense>
+                    <Suspense>
+                      <div className="w-full px-20 pt-4">{children}</div>
+                    </Suspense>
                     <RightSidebar />
                   </div>
                 </main>
