@@ -132,9 +132,7 @@ export const QuestionForm = ({
             name="content"
             render={() => (
               <FormItem>
-                <FormLabel className="text-foreground" htmlFor={undefined}>
-                  Description
-                </FormLabel>
+                <FormLabel className="text-foreground">Description</FormLabel>
                 <FormControl>
                   <Editor
                     onChange={handleOnChange}
