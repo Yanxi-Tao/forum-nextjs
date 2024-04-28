@@ -9,6 +9,8 @@ import { TopBar } from '@/components/shared/top-bar'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from '@/app/(root)/api/uploadthing/core'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import {
   ProgressBarProvider,
@@ -54,6 +56,8 @@ export default async function RootLayout({
             </ReactQueryProvider>
           </SessionProvider>
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
