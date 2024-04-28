@@ -1,5 +1,5 @@
 {
-  "name": "next-auth",
+  "name": "ibzn",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -56,6 +56,7 @@
     "next-auth": "5.0.0-beta.16",
     "next-nprogress-bar": "^2.3.11",
     "next-themes": "^0.3.0",
+    "pnpm": "^9.0.6",
     "radash": "^12.1.0",
     "react": "^18",
     "react-dom": "^18",
