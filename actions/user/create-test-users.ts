@@ -210,9 +210,9 @@ import bcrypt from 'bcryptjs'
 
 const testUsers = [
   {
-    name: 'beniamin_freitag',
-    email: 'beniamin_freitag@fis.edu',
-    password: 'test',
+    name: 'Sam',
+    email: 'yanxi_tao@fis.edu',
+    password: '123',
     emailVerified: new Date(),
   },
 ]
