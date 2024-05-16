@@ -14,6 +14,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { HiFlag } from 'react-icons/hi2'
 import { MdDelete } from 'react-icons/md'
 
@@ -31,6 +38,7 @@ import { DELETED_CONTENT, DELETED_USER } from '@/lib/constants'
 import { useUpdateVote } from '@/hooks/post'
 import { useDeleteComment } from '@/hooks/comment'
 import { AddedComment } from '@/components/display/comment-display'
+import { ReportForm } from '@/components/form/report-form'
 
 export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
   const {
@@ -94,23 +102,40 @@ export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
                   </>
                 )}
               </CardDescription>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <HiDotsHorizontal size={20} />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <HiFlag size={16} className="mr-2" />
-                    Report
-                  </DropdownMenuItem>
-                  {user?.id === authorId && content !== DELETED_CONTENT && (
-                    <DropdownMenuItem onSelect={() => deleteCurrentComment(id)}>
-                      <MdDelete size={16} className="mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Dialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <HiDotsHorizontal size={20} />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {user?.id && (
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem>
+                          <HiFlag size={16} className="mr-2" />
+                          Report
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    )}
+                    {user?.id === authorId && content !== DELETED_CONTENT && (
+                      <DropdownMenuItem
+                        onSelect={() => deleteCurrentComment(id)}
+                      >
+                        <MdDelete size={16} className="mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Report</DialogTitle>
+                  </DialogHeader>
+                  <ReportForm
+                    commentId={id}
+                    reportUserId={user?.id as string}
+                  />
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent
               className={`py-0 px-3 break-words ${

@@ -15,11 +15,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ProfileDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/user'
 import Link from 'next/link'
+import { HiFlag } from 'react-icons/hi2'
+import { ReportForm } from '@/components/form/report-form'
 
 export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
   const user = useCurrentUser()
@@ -51,18 +60,37 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
               {profile.profile?.bio || 'user has no bio yet ~'}
             </CardDescription>
           </div>
-          {user.id === profile.id && (
+          <Dialog>
             <DropdownMenu>
               <DropdownMenuTrigger className="h-fit focus:outline-none">
                 <HiDotsHorizontal size={20} />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Link href={`/profile/edit`}>Edit Profile</Link>
-                </DropdownMenuItem>
+                {user?.id && (
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem>
+                      <HiFlag size={16} className="mr-2" />
+                      Report
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                )}
+                {user.id === profile.id && (
+                  <DropdownMenuItem>
+                    <Link href={`/profile/edit`}>Edit Profile</Link>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
-          )}
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Report</DialogTitle>
+              </DialogHeader>
+              <ReportForm
+                reportedUserId={profile.id}
+                reportUserId={user?.id as string}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       </CardHeader>
       <CardContent className="w-full px-0">

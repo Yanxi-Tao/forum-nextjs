@@ -43,6 +43,8 @@ model User {
 
   notifiedNotifications  Notification[] @relation("NotificationToUser")
   generatedNotifications Notification[] @relation("GeneratedByToUser")
+  reportTo               Report[]       @relation("reportUser")
+  reportBy               Report[]       @relation("reportedUser")
 }
 
 // account model for provider login
@@ -124,6 +126,7 @@ model Post {
   communityId String?
 
   notifications Notification[]
+  report        Report[]
 
   @@index([id])
   @@index([title, content])
@@ -149,6 +152,7 @@ model Comment {
   repliesToId String?
 
   notifications Notification[]
+  report        Report[]
 }
 
 model Profile {
@@ -176,6 +180,7 @@ model Community {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  report    Report[]
 }
 
 model Notification {
@@ -204,4 +209,27 @@ enum NotificationType {
   answer
   commentPost
   commentReply
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  reason      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String
+
+  reportedBy   User   @relation(name: "reportUser", fields: [reportedById], references: [id])
+  reportedById String
+
+  post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?
+
+  community     Community? @relation(fields: [communitySlug], references: [slug])
+  communitySlug String?
+
+  reportedUser   User?   @relation(name: "reportedUser", fields: [reportedUserId], references: [id])
+  reportedUserId String?
 }

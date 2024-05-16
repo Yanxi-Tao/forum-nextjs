@@ -14,6 +14,7 @@ import {
   CreateCommunitySchema,
   CreatePostSchema,
   PostSchema,
+  ReportSchema,
   UpdateCommunitySchema,
   UpdatePostSchema,
   UpdateProfileSchema,
@@ -92,6 +93,11 @@ export type PostFormProps = {
   parentUserId?: string
 }
 
+export type ReportFormProps = Pick<
+  ReportSchemaTypes,
+  'postId' | 'commentId' | 'communitySlug' | 'reportUserId' | 'reportedUserId'
+>
+
 // zod schemas types
 export type CreateCommentSchemaTypes = z.infer<typeof CreateCommentSchema>
 
@@ -108,6 +114,8 @@ export type UpdateCommunitySchemaTypes = z.infer<typeof UpdateCommunitySchema>
 export type UpdateProfileSchemaTypes = z.infer<typeof UpdateProfileSchema>
 
 export type UpdateSettingsSchemaTypes = z.infer<typeof UpdateSettingsSchema>
+
+export type ReportSchemaTypes = z.infer<typeof ReportSchema>
 
 // Other Props
 export type FormAlertProps = {

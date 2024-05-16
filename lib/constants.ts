@@ -58,3 +58,30 @@ export const NOTIFICATION_KEY = 'notifications'
 
 export const DELETED_CONTENT = '[deleted-content]'
 export const DELETED_USER = '[deleted-user]'
+
+export const reportOptions = [
+  {
+    id: 'spam',
+    label: 'Spam or Advertisement',
+  },
+  {
+    id: 'hate',
+    label: 'Hate Speech or Offensive Language',
+  },
+  {
+    id: 'violence',
+    label: 'Violence or Harmful Behavior',
+  },
+  {
+    id: 'inappropriate',
+    label: 'Inappropriate Content',
+  },
+  {
+    id: 'misinformation',
+    label: 'Misinformation or False Information',
+  },
+  {
+    id: 'other',
+    label: 'Other',
+  },
+]

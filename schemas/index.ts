@@ -100,3 +100,31 @@ export const UpdateProfileSchema = z.object({
   bio: z.optional(z.string().max(100)),
   isPublic: z.optional(z.boolean()),
 })
+
+export const ReportSchema = z
+  .object({
+    reportUserId: z.string(),
+    postId: z.optional(z.string()),
+    commentId: z.optional(z.string()),
+    communitySlug: z.optional(z.string()),
+    reportedUserId: z.optional(z.string()),
+    reason: z
+      .string()
+      .array()
+      .nonempty()
+      .refine((value) => value.some((item) => item), {
+        message: 'You have to select at least one option.',
+      }),
+    description: z.string().min(1).max(255),
+  })
+  .refine(
+    (data) =>
+      data.postId ||
+      data.commentId ||
+      data.reportUserId ||
+      data.reportedUserId ||
+      data.communitySlug,
+    {
+      message: 'Something went wrong, please try again.',
+    }
+  )

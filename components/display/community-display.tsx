@@ -7,12 +7,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { AvatarCard, EditableAvatarCard } from '@/components/card/avatar-card'
 import { HiDotsHorizontal } from 'react-icons/hi'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { CommunityDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/user'
+import { HiFlag } from 'react-icons/hi2'
+import { ReportForm } from '../form/report-form'
 
 export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
   const user = useCurrentUser()
@@ -41,22 +50,39 @@ export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
           <CardDescription>{community.description}</CardDescription>
         </div>
         <div className="flex flex-col justify-between items-end">
-          {user?.id === community.ownerId ? (
+          <Dialog>
             <DropdownMenu>
               <DropdownMenuTrigger className="h-fit focus:outline-none">
                 <HiDotsHorizontal size={20} />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <Link href={`/community/${community.slug}/edit`}>
-                    Edit Community
-                  </Link>
-                </DropdownMenuItem>
+                {user?.id && (
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem>
+                      <HiFlag size={16} className="mr-2" />
+                      Report
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                )}
+                {user?.id === community.ownerId && (
+                  <DropdownMenuItem>
+                    <Link href={`/community/${community.slug}/edit`}>
+                      Edit Community
+                    </Link>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <div />
-          )}
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Report</DialogTitle>
+              </DialogHeader>
+              <ReportForm
+                communitySlug={community.slug}
+                reportUserId={user?.id as string}
+              />
+            </DialogContent>
+          </Dialog>
           <Button variant="outline" size="sm">
             <Link href={`/community/${community.slug}/create`}>
               Create Post

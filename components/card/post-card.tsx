@@ -25,6 +25,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
   BiSolidDownvote,
   BiUpvote,
   BiSolidUpvote,
@@ -45,6 +52,7 @@ import { DELETED_USER } from '@/lib/constants'
 import { useDeletePost } from '@/hooks/post'
 import { useUpdateBookmark } from '@/hooks/post'
 import { useUpdateVote } from '@/hooks/post'
+import { ReportForm } from '@/components/form/report-form'
 
 export const PostCard = ({
   post: {
@@ -134,36 +142,48 @@ export const PostCard = ({
             <span className="text-muted-foreground">
               {new Date(updatedAt).toDateString()}
             </span>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="focus:outline-none">
-                <HiDotsHorizontal size={20} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <HiFlag size={16} className="mr-2" />
-                  Report
-                </DropdownMenuItem>
-                {user?.id === author?.id && (
-                  <>
-                    {type === 'question' || type === 'article' ? (
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="focus:outline-none">
+                  <HiDotsHorizontal size={20} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {user?.id && (
+                    <DialogTrigger asChild>
                       <DropdownMenuItem>
-                        <Link
-                          href={`${redirectTo}/?edit=true`}
-                          className="flex"
-                        >
-                          <FiEdit size={16} className="mr-2" />
-                          Edit
-                        </Link>
+                        <HiFlag size={16} className="mr-2" />
+                        Report
                       </DropdownMenuItem>
-                    ) : null}
-                    <DropdownMenuItem onSelect={() => mutate()}>
-                      <MdDelete size={16} className="mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                    </DialogTrigger>
+                  )}
+                  {user?.id === author?.id && (
+                    <>
+                      {type === 'question' || type === 'article' ? (
+                        <DropdownMenuItem>
+                          <Link
+                            href={`${redirectTo}/?edit=true`}
+                            className="flex"
+                          >
+                            <FiEdit size={16} className="mr-2" />
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                      ) : null}
+                      <DropdownMenuItem onSelect={() => mutate()}>
+                        <MdDelete size={16} className="mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Report</DialogTitle>
+                </DialogHeader>
+                <ReportForm postId={id} reportUserId={user?.id as string} />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         {(type === 'question' || type === 'article') && (
