@@ -25,17 +25,19 @@ import { DialogClose } from '@radix-ui/react-dialog'
 export const ReportForm = ({
   postId,
   reportUserId,
-  reportedUserId,
+  userId,
   commentId,
   communitySlug,
+  type,
 }: ReportFormProps) => {
   const [isPending, startTransition] = useTransition()
   const form = useForm<ReportSchemaTypes>({
     resolver: zodResolver(ReportSchema),
     defaultValues: {
+      type,
       reportUserId,
       postId,
-      reportedUserId,
+      userId,
       commentId,
       communitySlug,
       reason: [],

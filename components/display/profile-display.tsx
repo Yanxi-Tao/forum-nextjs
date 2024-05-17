@@ -86,8 +86,9 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
                 <DialogTitle>Report</DialogTitle>
               </DialogHeader>
               <ReportForm
-                reportedUserId={profile.id}
+                userId={profile.id}
                 reportUserId={user?.id as string}
+                type="user"
               />
             </DialogContent>
           </Dialog>

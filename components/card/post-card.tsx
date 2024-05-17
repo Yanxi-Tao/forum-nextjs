@@ -181,7 +181,11 @@ export const PostCard = ({
                 <DialogHeader>
                   <DialogTitle>Report</DialogTitle>
                 </DialogHeader>
-                <ReportForm postId={id} reportUserId={user?.id as string} />
+                <ReportForm
+                  postId={id}
+                  reportUserId={user?.id as string}
+                  type="post"
+                />
               </DialogContent>
             </Dialog>
           </div>

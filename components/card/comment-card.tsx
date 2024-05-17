@@ -133,6 +133,7 @@ export const CommentCard = ({ comment, mutate }: CommentCardProps) => {
                   <ReportForm
                     commentId={id}
                     reportUserId={user?.id as string}
+                    type="comment"
                   />
                 </DialogContent>
               </Dialog>

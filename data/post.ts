@@ -1,4 +1,5 @@
 import { db } from '@/db/client'
+import { DELETED_CONTENT } from '@/lib/constants'
 import { PostType } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 
@@ -209,6 +210,7 @@ export const deletePostById = async (id: string, type: PostType) => {
           author: {
             disconnect: true,
           },
+          content: DELETED_CONTENT,
         },
         include: {
           author: true,
@@ -227,6 +229,19 @@ export const deletePostById = async (id: string, type: PostType) => {
       },
     })
     revalidatePath('/profile')
+    return true
+  } catch {
+    return false
+  }
+}
+
+export const deletePostByIdAdmin = async (id: string) => {
+  try {
+    await db.post.delete({
+      where: {
+        id,
+      },
+    })
     return true
   } catch {
     return false

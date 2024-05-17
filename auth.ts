@@ -11,6 +11,7 @@ import { getAccountByUserId } from '@/data/account'
 
 import { slugify } from '@/lib/slug'
 import { LoginSchema } from '@/schemas'
+import { UserRole } from '@prisma/client'
 
 export type ExtendedUser = DefaultSession['user'] & {
   isOAuth: boolean
@@ -19,6 +20,7 @@ export type ExtendedUser = DefaultSession['user'] & {
   name: string
   email: string
   image: string | null
+  role: UserRole
 }
 
 declare module 'next-auth' {
@@ -98,6 +100,7 @@ export const {
         session.user.email = token.email as string
         session.user.slug = token.slug as string
         session.user.image = token.image as string | null
+        session.user.role = token.role as UserRole
       }
 
       return session
@@ -117,6 +120,7 @@ export const {
       token.email = existingUser.email
       token.slug = existingUser.slug
       token.image = existingUser.image
+      token.role = existingUser.role
 
       return token
     },

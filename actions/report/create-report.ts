@@ -18,17 +18,19 @@ export const createReport = async (data: ReportSchemaTypes) => {
   const {
     postId,
     reportUserId,
-    reportedUserId,
+    userId,
     commentId,
     communitySlug,
     reason,
     description,
+    type,
   } = validatedData.data
 
   try {
     await db.report.create({
       data: {
-        reportedUserId,
+        type,
+        userId,
         reportedById: reportUserId,
         postId,
         commentId,

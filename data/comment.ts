@@ -67,3 +67,14 @@ export const deleteCommentById = async (id: string) => {
     return false
   }
 }
+
+export const deleteCommentByIdAdmin = async (id: string) => {
+  try {
+    await db.comment.delete({
+      where: { id },
+    })
+    return true
+  } catch (e) {
+    return false
+  }
+}

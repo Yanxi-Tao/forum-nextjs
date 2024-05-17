@@ -3,11 +3,9 @@
 import { db } from '@/db/client'
 import { revalidatePath } from 'next/cache'
 
-export const deleteUser = async (id: string) => {
-  // todo - does not deletion if user is a community owner
-  // require community to be deleted first or transfer ownership
+export const deleteReport = async (id: string) => {
   try {
-    await db.user.delete({
+    await db.report.delete({
       where: {
         id,
       },

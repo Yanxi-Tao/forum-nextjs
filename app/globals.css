@@ -80,6 +80,10 @@
   @apply !bg-foreground !top-0;
 }
 
+.moderate #nprogress .bar {
+  @apply !bg-foreground !top-0;
+}
+
 #nprogress .peg {
   @apply !hidden;
 }

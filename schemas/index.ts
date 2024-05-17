@@ -1,4 +1,4 @@
-import { PostType } from '@prisma/client'
+import { PostType, ReportType } from '@prisma/client'
 import { z } from 'zod'
 
 export const UpdateSettingsSchema = z
@@ -107,7 +107,8 @@ export const ReportSchema = z
     postId: z.optional(z.string()),
     commentId: z.optional(z.string()),
     communitySlug: z.optional(z.string()),
-    reportedUserId: z.optional(z.string()),
+    userId: z.optional(z.string()),
+    type: z.nativeEnum(ReportType),
     reason: z
       .string()
       .array()
@@ -122,7 +123,7 @@ export const ReportSchema = z
       data.postId ||
       data.commentId ||
       data.reportUserId ||
-      data.reportedUserId ||
+      data.userId ||
       data.communitySlug,
     {
       message: 'Something went wrong, please try again.',

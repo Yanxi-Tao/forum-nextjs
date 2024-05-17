@@ -25,6 +25,7 @@ model User {
   image         String?
   password      String?
   accounts      Account[]
+  role          UserRole  @default(USER)
 
   profile Profile?
 
@@ -44,7 +45,12 @@ model User {
   notifiedNotifications  Notification[] @relation("NotificationToUser")
   generatedNotifications Notification[] @relation("GeneratedByToUser")
   reportTo               Report[]       @relation("reportUser")
-  reportBy               Report[]       @relation("reportedUser")
+  reportBy               Report[]       @relation("user")
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 // account model for provider login
@@ -116,13 +122,13 @@ model Post {
 
   bookmarks User[] @relation("PostToUserBookmarked")
 
-  parent   Post?   @relation("PostToPost", fields: [parentId], references: [id])
+  parent   Post?   @relation("PostToPost", fields: [parentId], references: [id], onDelete: Cascade)
   parentId String?
   children Post[]  @relation("PostToPost")
 
   comments Comment[]
 
-  community   Community? @relation(fields: [communityId], references: [id])
+  community   Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String?
 
   notifications Notification[]
@@ -145,10 +151,10 @@ model Comment {
   postId String
 
   children Comment[] @relation("CommentToComment")
-  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id])
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   parentId String?
 
-  repliesTo   User?   @relation("ReplyToComment", fields: [repliesToId], references: [id])
+  repliesTo   User?   @relation("ReplyToComment", fields: [repliesToId], references: [id], onDelete: Cascade)
   repliesToId String?
 
   notifications Notification[]
@@ -171,7 +177,7 @@ model Community {
   name        String  @unique
   slug        String  @unique
   image       String?
-  owner       User?   @relation("OwnerToCommunity", fields: [ownerId], references: [id])
+  owner       User?   @relation("OwnerToCommunity", fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     String?
   description String
   isPublic    Boolean
@@ -212,24 +218,32 @@ enum NotificationType {
 }
 
 model Report {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   reason      String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   description String
+  type        ReportType
 
   reportedBy   User   @relation(name: "reportUser", fields: [reportedById], references: [id])
   reportedById String
 
-  post   Post?   @relation(fields: [postId], references: [id])
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String?
 
-  comment   Comment? @relation(fields: [commentId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?
 
-  community     Community? @relation(fields: [communitySlug], references: [slug])
+  community     Community? @relation(fields: [communitySlug], references: [slug], onDelete: Cascade)
   communitySlug String?
 
-  reportedUser   User?   @relation(name: "reportedUser", fields: [reportedUserId], references: [id])
-  reportedUserId String?
+  user   User?   @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+}
+
+enum ReportType {
+  post
+  comment
+  user
+  community
 }

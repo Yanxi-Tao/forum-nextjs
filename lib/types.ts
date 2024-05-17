@@ -95,7 +95,7 @@ export type PostFormProps = {
 
 export type ReportFormProps = Pick<
   ReportSchemaTypes,
-  'postId' | 'commentId' | 'communitySlug' | 'reportUserId' | 'reportedUserId'
+  'postId' | 'commentId' | 'communitySlug' | 'reportUserId' | 'userId' | 'type'
 >
 
 // zod schemas types

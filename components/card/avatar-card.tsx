@@ -39,7 +39,9 @@ export const AvatarCard = ({
           </AvatarFallback>
         </>
       ) : (
-        <AvatarFallback className="border">{initial}</AvatarFallback>
+        <AvatarFallback className="border-2 border-primary/20">
+          {initial}
+        </AvatarFallback>
       )}
     </Avatar>
   )
@@ -80,7 +82,10 @@ export const EditableAvatarCard = ({
               alt="profile pic"
               className="rounded-full border aspect-auto object-cover"
             />
-            <AvatarFallback delayMs={500} className="border">
+            <AvatarFallback
+              delayMs={500}
+              className="border-2 border-primary/20"
+            >
               {initial}
             </AvatarFallback>
           </div>

@@ -21,10 +21,19 @@ import Link from 'next/link'
 import { CommunityDisplayProps } from '@/lib/types'
 import { useCurrentUser } from '@/hooks/user'
 import { HiFlag } from 'react-icons/hi2'
-import { ReportForm } from '../form/report-form'
+import { ReportForm } from '@/components/form/report-form'
+import { MdDelete } from 'react-icons/md'
+import { deleteCommunity } from '@/actions/community/delete-community'
+import { useRouter } from 'next-nprogress-bar'
+import { FiEdit } from 'react-icons/fi'
 
 export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
+  const router = useRouter()
   const user = useCurrentUser()
+  const handleDelete = async () => {
+    await deleteCommunity(community.id)
+    router.push('/communities')
+  }
   return (
     <CardHeader className="bg-muted rounded-xl">
       <div className="flex space-x-4">
@@ -65,11 +74,21 @@ export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
                   </DialogTrigger>
                 )}
                 {user?.id === community.ownerId && (
-                  <DropdownMenuItem>
-                    <Link href={`/community/${community.slug}/edit`}>
-                      Edit Community
-                    </Link>
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem>
+                      <Link
+                        href={`/community/${community.slug}/edit`}
+                        className="flex items-center"
+                      >
+                        <FiEdit size={16} className="mr-2" />
+                        Edit
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleDelete()}>
+                      <MdDelete size={16} className="mr-2" />
+                      Delete
+                    </DropdownMenuItem>
+                  </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -80,6 +99,7 @@ export const CommunityDisplay = ({ community }: CommunityDisplayProps) => {
               <ReportForm
                 communitySlug={community.slug}
                 reportUserId={user?.id as string}
+                type="community"
               />
             </DialogContent>
           </Dialog>
