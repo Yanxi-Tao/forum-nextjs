@@ -11,6 +11,7 @@ import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from '@/app/(root)/api/uploadthing/core'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { CSPostHogProvider } from '@/lib/providers'
 
 import {
   ProgressBarProvider,
@@ -43,18 +44,20 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider session={session}>
-            <ReactQueryProvider>
-              <ProgressBarProvider>
-                <TopBar />
-                <main>
-                  <div className="relative w-screen flex">
-                    <LeftSidebar />
-                    <div className="w-full px-20 pt-4">{children}</div>
-                    <RightSidebar />
-                  </div>
-                </main>
-              </ProgressBarProvider>
-            </ReactQueryProvider>
+            <CSPostHogProvider>
+              <ReactQueryProvider>
+                <ProgressBarProvider>
+                  <TopBar />
+                  <main>
+                    <div className="relative w-screen flex">
+                      <LeftSidebar />
+                      <div className="w-full px-20 pt-4">{children}</div>
+                      <RightSidebar />
+                    </div>
+                  </main>
+                </ProgressBarProvider>
+              </ReactQueryProvider>
+            </CSPostHogProvider>
           </SessionProvider>
         </ThemeProvider>
         <Analytics />

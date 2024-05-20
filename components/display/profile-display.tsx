@@ -29,6 +29,7 @@ import { useCurrentUser } from '@/hooks/user'
 import Link from 'next/link'
 import { HiFlag } from 'react-icons/hi2'
 import { ReportForm } from '@/components/form/report-form'
+import { FiEdit } from 'react-icons/fi'
 
 export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
   const user = useCurrentUser()
@@ -76,7 +77,10 @@ export const ProfileDisplay = ({ profile }: ProfileDisplayProps) => {
                 )}
                 {user.id === profile.id && (
                   <DropdownMenuItem>
-                    <Link href={`/profile/edit`}>Edit Profile</Link>
+                    <Link href={`/profile/edit`} className="flex items-center">
+                      <FiEdit size={16} className="mr-2" />
+                      Edit
+                    </Link>
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>

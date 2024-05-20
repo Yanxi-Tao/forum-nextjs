@@ -85,7 +85,7 @@ export const ProfileForm = ({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="isPublic"
               render={({ field }) => (
@@ -104,7 +104,7 @@ export const ProfileForm = ({
                   </FormControl>
                 </FormItem>
               )}
-            />
+            /> */}
             <FormAlert alert={alert} />
             <div className="flex gap-x-3">
               <Button

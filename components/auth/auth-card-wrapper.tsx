@@ -60,6 +60,7 @@ const AuthProviders = () => {
         variant="secondary"
         size="lg"
         className="w-full"
+        disabled={true}
         onClick={() => onClick('google')}
       >
         <FcGoogle className="h-6 w-6 mr-2" />

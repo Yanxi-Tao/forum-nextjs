@@ -15,6 +15,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import {
   Collapsible,
@@ -47,6 +54,7 @@ import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { DELETED_USER } from '@/lib/constants'
 import { useRouter } from 'next-nprogress-bar'
+import { ReportForm } from '@/components/form/report-form'
 
 const ArticleForm = dynamic(
   () => import('@/components/form/post-form').then((mod) => mod.ArticleForm),
@@ -145,40 +153,56 @@ export default function ArticleDisplay({
                 <span className="text-xs">
                   {new Date(updatedAt).toDateString()}
                 </span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <HiDotsHorizontal size={20} />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>
-                      <HiFlag size={16} className="mr-2" />
-                      Report
-                    </DropdownMenuItem>
-                    {user?.id === author?.id && (
-                      <>
-                        <DropdownMenuItem>
-                          <Link
-                            href={`${pathname}/edit`}
-                            className="flex items-center"
+                <Dialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <HiDotsHorizontal size={20} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {user?.id && (
+                        <DialogTrigger asChild>
+                          <DropdownMenuItem>
+                            <HiFlag size={16} className="mr-2" />
+                            Report
+                          </DropdownMenuItem>
+                        </DialogTrigger>
+                      )}
+                      {user?.id === author?.id && (
+                        <>
+                          <DropdownMenuItem>
+                            <Link
+                              href={`${pathname}/edit`}
+                              className="flex items-center"
+                            >
+                              <FiEdit size={16} className="mr-2" />
+                              Edit
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() =>
+                              deletePost(id, 'article').then(() =>
+                                router.push('/')
+                              )
+                            }
                           >
-                            <FiEdit size={16} className="mr-2" />
-                            Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() =>
-                            deletePost(id, 'article').then(() =>
-                              router.push('/')
-                            )
-                          }
-                        >
-                          <MdDelete size={16} className="mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                            <MdDelete size={16} className="mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Report</DialogTitle>
+                    </DialogHeader>
+                    <ReportForm
+                      postId={id}
+                      reportUserId={user?.id as string}
+                      type="post"
+                    />
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <CardTitle className="leading-normal">{title}</CardTitle>

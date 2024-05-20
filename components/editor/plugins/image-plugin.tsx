@@ -42,7 +42,7 @@ export const InsertImageDialog: React.FC<{ editor: LexicalEditor }> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" disabled>
           <ImageIcon size={18} />
         </Button>
       </DialogTrigger>

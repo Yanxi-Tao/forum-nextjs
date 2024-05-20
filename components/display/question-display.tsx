@@ -15,6 +15,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import {
   BiSolidDownvote,
@@ -50,6 +57,7 @@ import { useUpdateVote, useUpdateBookmark } from '@/hooks/post'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next-nprogress-bar'
+import { ReportForm } from '@/components/form/report-form'
 
 const QuestionForm = dynamic(
   () => import('@/components/form/post-form').then((mod) => mod.QuestionForm),
@@ -182,33 +190,51 @@ export default function QuestionDisplay({
                 <span className="text-xs">
                   {new Date(updatedAt).toDateString()}
                 </span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="focus:outline-none">
-                    <HiDotsHorizontal size={20} />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>
-                      <HiFlag size={16} className="mr-2" />
-                      Report
-                    </DropdownMenuItem>
-                    {user?.id === author?.id && (
-                      <>
-                        <DropdownMenuItem
-                          onSelect={() => router.push(`${pathname}?edit=true`)}
-                        >
-                          <FiEdit size={16} className="mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => deletePost(id, 'question')}
-                        >
-                          <MdDelete size={16} className="mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="focus:outline-none">
+                      <HiDotsHorizontal size={20} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {user?.id && (
+                        <DialogTrigger asChild>
+                          <DropdownMenuItem>
+                            <HiFlag size={16} className="mr-2" />
+                            Report
+                          </DropdownMenuItem>
+                        </DialogTrigger>
+                      )}
+                      {user?.id === author?.id && (
+                        <>
+                          <DropdownMenuItem
+                            onSelect={() =>
+                              router.push(`${pathname}?edit=true`)
+                            }
+                          >
+                            <FiEdit size={16} className="mr-2" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => deletePost(id, 'question')}
+                          >
+                            <MdDelete size={16} className="mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Report</DialogTitle>
+                    </DialogHeader>
+                    <ReportForm
+                      postId={id}
+                      reportUserId={user?.id as string}
+                      type="post"
+                    />
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <CardTitle className="leading-normal">{title}</CardTitle>

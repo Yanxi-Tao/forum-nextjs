@@ -58,6 +58,7 @@
     "next-nprogress-bar": "^2.3.11",
     "next-themes": "^0.3.0",
     "pnpm": "^9.0.6",
+    "posthog-js": "^1.131.4",
     "radash": "^12.1.0",
     "react": "^18",
     "react-dom": "^18",
