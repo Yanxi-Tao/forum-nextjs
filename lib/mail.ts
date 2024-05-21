@@ -1,7 +1,10 @@
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const domain = process.env.NEXT_PUBLIC_URL
+const domain =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000'
+    : process.env.NEXT_PUBLIC_URL
 
 export const sendVerificationCodeEmail = async (
   email: string,

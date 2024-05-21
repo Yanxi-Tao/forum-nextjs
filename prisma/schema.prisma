@@ -225,7 +225,7 @@ model Report {
   description String
   type        ReportType
 
-  reportedBy   User   @relation(name: "reportUser", fields: [reportedById], references: [id])
+  reportedBy   User   @relation(name: "reportUser", fields: [reportedById], references: [id], onDelete: Cascade)
   reportedById String
 
   post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
