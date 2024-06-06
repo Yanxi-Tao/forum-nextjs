@@ -85,6 +85,9 @@ export const RegisterForm = () => {
                         disabled={isPending}
                       />
                     </FormControl>
+                    <FormDescription>
+                      Be mindful when putting your real name, it will be visible
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

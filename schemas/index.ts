@@ -6,6 +6,7 @@ export const UpdateSettingsSchema = z
     name: z.optional(
       z
         .string()
+        .regex(/^[A-Za-z0-9]+$/)
         .min(1, { message: 'Name is required' })
         .max(15, { message: 'Name is too long' })
     ),
@@ -51,6 +52,7 @@ export const RegisterSchema = z.object({
   password: z.string().min(3, { message: 'Password is required' }),
   name: z
     .string()
+    .regex(/^[A-Za-z0-9]+$/)
     .min(1, { message: 'Name is required' })
     .max(15, { message: 'Name is too long' }),
   code: z.string(),
