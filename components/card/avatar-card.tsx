@@ -87,10 +87,10 @@ export const EditableAvatarCard = ({
             </AvatarFallback>
           </div>
           <div className="absolute opacity-0 hover:opacity-100 transition-opacity duration-300 top-0 bottom-0 left-0 right-0 px-6">
-            <div className="flex h-full w-full items-center justify-center text-xs">
+            {/* <div className="flex h-full w-full items-center justify-center text-xs">
               Disabled for test
-            </div>
-            {/* <UploadButton
+            </div> */}
+            <UploadButton
               className="flex w-full h-full text-sm"
               appearance={{
                 button:
@@ -121,7 +121,7 @@ export const EditableAvatarCard = ({
                 setUploading(false)
                 console.error('Error: ', error)
               }}
-            /> */}
+            />
           </div>
         </div>
       )}
